@@ -1,0 +1,152 @@
+
+<body>
+	<div class="main">  	
+		<input type="checkbox" id="chk" aria-hidden="true">
+
+			<div class="signup">
+				<form>
+					<label class="label" for="chk" aria-hidden="true" *ngIf="!errorMsgReg.length">Sign up</label>
+          <div id="alertreg" class="alert alert-danger" role="alert" *ngIf="errorMsgReg.length">
+            <p style="line-height: 0.6px;" *ngFor="let msgReg of errorMsgReg">{{msgReg}}</p>
+          </div>
+					<input [(ngModel)]="registerRequest.firstname" type="text" name="firstname" placeholder="First name" required="">
+					<input [(ngModel)]="registerRequest.lastname"  type="text" name="lastname" placeholder="Last Name" required="">
+
+
+
+					<input [(ngModel)]="registerRequest.email" type="email" name="email" placeholder="Email" required="">
+          <!-- <input type="number" name="broj" placeholder="BrojTelefona" required=""> -->
+
+      
+					<input  [(ngModel)]="registerRequest.password" type="password" name="pswd" placeholder="Password" required="">
+					<button (click)="register()">
+            <span *ngIf="loading" class="spinner" role="status" aria-hidden="true"></span>
+            <span *ngIf="!loading"> Sign up  </span>
+
+          </button>
+				</form>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+			<div class="login">
+				<form name="loginForm" novalidate>
+					<label for="chk" aria-hidden="true">Sign In</label>
+					<input
+          [(ngModel)]="authRequest.email"
+          ng-blur="Login.blurInput(loginForm.email)"
+        ng-focus="Login.focusInput(loginForm.email)"
+        ng-model="Login.user.email"
+        class="form-control"
+        ng-class="{ 'is-dirty': Login.isDirty(loginForm.email) }"
+        required
+           type="email" name="email" placeholder="Email" required=""
+           >
+					<input 
+          [(ngModel)]="authRequest.password"
+          type="password"
+          name="password"
+          ng-blur="Login.blurInput(loginForm.password)"
+          ng-focus="Login.focusInput(loginForm.password)"
+          ng-model="Login.user.password"
+          ng-maxlength="30"
+          ng-minlength="6"
+          class="form-control"
+          ng-class="{ 'is-dirty': Login.isDirty(loginForm.password) }"
+          placeholder="Password" required="">
+
+					<button (click)="login()">Login</button>
+				</form>
+        <div class="custom-alert" *ngIf="errorMsg.length">
+          <div class="alert-content">
+            <ul>
+              <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+            </ul>
+          </div>
+        </div>
+        
+			</div>
+	</div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+<div
+  class="form-layout"
+  ng-app="app.loginForm"
+  ng-controller="LoginCtrl as Login"
+>
+  <h2>Sign In</h2>
+
+  <form name="loginForm" novalidate>
+    <div
+      class="input-field"
+      ng-class="{ active: Login.isLabelActive(loginForm.email) }"
+    >
+      <label> E-mail </label>
+      <input
+        [(ngModel)]="authRequest.email"
+        type="email"
+        name="email"
+        ng-blur="Login.blurInput(loginForm.email)"
+        ng-focus="Login.focusInput(loginForm.email)"
+        ng-model="Login.user.email"
+        class="form-control"
+        ng-class="{ 'is-dirty': Login.isDirty(loginForm.email) }"
+        required
+        autofocus
+      />
+    </div>
+    <div
+      class="input-field"
+      ng-class="{ active: Login.isLabelActive(loginForm.password) }"
+    >
+      <label> Password </label>
+      <input
+        [(ngModel)]="authRequest.password"
+        type="password"
+        name="password"
+        ng-blur="Login.blurInput(loginForm.password)"
+        ng-focus="Login.focusInput(loginForm.password)"
+        ng-model="Login.user.password"
+        ng-maxlength="30"
+        ng-minlength="6"
+        class="form-control"
+        ng-class="{ 'is-dirty': Login.isDirty(loginForm.password) }"
+        required
+      />
+    </div>
+    <button (click)="login()" class="btn btn-outline-secondary">Log In</button>
+    <div>
+      Don't have an account?&nbsp;
+      <button (click)="register()" type="button" class="btn btn-outline-dark">
+        Register
+      </button>
+    </div>
+  </form>
+  <div class="alert alert-danger" role="alert" *ngIf="errorMsg.length">
+    <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+  </div>
+  
+</div>  -->

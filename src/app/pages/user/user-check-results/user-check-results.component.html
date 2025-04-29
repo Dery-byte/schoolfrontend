@@ -1,0 +1,371 @@
+<form [formGroup]="examForm" (ngSubmit)="submitFormCheck()">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">GET RESULTS</div>
+        </div>
+        <div class="card-body">
+          <!-- Row 1 -->
+
+          <!-- Row 2 -->
+          <div class="row">
+            <!-- Quantity -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="examYear">Exam Year</label>
+                <select
+                  class="form-control"
+                  id="examYear"
+                  formControlName="examYear"
+                >
+                  <option value="">-- Select Year --</option>
+                  <option *ngFor="let year of examYears" [value]="year">
+                    {{ year }}
+                  </option>
+                </select>
+                <div
+                  class="text-danger"
+                  *ngIf="
+                    examForm.get('examYear')?.touched &&
+                    examForm.get('examYear')?.hasError('required')
+                  "
+                >
+                  Exam year is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Category (Select) -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="examType">Exam Type</label>
+                <select
+                  class="form-control"
+                  id="examType"
+                  formControlName="examType"
+                >
+                  <option value="">-- Select Exam Type --</option>
+                  <option *ngFor="let g of groups" [ngValue]="g.id">
+                    {{ g.name }}
+                  </option>
+                </select>
+                <div
+                  class="text-danger"
+                  *ngIf="
+                    examForm.get('examType')?.touched &&
+                    examForm.get('examType')?.hasError('required')
+                  "
+                >
+                  Exam Type is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Farm ID (Select) -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="indexNumber">Index Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="indexNumber"
+                  placeholder="Enter Index Number"
+                  formControlName="indexNumber"
+                />
+                <div
+                  class="text-danger"
+                  *ngIf="
+                    examForm.get('indexNumber')?.touched &&
+                    examForm.get('indexNumber')?.hasError('required')
+                  "
+                >
+                  Index Number is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- ADD RESULTS MANUALLY -->
+
+<hr />
+
+<form
+  [formGroup]="manualEntryForm"
+  (ngSubmit)="submitFormManu()"
+  class="container-fluid"
+>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Add Results Manually</div>
+    </div>
+
+    <div class="card-body">
+      <!-- Combined Top Row: Exam Year, Exam Type, Index Number -->
+      <div class="row mb-3">
+        <!-- Exam Year -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="examYear">Exam Year</label>
+            <select
+              class="form-control"
+              id="examYear"
+              formControlName="examYear"
+            >
+              <option value="">-- Select Year --</option>
+              <option *ngFor="let year of examYears" [value]="year">
+                {{ year }}
+              </option>
+            </select>
+            <div
+              class="text-danger"
+              *ngIf="
+                manualEntryForm.get('examYear')?.touched &&
+                manualEntryForm.get('examYear')?.hasError('required')
+              "
+            >
+              Exam year is required
+            </div>
+          </div>
+        </div>
+
+        <!-- Index Number -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="indexNumber">Index Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="indexNumber"
+              placeholder="Enter Index Number"
+              formControlName="indexNumber"
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                manualEntryForm.get('indexNumber')?.touched &&
+                manualEntryForm.get('indexNumber')?.hasError('required')
+              "
+            >
+              Index Number is required
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fullName"
+              placeholder="Optional"
+              formControlName="fullName"
+            />
+          </div>
+        </div>
+      </div>
+    
+
+      <!-- Exam Board Selection -->
+      <div class="row mb-3">
+        <div class="form-group col-12 col-md-6">
+          <label for="examBoard">Exam Board</label>
+          <select
+            class="form-control"
+            id="examBoard"
+            formControlName="examBoard"
+            (change)="onExamBoardChange($event)"
+          >
+            <option value="">-- Select Exam Board --</option>
+            <option value="WAEC">WAEC</option>
+            <option value="CTVET">CTVET</option>
+          </select>
+          <div
+            class="text-danger"
+            *ngIf="
+              manualEntryForm.get('examBoard')?.touched &&
+              manualEntryForm.get('examBoard')?.hasError('required')
+            "
+          >
+            Exam Board is required
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Exam Type (only shows for WAEC) -->
+        <div class="form-group col-12 col-md-6" *ngIf="showExamType">
+          <label for="examType">Exam Type</label>
+          <select 
+            class="form-control" formControlName="examType"  (change)="onExamTypeChange($event)">
+            <option  value="">-- Select Exam Type --</option>
+            <option *ngFor="let type of examTypes" [value]="type.key" >
+              {{ type.name }}
+            </option>
+          </select>
+
+
+
+          <div
+            class="text-danger"
+            *ngIf="
+              manualEntryForm.get('examType')?.touched &&
+              manualEntryForm.get('examType')?.hasError('required')
+            "
+          >
+            Exam Type is required
+          </div>
+        </div>
+
+        <!-- CTVET Exam Type (only shows when CTVET is selected) -->
+        <div class="form-group col-12 col-md-6" *ngIf="showCTVETOptions">
+          <label for="cTVETExamType">CTVET Exam Type</label>
+          <select
+            class="form-control"
+            id="cTVETExamType"
+            formControlName="cTVETExamType"
+            (change)="onCTVETExamTypeChange($event)"
+          >
+            <option value="">-- Select CTVET Type --</option>
+            <option *ngFor="let type of cTVETOptions" [value]="type">
+              {{ type }}
+            </option>
+          </select>
+          <div
+            class="text-danger"
+            *ngIf="
+              manualEntryForm.get('cTVETExamType')?.touched &&
+              manualEntryForm.get('cTVETExamType')?.hasError('required')
+            "
+          >
+            CTVET Exam Type is required
+          </div>
+        </div>
+      </div>
+
+      <!-- Subject & Grade Rows -->
+      <div formArrayName="resultDetails" class="mt-3">
+        <div
+          *ngFor="let group of resultsDetails.controls; let i = index"
+          [formGroupName]="i"
+          class="row mb-2 g-2"
+        >
+          <!-- Subject Selection -->
+          <div class="col-sm-5">
+            <select class="form-control" formControlName="subject">
+              <option value="">-- Select Subject --</option>
+              <option *ngIf="currentSubjects.length === 0" value="" disabled>
+                {{
+                  (showExamType && !manualEntryForm.value.examType) ||
+                  (showCTVETOptions && !manualEntryForm.value.cTVETExamType)
+                    ? "Select Exam Type first"
+                    : "Loading subjects..."
+                }}
+              </option>
+              <option *ngFor="let subject of currentSubjects" [value]="subject">
+                {{ subject }}
+              </option>
+            </select>
+            <div
+              class="text-danger"
+              *ngIf="
+                group.get('subject')?.touched &&
+                group.get('subject')?.hasError('required')
+              "
+            >
+              Subject is required
+            </div>
+          </div>
+
+          <!-- Grade Selection -->
+          <div class="col-12 col-sm-5">
+            <select class="form-control" formControlName="grade">
+              <option value="">-- Select Grade --</option>
+              <option *ngFor="let grade of currentGrades" [value]="grade">
+                {{ grade }}
+              </option>
+            </select>
+            <div
+              class="text-danger"
+              *ngIf="
+                group.get('grade')?.touched &&
+                group.get('grade')?.hasError('required')
+              "
+            >
+              Grade is required
+            </div>
+          </div>
+
+          <!-- Remove Button -->
+          <div
+            class="col-12 col-sm-2 d-flex align-items-center justify-content-center"
+          >
+            <!-- <button type="button" class="btn btn-danger w-100" (click)="removeSubjects(i)">
+              Remove
+            </button> -->
+
+            <button class="btn btn-danger btn-sm" (click)="removeSubjects(i)">
+              <i class="bx bx-trash"></i> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add and Submit Buttons -->
+      <div class="row mt-3">
+        <div class="col-6">
+          <button
+            type="button"
+            class="btn btn-secondary w-100"
+            (click)="addSubjects()"
+          >
+            + Add Subject
+          </button>
+        </div>
+        <div class="col-6">
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            [disabled]="manualEntryForm.invalid"
+          >
+            Submit Results
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

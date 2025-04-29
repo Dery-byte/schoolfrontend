@@ -1,0 +1,131 @@
+<div class="col-md-12">
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 sticky-top bg-white z-3"
+        style="top: 0"
+      >
+        <h4 class="card-title mb-0">University List</h4>
+  
+        <!-- University Type -->
+        <select class="form-control w-auto" [(ngModel)]="selectedType">
+          <option value="ALL">All Universities</option>
+          <option value="PUBLIC">Public Universities</option>
+          <option value="PRIVATE">Private Universities</option>
+        </select>
+  
+        <!-- University Search -->
+        <input
+          type="text"
+          class="form-control w-auto"
+          placeholder="Search University"
+          [(ngModel)]="universitySearch"
+        />
+  
+        <!-- Program Search -->
+        <input
+          type="text"
+          class="form-control w-auto"
+          placeholder="Search Program"
+          [(ngModel)]="programSearch"
+        />
+      </div>
+  
+      <div class="card-body">
+        <div *ngIf="filteredUniversities.length > 0; else noUniversity">
+          <div
+            *ngFor="let university of filteredUniversities"
+            class="mb-4 border rounded p-3 shadow-sm"
+          >
+            <h5>
+              {{ university.name }}
+              <span class="badge bg-secondary">{{ university.type }}</span>
+            </h5>
+            <p class="mb-2">
+              <strong>Location:</strong> {{ university.location }}
+            </p>
+  
+            <h6 class="text-muted">Programs Offered</h6>
+  
+            <ng-container
+              *ngIf="
+                university.programs && university.programs.length > 0;
+                else noPrograms
+              "
+            >
+              <ul class="list-group">
+                <li
+                  *ngFor="
+                    let program of getVisiblePrograms(university);
+                    let i = index
+                  "
+                  class="list-group-item"
+                >
+                  <div
+                    class="d-flex justify-content-between align-items-center flex-wrap"
+                  >
+                    <div>
+                      <strong>{{ i + 1 }}. {{ program.name }}</strong>
+                    </div>
+                    <div class="form-button-action">
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm btn-primary"
+                        title="Edit Program"
+                        (click)="onEditProgram(university, program)"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm btn-danger"
+                        title="Delete Program"
+                        (click)="onDeleteProgram(university, program)"
+                      >
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+  
+                  <div class="mt-2 ms-3">
+                    <strong>Cutoff Points:</strong>
+                    <ul class="mb-0">
+                      <li *ngFor="let subject of getSubjects(program)">
+                        {{ subject }}:
+                        <strong>{{ program.cutoffPoints[subject] }}</strong>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </ng-container>
+  
+            <ng-template #noPrograms>
+              <div class="alert alert-info mt-2">
+                No programs offered by this university.
+              </div>
+            </ng-template>
+  
+            <div *ngIf="university.programs.length > maxVisiblePrograms">
+              <button
+                class="btn btn-sm btn-outline-secondary mt-2"
+                (click)="toggleShowAll(university)"
+              >
+                {{
+                  showAll[university.id]
+                    ? 'Show Less'
+                    : 'Show All (' + university.programs.length + ')'
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <ng-template #noUniversity>
+          <div class="alert alert-warning text-center">
+            No universities available for the selected filters.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  

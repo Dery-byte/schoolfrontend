@@ -1,13 +1,330 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>SchoolFrontEnd</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <head>
+    <meta charset="utf-8" />
+    <title>School</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <link
+  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <link  href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.6/css/perfect-scrollbar.min.css" rel="stylesheet"
+    />
+    
+    <!-- <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap"
+      rel="stylesheet"
+    /> -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/css/animsition.min.css"
+    /> -->
+
+
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="assets/fonts/iconic/css/material-design-iconic-font.min.css">
+
+<link rel="stylesheet" href="assets/fonts/linearicons-v1.0.0/icon-font.min.css">
+
+<link rel="stylesheet" href="assets/vendor/animate/animate.css">
+
+<link rel="stylesheet" href="assets/vendor/css-hamburgers/hamburgers.min.css">
+
+<link rel="stylesheet" href="assets/vendor/animsition/css/animsition.min.css">
+
+<link rel="stylesheet" href="assets/vendor/select2/select2.min.css">
+<link rel="stylesheet" href="assets/vendor/daterangepicker/daterangepicker.css">
+
+<link rel="stylesheet" href="assets/vendor/slick/slick.css">
+
+<link rel="stylesheet" href="assets/vendor/MagnificPopup/magnific-popup.css">
+
+<link rel="stylesheet" href="assets/vendor/perfect-scrollbar/perfect-scrollbar.css">
+
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/util.css">
+
+    <link rel="stylesheet" href="assets/vendor/animsition/css/animsition.css"/>
+    <link rel="stylesheet" href="assets/vendor/animsition/css/animsition.min.css"/>
+    <link rel="stylesheet" href="assets/css/util.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/vendor/slick/slick.css" />
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body>
-  <app-root></app-root>
-</body>
+
+
+  <body class="animsition">
+    <app-root></app-root>
+
+
+
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/animsition/4.0.2/js/animsition.min.js"></script> -->
+
+    <!-- <script src="assets/vendor/animsition/js/animsition.min.js"></script> -->
+
+
+        <!-- <script src="assets/vendor/animsition/js/animsition.js"></script> -->
+
+    
+	<script src="assets/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="assets/vendor/animsition/js/animsition.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+
+    <!-- <script src="assets/js/map-custom.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <!--===============================================================================================-->
+    <script src="assets/vendor/bootstrap/js/popper.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <!-- <script src="assets/vendor/select2/select2.min.js"></script> -->
+    <!--===============================================================================================-->
+    <script src="assets/vendor/daterangepicker/moment.min.js"></script>
+    <script src="assets/vendor/daterangepicker/daterangepicker.js"></script>
+
+    <!--===========================BELOW CAUSE THE BANNE TO BE CHANGING====================================================================-->
+    <script src="assets/vendor/slick/slick.min.js"></script>
+    <script src="assets/js/slick-custom.js"></script>
+    <!--===============================================================================================-->
+    <script src="assets/vendor/parallax100/parallax100.js"></script>
+    <script src="assets/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="assets/vendor/isotope/isotope.pkgd.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="assets/vendor/sweetalert/sweetalert.min.js"></script>
+    <script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+    <script src="assets/js/custom.js"></script>
+
+
+    <!-- <script>
+      $(".js-select2").each(function () {
+        $(this).select2({
+          minimumResultsForSearch: 20,
+          dropdownParent: $(this).next(".dropDownSelect2"),
+        });
+      });
+    </script>
+
+    <script>
+      $(".parallax100").parallax100();
+    </script>
+    <script>
+      $(".gallery-lb").each(function () {
+        $(this).magnificPopup({
+          delegate: "a", 
+          type: "image",
+          gallery: {
+            enabled: true,
+          },
+          mainClass: "mfp-fade",
+        });
+      });
+    </script>
+
+    <script>
+      $(".js-addwish-b2").on("click", function (e) {
+        e.preventDefault();
+      });
+
+      $(".js-addwish-b2").each(function () {
+        var nameProduct = $(this).parent().parent().find(".js-name-b2").html();
+        $(this).on("click", function () {
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass("js-addedwish-b2");
+          $(this).off("click");
+        });
+      });
+
+      $(".js-addwish-detail").each(function () {
+        var nameProduct = $(this)
+          .parent()
+          .parent()
+          .parent()
+          .find(".js-name-detail")
+          .html();
+
+        $(this).on("click", function () {
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass("js-addedwish-detail");
+          $(this).off("click");
+        });
+      });
+
+      $(".js-addcart-detail").each(function () {
+        var nameProduct = $(this)
+          .parent()
+          .parent()
+          .parent()
+          .parent()
+          .find(".js-name-detail")
+          .html();
+        $(this).on("click", function () {
+          swal(nameProduct, "is added to cart !", "success");
+        });
+      });
+    </script>
+    <script>
+      $(".js-pscroll").each(function () {
+        $(this).css("position", "relative");
+        $(this).css("overflow", "hidden");
+        var ps = new PerfectScrollbar(this, {
+          wheelSpeed: 1,
+          scrollingThreshold: 1000,
+          wheelPropagation: false,
+        });
+
+        $(window).on("resize", function () {
+          ps.update();
+        });
+      });
+    </script>
+
+    <script>
+      $(".js-select2").each(function () {
+        $(this).select2({
+          minimumResultsForSearch: 20,
+          dropdownParent: $(this).next(".dropDownSelect2"),
+        });
+      });
+    </script>
+
+    <script>
+      $(".parallax100").parallax100();
+    </script>
+    <script>
+      $(".gallery-lb").each(function () {
+        $(this).magnificPopup({
+          delegate: "a", 
+          type: "image",
+          gallery: {
+            enabled: true,
+          },
+          mainClass: "mfp-fade",
+        });
+      });
+    </script>
+
+    <script>
+      $(".js-addwish-b2").on("click", function (e) {
+        e.preventDefault();
+      });
+
+      $(".js-addwish-b2").each(function () {
+        var nameProduct = $(this).parent().parent().find(".js-name-b2").html();
+        $(this).on("click", function () {
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass("js-addedwish-b2");
+          $(this).off("click");
+        });
+      });
+
+      $(".js-addwish-detail").each(function () {
+        var nameProduct = $(this)
+          .parent()
+          .parent()
+          .parent()
+          .find(".js-name-detail")
+          .html();
+
+        $(this).on("click", function () {
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass("js-addedwish-detail");
+          $(this).off("click");
+        });
+      });
+
+      $(".js-addcart-detail").each(function () {
+        var nameProduct = $(this)
+          .parent()
+          .parent()
+          .parent()
+          .parent()
+          .find(".js-name-detail")
+          .html();
+        $(this).on("click", function () {
+          swal(nameProduct, "is added to cart !", "success");
+        });
+      });
+    </script>
+    <script>
+      $(".js-pscroll").each(function () {
+        $(this).css("position", "relative");
+        $(this).css("overflow", "hidden");
+        var ps = new PerfectScrollbar(this, {
+          wheelSpeed: 1,
+          scrollingThreshold: 1000,
+          wheelPropagation: false,
+        });
+
+        $(window).on("resize", function () {
+          ps.update();
+        });
+      });
+    </script> -->
+    <!--===============================================================================================-->
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.6/dist/perfect-scrollbar.min.js
+    "></script> -->
+
+
+<!-- 
+	 <script src="../src/assets/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="../src/assets/vendor/animsition/js/animsition.min.js"></script>
+    <script src="../src/assets/vendor/bootstrap/js/popper.js"></script>
+    <script src="../src/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="../src/assets/vendor/daterangepicker/moment.min.js"></script>
+    <script src="../src/assets/vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="../src/assets/vendor/slick/slick.min.js"></script>
+    <script src="../src/assets/js/slick-custom.js"></script>
+    <script src="../src/assets/vendor/parallax100/parallax100.js"></script>
+    <script src="../src/assets/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+  <script src="../src/assets/vendor/isotope/isotope.pkgd.min.js"></script>
+    <script src="../src/assets/vendor/sweetalert/sweetalert.min.js"></script>
+    <script src="../src/assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+    <script src="../src/assets/vendor/sweetalert/sweetalert.min.js"></script> -->
+    <script src="https://pay.fondy.eu/latest/checkout.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+
+    <!-- jQuery -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+<!-- DataTables CSS -->
+
+<!-- DataTables JS -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+
+
+
+
+    <!-- THIS SCRIPTS ARE FOR THE ADMIN DASHBOAR -->
+    
+    
+
+
+  </body>
 </html>

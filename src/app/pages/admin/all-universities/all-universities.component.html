@@ -1,0 +1,67 @@
+<!-- University List -->
+<div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">University List</h4>
+        <!-- Dropdown to filter universities by type -->
+        <select class="form-control" [(ngModel)]="selectedType" (change)="onTypeChange($event)">
+          <option value="ALL">All Universities</option>
+          <option value="PUBLIC">Public Universities</option>
+          <option value="PRIVATE">Private Universities</option>
+        </select>
+      </div>
+  
+      <div class="card-body">
+        <div class="table-responsive">
+          <!-- Table to display universities -->
+          <table class="table table-striped table-hover" *ngIf="filteredUniversities.length > 0">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Type</th>
+                <th>Action</th>  <!-- Added Action header -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let university of filteredUniversities">
+                <td>{{ university.name }}</td>
+                <td>{{ university.location }}</td>
+                <td>{{ university.type }}</td>
+                <td>
+                  <div class="form-button-action">
+                    <!-- Edit Button -->
+                    <button
+                      type="button"
+                      data-bs-toggle="tooltip"
+                      title="Edit University"
+                      class="btn btn-link btn-primary"
+                      (click)="editUniversity(university)"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <!-- Remove Button -->
+                    <button
+                      type="button"
+                      data-bs-toggle="tooltip"
+                      title="Remove University"
+                      class="btn btn-link btn-danger"
+                      (click)="removeUniversity(university)"
+                    >
+                      <i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- No universities available message -->
+          <div *ngIf="filteredUniversities.length === 0" class="alert alert-warning">
+            No universities found for the selected type.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,144 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: #f5f6fa;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 24px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  color: #2c3e50;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.card h2 {
+  margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.card p {
+  font-size: 14px;
+  color: #555;
+}
+
+input[type="text"], .code-input {
+  /* width: 100%; */
+  padding: 12px;
+  border: 1px solid #10082e;
+  border-radius: 12px;
+  font-size: 18px;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+
+.code-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+code-input input:first-of-type {
+  autofocus: true;
+}
+
+
+
+button.btn {
+  width: 100%;
+  background-color: #192a56;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button.btn:hover {
+  background-color: #273c75;
+}
+
+.status-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.link {
+  margin-top: 16px;
+  color: #f39c12;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #e67e22;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+/* IMAGE */
+
+
+.container {
+  position: relative;  /* Ensure it is positioned for overlaying content */
+  background-image: url('../../../assets/img/schools.jpg');  /* Set your background image */
+  background-size: cover;  /* Ensure the image covers the whole area */
+  background-position: center center;  /* Center the background image */
+  background-repeat: no-repeat;  /* Prevent repeating the background */
+  padding: 20px;  /* Optional: Add padding to keep content away from edges */
+}
+
+
+
+.btn:hover {
+  background-color: #154c70;
+}
+
+
+
+
+
