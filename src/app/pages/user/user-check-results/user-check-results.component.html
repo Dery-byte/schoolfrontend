@@ -95,277 +95,118 @@
 
 <!-- ADD RESULTS MANUALLY -->
 
-<hr />
 
-<form
-  [formGroup]="manualEntryForm"
-  (ngSubmit)="submitFormManu()"
-  class="container-fluid"
->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">Add Results Manually</div>
-    </div>
 
-    <div class="card-body">
-      <!-- Combined Top Row: Exam Year, Exam Type, Index Number -->
-      <div class="row mb-3">
-        <!-- Exam Year -->
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="examYear">Exam Year</label>
-            <select
-              class="form-control"
-              id="examYear"
-              formControlName="examYear"
-            >
-              <option value="">-- Select Year --</option>
-              <option *ngFor="let year of examYears" [value]="year">
-                {{ year }}
-              </option>
-            </select>
-            <div
-              class="text-danger"
-              *ngIf="
-                manualEntryForm.get('examYear')?.touched &&
-                manualEntryForm.get('examYear')?.hasError('required')
-              "
-            >
-              Exam year is required
-            </div>
-          </div>
-        </div>
 
-        <!-- Index Number -->
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="indexNumber">Index Number</label>
-            <input
-              type="text"
-              class="form-control"
-              id="indexNumber"
-              placeholder="Enter Index Number"
-              formControlName="indexNumber"
-            />
-            <div
-              class="text-danger"
-              *ngIf="
-                manualEntryForm.get('indexNumber')?.touched &&
-                manualEntryForm.get('indexNumber')?.hasError('required')
-              "
-            >
-              Index Number is required
-            </div>
-          </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="fullName">Full Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="fullName"
-              placeholder="Optional"
-              formControlName="fullName"
-            />
-          </div>
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<form [formGroup]="entryForm" class="container-fluid mt-4">
+  <!-- Primary Info Section -->
+  <div class="card mb-3 p-3 bg-light">
+    <div class="row">
+      <div class="col-md-4">
+        <label>Index Number</label>
+        <input type="text" formControlName="indexNumber" class="form-control" placeholder="Index Number" />
       </div>
-    
-
-      <!-- Exam Board Selection -->
-      <div class="row mb-3">
-        <div class="form-group col-12 col-md-6">
-          <label for="examBoard">Exam Board</label>
-          <select
-            class="form-control"
-            id="examBoard"
-            formControlName="examBoard"
-            (change)="onExamBoardChange($event)"
-          >
-            <option value="">-- Select Exam Board --</option>
-            <option value="WAEC">WAEC</option>
-            <option value="CTVET">CTVET</option>
-          </select>
-          <div
-            class="text-danger"
-            *ngIf="
-              manualEntryForm.get('examBoard')?.touched &&
-              manualEntryForm.get('examBoard')?.hasError('required')
-            "
-          >
-            Exam Board is required
-          </div>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- Exam Type (only shows for WAEC) -->
-        <div class="form-group col-12 col-md-6" *ngIf="showExamType">
-          <label for="examType">Exam Type</label>
-          <select 
-            class="form-control" formControlName="examType"  (change)="onExamTypeChange($event)">
-            <option  value="">-- Select Exam Type --</option>
-            <option *ngFor="let type of examTypes" [value]="type.key" >
-              {{ type.name }}
-            </option>
-          </select>
-
-
-
-          <div
-            class="text-danger"
-            *ngIf="
-              manualEntryForm.get('examType')?.touched &&
-              manualEntryForm.get('examType')?.hasError('required')
-            "
-          >
-            Exam Type is required
-          </div>
-        </div>
-
-        <!-- CTVET Exam Type (only shows when CTVET is selected) -->
-        <div class="form-group col-12 col-md-6" *ngIf="showCTVETOptions">
-          <label for="cTVETExamType">CTVET Exam Type</label>
-          <select
-            class="form-control"
-            id="cTVETExamType"
-            formControlName="cTVETExamType"
-            (change)="onCTVETExamTypeChange($event)"
-          >
-            <option value="">-- Select CTVET Type --</option>
-            <option *ngFor="let type of cTVETOptions" [value]="type">
-              {{ type }}
-            </option>
-          </select>
-          <div
-            class="text-danger"
-            *ngIf="
-              manualEntryForm.get('cTVETExamType')?.touched &&
-              manualEntryForm.get('cTVETExamType')?.hasError('required')
-            "
-          >
-            CTVET Exam Type is required
-          </div>
-        </div>
+      <div class="col-md-4">
+        <label>Exam Board</label>
+        <select class="form-control" formControlName="examBoard" (change)="onBoardChange($event)">
+          <option value="">Choose Exam Board</option>
+          <option *ngFor="let board of examBoards" [value]="board">{{ board }}</option>
+        </select>
       </div>
-
-      <!-- Subject & Grade Rows -->
-      <div formArrayName="resultDetails" class="mt-3">
-        <div
-          *ngFor="let group of resultsDetails.controls; let i = index"
-          [formGroupName]="i"
-          class="row mb-2 g-2"
-        >
-          <!-- Subject Selection -->
-          <div class="col-sm-5">
-            <select class="form-control" formControlName="subject">
-              <option value="">-- Select Subject --</option>
-              <option *ngIf="currentSubjects.length === 0" value="" disabled>
-                {{
-                  (showExamType && !manualEntryForm.value.examType) ||
-                  (showCTVETOptions && !manualEntryForm.value.cTVETExamType)
-                    ? "Select Exam Type first"
-                    : "Loading subjects..."
-                }}
-              </option>
-              <option *ngFor="let subject of currentSubjects" [value]="subject">
-                {{ subject }}
-              </option>
-            </select>
-            <div
-              class="text-danger"
-              *ngIf="
-                group.get('subject')?.touched &&
-                group.get('subject')?.hasError('required')
-              "
-            >
-              Subject is required
-            </div>
-          </div>
-
-          <!-- Grade Selection -->
-          <div class="col-12 col-sm-5">
-            <select class="form-control" formControlName="grade">
-              <option value="">-- Select Grade --</option>
-              <option *ngFor="let grade of currentGrades" [value]="grade">
-                {{ grade }}
-              </option>
-            </select>
-            <div
-              class="text-danger"
-              *ngIf="
-                group.get('grade')?.touched &&
-                group.get('grade')?.hasError('required')
-              "
-            >
-              Grade is required
-            </div>
-          </div>
-
-          <!-- Remove Button -->
-          <div
-            class="col-12 col-sm-2 d-flex align-items-center justify-content-center"
-          >
-            <!-- <button type="button" class="btn btn-danger w-100" (click)="removeSubjects(i)">
-              Remove
-            </button> -->
-
-            <button class="btn btn-danger btn-sm" (click)="removeSubjects(i)">
-              <i class="bx bx-trash"></i> Remove
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add and Submit Buttons -->
-      <div class="row mt-3">
-        <div class="col-6">
-          <button
-            type="button"
-            class="btn btn-secondary w-100"
-            (click)="addSubjects()"
-          >
-            + Add Subject
-          </button>
-        </div>
-        <div class="col-6">
-          <button
-            type="submit"
-            class="btn btn-primary w-100"
-            [disabled]="manualEntryForm.invalid"
-          >
-            Submit Results
-          </button>
-        </div>
+      <div class="col-md-4">
+        <label>Exam Year</label>
+        <select class="form-control" formControlName="examYear">
+          <option value="">Choose</option>
+          <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+        </select>
       </div>
     </div>
+  </div>
+
+  <!-- Subject Entry Section -->
+  <div class="card mb-3 p-3 bg-light">
+    <div class="row">
+      <div class="col-md-3">
+        <label>Exam Type</label>
+        <select class="form-control" formControlName="examType">
+          <option value="">Choose Exam Type</option>
+          <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Subject</label>
+        <input type="text" formControlName="subject" class="form-control" placeholder="Select Subject" />
+      </div>
+      <div class="col-md-3">
+        <label>Grade</label>
+        <select class="form-control" formControlName="grade">
+          <option value="">Select Grade</option>
+          <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Sitting</label>
+        <select class="form-control" formControlName="sitting">
+          <option value="">Select Sitting</option>
+          <option value="May/June">May/June</option>
+          <option value="Nov/Dec">Nov/Dec</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button type="button" class="btn btn-primary px-5" (click)="addEntry()">➕ Add</button>
+    </div>
+  </div>
+
+  <!-- Entry Table -->
+  <div *ngIf="entries.length > 0" class="card">
+    <table class="table table-striped table-bordered mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Index No.</th>
+          <th>Exam Board</th>
+          <th>Year</th>
+          <th>Exam Type</th>
+          <th>Subject</th>
+          <th>Grade</th>
+          <th>Sitting</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of entries; let i = index">
+          <td>{{ item.indexNumber }}</td>
+          <td>{{ item.examBoard }}</td>
+          <td>{{ item.examYear }}</td>
+          <td>{{ item.examType }}</td>
+          <td>{{ item.subject }}</td>
+          <td>{{ item.grade }}</td>
+          <td>{{ item.sitting }}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="removeEntry(i)">🗑️ Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-end mt-3">
+  <button class="btn btn-success" (click)="getFormattedResponse()">
+    🔍 Submit for Interpretation
+  </button>
+</div>
+
   </div>
 </form>

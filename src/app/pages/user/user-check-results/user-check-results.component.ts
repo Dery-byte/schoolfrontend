@@ -49,10 +49,92 @@ export class UserCheckResultsComponent {
     private snackBar: MatSnackBar,
     private waec: WaecControllersService,
     private elig:EligibilityControllerService
-  ) {}
+  ) {
+     this.entryForm = this.fb.group({
+      indexNumber: [''],
+      examBoard: [''],
+      examYear: [''],
+      examType: [''],
+      subject: [''],
+      grade: [''],
+      sitting: ['']
+    });
+  }
+  examBoards = ['WAEC', 'CTVET'];
+
 
   // categories = ['PUBLIC', 'PRIVATE'];
 
+  onBoardChange(event: any): void {
+    const selectedBoard = event.target.value;
+    if (selectedBoard === 'WAEC') {
+      this.availableExamTypes = ['WASSCE Private', 'WASSCE School'];
+    } else if (selectedBoard === 'CTVET') {
+      this.availableExamTypes = ['NAPTEX', 'SSCE'];
+    } else {
+      this.availableExamTypes = [];
+    }
+    this.entryForm.patchValue({ examType: '' });
+  }
+
+  addEntry(): void {
+    const entry = this.entryForm.value;
+    if (entry.indexNumber && entry.examBoard && entry.examYear && entry.subject && entry.grade && entry.examType && entry.sitting) {
+      this.entries.push({ ...entry });
+      this.entryForm.patchValue({ subject: '', grade: '', examType: '', sitting: '' });
+    }
+  }
+
+  removeEntry(index: number): void {
+    this.entries.splice(index, 1);
+  }
+
+  getFormattedResponse(): void {
+  const response = this.entries.map(entry => {
+    // const subjectcode = this.subjectCodeMap[entry.subject] || 'UNK000';
+    // const interpretation = this.interpretationMap[entry.grade] || 'Unknown';
+
+    return {
+      // subjectcode,
+      subject: entry.subject,
+      grade: entry.grade,
+      // interpretation
+    };
+  });
+
+  console.log('Formatted Response:', response);
+}
+
+entryForm: FormGroup;
+entries: any[] = [];
+// examYears = [2024, 2023, 2022]; // Example years
+
+  availableExamTypes: string[] = [];
+
+
+// addEntry() {
+//   if (this.entryForm.invalid) {
+//     this.entryForm.markAllAsTouched();
+//     return;
+//   }
+
+//   this.entries.push({ ...this.entryForm.value });
+//   this.entryForm.reset();
+// }
+
+// removeEntry(index: number) {
+//   this.entries.splice(index, 1);
+// }
+
+submitResults() {
+  if (this.entries.length === 0) {
+    alert('No entries to submit.');
+    return;
+  }
+
+  console.log('Submitting:', this.entries);
+  // Submit this.entries to your backend or service here
+}
 
  
   ngOnInit(): void {

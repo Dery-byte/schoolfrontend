@@ -1,0 +1,129 @@
+.dashboard-welcome-section {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.welcome-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.welcome-header {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: white;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.welcome-text .welcome-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-text .welcome-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 0;
+}
+
+.welcome-image img {
+  height: 120px;
+  width: auto;
+}
+
+.welcome-content {
+  padding: 30px;
+}
+
+.feature-title {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.feature-description p {
+  color: #4a5568;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.feature-steps {
+  margin: 30px 0;
+}
+
+.step {
+  display: flex;
+  margin-bottom: 25px;
+  align-items: flex-start;
+}
+
+.step-icon {
+  background: #6e8efb;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.step-content h6 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.step-content p {
+  color: #4a5568;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.conclusion {
+  font-weight: 500;
+  color: #2c3e50 !important;
+  border-left: 3px solid #a777e3;
+  padding-left: 15px;
+}
+
+@media (max-width: 768px) {
+  .welcome-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .welcome-image {
+    margin-top: 20px;
+    align-self: flex-end;
+  }
+  
+  .welcome-image img {
+    height: 90px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
