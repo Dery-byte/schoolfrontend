@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -63,7 +65,9 @@ import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eli
     CodeInputModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgbNavModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
