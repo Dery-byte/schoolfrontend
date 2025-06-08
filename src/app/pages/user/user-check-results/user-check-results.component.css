@@ -1,0 +1,258 @@
+.btn-primary:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.spinner-border {
+  vertical-align: middle;
+}
+
+
+
+
+
+/* ELEIGIBILITY */
+
+
+.eligibility-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.university-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.university-header {
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.university-info {
+  .university-name {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  .university-meta {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+
+    .location {
+      margin-right: 12px;
+    }
+
+    .university-type {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &.public {
+        background: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+      }
+
+      &.private {
+        background: rgba(155, 89, 182, 0.1);
+        color: #9b59b6;
+      }
+    }
+  }
+}
+
+.programs-section {
+  padding: 20px 24px;
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #34495e;
+
+    .icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+
+      &.success {
+        color: #27ae60;
+      }
+
+      &.warning {
+        color: #f39c12;
+      }
+    }
+  }
+}
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.program-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  &.success {
+    border-left: 4px solid #27ae60;
+  }
+
+  &.warning {
+    border-left: 4px solid #f39c12;
+  }
+
+  .program-header {
+    padding: 16px;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ecf0f1;
+  }
+
+  .program-name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  .eligibility-score {
+    text-align: right;
+
+    .score-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #7f8c8d;
+      margin-bottom: 4px;
+    }
+
+    .score-bar {
+      width: 100px;
+      height: 6px;
+      background: #ecf0f1;
+      border-radius: 3px;
+      overflow: hidden;
+
+      .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #f39c12, #f1c40f);
+        transition: width 0.5s ease;
+      }
+    }
+  }
+
+  .program-badge {
+    padding: 4px 10px;
+    background: rgba(39, 174, 96, 0.1);
+    color: #27ae60;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .program-details {
+    padding: 16px;
+    background: white;
+
+    h6 {
+      margin: 0 0 12px 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .grade-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    .grade-tag {
+      display: flex;
+      align-items: center;
+      background: #f8f9fa;
+      border-radius: 4px;
+      overflow: hidden;
+      font-size: 0.85rem;
+
+      .subject {
+        padding: 4px 8px;
+        background: #ecf0f1;
+        font-weight: 500;
+        color: #34495e;
+      }
+
+      .grade {
+        padding: 4px 8px;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+    }
+  }
+
+  .feedback {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        padding: 8px 0;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: flex-start;
+
+        .icon {
+          margin-right: 8px;
+          margin-top: 2px;
+          font-size: 0.9rem;
+        }
+
+        &.error {
+          color: #e74c3c;
+
+          .icon {
+            color: #e74c3c;
+          }
+        }
+
+        &.warning {
+          color: #e67e22;
+
+          .icon {
+            color: #e67e22;
+          }
+        }
+      }
+    }
+  }
+}
+

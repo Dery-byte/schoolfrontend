@@ -30,6 +30,7 @@ import { UserHeaderComponent } from './pages/user/user-header/user-header.compon
 import { UserSidebarComponent } from './pages/user/user-sidebar/user-sidebar.component';
 import { UserCheckResultsComponent } from './pages/user/user-check-results/user-check-results.component';
 import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eligibility.component';
+import { ConfirmationModalComponent } from './pages/utilities/confirmation-modal/confirmation-modal.component';
 
 
 
@@ -55,7 +56,8 @@ import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eli
     UserHeaderComponent,
     UserSidebarComponent,
     UserCheckResultsComponent,
-    UserEligibilityComponent
+    UserEligibilityComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,

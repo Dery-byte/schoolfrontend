@@ -40,8 +40,75 @@
             </div>
           </div>
 
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <div class="text-center mt-4">
             <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="initiateCheck()"
+              style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
+              <i class="fas fa-play-circle me-2"></i> Start New Checkss
+            </button>
+
+
+
+            <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="createRecords()"
               style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
               <i class="fas fa-play-circle me-2"></i> Start New Check
             </button>
@@ -49,6 +116,83 @@
         </form>
       </div>
     </div>
+
+
+    <!-- {{userChecks|json}} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Previous Checks List -->
     <div *ngIf="userChecks.length > 0" class="card border-0 shadow-sm">
@@ -109,8 +253,90 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div>
 
+
+
+
+
+  
   <!-- Active Check Workflow -->
   <div *ngIf="currentCheck" class="active-check-container">
     <!-- Payment Step (shown if not paid) -->
@@ -194,7 +420,7 @@
           <i class="fas fa-user-graduate me-3 fs-4 text-primary"></i>
           <div>
             <h6 class="mb-0">Currently processing check for:</h6>
-            <strong class="fs-5">{{currentCheck.candidateName}}</strong> ({{currentCheck.examDetails.examType}})
+            <strong class="fs-5">{{currentCheck.candidateName}}</strong>
           </div>
         </div>
         <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
@@ -265,165 +491,373 @@
                   </div>
                 </div>
 
-                <div class="col-md-4">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="indexNumber" placeholder="Enter Index Number"
-                      formControlName="indexNumber" required>
-                    <label for="indexNumber">Index Number</label>
-                    <div class="invalid-feedback"
-                      *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
-                      Please enter an index number
+
+
+
+
+
+
+
+                <div class="col-md-4"> <!-- Wider column to fit both -->
+                  <div class="row g-3 ">
+                    <div class="col-md-8">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" id="indexNumber" placeholder="Enter Index Number"
+                          formControlName="indexNumber" required>
+                        <label for="indexNumber">Index Number</label>
+                        <div class="invalid-feedback"
+                          *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
+                          Please enter an index number
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Button (takes less space) -->
+                    <div class="col-md-4">
+                      <button type="button" class="btn btn-primary" (click)="openConfirmModal()"
+                        [disabled]="examForm.get('indexNumber')?.invalid">
+                        Confirm
+                      </button>
                     </div>
                   </div>
                 </div>
+
+
+
+
               </div>
 
               <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary px-5 rounded-pill shadow-sm"
                   style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;"
-                  (click)="submitFormCheck()">
+                  (click)="submitFormCheck()" [disabled]="!examForm.valid  || !isIndexConfirmed">
                   <i class="fas fa-search me-2"></i> Retrieve Results
                 </button>
               </div>
 
             </form>
           </div>
+          <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+            <div class="card-body text-center py-5">
+              <div class="mb-4">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <h5 class="mb-3">Retrieving WAEC Results</h5>
+              <p class="text-muted mb-4">Please wait while we fetch the official results from WAEC</p>
 
-<!-- LOADING SPINNER -->
-<!-- Add this right below the form in the "GET RESULTS FORM" section, before the waecresults json -->
-<div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-  <div class="card-body text-center py-5">
-    <div class="mb-4">
-      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-    <h5 class="mb-3">Retrieving WAEC Results</h5>
-    <p class="text-muted mb-4">Please wait while we fetch the official results from WAEC</p>
-    
-    <!-- Animated progress bar -->
-    <div class="progress mb-3" style="height: 8px; border-radius: 4px;">
-      <div class="progress-bar progress-bar-striped progress-bar-animated" 
-           role="progressbar" 
-           style="width: 100%; background: linear-gradient(135deg, #4e54c8, #8f94fb);">
-      </div>
-    </div>
-    
-    <div class="d-flex justify-content-center">
-      <div class="spinner-grow text-primary mx-1" style="width: 1.5rem; height: 1.5rem;" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <div class="spinner-grow text-primary mx-1" style="width: 1.5rem; height: 1.5rem; animation-delay: 0.2s;" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <div class="spinner-grow text-primary mx-1" style="width: 1.5rem; height: 1.5rem; animation-delay: 0.4s;" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-  </div>
-</div>
+              <!-- Animated progress bar -->
+              <div class="progress mb-3" style="height: 8px; border-radius: 4px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                  style="width: 100%; background: linear-gradient(135deg, #4e54c8, #8f94fb);">
+                </div>
+              </div>
 
-<!-- {{waecresults|json}} -->
-
-
-<!-- LOADING SPINNER -->
-
+              <div class="d-flex justify-content-center">
+                <div class="spinner-grow text-primary mx-1" style="width: 1.5rem; height: 1.5rem;" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <!-- <div class="spinner-grow text-primary mx-1"
+                  style="width: 1.5rem; height: 1.5rem; animation-delay: 0.2s;" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> -->
+                <!-- <div class="spinner-grow text-primary mx-1"
+                  style="width: 1.5rem; height: 1.5rem; animation-delay: 0.4s;" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div> -->
+              </div>
+            </div>
+          </div>
 
           <!-- {{waecresults|json}} -->
 
 
-<!-- Results Display Section -->
-<div *ngIf="waecresults" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-  <div class="card-header bg-white border-bottom-0 py-3">
-    <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for {{waecresults.cname}}</h5>
-  </div>
-  <div class="card-body">
-    <!-- Candidate Summary -->
-    <div class="row mb-4">
-      <div class="col-md-4">
-        <div class="d-flex align-items-center mb-3">
-          <i class="fas fa-id-card me-3 text-muted fs-4"></i>
-          <div>
-            <h6 class="mb-0 text-muted small">Index Number</h6>
-            <p class="mb-0 fw-bold">{{waecresults.cindex}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="d-flex align-items-center mb-3">
-          <i class="fas fa-calendar-alt me-3 text-muted fs-4"></i>
-          <div>
-            <h6 class="mb-0 text-muted small">Date of Birth</h6>
-            <p class="mb-0 fw-bold">{{waecresults.dob}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="d-flex align-items-center mb-3">
-          <i class="fas fa-graduation-cap me-3 text-muted fs-4"></i>
-          <div>
-            <h6 class="mb-0 text-muted small">Exam Year</h6>
-            <p class="mb-0 fw-bold">{{waecresults.examyear}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Results Table -->
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light">
-          <tr>
-            <th class="ps-4">Subject Code</th>
-            <th>Subject</th>
-            <th>Grade</th>
-            <th class="pe-4">Interpretation</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let result of waecresults.resultDetails">
-            <td class="ps-4">{{result.subjectcode}}</td>
-            <td class="fw-bold">{{result.subject}}</td>
-            <td>
-              <span class="badge rounded-pill py-2 px-3" 
-                [ngClass]="{
+          <!-- Results Display Section -->
+          <div *ngIf="waecresults" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+            <div class="card-header bg-white border-bottom-0 py-3">
+              <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for {{waecresults.cname}}
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Candidate Summary -->
+              <div class="row mb-4">
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-id-card me-3 text-muted fs-4"></i>
+                    <div>
+                      <h6 class="mb-0 text-muted small">Index Number</h6>
+                      <p class="mb-0 fw-bold">{{waecresults.cindex}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-calendar-alt me-3 text-muted fs-4"></i>
+                    <div>
+                      <h6 class="mb-0 text-muted small">Date of Birth</h6>
+                      <p class="mb-0 fw-bold">{{waecresults.dob}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-graduation-cap me-3 text-muted fs-4"></i>
+                    <div>
+                      <h6 class="mb-0 text-muted small">Exam Year</h6>
+                      <p class="mb-0 fw-bold">{{waecresults.examyear}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Results Table -->
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="ps-4">Subject Code</th>
+                      <th>Subject</th>
+                      <th>Grade</th>
+                      <th class="pe-4">Interpretation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let result of waecresults.resultDetails">
+                      <td class="ps-4">{{result.subjectcode}}</td>
+                      <td class="fw-bold">{{result.subject}}</td>
+                      <td>
+                        <span class="badge rounded-pill py-2 px-3" [ngClass]="{
                   'bg-success': result.grade === 'A1' || result.grade === 'B2' || result.grade === 'B3',
                   'bg-primary': result.grade === 'C4' || result.grade === 'C5' || result.grade === 'C6',
                   'bg-warning': result.grade === 'D7' || result.grade === 'E8',
                   'bg-danger': result.grade === 'F9'
                 }">
-                {{result.grade}}
-              </span>
-            </td>
-            <td class="pe-4">{{result.interpretation}}</td>
-          </tr>
-        </tbody>
-      </table>
+                          {{result.grade}}
+                        </span>
+                      </td>
+                      <td class="pe-4">{{result.interpretation}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Summary and Actions -->
+              <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                  <span class="badge bg-light text-dark rounded-pill py-2 px-3">
+                    <i class="fas fa-book me-2"></i> {{waecresults.resultDetails.length}} Subjects
+                  </span>
+                </div>
+                <div>
+                  <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeResults()"
+                    [disabled]="isCheckingEligibility">
+                    <span *ngIf="!isCheckingEligibility">
+                      <i class="fas fa-chart-bar me-2"></i> Check Eligibility
+                    </span>
+                    <span *ngIf="isCheckingEligibility">
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Checking...
+                    </span>
+                  </button>
+                  <button class="btn btn-outline-secondary rounded-pill shadow-sm" (click)="downloadResultsPDF()">
+                    <i class="fas fa-download me-2"></i> Download PDF
+                  </button>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+          <!-- ELEGIBILITY DISPLAY STARTS -->
+
+<div class="eligibility-container">
+  <!-- University Cards -->
+  <div *ngFor="let university of elligibilityResults" class="university-card">
+    <!-- University Header -->
+    <div class="university-header">
+      <div class="university-info">
+        <h3 class="university-name">{{ university.universityName }}</h3>
+        <div class="university-meta">
+          <span class="location">{{ university.location }}</span>
+          <span class="university-type" [class.public]="university.type === 'PUBLIC'" 
+                [class.private]="university.type === 'PRIVATE'">
+            {{ university.type | lowercase }}
+          </span>
+        </div>
+      </div>
     </div>
 
-    <!-- Summary and Actions -->
-    <div class="d-flex justify-content-between align-items-center mt-4">
-      <div>
-        <span class="badge bg-light text-dark rounded-pill py-2 px-3">
-          <i class="fas fa-book me-2"></i> {{waecresults.resultDetails.length}} Subjects
-        </span>
+    <!-- Eligible Programs -->
+    <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
+      <h4 class="section-title">
+        <span class="icon success"><i class="fas fa-check-circle"></i></span>
+        Eligible Programs
+      </h4>
+      <div class="programs-grid">
+        <div *ngFor="let program of university.eligiblePrograms" class="program-card success">
+          <div class="program-content">
+            <h5 class="program-name">{{ program.programName }}</h5>
+            <div class="program-badge">You qualify</div>
+          </div>
+        </div>
       </div>
-      <div>
-        <button class="btn btn-primary rounded-pill shadow-sm me-2" >
-          <i class="fas fa-chart-bar me-2"></i> Analyze Results
-        </button>
-        <button class="btn btn-outline-secondary rounded-pill shadow-sm" (click)="downloadResultsPDF()">
-          <i class="fas fa-download me-2"></i> Download PDF
-        </button>
+    </div>
+
+    <!-- Alternative Programs -->
+    <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
+      <h4 class="section-title">
+        <span class="icon warning"><i class="fas fa-info-circle"></i></span>
+        Alternative Options
+      </h4>
+      <div class="programs-grid">
+        <div *ngFor="let program of university.alternativePrograms" class="program-card warning">
+          <div class="program-header">
+            <h5 class="program-name">{{ program.programName }}</h5>
+            <div class="eligibility-score">
+              <div class="score-value">{{ program.percentageEligibility }}% match</div>
+              <div class="score-bar">
+                <div class="bar-fill" [style.width]="program.percentageEligibility + '%'"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="program-details">
+            <div class="requirements">
+              <h6>Requirements</h6>
+              <div class="grade-tags">
+                <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="grade-tag">
+                  <span class="subject">{{ subject  }}</span>
+                  <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="feedback">
+              <h6>Admission Notes</h6>
+              <ul>
+                <li *ngFor="let explanation of program.explanation" 
+                    [class.error]="explanation.includes('Invalid') || explanation.includes('missing')"
+                    [class.warning]="explanation.includes('Diff')">
+                  <i class="icon" [class.fa-times-circle]="explanation.includes('Invalid') || explanation.includes('missing')"
+                     [class.fa-exclamation-circle]="explanation.includes('Diff')"></i>
+                  {{ explanation }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+          <!-- ELEGIBILITY DISPLAY ENDS -->
+          <!-- {{elligibilityResults|json}} -->
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- CONFIRM INDEX NUMBER MODAL -->
+
+          <!-- Confirm Modal -->
+          <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirmModalLabel">Confirm Index Number</h5>
+                  <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                  <input type="text" [(ngModel)]="confirmInput" class="form-control"
+                    placeholder="Re-enter Index Number">
+                  <div *ngIf="showMismatchError" class="text-danger mt-2">
+                    Index numbers do not match.
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                  <button type="button" class="btn btn-success" (click)="verifyConfirmation()">Confirm</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
 
 
 

@@ -7,6 +7,25 @@ import { EligibilityControllerService } from 'src/app/services/services';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
+import { ConfirmationModalComponent } from '../../utilities/confirmation-modal/confirmation-modal.component';
+declare var bootstrap: any; // Required for Bootstrap JS modal handling
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+
+// interface EligibilityCheck {
+//   id: string;
+//   userId: string;
+//   candidateName: string | null;
+//   paymentStatus: string | null;
+//   checkStatus: 'not_started' | 'in_progress' | 'completed' | string;
+//   createdAt: string;
+//   lastUpdated: string;
+//   waecCandidateEntity: any | null;
+// }
+
+
+
 
 declare module 'jspdf' {
   interface jsPDF {
@@ -60,7 +79,9 @@ export class UserCheckResultsComponent implements OnInit {
   // Payment and Check Management
   paymentSuccess = false;
   currentCheck: EligibilityCheck | null = null;
-  userChecks: EligibilityCheck[] = [];
+  userChecks: any;
+
+  // userChecks: EligibilityCheck[] = [];
   newCheckForm: FormGroup;
 
   // Existing properties
@@ -69,7 +90,7 @@ export class UserCheckResultsComponent implements OnInit {
   entryForm: FormGroup;
   entries: any[] = [];
   examYears: number[] = Array.from(
-    {length: (new Date().getFullYear() - 1999)}, 
+    { length: (new Date().getFullYear() - 1999) },
     (_, i) => new Date().getFullYear() - i
   );
   examForm!: FormGroup;
@@ -85,7 +106,7 @@ export class UserCheckResultsComponent implements OnInit {
   showCTVETOptions = false;
   currentGrades: string[] = [];
   currentSubjects: string[] = [];
-  
+
   subjectDatabase: SubjectDatabase = {
     WAEC: {
       WASSCE_SCHOOL: [
@@ -133,8 +154,9 @@ export class UserCheckResultsComponent implements OnInit {
     private unive: UniversityControllerService,
     private snackBar: MatSnackBar,
     private waec: WaecControllersService,
-    private elig: EligibilityControllerService
-  ) {
+    private elig: EligibilityControllerService,
+    private eligibility: ManaulServiceService,
+private modalService: NgbModal  ) {
     this.entryForm = this.fb.group({
       indexNumber: [''],
       examBoard: [''],
@@ -155,26 +177,9 @@ export class UserCheckResultsComponent implements OnInit {
     this.initForm();
     this.manualForm();
     this.loadChecks();
+    this.getResultsByUser();
   }
 
-  // Check Management Methods
-  initiateCheck() {
-    const newCheck: EligibilityCheck = {
-      id: this.generateId(),
-      userId: 'current-user-id', // Replace with actual user ID from auth
-      candidateName: this.newCheckForm.value.candidateName,
-      examDetails: this.newCheckForm.value,
-      paymentStatus: 'pending',
-      checkStatus: 'not_started',
-      createdAt: new Date(),
-      lastUpdated: new Date()
-    };
-    
-    this.userChecks.unshift(newCheck);
-    this.currentCheck = newCheck;
-    this.saveChecks();
-    this.newCheckForm.reset();
-  }
 
   simulatePayment() {
     if (this.currentCheck) {
@@ -186,12 +191,21 @@ export class UserCheckResultsComponent implements OnInit {
     }
   }
 
+  // resumeCheck(checkId: string) {
+  //   this.currentCheck = this.userChecks.find(c => c.id === checkId) || null;
+  //   if (this.currentCheck?.paymentStatus === 'paid') {
+  //     this.paymentSuccess = true;
+  //   }
+  // }
+
   resumeCheck(checkId: string) {
-    this.currentCheck = this.userChecks.find(c => c.id === checkId) || null;
-    if (this.currentCheck?.paymentStatus === 'paid') {
-      this.paymentSuccess = true;
-    }
+
+    console.log(checkId);
+  this.currentCheck = this.userChecks.find((c: EligibilityCheck) => c.id === checkId) || null;
+  if (this.currentCheck?.paymentStatus === 'paid') {
+    this.paymentSuccess = true;
   }
+}
 
   cancelCurrentCheck() {
     this.currentCheck = null;
@@ -230,7 +244,7 @@ export class UserCheckResultsComponent implements OnInit {
     });
   }
 
-  manualForm() {  
+  manualForm() {
     this.manualEntryForm = this.fb.group({
       examBoard: ['', Validators.required],
       examYear: ['', Validators.required],
@@ -278,43 +292,190 @@ export class UserCheckResultsComponent implements OnInit {
 
   isLoading: boolean = false;
 
-  submitFormCheck() {
-    if (this.examForm.valid) {
-        this.isLoading = true;
 
-      const requestPayload = {
-        cindex: this.examForm.value.indexNumber,
-        examyear: this.examForm.value.examYear,
-        examtype: this.examForm.value.examType
-      };
-  
-      console.log(requestPayload);
-      this.waec.verifyWaecResult({body: requestPayload}).subscribe({
-        next: (res) => {
-          this.waecresults = res;
-                this.isLoading = false;
+  // confirmAction() {
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: "You won't be able to revert this!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Yes, proceed!',
+  //     cancelButtonText: 'No, cancel',
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       // User confirmed
+  //       console.log('Confirmed!');
+  //     } else {
+  //       // User cancelled or dismissed
+  //       console.log('Cancelled');
+  //     }
+  //   });
+  // }
 
-          localStorage.setItem("candidate", JSON.stringify(this.waecresults));
-          console.log('Success:', res);
-          this.examForm.reset();
-          
-          // Mark check as completed if payment was made
-          if (this.currentCheck) {
-            this.currentCheck.result = res;
-            this.currentCheck.checkStatus = 'completed';
-            this.saveChecks();
-          }
-        },
-        error: (err) => {
-                this.isLoading = false;
 
-          console.error('Error:', err);
-        }
-      });
-    } else {
-      this.examForm.markAllAsTouched();
-    }
+  // submitFormCheck() {
+  //   if (this.examForm.valid) {
+  //     this.isLoading = true;
+
+  //     const requestPayload = {
+  //       cindex: this.examForm.value.indexNumber,
+  //       examyear: this.examForm.value.examYear,
+  //       examtype: this.examForm.value.examType
+  //     };
+
+  //     console.log(requestPayload);
+  //     this.waec.verifyWaecResult({ body: requestPayload }).subscribe({
+  //       next: (res) => {
+  //         this.waecresults = res;
+  //         this.isLoading = false;
+
+  //         localStorage.setItem("candidate", JSON.stringify(this.waecresults));
+  //         console.log('Success:', res);
+  //         this.examForm.reset();
+
+  //         // Mark check as completed if payment was made
+  //         if (this.currentCheck) {
+  //           this.currentCheck.result = res;
+  //           this.currentCheck.checkStatus = 'completed';
+  //           this.saveChecks();
+  //         }
+  //       },
+  //       error: (err) => {
+  //         this.isLoading = false;
+
+  //         console.error('Error:', err);
+  //       }
+  //     });
+  //   } else {
+  //     this.examForm.markAllAsTouched();
+  //   }
+  // }
+submitFormCheck() {
+  if (this.examForm.valid && this.isIndexConfirmed) {
+    // Use SweetAlert2 for confirmation dialog
+    Swal.fire({
+      title: 'CONFIRM INDEX NUMBER',
+      html: `<h3 style="margin: 0; font-weight: bold;">${this.examForm.value.indexNumber}</h3>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, submit',
+      cancelButtonText: 'No, cancel',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.fetchResults(); // Proceed only if user confirms
+      }
+      // else do nothing if canceled
+    });
+  } else {
+    this.examForm.markAllAsTouched();
   }
+}
+
+// Add this method to your component class
+getSimplifiedResults(): {subject: string, grade: string}[] {
+  if (!this.waecresults || !this.waecresults.resultDetails) {
+    return [];
+  }
+
+  return this.waecresults.resultDetails.map((result: any) => ({
+    subject: result.subject,
+    grade: result.grade
+  }));
+}
+
+
+
+elligibilityResults:any;
+isCheckingEligibility: boolean = false;
+// In eligibility-results.component.ts
+getSubjects(cutoffPoints: any): string[] {
+  return Object.keys(cutoffPoints);
+}
+analyzeResults() {
+  if (!this.waecresults || !this.waecresults.resultDetails) {
+    console.warn('No results available to analyze');
+    return;
+  }
+
+    this.isCheckingEligibility = true;
+
+  // Create the properly formatted JSON structure
+  const analysisData = {
+    resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+      subject: result.subject,
+      grade: result.grade,
+    }))
+  };
+
+  // Log to console
+  console.log('Analysis Data:', analysisData);
+  console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
+  // Send to eligibility service
+  this.eligibility.checkEligibility(analysisData).subscribe({
+    next: (data: any) => {
+      this.elligibilityResults = data;
+            this.isCheckingEligibility = false; // Reset loading state
+
+    },
+    error: (err) => {
+            this.isCheckingEligibility = false; // Additional safety
+
+      console.error('Eligibility check failed:', err);
+    }
+  });
+}
+// Separate function for API call (cleaner code)
+
+
+
+fetchResults() {
+  this.isLoading = true;
+
+  const requestPayload = {
+    cindex: this.examForm.value.indexNumber,
+    examyear: this.examForm.value.examYear,
+    examtype: this.examForm.value.examType
+  };
+
+  this.waec.verifyWaecResult({ body: requestPayload }).subscribe({
+    next: (res) => {
+      this.handleSuccess(res);
+    },
+    error: (err) => {
+      this.handleError(err);
+    }
+  });
+}
+
+handleSuccess(res: any) {
+  this.isLoading = false;
+  this.waecresults = res;
+  localStorage.setItem("candidate", JSON.stringify(res));
+  
+  if (this.currentCheck) {
+    this.currentCheck.result = res;
+    this.currentCheck.checkStatus = 'completed';
+    this.saveChecks();
+  }
+}
+
+handleError(err: any) {
+  this.isLoading = false;
+  console.error('Error:', err);
+  // Optionally show an error toast/message
+}
+
+
+
+
+
+
+
+
+
+
+
 
   // Manual Entry Methods
   get resultsDetails(): FormArray {
@@ -354,7 +515,7 @@ export class UserCheckResultsComponent implements OnInit {
 
   onCTVETExamTypeChange(event: Event) {
     const cTVETExamType = (event.target as HTMLSelectElement).value;
-    
+
     if (cTVETExamType === 'NAPTEX') {
       this.currentSubjects = this.subjectDatabase.CTVET.NAPTEX;
       this.currentGrades = this.gradeOptions.NAPTEX;
@@ -362,7 +523,7 @@ export class UserCheckResultsComponent implements OnInit {
       this.currentSubjects = this.subjectDatabase.CTVET.TEU;
       this.currentGrades = this.gradeOptions.TEU;
     }
-    
+
     while (this.resultsDetails.length !== 0) {
       this.resultsDetails.removeAt(0);
     }
@@ -372,12 +533,12 @@ export class UserCheckResultsComponent implements OnInit {
   onExamTypeChange(event: Event) {
     const examType = (event.target as HTMLSelectElement).value as WASSCEType;
     const examBoard = this.manualEntryForm.get('examBoard')?.value as ExamBoard;
-    
+
     if (examBoard === 'WAEC' && examType) {
       this.currentSubjects = this.subjectDatabase.WAEC[examType];
       this.currentGrades = this.gradeOptions[examType];
     }
-    
+
     while (this.resultsDetails.length !== 0) {
       this.resultsDetails.removeAt(0);
     }
@@ -387,7 +548,7 @@ export class UserCheckResultsComponent implements OnInit {
   submitFormManu() {
     if (this.manualEntryForm.valid) {
       console.log('Form submitted:', this.manualEntryForm.value);
-      
+
       // Mark check as completed if payment was made
       if (this.currentCheck) {
         this.currentCheck.result = this.manualEntryForm.value;
@@ -439,102 +600,356 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-//  DOWNLOAD RESULTS AS PDF
+  //  DOWNLOAD RESULTS AS PDF
 
 
-downloadResultsPDF() {
-  if (!this.waecresults) return;
+  downloadResultsPDF() {
+    if (!this.waecresults) return;
 
-  const doc = new jsPDF();
+    const doc = new jsPDF();
 
-  // Title
-  doc.setFontSize(18);
-  doc.setTextColor(40, 53, 147);
-  doc.text('WAEC RESULT SLIP', 105, 20, { align: 'center' });
+    // Title
+    doc.setFontSize(18);
+    doc.setTextColor(40, 53, 147);
+    doc.text('WAEC RESULT SLIP', 105, 20, { align: 'center' });
 
-  // Candidate Info Table
-  autoTable(doc, {
-    startY: 30,
-    head: [['Candidate Name', 'Index Number', 'Date of Birth', 'Exam Year']],
-    body: [[
-      this.waecresults.cname,
-      this.waecresults.cindex,
-      this.waecresults.dob,
-      this.waecresults.examyear.toString()
-    ]],
-    theme: 'grid',
-    headStyles: {
-      fillColor: [78, 84, 200],
-      textColor: 255
+    // Candidate Info Table
+    autoTable(doc, {
+      startY: 30,
+      head: [['Candidate Name', 'Index Number', 'Date of Birth', 'Exam Year']],
+      body: [[
+        this.waecresults.cname,
+        this.waecresults.cindex,
+        this.waecresults.dob,
+        this.waecresults.examyear.toString()
+      ]],
+      theme: 'grid',
+      headStyles: {
+        fillColor: [78, 84, 200],
+        textColor: 255
+      }
+    });
+
+    // Results Data
+    const resultsData = this.waecresults.resultDetails.map(
+      (result: { subjectcode: string; subject: string; grade: string; interpretation: string }) => [
+        result.subjectcode,
+        result.subject,
+        result.grade,
+        result.interpretation
+      ]
+    );
+
+    // Results Table
+    autoTable(doc, {
+      startY: (doc as any).lastAutoTable.finalY + 10,
+      head: [['Subject Code', 'Subject', 'Grade', 'Interpretation']],
+      body: resultsData,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [78, 84, 200],
+        textColor: 255
+      },
+      styles: {
+        fontSize: 10,
+        cellPadding: 3
+      },
+      columnStyles: {
+        2: { cellWidth: 20 },
+        3: { cellWidth: 40 }
+      },
+      // didDrawCell: (data: any) => {
+      //   if (data.section === 'body' && data.column.index === 2) {
+      //     const grade = data.cell.raw;
+      //     const ctx = doc;
+
+      //     let fillColor: [number, number, number] | null = null;
+      //     if (['A1', 'B2', 'B3'].includes(grade)) fillColor = [46, 125, 50];      // Green
+      //     else if (['C4', 'C5', 'C6'].includes(grade)) fillColor = [30, 136, 229]; // Blue
+      //     else if (['D7', 'E8'].includes(grade)) fillColor = [255, 193, 7];       // Yellow
+      //     else if (grade === 'F9') fillColor = [198, 40, 40];                     // Red
+
+      //     if (fillColor) {
+      //       ctx.setFillColor(...fillColor);
+      //       ctx.circle(data.cell.x + 10, data.cell.y + 7, 5, 'F');
+      //       ctx.setTextColor(255, 255, 255);
+      //       ctx.text(grade, data.cell.x + 10, data.cell.y + 9, { align: 'center' });
+      //       ctx.setTextColor(0, 0, 0); // Reset for next cell
+      //     }
+      //   }
+      // }
+
+
+    });
+
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(
+      'Generated by OTC - ' + new Date().toLocaleDateString(),
+      105,
+      doc.internal.pageSize.height - 10,
+      { align: 'center' }
+    );
+
+    // Save the file
+    const filename = `WAEC_Result_${this.waecresults.cname.replace(/ /g, '_')}_${this.waecresults.examyear}.pdf`;
+    doc.save(filename);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  // MODAL TS CLASS
+
+
+
+  confirmInput = '';
+  showMismatchError = false;
+  modalInstance: any;
+
+  // constructor(private fb: FormBuilder) {}
+
+  openConfirmModal() {
+    this.confirmInput = '';
+    this.showMismatchError = false;
+    const modalElement = document.getElementById('confirmModal');
+    this.modalInstance = new bootstrap.Modal(modalElement);
+    this.modalInstance.show();
+  }
+
+  closeModal() {
+    this.modalInstance.hide();
+  }
+  isIndexConfirmed: boolean = false; // Track confirmation status
+
+
+  verifyConfirmation() {
+    const original = this.examForm.get('indexNumber')?.value;
+    if (this.confirmInput === original) {
+      this.isIndexConfirmed = true;
+      this.showMismatchError = false;
+      this.closeModal();
+      // Proceed to next step (e.g. enable next section or allow form submission)
+    } else {
+      this.showMismatchError = true;
     }
-  });
-
-  // Results Data
-  const resultsData = this.waecresults.resultDetails.map(
-    (result: { subjectcode: string; subject: string; grade: string; interpretation: string }) => [
-      result.subjectcode,
-      result.subject,
-      result.grade,
-      result.interpretation
-    ]
-  );
-
-  // Results Table
-  autoTable(doc, {
-  startY: (doc as any).lastAutoTable.finalY + 10,
-    head: [['Subject Code', 'Subject', 'Grade', 'Interpretation']],
-    body: resultsData,
-    theme: 'grid',
-    headStyles: {
-      fillColor: [78, 84, 200],
-      textColor: 255
-    },
-    styles: {
-      fontSize: 10,
-      cellPadding: 3
-    },
-    columnStyles: {
-      2: { cellWidth: 20 },
-      3: { cellWidth: 40 }
-    },
-    // didDrawCell: (data: any) => {
-    //   if (data.section === 'body' && data.column.index === 2) {
-    //     const grade = data.cell.raw;
-    //     const ctx = doc;
-
-    //     let fillColor: [number, number, number] | null = null;
-    //     if (['A1', 'B2', 'B3'].includes(grade)) fillColor = [46, 125, 50];      // Green
-    //     else if (['C4', 'C5', 'C6'].includes(grade)) fillColor = [30, 136, 229]; // Blue
-    //     else if (['D7', 'E8'].includes(grade)) fillColor = [255, 193, 7];       // Yellow
-    //     else if (grade === 'F9') fillColor = [198, 40, 40];                     // Red
-
-    //     if (fillColor) {
-    //       ctx.setFillColor(...fillColor);
-    //       ctx.circle(data.cell.x + 10, data.cell.y + 7, 5, 'F');
-    //       ctx.setTextColor(255, 255, 255);
-    //       ctx.text(grade, data.cell.x + 10, data.cell.y + 9, { align: 'center' });
-    //       ctx.setTextColor(0, 0, 0); // Reset for next cell
-    //     }
-    //   }
-    // }
+  }
 
 
-  });
 
-  // Footer
-  doc.setFontSize(10);
-  doc.setTextColor(100, 100, 100);
-  doc.text(
-    'Generated by OTC - ' + new Date().toLocaleDateString(),
-    105,
-    doc.internal.pageSize.height - 10,
-    { align: 'center' }
-  );
 
-  // Save the file
-  const filename = `WAEC_Result_${this.waecresults.cname.replace(/ /g, '_')}_${this.waecresults.examyear}.pdf`;
-  doc.save(filename);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  // openConfirmationModal() {
+  //   const modalRef = this.modalService.open(ConfirmationModalComponent, {
+  //     centered: true,
+  //     backdrop: 'static'
+  //   });
+
+  //   // Customize modal inputs
+  //   modalRef.componentInstance.title = 'Confirm Index Number';
+  //   modalRef.componentInstance.message = `You entered: }. Is this correct?`;
+  //   modalRef.componentInstance.confirmText = 'Yes, Retrieve Results';
+  //   modalRef.componentInstance.cancelText = 'No, Edit';
+
+  //   modalRef.result.then((result) => {
+  //     if (result) {
+  //     }
+  //   }).catch(() => {
+  //     // Handle dismissal
+  //     console.log('Modal dismissed');
+  //   });
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // Check Management Methods
+  initiateCheck() {
+    const newCheck: EligibilityCheck = {
+      id: this.generateId(),
+      userId: 'current-user-id', // Replace with actual user ID from auth
+      candidateName: this.newCheckForm.value.candidateName,
+      examDetails: this.newCheckForm.value,
+      paymentStatus: 'pending',
+      checkStatus: 'not_started',
+      createdAt: new Date(),
+      lastUpdated: new Date()
+    };
+
+    this.userChecks.unshift(newCheck);
+    this.currentCheck = newCheck;
+    this.saveChecks();
+    this.newCheckForm.reset();
+  }
+
+
+
+// REAL API FOR THE FLOW
+
+// 1st Step
+createRecords() {
+    this.eligibility.startFirstStep().subscribe({
+      next: (data: any) => {
+        this.currentCheck = data;
+        this.userChecks.unshift(data);
+        this.saveChecks();
+        alert("Successfully started check");
+      },
+      error: (err) => {
+        console.error(err);
+        alert("Failed to start check");
+      }
+    });
+  }
+
+
+
+//2nd Step
+updatePayment(recordsId:number, paymentStatus: any){
+  this.eligibility.startSecondStep(recordsId,paymentStatus).subscribe((data=>{
+    console.log("succeffully created the records");
+  }))
 }
+
+//3rd Step
+updateCandidate(recordId: number,payload: any){
+  this.eligibility.startThirdStep(recordId,payload).subscribe((data=>{
+    this.getResultsByUser();
+    console.log("succeffully created the records");
+  }))
+}
+
+
+
+getResultsByUser(){
+  this.eligibility.getAllRecordsByUserID().subscribe((data=>{
+    this.userChecks=data;
+    console.log(data);
+  }));
+}
+
+
+
+
+
+
+
 
 
 
