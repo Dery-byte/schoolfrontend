@@ -40,7 +40,7 @@
             </div>
           </div>
 
-        
+
 
 
 
@@ -101,10 +101,10 @@
 
 
           <div class="text-center mt-4">
-            <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="initiateCheck()"
+            <!-- <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="initiateCheck()"
               style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
               <i class="fas fa-play-circle me-2"></i> Start New Checkss
-            </button>
+            </button> -->
 
 
 
@@ -112,6 +112,15 @@
               style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
               <i class="fas fa-play-circle me-2"></i> Start New Check
             </button>
+
+            <button class="close-button" (click)="openPaymentModal()" aria-label="Close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Open Payment Modal
+            </button>
+
+
           </div>
         </form>
       </div>
@@ -336,7 +345,7 @@
 
 
 
-  
+
   <!-- Active Check Workflow -->
   <div *ngIf="currentCheck" class="active-check-container">
     <!-- Payment Step (shown if not paid) -->
@@ -679,86 +688,87 @@
 
           <!-- ELEGIBILITY DISPLAY STARTS -->
 
-<div class="eligibility-container">
-  <!-- University Cards -->
-  <div *ngFor="let university of elligibilityResults" class="university-card">
-    <!-- University Header -->
-    <div class="university-header">
-      <div class="university-info">
-        <h3 class="university-name">{{ university.universityName }}</h3>
-        <div class="university-meta">
-          <span class="location">{{ university.location }}</span>
-          <span class="university-type" [class.public]="university.type === 'PUBLIC'" 
-                [class.private]="university.type === 'PRIVATE'">
-            {{ university.type | lowercase }}
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Eligible Programs -->
-    <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
-      <h4 class="section-title">
-        <span class="icon success"><i class="fas fa-check-circle"></i></span>
-        Eligible Programs
-      </h4>
-      <div class="programs-grid">
-        <div *ngFor="let program of university.eligiblePrograms" class="program-card success">
-          <div class="program-content">
-            <h5 class="program-name">{{ program.programName }}</h5>
-            <div class="program-badge">You qualify</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Alternative Programs -->
-    <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
-      <h4 class="section-title">
-        <span class="icon warning"><i class="fas fa-info-circle"></i></span>
-        Alternative Options
-      </h4>
-      <div class="programs-grid">
-        <div *ngFor="let program of university.alternativePrograms" class="program-card warning">
-          <div class="program-header">
-            <h5 class="program-name">{{ program.programName }}</h5>
-            <div class="eligibility-score">
-              <div class="score-value">{{ program.percentageEligibility }}% match</div>
-              <div class="score-bar">
-                <div class="bar-fill" [style.width]="program.percentageEligibility + '%'"></div>
+          <div class="eligibility-container">
+            <!-- University Cards -->
+            <div *ngFor="let university of elligibilityResults" class="university-card">
+              <!-- University Header -->
+              <div class="university-header">
+                <div class="university-info">
+                  <h3 class="university-name">{{ university.universityName }}</h3>
+                  <div class="university-meta">
+                    <span class="location">{{ university.location }}</span>
+                    <span class="university-type" [class.public]="university.type === 'PUBLIC'"
+                      [class.private]="university.type === 'PRIVATE'">
+                      {{ university.type | lowercase }}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div class="program-details">
-            <div class="requirements">
-              <h6>Requirements</h6>
-              <div class="grade-tags">
-                <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="grade-tag">
-                  <span class="subject">{{ subject  }}</span>
-                  <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+              <!-- Eligible Programs -->
+              <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
+                <h4 class="section-title">
+                  <span class="icon success"><i class="fas fa-check-circle"></i></span>
+                  Eligible Programs
+                </h4>
+                <div class="programs-grid">
+                  <div *ngFor="let program of university.eligiblePrograms" class="program-card success">
+                    <div class="program-content">
+                      <h5 class="program-name">{{ program.programName }}</h5>
+                      <div class="program-badge">You qualify</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Alternative Programs -->
+              <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
+                <h4 class="section-title">
+                  <span class="icon warning"><i class="fas fa-info-circle"></i></span>
+                  Alternative Options
+                </h4>
+                <div class="programs-grid">
+                  <div *ngFor="let program of university.alternativePrograms" class="program-card warning">
+                    <div class="program-header">
+                      <h5 class="program-name">{{ program.programName }}</h5>
+                      <div class="eligibility-score">
+                        <div class="score-value">{{ program.percentageEligibility }}% match</div>
+                        <div class="score-bar">
+                          <div class="bar-fill" [style.width]="program.percentageEligibility + '%'"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="program-details">
+                      <div class="requirements">
+                        <h6>Requirements</h6>
+                        <div class="grade-tags">
+                          <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="grade-tag">
+                            <span class="subject">{{ subject }}</span>
+                            <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="feedback">
+                        <h6>Admission Notes</h6>
+                        <ul>
+                          <li *ngFor="let explanation of program.explanation"
+                            [class.error]="explanation.includes('Invalid') || explanation.includes('missing')"
+                            [class.warning]="explanation.includes('Diff')">
+                            <i class="icon"
+                              [class.fa-times-circle]="explanation.includes('Invalid') || explanation.includes('missing')"
+                              [class.fa-exclamation-circle]="explanation.includes('Diff')"></i>
+                            {{ explanation }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div class="feedback">
-              <h6>Admission Notes</h6>
-              <ul>
-                <li *ngFor="let explanation of program.explanation" 
-                    [class.error]="explanation.includes('Invalid') || explanation.includes('missing')"
-                    [class.warning]="explanation.includes('Diff')">
-                  <i class="icon" [class.fa-times-circle]="explanation.includes('Invalid') || explanation.includes('missing')"
-                     [class.fa-exclamation-circle]="explanation.includes('Diff')"></i>
-                  {{ explanation }}
-                </li>
-              </ul>
-            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
           <!-- ELEGIBILITY DISPLAY ENDS -->
           <!-- {{elligibilityResults|json}} -->
@@ -1201,6 +1211,135 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- //MODAL HTML TEMPLATE -->
+
+<div class="modal-backdrop" *ngIf="showPaymentModal" @fadeInOut>
+  <div class="payment-modal no-blur">
+    <div class="modal-content-container">
+      <!-- Header with progress indicator -->
+      <div class="modal-header">
+        <div class="progress-step active">Complete Payment</div>
+        <button class="close-button" (click)="closePaymentModal()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
+        <div class="form-scroll-container">
+            <h3 class="section-title">Payment Amount</h3>
+            <div class="form-group amount-group">
+              <div class="currency-prefix">GHS</div>
+              <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
+                  [readonly]="isAmountFixed"  min="0.01" step="0.01" autofocus  (blur)="validateAmount()"
+                />
+            </div>
+          <h3 class="section-title">Mobile Money Details</h3>
+          <div class="form-group">
+            <label for="mobileNumber">Phone Number</label>
+            <div class="input-with-select">
+              <select formControlName="mobileNetwork" class="network-select" required>
+                <option value="" disabled selected>Select Network</option>
+                <option value="1">MTN</option>
+                <option value="5">Vodafone</option>
+                <option value="7">AirtelTigo</option>
+              </select>
+              <input type="tel" id="mobileNumber" formControlName="mobileNumber" placeholder="0244 123 456"
+                class="phone-input">
+            </div>
+            <!-- Add validation message -->
+            <div *ngIf="paymentForm.get('mobileNetwork')?.invalid && paymentForm.get('mobileNetwork')?.touched" 
+                 class="error-message">
+              Please select a mobile network
+            </div>
+          </div>
+          <div class="info-box">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                fill="#EFF6FF" stroke="#3B82F6" />
+              <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+              <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <p>You'll receive a payment request on your phone</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="submit-button" [disabled]="!paymentForm.valid">
+            <span *ngIf="!processingPayment">Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}}</span>
+            <span *ngIf="processingPayment" class="processing">
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+              </svg>
+              Processing...
+            </span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

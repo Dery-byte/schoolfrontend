@@ -12,6 +12,7 @@ declare var bootstrap: any; // Required for Bootstrap JS modal handling
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+import { BlurService } from 'src/app/shared/blur/blur.service';
 
 // interface EligibilityCheck {
 //   id: string;
@@ -58,6 +59,7 @@ interface SubjectDatabase {
   };
 }
 
+
 interface EligibilityCheck {
   id: string;
   userId: string;
@@ -76,6 +78,16 @@ interface EligibilityCheck {
   styleUrls: ['./user-check-results.component.css']
 })
 export class UserCheckResultsComponent implements OnInit {
+
+
+  paymentForm!: FormGroup;
+  isSubmitting = false;
+  showPaymentModal = false;
+
+  showNewPassword = false;
+  showConfirmPassword = false;
+
+
   // Payment and Check Management
   paymentSuccess = false;
   currentCheck: EligibilityCheck | null = null;
@@ -156,6 +168,7 @@ export class UserCheckResultsComponent implements OnInit {
     private waec: WaecControllersService,
     private elig: EligibilityControllerService,
     private eligibility: ManaulServiceService,
+    private blurService: BlurService,
 private modalService: NgbModal  ) {
     this.entryForm = this.fb.group({
       indexNumber: [''],
@@ -171,13 +184,19 @@ private modalService: NgbModal  ) {
       candidateName: ['', Validators.required],
       examType: ['', Validators.required]
     });
+
+
+
   }
 
   ngOnInit(): void {
+      this.initializeForm(50.00); // Sets fixed amount to GHS 50.00
+
     this.initForm();
     this.manualForm();
     this.loadChecks();
     this.getResultsByUser();
+
   }
 
 
@@ -199,7 +218,6 @@ private modalService: NgbModal  ) {
   // }
 
   resumeCheck(checkId: string) {
-
     console.log(checkId);
   this.currentCheck = this.userChecks.find((c: EligibilityCheck) => c.id === checkId) || null;
   if (this.currentCheck?.paymentStatus === 'paid') {
@@ -935,8 +953,6 @@ updateCandidate(recordId: number,payload: any){
   }))
 }
 
-
-
 getResultsByUser(){
   this.eligibility.getAllRecordsByUserID().subscribe((data=>{
     this.userChecks=data;
@@ -944,17 +960,91 @@ getResultsByUser(){
   }));
 }
 
+// THE PAYMENT MODAL 
+
+closePaymentModal() {
+    this.showPaymentModal = false;
+    this.isSubmitting = false;
+    this.showPaymentModal = false;
+    document.body.style.overflow = ''; // 🔓 Restore scroll
+    this.blurService.setBlur(false);
+  }
 
 
+  
+  processingPayment = false;
+  // formatAmount(event: any): void {
+  //   let value = event.target.value.replace(/[^0-9.]/g, '');
+  //   // Handle multiple decimal points
+  //   const decimalSplit = value.split('.');
+  //   if (decimalSplit.length > 2) {
+  //     value = decimalSplit[0] + '.' + decimalSplit[1];
+  //   }
+
+  //   // Limit to 2 decimal places
+  //   if (decimalSplit.length > 1) {
+  //     value = decimalSplit[0] + '.' + decimalSplit[1].slice(0, 2);
+  //   }
+  //   event.target.value = value;
+  //   this.paymentForm.get('amount')?.setValue(this.totalPrice.toFixed(2), { emitEvent: false, onlySelf:true });
+  // }
+    totalPrice: number = 0;
+
+    // Submit payment
+  submitPayment(): void {
+    if (this.paymentForm.valid) {
+      this.processingPayment = true;    
+      // Simulate payment processing
+      setTimeout(() => {
+        this.processingPayment = false;
+        // Handle payment success/failure here
+        console.log('Payment submitted:', this.paymentForm.value);
+      }, 2000);
+    }
+  }
+    // Validate amount on blur
+  validateAmount(): void {
+    const amountControl = this.paymentForm.get('amount');
+    if (amountControl?.value) {
+      const numValue = parseFloat(amountControl.value);
+      if (!isNaN(numValue)) {
+        amountControl.setValue(numValue.toFixed(2));
+      } else {
+        amountControl.setValue('0.00');
+      }
+    }
+  }
+
+initializeForm(fixedAmount: number = 0.00) {
+  this.paymentForm = this.fb.group({
+    amount: [
+      fixedAmount.toFixed(2), 
+      [Validators.required, Validators.min(0.01)]
+    ],
+    mobileNumber: ['', [
+      Validators.required,
+      Validators.pattern(/^(?:233|0)[2345][0-9]{8}$/)
+    ]],
+    mobileNetwork: ['', Validators.required]
+  });
+
+  // Make readonly instead of disabled to include in form value
+  this.isAmountFixed = true;
+}
+isAmountFixed = true; // Add this property
+
+openPaymentModal() {
+  this.showPaymentModal = true;
+  document.body.style.overflow = 'hidden';
+      this.blurService.setBlur(true);
 
 
+}
 
 
-
-
-
-
-
-
-
+ ngOnDestroy() {
+    // Clean up when component is destroyed
+    this.blurService.setBlur(false);
+    document.body.style.overflow = '';
+  }
 }
