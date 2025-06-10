@@ -49,15 +49,6 @@ startFirstStep() {
   return this.http.post(`${baseUrl}/auth/records/createCheckRecords`, body, { headers });
 }
 
-
-
-
-
-
-
-
-
-
   startSecondStep(recordId: number, paymentStatus: any) {
     const token = localStorage.getItem('token'); // Retrieve token
     const headers = new HttpHeaders({
@@ -114,7 +105,17 @@ startFirstStep() {
   return this.http.post(`${baseUrl}/auth/payments/initiate`, payload, { headers });
 }
 
+ 
 
+ verifyOTP(payload:any) {
+  const token = localStorage.getItem('token'); // Retrieve token
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json' // Specify JSON content
+
+  });
+  return this.http.post(`${baseUrl}/auth/payments/verify-otp`, payload, { headers });
+}
 
 
 

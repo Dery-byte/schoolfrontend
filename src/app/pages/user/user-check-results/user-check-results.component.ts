@@ -201,7 +201,7 @@ private modalService: NgbModal  ) {
   
 
   ngOnInit(): void {
-      this.initializeForm(50.00); // Sets fixed amount to GHS 50.00
+      this.initializeForm(1.00); // Sets fixed amount to GHS 50.00
 
     this.initForm();
     this.manualForm();
@@ -984,30 +984,28 @@ closePaymentModal() {
 
   
   processingPayment = false;
-  // formatAmount(event: any): void {
-  //   let value = event.target.value.replace(/[^0-9.]/g, '');
-  //   // Handle multiple decimal points
-  //   const decimalSplit = value.split('.');
-  //   if (decimalSplit.length > 2) {
-  //     value = decimalSplit[0] + '.' + decimalSplit[1];
-  //   }
-
-  //   // Limit to 2 decimal places
-  //   if (decimalSplit.length > 1) {
-  //     value = decimalSplit[0] + '.' + decimalSplit[1].slice(0, 2);
-  //   }
-  //   event.target.value = value;
-  //   this.paymentForm.get('amount')?.setValue(this.totalPrice.toFixed(2), { emitEvent: false, onlySelf:true });
-  // }
     totalPrice: number = 0;
+
+
+
+
+
+
+
+
+
 
     // Submit payment
   submitPayment(): void {
     if (this.paymentForm.valid) {
       this.processingPayment = true;    
       this.manualService.initializePayment(this.paymentForm.value).subscribe((data)=>{
+        this.closePaymentModal();
+        this.openOtpModal()
         console.log(data);
       })
+      this.openPaymentModal();
+
       // Simulate payment processing
       setTimeout(() => {
         this.processingPayment = false;
@@ -1016,6 +1014,35 @@ closePaymentModal() {
       }, 2000);
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Validate amount on blur
   validateAmount(): void {
     const amountControl = this.paymentForm.get('amount');
@@ -1079,9 +1106,6 @@ openOtpModal() {
 //   }
 
 
-  submitOTP(){
-    console.log("Summmnoodoidi, OTP")
-  }
 
 
 
@@ -1228,6 +1252,16 @@ openOtpModal() {
   //   }
   // }
 
+
+
+  
+ payee={
+    amount:"",
+    channel:"",
+    payer:"",
+    otpcode:""
+  }
+
   verifyOTP() {
     if (this.otpForm.invalid) {
       this.otpError = 'Please enter a valid 6-digit code';
@@ -1236,20 +1270,34 @@ openOtpModal() {
     
     this.verifyingOTP = true;
     this.otpError = '';
-    
     // Combine OTP digits
-    const otp = Object.values(this.otpForm.value).join('');
-    
-    // Here you would call your OTP verification service
-    // this.otpService.verifyOTP(otp).subscribe(...)
-    
-    // For demo purposes, we'll simulate a delay
-    setTimeout(() => {
-      this.verifyingOTP = false;
+    const otpValue = Object.values(this.otpForm.value).join('');
+
+ this.payee.amount=this.paymentForm.get('amount')?.value;
+  this.payee.channel = this.paymentForm.value.channel;
+  this.payee.payer = this.paymentForm.value.payer;
+  this.payee.otpcode = otpValue;
+
+    console.log("This is teh OTP entered", this.payee);
+     this.manualService.verifyOTP(this.payee).subscribe((data)=>{
+
+      console.log("Success Response OTP Verification", data);
+      console.log("Success!!!");
+    })
+      //this.verifyingOTP = false;
       // this.showOtpModal = false; // Uncomment on successful verification
-      // this.otpError = 'Invalid verification code'; // Uncomment if verification fails
-    }, 2000);
+       //this.otpError = 'Invalid verification code'; // Uncomment if verification fails
+  
   }
+
+
+
+
+
+
+
+
+
 
   resendOTP() {
     if (this.resendCooldown > 0) return;
@@ -1270,6 +1318,7 @@ openOtpModal() {
     
     // Here you would call your OTP resend service
     // this.otpService.resendOTP().subscribe(...)
+    
   }
 
   closeOtpModal() {
