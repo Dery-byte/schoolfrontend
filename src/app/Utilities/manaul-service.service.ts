@@ -105,6 +105,17 @@ startFirstStep() {
   
 
 
+  
+ initializePayment(payload:any) {
+  const token = localStorage.getItem('token'); // Retrieve token
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+  return this.http.post(`${baseUrl}/auth/payments/initiate`, payload, { headers });
+}
+
+
+
 
 
 

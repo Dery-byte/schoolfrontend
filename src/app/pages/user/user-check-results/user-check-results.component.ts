@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { UniversityControllerService } from 'src/app/services/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -78,6 +78,7 @@ interface EligibilityCheck {
   styleUrls: ['./user-check-results.component.css']
 })
 export class UserCheckResultsComponent implements OnInit {
+@ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
 
   paymentForm!: FormGroup;
@@ -167,7 +168,7 @@ export class UserCheckResultsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private waec: WaecControllersService,
     private elig: EligibilityControllerService,
-    private eligibility: ManaulServiceService,
+    private manualService: ManaulServiceService,
     private blurService: BlurService,
 private modalService: NgbModal  ) {
     this.entryForm = this.fb.group({
@@ -185,9 +186,19 @@ private modalService: NgbModal  ) {
       examType: ['', Validators.required]
     });
 
-
+  this.otpForm = this.fb.group({
+      digit0: ['', [Validators.required, Validators.pattern('[0-9]')]],
+      digit1: ['', [Validators.required, Validators.pattern('[0-9]')]],
+      digit2: ['', [Validators.required, Validators.pattern('[0-9]')]],
+      digit3: ['', [Validators.required, Validators.pattern('[0-9]')]],
+      digit4: ['', [Validators.required, Validators.pattern('[0-9]')]],
+      digit5: ['', [Validators.required, Validators.pattern('[0-9]')]]
+    });
 
   }
+
+
+  
 
   ngOnInit(): void {
       this.initializeForm(50.00); // Sets fixed amount to GHS 50.00
@@ -430,7 +441,7 @@ analyzeResults() {
   console.log('Analysis Data:', analysisData);
   console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
   // Send to eligibility service
-  this.eligibility.checkEligibility(analysisData).subscribe({
+  this.manualService.checkEligibility(analysisData).subscribe({
     next: (data: any) => {
       this.elligibilityResults = data;
             this.isCheckingEligibility = false; // Reset loading state
@@ -922,7 +933,7 @@ handleError(err: any) {
 
 // 1st Step
 createRecords() {
-    this.eligibility.startFirstStep().subscribe({
+    this.manualService.startFirstStep().subscribe({
       next: (data: any) => {
         this.currentCheck = data;
         this.userChecks.unshift(data);
@@ -940,21 +951,21 @@ createRecords() {
 
 //2nd Step
 updatePayment(recordsId:number, paymentStatus: any){
-  this.eligibility.startSecondStep(recordsId,paymentStatus).subscribe((data=>{
+  this.manualService.startSecondStep(recordsId,paymentStatus).subscribe((data=>{
     console.log("succeffully created the records");
   }))
 }
 
 //3rd Step
 updateCandidate(recordId: number,payload: any){
-  this.eligibility.startThirdStep(recordId,payload).subscribe((data=>{
+  this.manualService.startThirdStep(recordId,payload).subscribe((data=>{
     this.getResultsByUser();
     console.log("succeffully created the records");
   }))
 }
 
 getResultsByUser(){
-  this.eligibility.getAllRecordsByUserID().subscribe((data=>{
+  this.manualService.getAllRecordsByUserID().subscribe((data=>{
     this.userChecks=data;
     console.log(data);
   }));
@@ -994,6 +1005,9 @@ closePaymentModal() {
   submitPayment(): void {
     if (this.paymentForm.valid) {
       this.processingPayment = true;    
+      this.manualService.initializePayment(this.paymentForm.value).subscribe((data)=>{
+        console.log(data);
+      })
       // Simulate payment processing
       setTimeout(() => {
         this.processingPayment = false;
@@ -1021,11 +1035,11 @@ initializeForm(fixedAmount: number = 0.00) {
       fixedAmount.toFixed(2), 
       [Validators.required, Validators.min(0.01)]
     ],
-    mobileNumber: ['', [
+    payer: ['', [
       Validators.required,
       Validators.pattern(/^(?:233|0)[2345][0-9]{8}$/)
     ]],
-    mobileNetwork: ['', Validators.required]
+    channel: ['', Validators.required]
   });
 
   // Make readonly instead of disabled to include in form value
@@ -1038,7 +1052,6 @@ openPaymentModal() {
   document.body.style.overflow = 'hidden';
       this.blurService.setBlur(true);
 
-
 }
 
 
@@ -1047,4 +1060,273 @@ openPaymentModal() {
     this.blurService.setBlur(false);
     document.body.style.overflow = '';
   }
+
+
+
+
+  showOtpModal=false;
+openOtpModal() {
+  this.showOtpModal = true;
+  document.body.style.overflow = 'hidden';
+      this.blurService.setBlur(true);
+
 }
+// closeOtpModal() {
+//     this.isSubmitting = false;
+//     this.showOtpModal = false;
+//     document.body.style.overflow = ''; // 🔓 Restore scroll
+//     this.blurService.setBlur(false);
+//   }
+
+
+  submitOTP(){
+    console.log("Summmnoodoidi, OTP")
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  otpForm!: FormGroup;
+  otpError = '';
+  verifyingOTP = false;
+  resendCooldown = 0;
+  lastFourDigits = '1234'; // Replace with actual last digits
+
+  // constructor(private fb: FormBuilder) {
+  
+  // }
+
+  handleOtpKeyDown(event: KeyboardEvent, index: number) {
+    // Allow backspace, delete, tab, arrows
+    if ([8, 9, 37, 39, 46].includes(event.keyCode)) {
+      return;
+    }
+    
+    // Only allow numbers
+    if (event.keyCode < 48 || event.keyCode > 57) {
+      if (event.keyCode < 96 || event.keyCode > 105) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  moveToNext(event: any, index: number) {
+    const input = event.target;
+    if (input.value.length === 1) {
+      if (index < 5) {
+        const nextInput = document.querySelector(`[formControlName="digit${index + 1}"]`) as HTMLInputElement;
+        nextInput.focus();
+      } else {
+        input.blur();
+      }
+    }
+  }
+
+  // handlePaste(event: ClipboardEvent) {
+  //   event.preventDefault();
+  //   const pasteData = event.clipboardData?.getData('text/plain').trim();
+  //   if (pasteData && pasteData.length === 6 && /^\d+$/.test(pasteData)) {
+  //     for (let i = 0; i < 6; i++) {
+  //       this.otpForm.get(`digit${i}`)?.setValue(pasteData[i]);
+  //     }
+  //   }
+  // }
+
+  verifyOTP() {
+    if (this.otpForm.invalid) {
+      this.otpError = 'Please enter a valid 6-digit code';
+      return;
+    }
+    
+    this.verifyingOTP = true;
+    this.otpError = '';
+    
+    // Combine OTP digits
+    const otp = Object.values(this.otpForm.value).join('');
+    
+    // Here you would call your OTP verification service
+    // this.otpService.verifyOTP(otp).subscribe(...)
+    
+    // For demo purposes, we'll simulate a delay
+    setTimeout(() => {
+      this.verifyingOTP = false;
+      // this.showOtpModal = false; // Uncomment on successful verification
+      // this.otpError = 'Invalid verification code'; // Uncomment if verification fails
+    }, 2000);
+  }
+
+  resendOTP() {
+    if (this.resendCooldown > 0) return;
+    
+    // Reset OTP fields
+    for (let i = 0; i < 6; i++) {
+      this.otpForm.get(`digit${i}`)?.setValue('');
+    }
+    
+    // Set cooldown (60 seconds)
+    this.resendCooldown = 60;
+    const interval = setInterval(() => {
+      this.resendCooldown--;
+      if (this.resendCooldown <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+    
+    // Here you would call your OTP resend service
+    // this.otpService.resendOTP().subscribe(...)
+  }
+
+  closeOtpModal() {
+    this.showOtpModal = false;
+  }
+
+
+handlePaste(event: ClipboardEvent) {
+  event.preventDefault();
+  const pasteData = event.clipboardData?.getData('text/plain').replace(/\D/g, ''); // Remove non-digits
+  if (pasteData && pasteData.length >= 6) {
+    for (let i = 0; i < 6; i++) {
+      const control = this.otpForm.get(`digit${i}`);
+      if (control) {
+        control.setValue(pasteData[i]);
+      }
+    }
+    // Focus the last field after paste
+    setTimeout(() => {
+      const lastInput = document.querySelector('[formControlName="digit5"]') as HTMLInputElement;
+      if (lastInput) {
+        lastInput.focus();
+      }
+    }, 10);
+  }
+}
+
+
+handleInput(event: any, index: number): void {
+  const input = event.target;
+  const value = input.value;
+
+  // Allow only digits
+  if (!/^\d$/.test(value)) {
+    input.value = '';
+    return;
+  }
+
+  if (value && index < 5) {
+    const inputsArray = this.otpInputs.toArray();
+    inputsArray[index + 1].nativeElement.focus();
+  }
+
+  // Optionally mark field as touched
+  this.otpForm.get(`digit${index}`)?.markAsTouched();
+}
+
+handleKeyDown(event: KeyboardEvent, index: number): void {
+  const key = event.key;
+
+  if (key === 'Backspace' && index > 0 && !this.otpForm.get(`digit${index}`)?.value) {
+    const inputsArray = this.otpInputs.toArray();
+    inputsArray[index - 1].nativeElement.focus();
+  }
+}
+
+
+
+}
+

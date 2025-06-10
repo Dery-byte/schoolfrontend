@@ -121,6 +121,15 @@
             </button>
 
 
+
+
+            <button class="close-button" (click)="openOtpModal()" aria-label="Close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Open OTP Modal
+            </button>
+
           </div>
         </form>
       </div>
@@ -401,7 +410,7 @@
                 <strong class="text-primary">GHS 5,200</strong>
               </div>
 
-              <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm" (click)="simulatePayment()"
+              <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm" (click)="openPaymentModal()"
                 style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
                 <i class="fas fa-lock me-2"></i> Proceed to Secure Payment
               </button>
@@ -1302,17 +1311,17 @@
           <div class="form-group">
             <label for="mobileNumber">Phone Number</label>
             <div class="input-with-select">
-              <select formControlName="mobileNetwork" class="network-select" required>
+              <select formControlName="channel" class="network-select" required>
                 <option value="" disabled selected>Select Network</option>
-                <option value="1">MTN</option>
-                <option value="5">Vodafone</option>
+                <option value="13">MTN</option>
+                <option value="6">Vodafone</option>
                 <option value="7">AirtelTigo</option>
               </select>
-              <input type="tel" id="mobileNumber" formControlName="mobileNumber" placeholder="0244 123 456"
+              <input type="tel" id="mobileNumber" formControlName="payer" placeholder="0244 123 456"
                 class="phone-input">
             </div>
             <!-- Add validation message -->
-            <div *ngIf="paymentForm.get('mobileNetwork')?.invalid && paymentForm.get('mobileNetwork')?.touched" 
+            <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched" 
                  class="error-message">
               Please select a mobile network
             </div>
@@ -1336,6 +1345,143 @@
                 <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
               </svg>
               Processing...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- OTP VERIFICATION MODAL -->
+<div class="modal-backdrop" *ngIf="showOtpModal" @fadeInOut>
+  <div class="otp-modal">
+    <div class="modal-content-container">
+      <!-- Header with close button -->
+      <div class="modal-header">
+        <h2 class="modal-title">Verify Payment</h2>
+        <button class="close-button" (click)="closeOtpModal()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      
+      <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()">
+        <div class="form-container">
+          <!-- OTP Instructions -->
+          <div class="otp-instructions">
+            <p>We've sent a 6-digit verification code to your phone number ending with <strong>{{lastFourDigits}}</strong></p>
+          </div>
+          
+          <!-- OTP Input Fields -->
+ <div class="otp-input-group">
+  <ng-container *ngFor="let field of [0,1,2,3,4,5]; let i = index">
+  <input 
+    #otpInput
+    type="text"
+    maxlength="1"
+    class="otp-digit"
+    [class.error]="otpForm.get('digit'+i)?.invalid && otpForm.get('digit'+i)?.touched"
+    formControlName="digit{{i}}"
+    (input)="handleInput($event, i)"
+    (keydown)="handleKeyDown($event, i)"
+    (paste)="handlePaste($event)"
+    autocomplete="one-time-code"
+    inputmode="numeric"
+    pattern="[0-9]*"
+  >
+</ng-container>
+
+</div>
+          
+          <!-- Error Message -->
+          <div *ngIf="otpError" class="error-message">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" fill="#FEF2F2" stroke="#EF4444"/>
+              <path d="M8 5V9" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 12H8.01" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            {{otpError}}
+          </div>
+          
+          <!-- Resend OTP Option -->
+          <div class="otp-resend">
+            <p>Didn't receive the code? 
+              <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
+                Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
+              </button>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="modal-footer">
+          <button type="submit" class="submit-button" [disabled]="otpForm.invalid || verifyingOTP">
+            <span *ngIf="!verifyingOTP">Verify Payment</span>
+            <span *ngIf="verifyingOTP" class="processing">
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+              </svg>
+              Verifying...
             </span>
           </button>
         </div>

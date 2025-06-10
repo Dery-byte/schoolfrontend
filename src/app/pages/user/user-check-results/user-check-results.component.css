@@ -645,3 +645,204 @@
       min-width: 80px;
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* OTP CSS */
+
+
+
+
+
+  /* OTP Modal Styles */
+.otp-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin: 20px auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0;
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #F1F5F9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-container {
+  padding: 24px;
+}
+
+.otp-instructions {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #64748B;
+  font-size: 0.9375rem;
+}
+
+.otp-instructions strong {
+  color: #1E293B;
+  font-weight: 500;
+}
+
+.otp-input-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.otp-digit {
+  width: 48px;
+  height: 56px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1E293B;
+  transition: all 0.2s ease;
+}
+
+.otp-digit:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.otp-digit.error {
+  border-color: #EF4444;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #EF4444;
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+
+.otp-resend {
+  text-align: center;
+  color: #64748B;
+  font-size: 0.875rem;
+  margin-bottom: 24px;
+}
+
+.resend-link {
+  background: none;
+  border: none;
+  color: #3B82F6;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.resend-link:disabled {
+  color: #94A3B8;
+  cursor: not-allowed;
+}
+
+.modal-footer {
+  padding: 0 24px 24px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #2563EB;
+}
+
+.submit-button:disabled {
+  background-color: #94A3B8;
+  cursor: not-allowed;
+}
+
+.processing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.spinner {
+  animation: rotate 1s linear infinite;
+  width: 20px;
+  height: 20px;
+}
+
+.spinner circle {
+  stroke: white;
+  stroke-linecap: round;
+  stroke-dasharray: 90, 150;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes dash {
+  0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+  100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+}
