@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component,  Input, Output, EventEmitter ,OnInit,ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { UniversityControllerService } from 'src/app/services/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -79,6 +79,10 @@ interface EligibilityCheck {
 })
 export class UserCheckResultsComponent implements OnInit {
 @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
+ @Input() statusData: any;
+  @Input() paymentCompleted: boolean = false;
+  @Input() webhookResponse: any = null;
+  // @Output() closeModal = new EventEmitter<void>();
 
 
   paymentForm!: FormGroup;
@@ -1376,6 +1380,33 @@ handleKeyDown(event: KeyboardEvent, index: number): void {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// WEBHOOK STAFF
+amount:number=0;
+showWebHook=false;
+
+openWebhook() {
+  this.showWebHook = true;
+  document.body.style.overflow = 'hidden';
+      this.blurService.setBlur(true);
+}
+
+
+  closeWebhook() {
+    this.showWebHook = false;
+  }
 
 }
 

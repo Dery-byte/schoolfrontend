@@ -130,6 +130,16 @@
               Open OTP Modal
             </button>
 
+
+            <button class="close-button" (click)="openWebhook()" aria-label="Close">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Open Webhook MOdal.
+            </button>
+
+
+
           </div>
         </form>
       </div>
@@ -1300,13 +1310,12 @@
       </div>
       <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
         <div class="form-scroll-container">
-            <h3 class="section-title">Payment Amount</h3>
-            <div class="form-group amount-group">
-              <div class="currency-prefix">GHS</div>
-              <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
-                  [readonly]="isAmountFixed"  min="0.01" step="0.01" autofocus  (blur)="validateAmount()"
-                />
-            </div>
+          <h3 class="section-title">Payment Amount</h3>
+          <div class="form-group amount-group">
+            <div class="currency-prefix">GHS</div>
+            <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
+              [readonly]="isAmountFixed" min="0.01" step="0.01" autofocus (blur)="validateAmount()" />
+          </div>
           <h3 class="section-title">Mobile Money Details</h3>
           <div class="form-group">
             <label for="mobileNumber">Phone Number</label>
@@ -1321,8 +1330,8 @@
                 class="phone-input">
             </div>
             <!-- Add validation message -->
-            <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched" 
-                 class="error-message">
+            <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
+              class="error-message">
               Please select a mobile network
             </div>
           </div>
@@ -1424,55 +1433,48 @@
           </svg>
         </button>
       </div>
-      
+
       <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()">
         <div class="form-container">
           <!-- OTP Instructions -->
           <div class="otp-instructions">
-            <p>We've sent a 6-digit verification code to your phone number ending with <strong>{{lastFourDigits}}</strong></p>
+            <p>We've sent a 6-digit verification code to your phone number ending with
+              <strong>{{lastFourDigits}}</strong></p>
           </div>
-          
-          <!-- OTP Input Fields -->
- <div class="otp-input-group">
-  <ng-container *ngFor="let field of [0,1,2,3,4,5]; let i = index">
-  <input 
-    #otpInput
-    type="text"
-    maxlength="1"
-    class="otp-digit"
-    [class.error]="otpForm.get('digit'+i)?.invalid && otpForm.get('digit'+i)?.touched"
-    formControlName="digit{{i}}"
-    (input)="handleInput($event, i)"
-    (keydown)="handleKeyDown($event, i)"
-    (paste)="handlePaste($event)"
-    autocomplete="one-time-code"
-    inputmode="numeric"
-    pattern="[0-9]*"
-  >
-</ng-container>
 
-</div>
-          
+          <!-- OTP Input Fields -->
+          <div class="otp-input-group">
+            <ng-container *ngFor="let field of [0,1,2,3,4,5]; let i = index">
+              <input #otpInput type="text" maxlength="1" class="otp-digit"
+                [class.error]="otpForm.get('digit'+i)?.invalid && otpForm.get('digit'+i)?.touched"
+                formControlName="digit{{i}}" (input)="handleInput($event, i)" (keydown)="handleKeyDown($event, i)"
+                (paste)="handlePaste($event)" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*">
+            </ng-container>
+
+          </div>
+
           <!-- Error Message -->
           <div *ngIf="otpError" class="error-message">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" fill="#FEF2F2" stroke="#EF4444"/>
-              <path d="M8 5V9" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
-              <path d="M8 12H8.01" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
+              <path
+                d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                fill="#FEF2F2" stroke="#EF4444" />
+              <path d="M8 5V9" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
+              <path d="M8 12H8.01" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
             </svg>
             {{otpError}}
           </div>
-          
+
           <!-- Resend OTP Option -->
           <div class="otp-resend">
-            <p>Didn't receive the code? 
+            <p>Didn't receive the code?
               <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
                 Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
               </button>
             </p>
           </div>
         </div>
-        
+
         <!-- Submit Button -->
         <div class="modal-footer">
           <button type="submit" class="submit-button" [disabled]="otpForm.invalid || verifyingOTP">
@@ -1489,3 +1491,104 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- WAITING FOR WEBHOOK- to update payment Status -->
+<div class="modal-backdrop" *ngIf="showWebHook">
+
+  <!-- <div class="payment-status-modal" [class.show]="showWebHook"> -->
+  <div  (click)="closeModal()"></div>
+  
+  <div class="modal-card" >
+    <!-- Processing State -->
+    <div class="modal-body" *ngIf="!paymentCompleted">
+      <div class="processing-header">
+        <div class="spinner-container">
+          <div class="spinner"></div>
+        </div>
+        <h3 class="modal-title">Complete Payment on Your Phone</h3>
+      </div>
+      
+      <div class="payment-instructions">
+        <p class="instruction-text">Please approve the payment request on your mobile device to continue</p>
+        <div class="countdown-timer">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+            <path fill="currentColor" d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+          </svg>
+          <span>Waiting for confirmation...</span>
+        </div>
+      </div>
+      
+      <div class="payment-details">
+        <div class="detail-row">
+          <span class="detail-label">Reference:</span>
+          <span class="detail-value">{{ statusData?.data }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Amount:</span>
+          <span class="detail-value">{{ amount | currency }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Success State -->
+    <div class="modal-body success-state" *ngIf="paymentCompleted">
+      <div class="success-animation">
+        <svg class="checkmark" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+      
+      <h3 class="modal-title">Payment Successful!</h3>
+      <p class="success-message">{{ webhookResponse?.message || 'Your payment has been processed successfully' }}</p>
+      
+      <div class="payment-details success-details">
+        <div class="detail-row">
+          <span class="detail-label">Reference:</span>
+          <span class="detail-value">{{ statusData?.data }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Amount:</span>
+          <span class="detail-value">{{ amount | currency }}</span>
+        </div>
+        <div class="detail-row" *ngIf="webhookResponse?.transactionId">
+          <span class="detail-label">Transaction ID:</span>
+          <span class="detail-value">{{ webhookResponse.transactionId }}</span>
+        </div>
+      </div>
+      
+      <button class="action-button" (click)="closeModal()">
+        Done
+      </button>
+    </div>
+  </div>
+</div>
+<!-- </div> -->
