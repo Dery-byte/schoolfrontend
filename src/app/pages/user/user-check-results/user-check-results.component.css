@@ -911,11 +911,6 @@
 
 
 /* WEBHOOK CSS  */
-
-
-
-
-
 /* Base Styles */
 .payment-status-modal {
   position: fixed;
@@ -1207,4 +1202,107 @@
 @keyframes slideInOut {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* for the select widget */
+
+
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.form-select {
+  display: block;
+  width: auto;
+  padding: 18px 50px 5px;
+  font-size: 1rem;
+  /* font-weight: 400; */
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 20px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  appearance: none;
+  /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px; */
+}
+
+.form-select:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.floating-label {
+  position: absolute;
+  top: 0.625rem;
+  left: 0.75rem;
+  font-size: 0.8rem;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.form-select:focus + .floating-label,
+.form-select:not(:placeholder-shown) + .floating-label {
+  top: 0.25rem;
+  font-size: 0.7rem;
+  color: #0d6efd;
+}
+
+.form-text {
+  margin-top: 2px;
+  font-size: 10px;
+  color: #6c757d;
+}
+
+.invalid-feedback {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
 }

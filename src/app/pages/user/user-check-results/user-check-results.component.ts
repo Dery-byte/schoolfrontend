@@ -1,4 +1,4 @@
-import { Component,  Input, Output, EventEmitter ,OnInit,ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component,  Input, Output, EventEmitter ,OnInit,ViewChild,ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { UniversityControllerService } from 'src/app/services/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { BlurService } from 'src/app/shared/blur/blur.service';
+
 
 // interface EligibilityCheck {
 //   id: string;
@@ -83,6 +84,8 @@ export class UserCheckResultsComponent implements OnInit {
   @Input() paymentCompleted: boolean = false;
   @Input() webhookResponse: any = null;
   // @Output() closeModal = new EventEmitter<void>();
+  @ViewChild('paymentConfirmation', { static: false }) 
+  paymentConfirmation!: ElementRef<HTMLDivElement>;
 
 
   paymentForm!: FormGroup;
@@ -1531,6 +1534,33 @@ openWebhook() {
   closeWebhook() {
     this.showWebHook = false;
   }
+
+
+  // In your component.ts
+proceedToPaymentConfirmation() {
+  this.closeWebhook();
+  setTimeout(() => {
+    this.paymentConfirmation.nativeElement.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+  }, 100);
+}
+
+
+
+
+  proceed(checkId: string) {
+    console.log(checkId);
+  if (this.currentCheck?.paymentStatus === 'PAID') {
+    this.paymentSuccess = true;
+  }
+}
+
+
+
+
+
 
 }
 
