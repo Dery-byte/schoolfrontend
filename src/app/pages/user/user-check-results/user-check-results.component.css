@@ -980,11 +980,20 @@
 }
 
 .spinner {
-  width: 60px;
-  height: 60px;
+  width: 35px;
+  height: 35px;
   border: 5px solid rgba(0, 119, 255, 0.1);
   border-radius: 50%;
-  border-top-color: #0077ff;
+  border-top-color: #eb0e62;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerpaystatus {
+  width: 70px;
+  height: 70px;
+  border: 5px solid rgba(0, 119, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: #2a9cb1;
   animation: spin 1s linear infinite;
 }
 
@@ -1056,10 +1065,11 @@
   text-align: center;
 }
 
+/* Checkmark Animation Styles */
 .success-animation {
-  margin: 0 auto 24px;
   width: 100px;
   height: 100px;
+  margin: 0 auto 20px;
 }
 
 .checkmark {
@@ -1068,7 +1078,7 @@
 }
 
 .checkmark-circle {
-  stroke: #0077ff;
+  stroke: #4CAF50; /* Green color */
   stroke-width: 2;
   stroke-dasharray: 166;
   stroke-dashoffset: 166;
@@ -1076,11 +1086,77 @@
 }
 
 .checkmark-check {
-  stroke: #0077ff;
+  transform-origin: 50% 50%;
+  stroke: #4CAF50; /* Green color */
   stroke-width: 2;
   stroke-dasharray: 48;
   stroke-dashoffset: 48;
   animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+.test-checkmark {
+  font-size: 60px;
+  color: green;
+  text-align: center;
+  margin: 20px 0;
+}
+
+
+
+.checkmark-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.checkmark-animated {
+  display: inline-block;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+}
+
+/* Background fill animation */
+.checkmark-bg {
+  animation: 
+    fill-in 0.5s ease-out forwards,
+    gentle-pulse 0.6s ease-out 1s both;
+}
+
+/* Checkmark draw animation */
+.checkmark-check {
+  animation: 
+    check-draw 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.5s forwards;
+}
+
+@keyframes fill-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes check-draw {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+@keyframes gentle-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 @keyframes stroke {

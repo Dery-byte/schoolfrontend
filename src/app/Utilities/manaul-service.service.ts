@@ -111,12 +111,24 @@ startFirstStep() {
   const token = localStorage.getItem('token'); // Retrieve token
   const headers = new HttpHeaders({
     Authorization: `Bearer ${token}`,
+        'ngrok-skip-browser-warning': 'true',
+
     'Content-Type': 'application/json' // Specify JSON content
 
   });
   return this.http.post(`${baseUrl}/auth/payments/verify-otp`, payload, { headers });
 }
 
+
+getPaymentStatus(externalRef: String){
+    const headers = new HttpHeaders({
+        'ngrok-skip-browser-warning': 'true',
+    'Content-Type': 'application/json' // Specify JSON content
+  });
+    return this.http.get(
+      `${baseUrl}/auth/payments/payment-status/${externalRef}`,
+          { headers });
+}
 
 
 

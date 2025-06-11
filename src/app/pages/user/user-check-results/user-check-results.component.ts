@@ -65,7 +65,7 @@ interface EligibilityCheck {
   userId: string;
   candidateName: string;
   examDetails: any;
-  paymentStatus: 'pending' | 'paid' | 'failed';
+  paymentStatus: 'PENDING' | 'PAID';
   checkStatus: 'not_started' | 'in_progress' | 'completed';
   createdAt: Date;
   lastUpdated: Date;
@@ -217,7 +217,7 @@ private modalService: NgbModal  ) {
 
   simulatePayment() {
     if (this.currentCheck) {
-      this.currentCheck.paymentStatus = 'paid';
+      this.currentCheck.paymentStatus = 'PAID';
       this.currentCheck.checkStatus = 'in_progress';
       this.currentCheck.lastUpdated = new Date();
       this.saveChecks();
@@ -235,7 +235,7 @@ private modalService: NgbModal  ) {
   resumeCheck(checkId: string) {
     console.log(checkId);
   this.currentCheck = this.userChecks.find((c: EligibilityCheck) => c.id === checkId) || null;
-  if (this.currentCheck?.paymentStatus === 'paid') {
+  if (this.currentCheck?.paymentStatus === 'PAID') {
     this.paymentSuccess = true;
   }
 }
@@ -919,7 +919,7 @@ handleError(err: any) {
       userId: 'current-user-id', // Replace with actual user ID from auth
       candidateName: this.newCheckForm.value.candidateName,
       examDetails: this.newCheckForm.value,
-      paymentStatus: 'pending',
+      paymentStatus: 'PENDING',
       checkStatus: 'not_started',
       createdAt: new Date(),
       lastUpdated: new Date()
@@ -1000,10 +1000,15 @@ closePaymentModal() {
 
 
     // Submit payment
+    externalRef: string = ''; // Add this at the top of your component
+
   submitPayment(): void {
     if (this.paymentForm.valid) {
       this.processingPayment = true;    
-      this.manualService.initializePayment(this.paymentForm.value).subscribe((data)=>{
+      this.manualService.initializePayment(this.paymentForm.value).subscribe((data:any)=>{
+        // Save externalRef for later use
+      this.externalRef = data.externalref;
+      console.log("This is the external ref ", this.externalRef);
         this.closePaymentModal();
         this.openOtpModal()
         console.log(data);
@@ -1021,6 +1026,28 @@ closePaymentModal() {
 
 
 
+
+//GET PAYMENT STATUS
+intervalId: any;
+paymentsucceDetails:any;
+startPaymentStatusCheck() {
+  this.intervalId = setInterval(() => {
+   this.manualService.getPaymentStatus(this.externalRef).subscribe((paymentStatus: any) => {
+      if (paymentStatus.txStatus === 1) {
+        this.paymentsucceDetails = paymentStatus;
+        console.log("This is the payment Status ", paymentStatus);
+        clearInterval(this.intervalId); // Stop polling on success
+       // this.handlePaymentSuccess();
+      } else if (paymentStatus.txStatus === -1) {
+                console.log("This is the payment Status ", paymentStatus);
+
+        clearInterval(this.intervalId); // Stop polling on failure
+      //  this.handlePaymentFailure();
+      }
+    });
+  }, 3000); // Poll every 3 seconds
+
+}
 
 
 
@@ -1102,6 +1129,7 @@ openOtpModal() {
       this.blurService.setBlur(true);
 
 }
+
 // closeOtpModal() {
 //     this.isSubmitting = false;
 //     this.showOtpModal = false;
@@ -1269,6 +1297,7 @@ openOtpModal() {
   verifyOTP() {
     if (this.otpForm.invalid) {
       this.otpError = 'Please enter a valid 6-digit code';
+          this.shakeOtpInput(); // Add visual feedback
       return;
     }
     
@@ -1282,12 +1311,17 @@ openOtpModal() {
   this.payee.payer = this.paymentForm.value.payer;
   this.payee.otpcode = otpValue;
 
-    console.log("This is teh OTP entered", this.payee);
-     this.manualService.verifyOTP(this.payee).subscribe((data)=>{
-
-      console.log("Success Response OTP Verification", data);
-      console.log("Success!!!");
-    })
+    console.log("This is the OTP entered", this.payee);
+       this.manualService.verifyOTP(this.payee).subscribe({
+    next: (response) => {
+      // Successful OTP verification
+      this.handleOtpSuccess(response);
+    },
+    error: (error) => {
+      // Handle verification failure
+      this.handleOtpError(error);
+    }
+  });
       //this.verifyingOTP = false;
       // this.showOtpModal = false; // Uncomment on successful verification
        //this.otpError = 'Invalid verification code'; // Uncomment if verification fails
@@ -1295,13 +1329,70 @@ openOtpModal() {
   }
 
 
+private handleOtpError(error: any) {
+  this.verifyingOTP = false;
+  
+  // Handle different error cases
+  if (error.status === 400) {
+    this.otpError = 'Invalid OTP code. Please try again.';
+    this.shakeOtpInput();
+  } else if (error.status === 429) {
+    this.otpError = 'Too many attempts. Please wait before trying again.';
+  } else {
+    this.otpError = 'Verification failed. Please try again later.';
+  }
+  
+  // Log error for debugging
+  console.error('OTP Verification Error:', error);
+}
 
 
 
+// private listenForPaymentConfirmation(referenceId: string) {
+//   // Implementation depends on your webhook/polling mechanism
+//   // This is a conceptual example using a mock service
+  
+//   this.paymentService.listenForPaymentStatus(referenceId).subscribe({
+//     next: (paymentStatus) => {
+//       if (paymentStatus.status === 'SUCCESS') {
+//         this.handlePaymentSuccess(paymentStatus);
+//       } else if (paymentStatus.status === 'FAILED') {
+//         this.handlePaymentFailure(paymentStatus);
+//       }
+//       // Other statuses can be handled as needed
+//     },
+//     error: (err) => {
+//       console.error('Payment status listening error:', err);
+//       this.handlePaymentError();
+//     }
+//   });
+// }
 
 
+// private handlePaymentSuccess(paymentStatus: any) {
+//   // Update modal with success state
+//   this.paymentCompleted = true;
+//   this.webhookResponse = paymentStatus;
+  
+//   // Track successful payment
+//   this.analyticsService.trackPaymentSuccess(this.payee.amount);
+  
+//   // Auto-close after delay (optional)
+//   setTimeout(() => {
+//     this.router.navigate(['/payment/success'], {
+//       state: { paymentData: this.paymentStatusData }
+//     });
+//   }, 3000);
+// }
 
-
+// private handlePaymentFailure(paymentStatus: any) {
+//   // Update modal with failure state
+//   this.paymentFailed = true;
+//   this.webhookResponse = paymentStatus;
+  
+//   // Show retry option
+//   this.retryAvailable = true;
+// }
 
   resendOTP() {
     if (this.resendCooldown > 0) return;
@@ -1329,6 +1420,39 @@ openOtpModal() {
     this.showOtpModal = false;
   }
 
+private shakeOtpInput() {
+  // Add visual feedback for invalid OTP
+  const otpContainer = document.querySelector('.otp-container');
+  if (otpContainer) {
+    otpContainer.classList.add('shake');
+    setTimeout(() => {
+      otpContainer.classList.remove('shake');
+    }, 500);
+  }}
+
+
+  paymentStatusData:any;
+  
+// private handlePaymentError() {
+//   // Handle connection/technical errors
+//   this.paymentStatusError = true;
+//   this.webhookResponse = {
+//     message: 'Unable to verify payment status. Please check your transactions later.'
+//   };
+// }
+
+
+private handleOtpSuccess(response: any) {
+  // Close OTP modal and show payment status modal
+  this.showOtpModal = false;
+  this.verifyingOTP = false;
+  this.showWebHook = true;
+  this.startPaymentStatusCheck();
+  // Store response data for the payment status modal
+  this.paymentStatusData = {
+    ...response,
+    amount: this.payee.amount // Include amount in the display data
+  }};
 
 handlePaste(event: ClipboardEvent) {
   event.preventDefault();
