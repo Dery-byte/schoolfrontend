@@ -111,7 +111,7 @@ startFirstStep() {
   const token = localStorage.getItem('token'); // Retrieve token
   const headers = new HttpHeaders({
     Authorization: `Bearer ${token}`,
-        'ngrok-skip-browser-warning': 'true',
+        //'ngrok-skip-browser-warning': 'true',
 
     'Content-Type': 'application/json' // Specify JSON content
 
@@ -122,7 +122,7 @@ startFirstStep() {
 
 getPaymentStatus(externalRef: String){
     const headers = new HttpHeaders({
-        'ngrok-skip-browser-warning': 'true',
+      //  'ngrok-skip-browser-warning': 'true',
     'Content-Type': 'application/json' // Specify JSON content
   });
     return this.http.get(
