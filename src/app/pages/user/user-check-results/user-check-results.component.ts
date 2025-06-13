@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { BlurService } from 'src/app/shared/blur/blur.service';
+import { Router } from '@angular/router';
 
 
 // interface EligibilityCheck {
@@ -87,6 +88,7 @@ export class UserCheckResultsComponent implements OnInit {
   @ViewChild('paymentConfirmation', { static: false }) 
   paymentConfirmation!: ElementRef<HTMLDivElement>;
 
+confirmInput: string = '';
 
   paymentForm!: FormGroup;
   isSubmitting = false;
@@ -177,6 +179,7 @@ export class UserCheckResultsComponent implements OnInit {
     private elig: EligibilityControllerService,
     private manualService: ManaulServiceService,
     private blurService: BlurService,
+  private router: Router,
 private modalService: NgbModal  ) {
     this.entryForm = this.fb.group({
       indexNumber: [''],
@@ -292,6 +295,8 @@ private modalService: NgbModal  ) {
     });
   }
 
+
+  
   onBoardChange(event: any): void {
     const selectedBoard = event.target.value;
     if (selectedBoard === 'WAEC') {
@@ -428,15 +433,67 @@ isCheckingEligibility: boolean = false;
 getSubjects(cutoffPoints: any): string[] {
   return Object.keys(cutoffPoints);
 }
+
+
+
+
+
+
+
+
+// analyzeResults() {
+//   if (!this.waecresults || !this.waecresults.resultDetails) {
+//     console.warn('No results available to analyze');
+//     return;
+//   }
+//     this.isCheckingEligibility = true;
+//   // Create the properly formatted JSON structure
+//   const analysisData = {
+//     resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+//       subject: result.subject,
+//       grade: result.grade,
+//     }))
+//   };
+//   // Log to console
+//   console.log('Analysis Data:', analysisData);
+//   console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
+//   // Send to eligibility service
+//   this.manualService.checkEligibility(analysisData).subscribe({
+//     next: (data: any) => {
+//       this.elligibilityResults = data;
+
+//       console.log("This is the elligibility Results ", data)
+//             this.isCheckingEligibility = false; // Reset loading state
+//     },
+//     error: (err) => {
+//             this.isCheckingEligibility = false; // Additional safety
+//       console.error('Eligibility check failed:', err);
+//     }
+//   });
+// }
+
+
+
+
+
+
+
+
+
+// constructor(
+//   private manualService: ManualService,
+//   private snackBar: MatSnackBar,
+//   private router: Router
+// ) {}
+
 analyzeResults() {
   if (!this.waecresults || !this.waecresults.resultDetails) {
     console.warn('No results available to analyze');
     return;
   }
 
-    this.isCheckingEligibility = true;
+  this.isCheckingEligibility = true;
 
-  // Create the properly formatted JSON structure
   const analysisData = {
     resultDetails: this.waecresults.resultDetails.map((result: any) => ({
       subject: result.subject,
@@ -444,23 +501,42 @@ analyzeResults() {
     }))
   };
 
-  // Log to console
   console.log('Analysis Data:', analysisData);
-  console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
-  // Send to eligibility service
   this.manualService.checkEligibility(analysisData).subscribe({
     next: (data: any) => {
       this.elligibilityResults = data;
-            this.isCheckingEligibility = false; // Reset loading state
+      this.isCheckingEligibility = false;
 
+      // ✅ Show success snackbar
+      this.snackBar.open('Eligibility check successful!', 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        panelClass: ['snackbar-success']  // Optional: define in styles.css
+      });
+
+      // ✅ Navigate to another route (e.g., to /eligibility-results)
+     setTimeout(() => {
+  this.router.navigate(['/user/checkEligilibilty'], {
+    // state: { result: data }
+  });
+}, 4000); // Delay in milliseconds
     },
     error: (err) => {
-            this.isCheckingEligibility = false; // Additional safety
-
+      this.isCheckingEligibility = false;
       console.error('Eligibility check failed:', err);
+
+      // ❌ Show error snackbar
+      this.snackBar.open('Failed to check eligibility.', 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        panelClass: ['snackbar-error']
+      });
     }
   });
 }
+
+
+
 // Separate function for API call (cleaner code)
 
 
@@ -747,8 +823,6 @@ handleError(err: any) {
   // MODAL TS CLASS
 
 
-
-  confirmInput = '';
   showMismatchError = false;
   modalInstance: any;
 

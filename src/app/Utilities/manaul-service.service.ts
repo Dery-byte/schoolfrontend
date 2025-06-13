@@ -12,9 +12,26 @@ export class ManaulServiceService {
   constructor(private http: HttpClient) { }
 
    checkEligibility(payload: any) {
-    return this.http.post(`${baseUrl}/auth/check-eligibilityAll`, payload, {
-    }
+        const token = localStorage.getItem('token'); // Retrieve token
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+    return this.http.post(`${baseUrl}/auth/check-eligibilityAll`, payload, 
+    { headers }
+
   )};
+
+//   checkEligibility(candidate: any, recordId: string) {
+//     const token = localStorage.getItem('token'); // Retrieve token
+//   const headers = new HttpHeaders({
+//     Authorization: `Bearer ${token}`
+//   });
+//   return this.http.post(
+//     `${baseUrl}/auth/check-eligibilityAll?recordId=${recordId}`,
+//     candidate,
+//     { headers }
+//   );
+// }
 
 
 

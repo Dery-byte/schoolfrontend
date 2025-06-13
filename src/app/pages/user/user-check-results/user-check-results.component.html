@@ -707,10 +707,13 @@
                   </span>
                 </div>
                 <div>
+
+
+                  <!-- {{currentCheck|json}} -->
                   <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeResults()"
                     [disabled]="isCheckingEligibility">
                     <span *ngIf="!isCheckingEligibility">
-                      <i class="fas fa-chart-bar me-2"></i> Check Eligibility
+                      <i class="fas fa-chart-bar me-2"></i>Check Eligibility
                     </span>
                     <span *ngIf="isCheckingEligibility">
                       <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
