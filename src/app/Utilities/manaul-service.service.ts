@@ -133,5 +133,15 @@ getPaymentStatus(externalRef: String){
 
 
 
+ eligibilityRecordsByUser() {
+  const token = localStorage.getItem('token'); // Retrieve token
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json' // Specify JSON content
+  });
+  return this.http.get(`${baseUrl}/auth/eligibilityRecords/my-eligibility-records`, { headers });
+}
+
+
 
 }
