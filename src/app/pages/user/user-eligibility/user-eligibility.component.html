@@ -1,5 +1,35 @@
 <!-- eligibility-results.component.html -->
+
 <div class="results-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="full-page-loading">
+    <div class="spinner-container">
+      <div class="big-spinner"></div>
+      <p class="loading-text">Loading eligibility results...</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && loadingError" class="error-message">
+    <div class="error-icon">!</div>
+    <h3>Failed to load results</h3>
+    <p>Please try again later or contact support</p>
+   
+  </div>
+
+   <!-- Empty State -->
+  <div *ngIf="!isLoading && !loadingError && (!records || records.length === 0)" class="empty-state">
+    <div class="empty-state-card">
+      <div class="empty-icon">📭</div>
+      <h3>No Results Available</h3>
+      <p>We couldn't find any eligibility results. Consider checking <a routerLink="/user/checkResults/">here</a> </p>
+      <!-- <button class="action-btn" (click)="refreshSearch()">Refresh Search</button> -->
+    </div>
+  </div>
+
+
+
+<div class="results-container" *ngIf="!isLoading && !loadingError && records && records.length > 0">
   <div *ngFor="let result of records" class="result-card" [class.expanded]="expandedResultId === result.id">
     <div class="card-header" (click)="toggleExpand(result.id)">
       <div class="header-content">
@@ -80,6 +110,12 @@
   </div>
 </div>
 
+ 
+
+
+
+
+
 <!-- Preview Modal -->
 <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
@@ -129,120 +165,4 @@
 
 
 
-{{records|json}}
-
-
-
-
-
-<div class="table-responsive mt-4">
-    <table class="table table-hover">
-        <thead class="thead-dark bg-dark">  <!-- Deep gray header -->
-            <tr>
-                <th>Index No.</th>
-                <th>Exam Board</th>
-                <th>Year</th>
-                <th>Exam Type</th>
-                <th>Subject</th>
-                <th>Grade</th>
-                <th>Sitting</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Light row -->
-            <tr class="bg-white">  
-                <td>12345678</td>
-                <td>WASSCE</td>
-                <td>2024</td>
-                <td>SSCE</td>
-                <td>Mathematics</td>
-                <td>A</td>
-                <td>May/June</td>
-                <td>
-                    <button class="btn btn-danger btn-sm">
-                        <i class="bx bx-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            
-            <!-- Light gray row -->
-            <tr class="bg-light">  
-                <td>87654321</td>
-                <td>NAPTEX</td>
-                <td>2023</td>
-                <td>WASSCE</td>
-                <td>English</td>
-                <td>B</td>
-                <td>Nov/Dec</td>
-                <td>
-                    <button class="btn btn-danger btn-sm">
-                        <i class="bx bx-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            
-            <!-- Darker gray row -->
-            <tr class="bg-white">  
-                <td>11223344</td>
-                <td>SSCE</td>
-                <td>2025</td>
-                <td>NAPTEX</td>
-                <td>Science</td>
-                <td>A</td>
-                <td>May/June</td>
-                <td>
-                    <button class="btn btn-danger btn-sm">
-                        <i class="bx bx-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            
-            <!-- Repeat the pattern -->
-            <tr class="bg-light">  
-                <td>55667788</td>
-                <td>WASSCE</td>
-                <td>2024</td>
-                <td>SSCE</td>
-                <td>Mathematics</td>
-                <td>B+</td>
-                <td>Nov/Dec</td>
-                <td>
-                    <button class="btn btn-danger btn-sm">
-                        <i class="bx bx-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            
-            <tr class="bg-white">  
-                <td>99887766</td>
-                <td>NAPTEX</td>
-                <td>2023</td>
-                <td>WASSCE</td>
-                <td>English</td>
-                <td>A</td>
-                <td>May/June</td>
-                <td>
-                    <button class="btn btn-danger btn-sm">
-                        <i class="bx bx-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            
-            <tr class="bg-light">  
-                <td>33445566</td>
-                <td>SSCE</td>
-                <td>2025</td>
-                <td>NAPTEX</td>
-                <td>Science</td>
-                <td>C</td>
-                <td>Nov/Dec</td>
-                <td>
-                    <button class="btn btn-danger btn-sm">
-                        <i class="bx bx-trash"></i> Delete
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<!-- {{records|json}} -->

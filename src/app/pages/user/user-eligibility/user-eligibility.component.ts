@@ -4,6 +4,8 @@ import { EligibilityResult } from 'src/app/customModels/eligibility.model';
 import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 
 @Component({
@@ -16,7 +18,10 @@ export class UserEligibilityComponent {
   expandedResultId: string | null = null;
   selectedResult: EligibilityResult | null = null;
   showModal = false;
-  constructor(  private manualService: ManaulServiceService,){ 
+   isLoading = false;
+  loadingError = false;
+  constructor(  private manualService: ManaulServiceService,    private snackBar: MatSnackBar
+){ 
   }
 
     ngOnInit(): void {
@@ -27,11 +32,21 @@ export class UserEligibilityComponent {
 
   // records:any;
   recordByUser(){
+    this.isLoading = true;
+    this.loadingError = false;
   this.manualService.eligibilityRecordsByUser().subscribe({
     next: (data: any) => {
       this.records = data;
+      this.isLoading = false;
     },
     error: (err) => {
+          this.loadingError = true;
+        this.isLoading = false;
+        this.snackBar.open('Failed to load results', 'Dismiss', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      
       console.error('Fetching Records!!!:', err);
     }
   });
