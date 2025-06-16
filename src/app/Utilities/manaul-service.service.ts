@@ -4,6 +4,7 @@ import baseUrl from './helper';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -114,13 +115,30 @@ startFirstStep() {
 
 
   
- initializePayment(payload:any) {
-  const token = localStorage.getItem('token'); // Retrieve token
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
-  return this.http.post(`${baseUrl}/auth/payments/initiate`, payload, { headers });
-}
+//  initializePayment(payload:any) {
+//   const token = localStorage.getItem('token'); // Retrieve token
+//   const headers = new HttpHeaders({
+//     Authorization: `Bearer ${token}`
+//   });
+//   return this.http.post(`${baseUrl}/auth/payments/initiate`, payload, { headers });
+// }
+
+ // Option 2: Include recordId in the payload (recommended)
+ initializePayment(payload: any, recordId?: string) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+let params = new HttpParams();
+ if (recordId) {
+    params = params.set('recordId', recordId);
+  }
+    return this.http.post(`${baseUrl}/auth/payments/initiate`, payload, { 
+      headers,
+      params 
+    });
+  }
+
 
  
 

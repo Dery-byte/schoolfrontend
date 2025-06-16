@@ -249,7 +249,7 @@
 
 
 
-
+<!-- {{userChecks|json}} -->
 
     <!-- Previous Checks List -->
     <div *ngIf="userChecks.length > 0" class="card border-0 shadow-sm">
@@ -295,6 +295,8 @@
                     {{check.checkStatus | titlecase}}
                   </span>
                 </td>
+
+                {{check|json}}
                 <td class="pe-4 text-end">
                   <button class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
                       'btn-outline-primary': check.paymentStatus === 'paid',

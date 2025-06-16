@@ -237,9 +237,9 @@ private modalService: NgbModal  ) {
   //     this.paymentSuccess = true;
   //   }
   // }
-
   resumeCheck(checkId: string) {
     console.log(checkId);
+    this.recordId =checkId;
   this.currentCheck = this.userChecks.find((c: EligibilityCheck) => c.id === checkId) || null;
   if (this.currentCheck?.paymentStatus === 'PAID') {
     this.paymentSuccess = true;
@@ -1079,28 +1079,60 @@ closePaymentModal() {
     // Submit payment
     externalRef: string = ''; // Add this at the top of your component
 
-  submitPayment(): void {
-    if (this.paymentForm.valid) {
-      this.processingPayment = true;    
-      this.manualService.initializePayment(this.paymentForm.value).subscribe((data:any)=>{
+  // submitPayment(): void {
+  //   if (this.paymentForm.valid) {
+  //     this.processingPayment = true;    
+  //     this.manualService.initializePayment(this.paymentForm.value).subscribe((data:any)=>{
+  //       // Save externalRef for later use
+  //     this.externalRef = data.externalref;
+  //     console.log("This is the external ref ", this.externalRef);
+  //       this.closePaymentModal();
+  //       this.openOtpModal()
+  //       console.log(data);
+  //     })
+  //     this.openPaymentModal();
+
+  //     // Simulate payment processing
+  //     setTimeout(() => {
+  //       this.processingPayment = false;
+  //       // Handle payment success/failure here
+  //       console.log('Payment submitted:', this.paymentForm.value);
+  //     }, 2000);
+  //   }
+  // }
+  recordId:any;
+
+submitPayment(): void {
+  if (this.paymentForm.valid) {
+    this.processingPayment = true;
+    
+    // Get the recordId from wherever it's stored in your component
+    const recordId = this.recordId; // Or this.paymentForm.get('recordId')?.value;
+            console.log("This is the record ID: ", recordId);
+    this.manualService.initializePayment(this.paymentForm.value, recordId).subscribe({
+      next: (data: any) => {
         // Save externalRef for later use
-      this.externalRef = data.externalref;
-      console.log("This is the external ref ", this.externalRef);
+        this.externalRef = data.externalref;
+        console.log("This is the external ref ", this.externalRef);
+        console.log("This is the record ID: ", recordId);
+        // Store the recordId for future reference if needed
+        if (recordId) {
+          this.recordId = recordId;
+        }
         this.closePaymentModal();
-        this.openOtpModal()
-        console.log(data);
-      })
-      this.openPaymentModal();
-
-      // Simulate payment processing
-      setTimeout(() => {
+        this.openOtpModal();
         this.processingPayment = false;
-        // Handle payment success/failure here
-        console.log('Payment submitted:', this.paymentForm.value);
-      }, 2000);
-    }
+      },
+      error: (err) => {
+        console.error('Payment failed:', err);
+        this.processingPayment = false;
+        // Handle error (show message to user, etc.)
+      }
+    });
+    
+    this.openPaymentModal();
   }
-
+}
 
 
 
