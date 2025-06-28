@@ -485,54 +485,68 @@ export class UserCheckResultsComponent implements OnInit {
   //   private router: Router
   // ) {}
 
-  // analyzeResults() {
-  //   if (!this.waecresults || !this.waecresults.resultDetails) {
-  //     console.warn('No results available to analyze');
-  //     return;
-  //   }
+  analyzeOneResults() {
+    if (!this.waecresults || !this.waecresults.resultDetails) {
+      console.warn('No results available to analyze');
+      return;
+    }
 
-  //   this.isCheckingEligibility = true;
+    this.isCheckingEligibility = true;
 
-  //   const analysisData = {
-  //     resultDetails: this.waecresults.resultDetails.map((result: any) => ({
-  //       subject: result.subject,
-  //       grade: result.grade,
-  //     }))
-  //   };
+    const analysisData = {
+      resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+        subject: result.subject,
+        grade: result.grade,
+      }))
+    };
 
-  //   console.log('Analysis Data:', analysisData);
-  //   this.manualService.checkEligibility(analysisData).subscribe({
-  //     next: (data: any) => {
-  //       this.elligibilityResults = data;
-  //       this.isCheckingEligibility = false;
+    console.log('Analysis Data:', analysisData);
+    this.manualService.checkEligibility(analysisData).subscribe({
+      next: (data: any) => {
+        this.elligibilityResults = data;
+        this.isCheckingEligibility = false;
 
-  //       // ✅ Show success snackbar
-  //       this.snackBar.open('Eligibility check successful!', 'Close', {
-  //         duration: 3000,
-  //         verticalPosition: 'bottom',
-  //         panelClass: ['snackbar-success']  // Optional: define in styles.css
-  //       });
+        // ✅ Show success snackbar
+        this.snackBar.open('Eligibility check successful!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-success']  // Optional: define in styles.css
+        });
 
-  //       // ✅ Navigate to another route (e.g., to /eligibility-results)
-  //       setTimeout(() => {
-  //         this.router.navigate(['/user/checkEligilibilty'], {
-  //           // state: { result: data }
-  //         });
-  //       }, 4000); // Delay in milliseconds
-  //     },
-  //     error: (err) => {
-  //       this.isCheckingEligibility = false;
-  //       console.error('Eligibility check failed:', err);
+        // ✅ Navigate to another route (e.g., to /eligibility-results)
+        setTimeout(() => {
+          this.router.navigate(['/user/checkEligilibilty'], {
+            // state: { result: data }
+          });
+        }, 4000); // Delay in milliseconds
+      },
+      error: (err) => {
+        this.isCheckingEligibility = false;
+        console.error('Eligibility check failed:', err);
 
-  //       // ❌ Show error snackbar
-  //       this.snackBar.open('Failed to check eligibility.', 'Close', {
-  //         duration: 3000,
-  //         verticalPosition: 'bottom',
-  //         panelClass: ['snackbar-error']
-  //       });
-  //     }
-  //   });
-  // }
+        // ❌ Show error snackbar
+        this.snackBar.open('Failed to check eligibility.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
+  }
+  normalizeSubject(subject: string): string {
+  const map: Record<string, string> = {
+    'ENGLISH LANG': 'ENGLISH LANGUAGE',
+    'ENGLISH LANGUAGE': 'ENGLISH LANGUAGE',
+    'MATHS': 'MATHEMATICS',
+    'MATHEMATICS(CORE)': 'MATHEMATICS',
+    'MATHEMATICS ELECTIVE': 'MATHEMATICS (ELECTIVE)',
+    // Add more if needed
+  };
+
+  const key = subject.trim().toUpperCase();
+  return map[key] || key;
+}
+
 
   gradeOrder = ['A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9'];
 
@@ -542,7 +556,7 @@ getBetterGrade(g1: string, g2: string): string {
   return i1 <= i2 ? g1 : g2;
 }
 
-analyzeResults() {
+analyzeTwoResults() {
   const r1 = this.waecresults;
   const r2 = this.waecresults2;
 
@@ -557,18 +571,22 @@ analyzeResults() {
 
   // Step 1: Add all from first result
   for (const res of r1.resultDetails) {
-    finalResultMap[res.subject] = { subject: res.subject, grade: res.grade };
+      const norm = this.normalizeSubject(res.subject);
+
+    finalResultMap[norm] = { subject: norm, grade: res.grade };
   }
 
   // Step 2: If second result exists, compare and update
   if (r2 && r2.resultDetails) {
     for (const res of r2.resultDetails) {
-      const existing = finalResultMap[res.subject];
+          const norm = this.normalizeSubject(res.subject);
+
+      const existing = finalResultMap[norm];
       if (existing) {
         const better = this.getBetterGrade(existing.grade, res.grade);
-        finalResultMap[res.subject] = { subject: res.subject, grade: better };
+        finalResultMap[norm] = { subject: norm, grade: better };
       } else {
-        finalResultMap[res.subject] = { subject: res.subject, grade: res.grade };
+        finalResultMap[norm] = { subject: norm, grade: res.grade };
       }
     }
   }
@@ -579,7 +597,6 @@ analyzeResults() {
   };
 
   console.log('Best Grades Analysis:', analysisData);
-
   this.manualService.checkEligibility(analysisData).subscribe({
     next: (data: any) => {
       this.elligibilityResults = data;
