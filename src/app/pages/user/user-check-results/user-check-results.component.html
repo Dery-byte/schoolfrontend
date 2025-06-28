@@ -249,7 +249,7 @@
 
 
 
-<!-- {{userChecks|json}} -->
+    <!-- {{userChecks|json}} -->
 
     <!-- Previous Checks List -->
     <div *ngIf="userChecks.length > 0" class="card border-0 shadow-sm">
@@ -762,7 +762,7 @@
 
 
           <!-- Results Display Section -->
-          <div *ngIf="waecresults" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+          <div *ngIf="waecresults && !secondResultFetched" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
             <div class="card-header bg-white border-bottom-0 py-3">
               <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for {{waecresults.cname}}
               </h5>
@@ -884,92 +884,92 @@
 
 
           <div class="row mt-4" *ngIf="waecresults && waecresults2">
-  <!-- First WAEC Result -->
-  <div class="col-md-6">
-    <div class="card border-0 shadow-sm mb-4">
-      <div class="card-header bg-light text-center fw-bold">
-        FIRST WAEC RESULT
-      </div>
-      <div class="card-body px-4">
-          <!-- Candidate Info -->
-        <div class="mt-4 border-top pt-3 text-muted small">
-          <p><strong>Name:</strong> {{ waecresults.cname }}</p>
-          <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
-          <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
-          <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
-        </div>
-        <table class="table table-bordered table-striped text-center">
-          <thead class="table-light">
-            <tr>
-              <th>Subject</th>
-              <th>Grade</th>
-              <th>Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let res of waecresults.resultDetails">
-              <td>{{ res.subject }}</td>
-              <td>
-                <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+            <!-- First WAEC Result -->
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light text-center fw-bold">
+                  FIRST WAEC RESULT
+                </div>
+                <div class="card-body px-4">
+                  <!-- Candidate Info -->
+                  <div class="mt-4 border-top pt-3 text-muted small">
+                    <p><strong>Name:</strong> {{ waecresults.cname }}</p>
+                    <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
+                    <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
+                    <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
+                  </div>
+                  <table class="table table-bordered table-striped text-center">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Subject</th>
+                        <th>Grade</th>
+                        <th>Interpretation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let res of waecresults.resultDetails">
+                        <td>{{ res.subject }}</td>
+                        <td>
+                          <span class="badge rounded-pill py-2 px-3" [ngClass]="{
                   'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
                   'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
                   'bg-warning': res.grade === 'D7' || res.grade === 'E8',
                   'bg-danger': res.grade === 'F9'
                 }">{{ res.grade }}</span>
-              </td>
-              <td>{{ res.interpretation?.trim() }}</td>
-            </tr>
-          </tbody>
-        </table>
+                        </td>
+                        <td>{{ res.interpretation?.trim() }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
 
-      
-      </div>
-    </div>
-  </div>
 
-  <!-- Second WAEC Result -->
-  <div class="col-md-6">
-    <div class="card border-0 shadow-sm mb-4">
-      <div class="card-header bg-light text-center fw-bold">
-        SECOND WAEC RESULT
-      </div>
-      <div class="card-body px-4">
-           <!-- Candidate Info -->
-        <div class="mt-4 border-top pt-3 text-muted small">
-          <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
-          <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
-          <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
-          <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
-        </div>
-        <table class="table table-bordered table-striped text-center">
-          <thead class="table-light">
-            <tr>
-              <th>Subject</th>
-              <th>Grade</th>
-              <th>Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let res of waecresults2.resultDetails">
-              <td>{{ res.subject }}</td>
-              <td>
-                <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+                </div>
+              </div>
+            </div>
+
+            <!-- Second WAEC Result -->
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light text-center fw-bold">
+                  SECOND WAEC RESULT
+                </div>
+                <div class="card-body px-4">
+                  <!-- Candidate Info -->
+                  <div class="mt-4 border-top pt-3 text-muted small">
+                    <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
+                    <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
+                    <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
+                    <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
+                  </div>
+                  <table class="table table-bordered table-striped text-center">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Subject</th>
+                        <th>Grade</th>
+                        <th>Interpretation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let res of waecresults2.resultDetails">
+                        <td>{{ res.subject }}</td>
+                        <td>
+                          <span class="badge rounded-pill py-2 px-3" [ngClass]="{
                   'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
                   'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
                   'bg-warning': res.grade === 'D7' || res.grade === 'E8',
                   'bg-danger': res.grade === 'F9'
                 }">{{ res.grade }}</span>
-              </td>
-              <td>{{ res.interpretation?.trim() }}</td>
-            </tr>
-          </tbody>
-        </table>
+                        </td>
+                        <td>{{ res.interpretation?.trim() }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
 
-     
-      </div>
-    </div>
-  </div>
-</div>
+
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 

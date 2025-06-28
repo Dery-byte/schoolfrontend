@@ -1,4 +1,4 @@
-import { Component,  Input, Output, EventEmitter ,OnInit,ViewChild,ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { UniversityControllerService } from 'src/app/services/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -80,15 +80,15 @@ interface EligibilityCheck {
   styleUrls: ['./user-check-results.component.css']
 })
 export class UserCheckResultsComponent implements OnInit {
-@ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
- @Input() statusData: any;
+  @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
+  @Input() statusData: any;
   @Input() paymentCompleted: boolean = false;
   @Input() webhookResponse: any = null;
   // @Output() closeModal = new EventEmitter<void>();
-  @ViewChild('paymentConfirmation', { static: false }) 
+  @ViewChild('paymentConfirmation', { static: false })
   paymentConfirmation!: ElementRef<HTMLDivElement>;
 
-confirmInput: string = '';
+  confirmInput: string = '';
 
   paymentForm!: FormGroup;
   isSubmitting = false;
@@ -178,8 +178,8 @@ confirmInput: string = '';
     private elig: EligibilityControllerService,
     private manualService: ManaulServiceService,
     private blurService: BlurService,
-  private router: Router,
-private modalService: NgbModal  ) {
+    private router: Router,
+    private modalService: NgbModal) {
     this.entryForm = this.fb.group({
       indexNumber: [''],
       examBoard: [''],
@@ -195,7 +195,7 @@ private modalService: NgbModal  ) {
       examType: ['', Validators.required]
     });
 
-  this.otpForm = this.fb.group({
+    this.otpForm = this.fb.group({
       digit0: ['', [Validators.required, Validators.pattern('[0-9]')]],
       digit1: ['', [Validators.required, Validators.pattern('[0-9]')]],
       digit2: ['', [Validators.required, Validators.pattern('[0-9]')]],
@@ -207,10 +207,10 @@ private modalService: NgbModal  ) {
   }
 
 
-  
+
 
   ngOnInit(): void {
-      this.initializeForm(1.00); // Sets fixed amount to GHS 50.00
+    this.initializeForm(1.00); // Sets fixed amount to GHS 50.00
 
     this.initForm();
     this.manualForm();
@@ -238,12 +238,12 @@ private modalService: NgbModal  ) {
   // }
   resumeCheck(checkId: string) {
     console.log(checkId);
-    this.recordId =checkId;
-  this.currentCheck = this.userChecks.find((c: EligibilityCheck) => c.id === checkId) || null;
-  if (this.currentCheck?.paymentStatus === 'PAID') {
-    this.paymentSuccess = true;
+    this.recordId = checkId;
+    this.currentCheck = this.userChecks.find((c: EligibilityCheck) => c.id === checkId) || null;
+    if (this.currentCheck?.paymentStatus === 'PAID') {
+      this.paymentSuccess = true;
+    }
   }
-}
 
   cancelCurrentCheck() {
     this.currentCheck = null;
@@ -295,7 +295,7 @@ private modalService: NgbModal  ) {
   }
 
 
-  
+
   onBoardChange(event: any): void {
     const selectedBoard = event.target.value;
     if (selectedBoard === 'WAEC') {
@@ -390,243 +390,247 @@ private modalService: NgbModal  ) {
   //     this.examForm.markAllAsTouched();
   //   }
   // }
-submitFormCheck() {
-  if (this.examForm.valid && this.isIndexConfirmed) {
-    // Use SweetAlert2 for confirmation dialog
-    Swal.fire({
-      title: 'CONFIRM INDEX NUMBER',
-      html: `<h3 style="margin: 0; font-weight: bold;">${this.examForm.value.indexNumber}</h3>`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, submit',
-      cancelButtonText: 'No, cancel',
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.fetchResultAutoAssign(); // Proceed only if user confirms
-      }
-      // else do nothing if canceled
-    });
-  } else {
-    this.examForm.markAllAsTouched();
-  }
-}
-
-// Add this method to your component class
-getSimplifiedResults(): {subject: string, grade: string}[] {
-  if (!this.waecresults || !this.waecresults.resultDetails) {
-    return [];
+  submitFormCheck() {
+    if (this.examForm.valid && this.isIndexConfirmed) {
+      // Use SweetAlert2 for confirmation dialog
+      Swal.fire({
+        title: 'CONFIRM INDEX NUMBER',
+        html: `<h3 style="margin: 0; font-weight: bold;">${this.examForm.value.indexNumber}</h3>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, submit',
+        cancelButtonText: 'No, cancel',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.fetchResultAutoAssign(); // Proceed only if user confirms
+        }
+        // else do nothing if canceled
+      });
+    } else {
+      this.examForm.markAllAsTouched();
+    }
   }
 
-  return this.waecresults.resultDetails.map((result: any) => ({
-    subject: result.subject,
-    grade: result.grade
-  }));
-}
+  // Add this method to your component class
+  getSimplifiedResults(): { subject: string, grade: string }[] {
+    if (!this.waecresults || !this.waecresults.resultDetails) {
+      return [];
+    }
 
-
-
-elligibilityResults:any;
-isCheckingEligibility: boolean = false;
-// In eligibility-results.component.ts
-getSubjects(cutoffPoints: any): string[] {
-  return Object.keys(cutoffPoints);
-}
-
-
-
-
-
-
-
-
-// analyzeResults() {
-//   if (!this.waecresults || !this.waecresults.resultDetails) {
-//     console.warn('No results available to analyze');
-//     return;
-//   }
-//     this.isCheckingEligibility = true;
-//   // Create the properly formatted JSON structure
-//   const analysisData = {
-//     resultDetails: this.waecresults.resultDetails.map((result: any) => ({
-//       subject: result.subject,
-//       grade: result.grade,
-//     }))
-//   };
-//   // Log to console
-//   console.log('Analysis Data:', analysisData);
-//   console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
-//   // Send to eligibility service
-//   this.manualService.checkEligibility(analysisData).subscribe({
-//     next: (data: any) => {
-//       this.elligibilityResults = data;
-
-//       console.log("This is the elligibility Results ", data)
-//             this.isCheckingEligibility = false; // Reset loading state
-//     },
-//     error: (err) => {
-//             this.isCheckingEligibility = false; // Additional safety
-//       console.error('Eligibility check failed:', err);
-//     }
-//   });
-// }
-
-
-
-
-
-
-
-
-
-// constructor(
-//   private manualService: ManualService,
-//   private snackBar: MatSnackBar,
-//   private router: Router
-// ) {}
-
-analyzeResults() {
-  if (!this.waecresults || !this.waecresults.resultDetails) {
-    console.warn('No results available to analyze');
-    return;
-  }
-
-  this.isCheckingEligibility = true;
-
-  const analysisData = {
-    resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+    return this.waecresults.resultDetails.map((result: any) => ({
       subject: result.subject,
-      grade: result.grade,
-    }))
-  };
+      grade: result.grade
+    }));
+  }
 
-  console.log('Analysis Data:', analysisData);
-  this.manualService.checkEligibility(analysisData).subscribe({
-    next: (data: any) => {
-      this.elligibilityResults = data;
-      this.isCheckingEligibility = false;
 
-      // ✅ Show success snackbar
-      this.snackBar.open('Eligibility check successful!', 'Close', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        panelClass: ['snackbar-success']  // Optional: define in styles.css
-      });
 
-      // ✅ Navigate to another route (e.g., to /eligibility-results)
-     setTimeout(() => {
-  this.router.navigate(['/user/checkEligilibilty'], {
-    // state: { result: data }
-  });
-}, 4000); // Delay in milliseconds
-    },
-    error: (err) => {
-      this.isCheckingEligibility = false;
-      console.error('Eligibility check failed:', err);
+  elligibilityResults: any;
+  isCheckingEligibility: boolean = false;
+  // In eligibility-results.component.ts
+  getSubjects(cutoffPoints: any): string[] {
+    return Object.keys(cutoffPoints);
+  }
 
-      // ❌ Show error snackbar
-      this.snackBar.open('Failed to check eligibility.', 'Close', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        panelClass: ['snackbar-error']
-      });
+
+
+
+
+
+
+
+  // analyzeResults() {
+  //   if (!this.waecresults || !this.waecresults.resultDetails) {
+  //     console.warn('No results available to analyze');
+  //     return;
+  //   }
+  //     this.isCheckingEligibility = true;
+  //   // Create the properly formatted JSON structure
+  //   const analysisData = {
+  //     resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+  //       subject: result.subject,
+  //       grade: result.grade,
+  //     }))
+  //   };
+  //   // Log to console
+  //   console.log('Analysis Data:', analysisData);
+  //   console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
+  //   // Send to eligibility service
+  //   this.manualService.checkEligibility(analysisData).subscribe({
+  //     next: (data: any) => {
+  //       this.elligibilityResults = data;
+
+  //       console.log("This is the elligibility Results ", data)
+  //             this.isCheckingEligibility = false; // Reset loading state
+  //     },
+  //     error: (err) => {
+  //             this.isCheckingEligibility = false; // Additional safety
+  //       console.error('Eligibility check failed:', err);
+  //     }
+  //   });
+  // }
+
+
+
+
+
+
+
+
+
+  // constructor(
+  //   private manualService: ManualService,
+  //   private snackBar: MatSnackBar,
+  //   private router: Router
+  // ) {}
+
+  analyzeResults() {
+    if (!this.waecresults || !this.waecresults.resultDetails) {
+      console.warn('No results available to analyze');
+      return;
     }
-  });
-}
 
+    this.isCheckingEligibility = true;
 
+    const analysisData = {
+      resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+        subject: result.subject,
+        grade: result.grade,
+      }))
+    };
 
-// Separate function for API call (cleaner code)
+    console.log('Analysis Data:', analysisData);
+    this.manualService.checkEligibility(analysisData).subscribe({
+      next: (data: any) => {
+        this.elligibilityResults = data;
+        this.isCheckingEligibility = false;
 
-waecresults:any;
-waecresults2:any;
-errorMessage:any;
-fetchResultAutoAssign() {
-  const payload = {
-    cindex: this.examForm.value.indexNumber,
-    examyear: this.examForm.value.examYear,
-    examtype: this.examForm.value.examType
-  };
+        // ✅ Show success snackbar
+        this.snackBar.open('Eligibility check successful!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-success']  // Optional: define in styles.css
+        });
 
-  this.waec.verifyWaecResult({ body: payload }).subscribe({
-    next: (res) => {
-      if (!this.waecresults) {
-        this.waecresults = res;
-        console.log("Results 1 ", this.waecresults);
-      } else if (!this.waecresults2) {
-        this.waecresults2 = res;
-                console.log("Results 2 ", this.waecresults2);
+        // ✅ Navigate to another route (e.g., to /eligibility-results)
+        setTimeout(() => {
+          this.router.navigate(['/user/checkEligilibilty'], {
+            // state: { result: data }
+          });
+        }, 4000); // Delay in milliseconds
+      },
+      error: (err) => {
+        this.isCheckingEligibility = false;
+        console.error('Eligibility check failed:', err);
 
-      } else {
-        // Both already filled
-        this.errorMessage = 'You can only compare two results.';
+        // ❌ Show error snackbar
+        this.snackBar.open('Failed to check eligibility.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-error']
+        });
       }
-    }
-  });
-}
+    });
+  }
 
-getAlignedSubjects(): {
-  subjectcode: string;
-  subject: string;
-  result1: {
+
+
+  // Separate function for API call (cleaner code)
+
+  waecresults: any;
+  waecresults2: any;
+  errorMessage: any;
+  secondResultFetched = false;
+
+  fetchResultAutoAssign() {
+    const payload = {
+      cindex: this.examForm.value.indexNumber,
+      examyear: this.examForm.value.examYear,
+      examtype: this.examForm.value.examType
+    };
+
+    this.waec.verifyWaecResult({ body: payload }).subscribe({
+      next: (res) => {
+        if (!this.waecresults) {
+          this.waecresults = res;
+          console.log("Results 1 ", this.waecresults);
+        } else if (!this.waecresults2) {
+          this.waecresults2 = res;
+          this.secondResultFetched = true; // 🚨 set flag to true
+
+          console.log("Results 2 ", this.waecresults2);
+
+        } else {
+          // Both already filled
+          this.errorMessage = 'You can only compare two results.';
+        }
+      }
+    });
+  }
+
+  getAlignedSubjects(): {
     subjectcode: string;
     subject: string;
-    grade: string;
-    interpretation: string;
-  } | null;
-  result2: {
-    subjectcode: string;
-    subject: string;
-    grade: string;
-    interpretation: string;
-  } | null;
-}[] {
-  if (!this.waecresults) return [];
-
-  const subjects1 = this.waecresults.resultDetails;
-  const subjects2 = this.waecresults2?.resultDetails || [];
-
-  return subjects1.map((sub1: {
-    subjectcode: string;
-    subject: string;
-    grade: string;
-    interpretation: string;
-  }) => {
-    const sub2 = subjects2.find((s: {
+    result1: {
       subjectcode: string;
       subject: string;
       grade: string;
       interpretation: string;
-    }) => s.subjectcode === sub1.subjectcode) || null;
+    } | null;
+    result2: {
+      subjectcode: string;
+      subject: string;
+      grade: string;
+      interpretation: string;
+    } | null;
+  }[] {
+    if (!this.waecresults) return [];
 
-    return {
-      subjectcode: sub1.subjectcode,
-      subject: sub1.subject,
-      result1: sub1,
-      result2: sub2
-    };
-  });
-}
+    const subjects1 = this.waecresults.resultDetails;
+    const subjects2 = this.waecresults2?.resultDetails || [];
 
+    return subjects1.map((sub1: {
+      subjectcode: string;
+      subject: string;
+      grade: string;
+      interpretation: string;
+    }) => {
+      const sub2 = subjects2.find((s: {
+        subjectcode: string;
+        subject: string;
+        grade: string;
+        interpretation: string;
+      }) => s.subjectcode === sub1.subjectcode) || null;
 
-
-handleSuccess(res: any) {
-  this.isLoading = false;
-  this.waecresults = res;
-  localStorage.setItem("candidate", JSON.stringify(res));
-  
-  if (this.currentCheck) {
-    this.currentCheck.result = res;
-    this.currentCheck.checkStatus = 'completed';
-    this.saveChecks();
+      return {
+        subjectcode: sub1.subjectcode,
+        subject: sub1.subject,
+        result1: sub1,
+        result2: sub2
+      };
+    });
   }
-}
 
-handleError(err: any) {
-  this.isLoading = false;
-  console.error('Error:', err);
-  // Optionally show an error toast/message
-}
+
+
+  handleSuccess(res: any) {
+    this.isLoading = false;
+    this.waecresults = res;
+    localStorage.setItem("candidate", JSON.stringify(res));
+
+    if (this.currentCheck) {
+      this.currentCheck.result = res;
+      this.currentCheck.checkStatus = 'completed';
+      this.saveChecks();
+    }
+  }
+
+  handleError(err: any) {
+    this.isLoading = false;
+    console.error('Error:', err);
+    // Optionally show an error toast/message
+  }
 
 
 
@@ -921,7 +925,7 @@ handleError(err: any) {
 
 
 
-  
+
   // openConfirmationModal() {
   //   const modalRef = this.modalService.open(ConfirmationModalComponent, {
   //     centered: true,
@@ -1060,10 +1064,10 @@ handleError(err: any) {
 
 
 
-// REAL API FOR THE FLOW
+  // REAL API FOR THE FLOW
 
-// 1st Step
-createRecords() {
+  // 1st Step
+  createRecords() {
     this.manualService.startFirstStep().subscribe({
       next: (data: any) => {
         this.currentCheck = data;
@@ -1080,31 +1084,31 @@ createRecords() {
 
 
 
-//2nd Step
-updatePayment(recordsId:number, paymentStatus: any){
-  this.manualService.startSecondStep(recordsId,paymentStatus).subscribe((data=>{
-    console.log("succeffully created the records");
-  }))
-}
+  //2nd Step
+  updatePayment(recordsId: number, paymentStatus: any) {
+    this.manualService.startSecondStep(recordsId, paymentStatus).subscribe((data => {
+      console.log("succeffully created the records");
+    }))
+  }
 
-//3rd Step
-updateCandidate(recordId: number,payload: any){
-  this.manualService.startThirdStep(recordId,payload).subscribe((data=>{
-    this.getResultsByUser();
-    console.log("succeffully created the records");
-  }))
-}
+  //3rd Step
+  updateCandidate(recordId: number, payload: any) {
+    this.manualService.startThirdStep(recordId, payload).subscribe((data => {
+      this.getResultsByUser();
+      console.log("succeffully created the records");
+    }))
+  }
 
-getResultsByUser(){
-  this.manualService.getAllRecordsByUserID().subscribe((data=>{
-    this.userChecks=data;
-    console.log(data);
-  }));
-}
+  getResultsByUser() {
+    this.manualService.getAllRecordsByUserID().subscribe((data => {
+      this.userChecks = data;
+      console.log(data);
+    }));
+  }
 
-// THE PAYMENT MODAL 
+  // THE PAYMENT MODAL 
 
-closePaymentModal() {
+  closePaymentModal() {
     this.showPaymentModal = false;
     this.isSubmitting = false;
     this.showPaymentModal = false;
@@ -1113,9 +1117,9 @@ closePaymentModal() {
   }
 
 
-  
+
   processingPayment = false;
-    totalPrice: number = 0;
+  totalPrice: number = 0;
 
 
 
@@ -1126,8 +1130,8 @@ closePaymentModal() {
 
 
 
-    // Submit payment
-    externalRef: string = ''; // Add this at the top of your component
+  // Submit payment
+  externalRef: string = ''; // Add this at the top of your component
 
   // submitPayment(): void {
   //   if (this.paymentForm.valid) {
@@ -1150,66 +1154,63 @@ closePaymentModal() {
   //     }, 2000);
   //   }
   // }
-  recordId:any;
+  recordId: any;
 
-submitPayment(): void {
-  if (this.paymentForm.valid) {
-    this.processingPayment = true;
-    
-    // Get the recordId from wherever it's stored in your component
-    const recordId = this.recordId; // Or this.paymentForm.get('recordId')?.value;
-            console.log("This is the record ID: ", recordId);
-    this.manualService.initializePayment(this.paymentForm.value, recordId).subscribe({
-      next: (data: any) => {
-        // Save externalRef for later use
-        this.externalRef = data.externalref;
-        console.log("This is the external ref ", this.externalRef);
-        console.log("This is the record ID: ", recordId);
-        // Store the recordId for future reference if needed
-        if (recordId) {
-          this.recordId = recordId;
+  submitPayment(): void {
+    if (this.paymentForm.valid) {
+      this.processingPayment = true;
+
+      // Get the recordId from wherever it's stored in your component
+      const recordId = this.recordId; // Or this.paymentForm.get('recordId')?.value;
+      console.log("This is the record ID: ", recordId);
+      this.manualService.initializePayment(this.paymentForm.value, recordId).subscribe({
+        next: (data: any) => {
+          // Save externalRef for later use
+          this.externalRef = data.externalref;
+          console.log("This is the external ref ", this.externalRef);
+          console.log("This is the record ID: ", recordId);
+          // Store the recordId for future reference if needed
+          if (recordId) {
+            this.recordId = recordId;
+          }
+          this.closePaymentModal();
+          this.openOtpModal();
+          this.processingPayment = false;
+        },
+        error: (err) => {
+          console.error('Payment failed:', err);
+          this.processingPayment = false;
+          // Handle error (show message to user, etc.)
         }
-        this.closePaymentModal();
-        this.openOtpModal();
-        this.processingPayment = false;
-      },
-      error: (err) => {
-        console.error('Payment failed:', err);
-        this.processingPayment = false;
-        // Handle error (show message to user, etc.)
-      }
-    });
-    
-    this.openPaymentModal();
+      });
+
+      this.openPaymentModal();
+    }
   }
-}
 
 
 
-//GET PAYMENT STATUS
-intervalId: any;
-paymentsucceDetails:any;
-startPaymentStatusCheck() {
-  this.intervalId = setInterval(() => {
-   this.manualService.getPaymentStatus(this.externalRef).subscribe((paymentStatus: any) => {
-      if (paymentStatus.txStatus === 1) {
-        this.paymentsucceDetails = paymentStatus;
-        console.log("This is the payment Status ", paymentStatus);
-        clearInterval(this.intervalId); // Stop polling on success
-       // this.handlePaymentSuccess();
-      } else if (paymentStatus.txStatus === -1) {
-                console.log("This is the payment Status ", paymentStatus);
+  //GET PAYMENT STATUS
+  intervalId: any;
+  paymentsucceDetails: any;
+  startPaymentStatusCheck() {
+    this.intervalId = setInterval(() => {
+      this.manualService.getPaymentStatus(this.externalRef).subscribe((paymentStatus: any) => {
+        if (paymentStatus.txStatus === 1) {
+          this.paymentsucceDetails = paymentStatus;
+          console.log("This is the payment Status ", paymentStatus);
+          clearInterval(this.intervalId); // Stop polling on success
+          // this.handlePaymentSuccess();
+        } else if (paymentStatus.txStatus === -1) {
+          console.log("This is the payment Status ", paymentStatus);
 
-        clearInterval(this.intervalId); // Stop polling on failure
-      //  this.handlePaymentFailure();
-      }
-    });
-  }, 3000); // Poll every 3 seconds
+          clearInterval(this.intervalId); // Stop polling on failure
+          //  this.handlePaymentFailure();
+        }
+      });
+    }, 3000); // Poll every 3 seconds
 
-}
-
-
-
+  }
 
 
 
@@ -1233,7 +1234,10 @@ startPaymentStatusCheck() {
 
 
 
-    // Validate amount on blur
+
+
+
+  // Validate amount on blur
   validateAmount(): void {
     const amountControl = this.paymentForm.get('amount');
     if (amountControl?.value) {
@@ -1246,33 +1250,33 @@ startPaymentStatusCheck() {
     }
   }
 
-initializeForm(fixedAmount: number = 0.00) {
-  this.paymentForm = this.fb.group({
-    amount: [
-      fixedAmount.toFixed(2), 
-      [Validators.required, Validators.min(0.01)]
-    ],
-    payer: ['', [
-      Validators.required,
-      Validators.pattern(/^(?:233|0)[2345][0-9]{8}$/)
-    ]],
-    channel: ['', Validators.required]
-  });
+  initializeForm(fixedAmount: number = 0.00) {
+    this.paymentForm = this.fb.group({
+      amount: [
+        fixedAmount.toFixed(2),
+        [Validators.required, Validators.min(0.01)]
+      ],
+      payer: ['', [
+        Validators.required,
+        Validators.pattern(/^(?:233|0)[2345][0-9]{8}$/)
+      ]],
+      channel: ['', Validators.required]
+    });
 
-  // Make readonly instead of disabled to include in form value
-  this.isAmountFixed = true;
-}
-isAmountFixed = true; // Add this property
+    // Make readonly instead of disabled to include in form value
+    this.isAmountFixed = true;
+  }
+  isAmountFixed = true; // Add this property
 
-openPaymentModal() {
-  this.showPaymentModal = true;
-  document.body.style.overflow = 'hidden';
-      this.blurService.setBlur(true);
+  openPaymentModal() {
+    this.showPaymentModal = true;
+    document.body.style.overflow = 'hidden';
+    this.blurService.setBlur(true);
 
-}
+  }
 
 
- ngOnDestroy() {
+  ngOnDestroy() {
     // Clean up when component is destroyed
     this.blurService.setBlur(false);
     document.body.style.overflow = '';
@@ -1281,20 +1285,20 @@ openPaymentModal() {
 
 
 
-  showOtpModal=false;
-openOtpModal() {
-  this.showOtpModal = true;
-  document.body.style.overflow = 'hidden';
-      this.blurService.setBlur(true);
+  showOtpModal = false;
+  openOtpModal() {
+    this.showOtpModal = true;
+    document.body.style.overflow = 'hidden';
+    this.blurService.setBlur(true);
 
-}
+  }
 
-// closeOtpModal() {
-//     this.isSubmitting = false;
-//     this.showOtpModal = false;
-//     document.body.style.overflow = ''; // 🔓 Restore scroll
-//     this.blurService.setBlur(false);
-//   }
+  // closeOtpModal() {
+  //     this.isSubmitting = false;
+  //     this.showOtpModal = false;
+  //     document.body.style.overflow = ''; // 🔓 Restore scroll
+  //     this.blurService.setBlur(false);
+  //   }
 
 
 
@@ -1404,7 +1408,7 @@ openOtpModal() {
   lastFourDigits = '1234'; // Replace with actual last digits
 
   // constructor(private fb: FormBuilder) {
-  
+
   // }
 
   handleOtpKeyDown(event: KeyboardEvent, index: number) {
@@ -1412,7 +1416,7 @@ openOtpModal() {
     if ([8, 9, 37, 39, 46].includes(event.keyCode)) {
       return;
     }
-    
+
     // Only allow numbers
     if (event.keyCode < 48 || event.keyCode > 57) {
       if (event.keyCode < 96 || event.keyCode > 105) {
@@ -1445,122 +1449,122 @@ openOtpModal() {
 
 
 
-  
- payee={
-    amount:"",
-    channel:"",
-    payer:"",
-    otpcode:""
+
+  payee = {
+    amount: "",
+    channel: "",
+    payer: "",
+    otpcode: ""
   }
 
   verifyOTP() {
     if (this.otpForm.invalid) {
       this.otpError = 'Please enter a valid 6-digit code';
-          this.shakeOtpInput(); // Add visual feedback
+      this.shakeOtpInput(); // Add visual feedback
       return;
     }
-    
+
     this.verifyingOTP = true;
     this.otpError = '';
     // Combine OTP digits
     const otpValue = Object.values(this.otpForm.value).join('');
 
- this.payee.amount=this.paymentForm.get('amount')?.value;
-  this.payee.channel = this.paymentForm.value.channel;
-  this.payee.payer = this.paymentForm.value.payer;
-  this.payee.otpcode = otpValue;
+    this.payee.amount = this.paymentForm.get('amount')?.value;
+    this.payee.channel = this.paymentForm.value.channel;
+    this.payee.payer = this.paymentForm.value.payer;
+    this.payee.otpcode = otpValue;
 
     console.log("This is the OTP entered", this.payee);
-       this.manualService.verifyOTP(this.payee).subscribe({
-    next: (response) => {
-      // Successful OTP verification
-      this.handleOtpSuccess(response);
-    },
-    error: (error) => {
-      // Handle verification failure
-      this.handleOtpError(error);
+    this.manualService.verifyOTP(this.payee).subscribe({
+      next: (response) => {
+        // Successful OTP verification
+        this.handleOtpSuccess(response);
+      },
+      error: (error) => {
+        // Handle verification failure
+        this.handleOtpError(error);
+      }
+    });
+    //this.verifyingOTP = false;
+    // this.showOtpModal = false; // Uncomment on successful verification
+    //this.otpError = 'Invalid verification code'; // Uncomment if verification fails
+
+  }
+
+
+  private handleOtpError(error: any) {
+    this.verifyingOTP = false;
+
+    // Handle different error cases
+    if (error.status === 400) {
+      this.otpError = 'Invalid OTP code. Please try again.';
+      this.shakeOtpInput();
+    } else if (error.status === 429) {
+      this.otpError = 'Too many attempts. Please wait before trying again.';
+    } else {
+      this.otpError = 'Verification failed. Please try again later.';
     }
-  });
-      //this.verifyingOTP = false;
-      // this.showOtpModal = false; // Uncomment on successful verification
-       //this.otpError = 'Invalid verification code'; // Uncomment if verification fails
-  
+
+    // Log error for debugging
+    console.error('OTP Verification Error:', error);
   }
 
 
-private handleOtpError(error: any) {
-  this.verifyingOTP = false;
-  
-  // Handle different error cases
-  if (error.status === 400) {
-    this.otpError = 'Invalid OTP code. Please try again.';
-    this.shakeOtpInput();
-  } else if (error.status === 429) {
-    this.otpError = 'Too many attempts. Please wait before trying again.';
-  } else {
-    this.otpError = 'Verification failed. Please try again later.';
-  }
-  
-  // Log error for debugging
-  console.error('OTP Verification Error:', error);
-}
+
+  // private listenForPaymentConfirmation(referenceId: string) {
+  //   // Implementation depends on your webhook/polling mechanism
+  //   // This is a conceptual example using a mock service
+
+  //   this.paymentService.listenForPaymentStatus(referenceId).subscribe({
+  //     next: (paymentStatus) => {
+  //       if (paymentStatus.status === 'SUCCESS') {
+  //         this.handlePaymentSuccess(paymentStatus);
+  //       } else if (paymentStatus.status === 'FAILED') {
+  //         this.handlePaymentFailure(paymentStatus);
+  //       }
+  //       // Other statuses can be handled as needed
+  //     },
+  //     error: (err) => {
+  //       console.error('Payment status listening error:', err);
+  //       this.handlePaymentError();
+  //     }
+  //   });
+  // }
 
 
+  // private handlePaymentSuccess(paymentStatus: any) {
+  //   // Update modal with success state
+  //   this.paymentCompleted = true;
+  //   this.webhookResponse = paymentStatus;
 
-// private listenForPaymentConfirmation(referenceId: string) {
-//   // Implementation depends on your webhook/polling mechanism
-//   // This is a conceptual example using a mock service
-  
-//   this.paymentService.listenForPaymentStatus(referenceId).subscribe({
-//     next: (paymentStatus) => {
-//       if (paymentStatus.status === 'SUCCESS') {
-//         this.handlePaymentSuccess(paymentStatus);
-//       } else if (paymentStatus.status === 'FAILED') {
-//         this.handlePaymentFailure(paymentStatus);
-//       }
-//       // Other statuses can be handled as needed
-//     },
-//     error: (err) => {
-//       console.error('Payment status listening error:', err);
-//       this.handlePaymentError();
-//     }
-//   });
-// }
+  //   // Track successful payment
+  //   this.analyticsService.trackPaymentSuccess(this.payee.amount);
 
+  //   // Auto-close after delay (optional)
+  //   setTimeout(() => {
+  //     this.router.navigate(['/payment/success'], {
+  //       state: { paymentData: this.paymentStatusData }
+  //     });
+  //   }, 3000);
+  // }
 
-// private handlePaymentSuccess(paymentStatus: any) {
-//   // Update modal with success state
-//   this.paymentCompleted = true;
-//   this.webhookResponse = paymentStatus;
-  
-//   // Track successful payment
-//   this.analyticsService.trackPaymentSuccess(this.payee.amount);
-  
-//   // Auto-close after delay (optional)
-//   setTimeout(() => {
-//     this.router.navigate(['/payment/success'], {
-//       state: { paymentData: this.paymentStatusData }
-//     });
-//   }, 3000);
-// }
+  // private handlePaymentFailure(paymentStatus: any) {
+  //   // Update modal with failure state
+  //   this.paymentFailed = true;
+  //   this.webhookResponse = paymentStatus;
 
-// private handlePaymentFailure(paymentStatus: any) {
-//   // Update modal with failure state
-//   this.paymentFailed = true;
-//   this.webhookResponse = paymentStatus;
-  
-//   // Show retry option
-//   this.retryAvailable = true;
-// }
+  //   // Show retry option
+  //   this.retryAvailable = true;
+  // }
 
   resendOTP() {
     if (this.resendCooldown > 0) return;
-    
+
     // Reset OTP fields
     for (let i = 0; i < 6; i++) {
       this.otpForm.get(`digit${i}`)?.setValue('');
     }
-    
+
     // Set cooldown (60 seconds)
     this.resendCooldown = 60;
     const interval = setInterval(() => {
@@ -1569,98 +1573,100 @@ private handleOtpError(error: any) {
         clearInterval(interval);
       }
     }, 1000);
-    
+
     // Here you would call your OTP resend service
     // this.otpService.resendOTP().subscribe(...)
-    
+
   }
 
   closeOtpModal() {
     this.showOtpModal = false;
   }
 
-private shakeOtpInput() {
-  // Add visual feedback for invalid OTP
-  const otpContainer = document.querySelector('.otp-container');
-  if (otpContainer) {
-    otpContainer.classList.add('shake');
-    setTimeout(() => {
-      otpContainer.classList.remove('shake');
-    }, 500);
-  }}
-
-
-  paymentStatusData:any;
-  
-// private handlePaymentError() {
-//   // Handle connection/technical errors
-//   this.paymentStatusError = true;
-//   this.webhookResponse = {
-//     message: 'Unable to verify payment status. Please check your transactions later.'
-//   };
-// }
-
-
-private handleOtpSuccess(response: any) {
-  // Close OTP modal and show payment status modal
-  this.showOtpModal = false;
-  this.verifyingOTP = false;
-  this.showWebHook = true;
-  this.startPaymentStatusCheck();
-  // Store response data for the payment status modal
-  this.paymentStatusData = {
-    ...response,
-    amount: this.payee.amount // Include amount in the display data
-  }};
-
-handlePaste(event: ClipboardEvent) {
-  event.preventDefault();
-  const pasteData = event.clipboardData?.getData('text/plain').replace(/\D/g, ''); // Remove non-digits
-  if (pasteData && pasteData.length >= 6) {
-    for (let i = 0; i < 6; i++) {
-      const control = this.otpForm.get(`digit${i}`);
-      if (control) {
-        control.setValue(pasteData[i]);
-      }
+  private shakeOtpInput() {
+    // Add visual feedback for invalid OTP
+    const otpContainer = document.querySelector('.otp-container');
+    if (otpContainer) {
+      otpContainer.classList.add('shake');
+      setTimeout(() => {
+        otpContainer.classList.remove('shake');
+      }, 500);
     }
-    // Focus the last field after paste
-    setTimeout(() => {
-      const lastInput = document.querySelector('[formControlName="digit5"]') as HTMLInputElement;
-      if (lastInput) {
-        lastInput.focus();
+  }
+
+
+  paymentStatusData: any;
+
+  // private handlePaymentError() {
+  //   // Handle connection/technical errors
+  //   this.paymentStatusError = true;
+  //   this.webhookResponse = {
+  //     message: 'Unable to verify payment status. Please check your transactions later.'
+  //   };
+  // }
+
+
+  private handleOtpSuccess(response: any) {
+    // Close OTP modal and show payment status modal
+    this.showOtpModal = false;
+    this.verifyingOTP = false;
+    this.showWebHook = true;
+    this.startPaymentStatusCheck();
+    // Store response data for the payment status modal
+    this.paymentStatusData = {
+      ...response,
+      amount: this.payee.amount // Include amount in the display data
+    }
+  };
+
+  handlePaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const pasteData = event.clipboardData?.getData('text/plain').replace(/\D/g, ''); // Remove non-digits
+    if (pasteData && pasteData.length >= 6) {
+      for (let i = 0; i < 6; i++) {
+        const control = this.otpForm.get(`digit${i}`);
+        if (control) {
+          control.setValue(pasteData[i]);
+        }
       }
-    }, 10);
-  }
-}
-
-
-handleInput(event: any, index: number): void {
-  const input = event.target;
-  const value = input.value;
-
-  // Allow only digits
-  if (!/^\d$/.test(value)) {
-    input.value = '';
-    return;
+      // Focus the last field after paste
+      setTimeout(() => {
+        const lastInput = document.querySelector('[formControlName="digit5"]') as HTMLInputElement;
+        if (lastInput) {
+          lastInput.focus();
+        }
+      }, 10);
+    }
   }
 
-  if (value && index < 5) {
-    const inputsArray = this.otpInputs.toArray();
-    inputsArray[index + 1].nativeElement.focus();
+
+  handleInput(event: any, index: number): void {
+    const input = event.target;
+    const value = input.value;
+
+    // Allow only digits
+    if (!/^\d$/.test(value)) {
+      input.value = '';
+      return;
+    }
+
+    if (value && index < 5) {
+      const inputsArray = this.otpInputs.toArray();
+      inputsArray[index + 1].nativeElement.focus();
+    }
+
+    // Optionally mark field as touched
+    this.otpForm.get(`digit${index}`)?.markAsTouched();
   }
 
-  // Optionally mark field as touched
-  this.otpForm.get(`digit${index}`)?.markAsTouched();
-}
+  handleKeyDown(event: KeyboardEvent, index: number): void {
+    const key = event.key;
 
-handleKeyDown(event: KeyboardEvent, index: number): void {
-  const key = event.key;
-
-  if (key === 'Backspace' && index > 0 && !this.otpForm.get(`digit${index}`)?.value) {
-    const inputsArray = this.otpInputs.toArray();
-    inputsArray[index - 1].nativeElement.focus();
+    if (key === 'Backspace' && index > 0 && !this.otpForm.get(`digit${index}`)?.value) {
+      const inputsArray = this.otpInputs.toArray();
+      inputsArray[index - 1].nativeElement.focus();
+    }
   }
-}
 
 
 
@@ -1676,15 +1682,15 @@ handleKeyDown(event: KeyboardEvent, index: number): void {
 
 
 
-// WEBHOOK STAFF
-amount:number=0;
-showWebHook=false;
+  // WEBHOOK STAFF
+  amount: number = 0;
+  showWebHook = false;
 
-openWebhook() {
-  this.showWebHook = true;
-  document.body.style.overflow = 'hidden';
-      this.blurService.setBlur(true);
-}
+  openWebhook() {
+    this.showWebHook = true;
+    document.body.style.overflow = 'hidden';
+    this.blurService.setBlur(true);
+  }
 
 
   closeWebhook() {
@@ -1693,25 +1699,25 @@ openWebhook() {
 
 
   // In your component.ts
-proceedToPaymentConfirmation() {
-  this.closeWebhook();
-  setTimeout(() => {
-    this.paymentConfirmation.nativeElement.scrollIntoView({ 
-      behavior: 'smooth', 
-      block: 'start' 
-    });
-  }, 100);
-}
+  proceedToPaymentConfirmation() {
+    this.closeWebhook();
+    setTimeout(() => {
+      this.paymentConfirmation.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 100);
+  }
 
 
 
 
   proceed(checkId: string) {
     console.log(checkId);
-  if (this.currentCheck?.paymentStatus === 'PAID') {
-    this.paymentSuccess = true;
+    if (this.currentCheck?.paymentStatus === 'PAID') {
+      this.paymentSuccess = true;
+    }
   }
-}
 
 
 
