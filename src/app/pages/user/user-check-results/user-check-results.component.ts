@@ -117,7 +117,6 @@ confirmInput: string = '';
   );
   examForm!: FormGroup;
   manualEntryForm!: FormGroup;
-  waecresults: any;
   examTypes: ExamType[] = [
     { id: 1, name: 'WASSCE School Candidate', key: 'WASSCE_SCHOOL' },
     { id: 2, name: 'WASSCE Private Candidate', key: 'WASSCE_PRIVATE' }
@@ -404,7 +403,7 @@ submitFormCheck() {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.fetchResults(); // Proceed only if user confirms
+        this.fetchResultAutoAssign(); // Proceed only if user confirms
       }
       // else do nothing if canceled
     });
@@ -539,26 +538,77 @@ analyzeResults() {
 
 // Separate function for API call (cleaner code)
 
-
-
-fetchResults() {
-  this.isLoading = true;
-
-  const requestPayload = {
+waecresults:any;
+waecresults2:any;
+errorMessage:any;
+fetchResultAutoAssign() {
+  const payload = {
     cindex: this.examForm.value.indexNumber,
     examyear: this.examForm.value.examYear,
     examtype: this.examForm.value.examType
   };
 
-  this.waec.verifyWaecResult({ body: requestPayload }).subscribe({
+  this.waec.verifyWaecResult({ body: payload }).subscribe({
     next: (res) => {
-      this.handleSuccess(res);
-    },
-    error: (err) => {
-      this.handleError(err);
+      if (!this.waecresults) {
+        this.waecresults = res;
+        console.log("Results 1 ", this.waecresults);
+      } else if (!this.waecresults2) {
+        this.waecresults2 = res;
+                console.log("Results 2 ", this.waecresults2);
+
+      } else {
+        // Both already filled
+        this.errorMessage = 'You can only compare two results.';
+      }
     }
   });
 }
+
+getAlignedSubjects(): {
+  subjectcode: string;
+  subject: string;
+  result1: {
+    subjectcode: string;
+    subject: string;
+    grade: string;
+    interpretation: string;
+  } | null;
+  result2: {
+    subjectcode: string;
+    subject: string;
+    grade: string;
+    interpretation: string;
+  } | null;
+}[] {
+  if (!this.waecresults) return [];
+
+  const subjects1 = this.waecresults.resultDetails;
+  const subjects2 = this.waecresults2?.resultDetails || [];
+
+  return subjects1.map((sub1: {
+    subjectcode: string;
+    subject: string;
+    grade: string;
+    interpretation: string;
+  }) => {
+    const sub2 = subjects2.find((s: {
+      subjectcode: string;
+      subject: string;
+      grade: string;
+      interpretation: string;
+    }) => s.subjectcode === sub1.subjectcode) || null;
+
+    return {
+      subjectcode: sub1.subjectcode,
+      subject: sub1.subject,
+      result1: sub1,
+      result2: sub2
+    };
+  });
+}
+
+
 
 handleSuccess(res: any) {
   this.isLoading = false;

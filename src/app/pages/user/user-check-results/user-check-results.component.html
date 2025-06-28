@@ -633,6 +633,134 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <!-- Results Display Section -->
           <div *ngIf="waecresults" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
             <div class="card-header bg-white border-bottom-0 py-3">
@@ -739,89 +867,132 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="row mt-4" *ngIf="waecresults && waecresults2">
+  <!-- First WAEC Result -->
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-light text-center fw-bold">
+        FIRST WAEC RESULT
+      </div>
+      <div class="card-body px-4">
+          <!-- Candidate Info -->
+        <div class="mt-4 border-top pt-3 text-muted small">
+          <p><strong>Name:</strong> {{ waecresults.cname }}</p>
+          <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
+          <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
+          <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
+        </div>
+        <table class="table table-bordered table-striped text-center">
+          <thead class="table-light">
+            <tr>
+              <th>Subject</th>
+              <th>Grade</th>
+              <th>Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let res of waecresults.resultDetails">
+              <td>{{ res.subject }}</td>
+              <td>
+                <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
+                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
+                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
+                  'bg-danger': res.grade === 'F9'
+                }">{{ res.grade }}</span>
+              </td>
+              <td>{{ res.interpretation?.trim() }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      
+      </div>
+    </div>
+  </div>
+
+  <!-- Second WAEC Result -->
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-light text-center fw-bold">
+        SECOND WAEC RESULT
+      </div>
+      <div class="card-body px-4">
+           <!-- Candidate Info -->
+        <div class="mt-4 border-top pt-3 text-muted small">
+          <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
+          <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
+          <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
+          <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
+        </div>
+        <table class="table table-bordered table-striped text-center">
+          <thead class="table-light">
+            <tr>
+              <th>Subject</th>
+              <th>Grade</th>
+              <th>Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let res of waecresults2.resultDetails">
+              <td>{{ res.subject }}</td>
+              <td>
+                <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
+                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
+                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
+                  'bg-danger': res.grade === 'F9'
+                }">{{ res.grade }}</span>
+              </td>
+              <td>{{ res.interpretation?.trim() }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <!-- ELEGIBILITY DISPLAY STARTS -->
 
-          <div class="eligibility-container">
-            <!-- University Cards -->
-            <div *ngFor="let university of elligibilityResults" class="university-card">
-              <!-- University Header -->
-              <div class="university-header">
-                <div class="university-info">
-                  <h3 class="university-name">{{ university.universityName }}</h3>
-                  <div class="university-meta">
-                    <span class="location">{{ university.location }}</span>
-                    <span class="university-type" [class.public]="university.type === 'PUBLIC'"
-                      [class.private]="university.type === 'PRIVATE'">
-                      {{ university.type | lowercase }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Eligible Programs -->
-              <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
-                <h4 class="section-title">
-                  <span class="icon success"><i class="fas fa-check-circle"></i></span>
-                  Eligible Programs
-                </h4>
-                <div class="programs-grid">
-                  <div *ngFor="let program of university.eligiblePrograms" class="program-card success">
-                    <div class="program-content">
-                      <h5 class="program-name">{{ program.programName }}</h5>
-                      <div class="program-badge">You qualify</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Alternative Programs -->
-              <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
-                <h4 class="section-title">
-                  <span class="icon warning"><i class="fas fa-info-circle"></i></span>
-                  Alternative Options
-                </h4>
-                <div class="programs-grid">
-                  <div *ngFor="let program of university.alternativePrograms" class="program-card warning">
-                    <div class="program-header">
-                      <h5 class="program-name">{{ program.programName }}</h5>
-                      <div class="eligibility-score">
-                        <div class="score-value">{{ program.percentageEligibility }}% match</div>
-                        <div class="score-bar">
-                          <div class="bar-fill" [style.width]="program.percentageEligibility + '%'"></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="program-details">
-                      <div class="requirements">
-                        <h6>Requirements</h6>
-                        <div class="grade-tags">
-                          <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="grade-tag">
-                            <span class="subject">{{ subject }}</span>
-                            <span class="grade">{{ program.cutoffPoints[subject] }}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="feedback">
-                        <h6>Admission Notes</h6>
-                        <ul>
-                          <li *ngFor="let explanation of program.explanation"
-                            [class.error]="explanation.includes('Invalid') || explanation.includes('missing')"
-                            [class.warning]="explanation.includes('Diff')">
-                            <i class="icon"
-                              [class.fa-times-circle]="explanation.includes('Invalid') || explanation.includes('missing')"
-                              [class.fa-exclamation-circle]="explanation.includes('Diff')"></i>
-                            {{ explanation }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- ELEGIBILITY DISPLAY ENDS -->
           <!-- {{elligibilityResults|json}} -->
