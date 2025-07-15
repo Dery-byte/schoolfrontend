@@ -3,11 +3,14 @@ import {AuthenticationRequest} from '../../services/models/authentication-reques
 import { AuthenticationService } from 'src/app/services/services';
 import { TokenService } from 'src/app/services/token/token.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl,FormArray, Validators } from '@angular/forms';
 import { decodeToken } from 'src/app/Utilities/token.util';
 import { AuthService } from 'src/app/auth/auth.service';
 import {RegistrationRequest} from '../../services/models/registration-request';
 import { delay } from 'rxjs';
+import { BlurService } from 'src/app/shared/blur/blur.service';
+import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+
 
 
 
@@ -87,7 +90,10 @@ export class LoginComponent {
     private authenticationService: AuthenticationService,
     private tokenService: TokenService,
     private router: Router,
-    private authService:AuthService
+    private authService:AuthService,
+        private blurService: BlurService,
+        private manualService:ManaulServiceService
+    
   ) {
   }
 
@@ -148,7 +154,65 @@ export class LoginComponent {
   }
 
 
+  paymentForm = new FormGroup({
+    amount: new FormControl('', [Validators.required, Validators.min(0.01)]),
+    payer: new FormControl('', [Validators.required, Validators.pattern(/^0\d{9}$/)])
+  });
 
+
+  showorgottenPasswordModal = false;
+  passwordResetForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email])
+  });
+
+  openFogottenModal() {
+    console.log("Opening password reset modal");
+    this.showorgottenPasswordModal = true;
+    document.body.style.overflow = 'hidden';
+    this.blurService.setBlur(true);
+  }
+
+  closeFogottenModal() {
+    this.showorgottenPasswordModal = false;
+    document.body.style.overflow = '';
+    this.blurService.setBlur(false);
+  }
+
+
+
+    showSuccessMessage = false;
+    isSubmitting = false;
+
+  apiError: string | null = null;
+
+  
+ passwordResetRequest() {
+    if (this.passwordResetForm.invalid) return;
+          console.log('Email submitted:', this.passwordResetForm.value.email);
+
+
+    this.isSubmitting = true;
+    this.showSuccessMessage = false;
+    this.apiError = null;
+
+   const email =this.passwordResetForm.value.email;
+
+   console.log(email);
+
+      this.manualService.requestPasswordReset(email).subscribe({
+      next: () => {
+        this.showSuccessMessage = true;
+        this.passwordResetForm.reset();
+      },
+      error: (err) => {
+        console.error('Password reset error:', err);
+        this.apiError = err.error?.message || 'Failed to send reset link. Please try again.';
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      }
+    });
+  }
 
  
   
