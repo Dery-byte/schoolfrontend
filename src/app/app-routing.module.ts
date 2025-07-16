@@ -13,6 +13,7 @@ import { AllUniversitiesComponent } from './pages/admin/all-universities/all-uni
 import { AllProgramsComponent } from './pages/admin/all-programs/all-programs.component';
 import { UserCheckResultsComponent } from './pages/user/user-check-results/user-check-results.component';
 import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eligibility.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 
 
@@ -23,6 +24,7 @@ const routes: Routes = [
 
    // 🔐 LOGIN ROUTE (default route)
    { path: '', component: LoginComponent, pathMatch: 'full' },
+   {path:'reset-password', component:ResetPasswordComponent},
 
   //  {path:'activate-account', component:ActivateAccountComponent},
 

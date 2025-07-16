@@ -225,7 +225,7 @@ export class UserCheckResultsComponent implements OnInit {
       this.currentCheck.paymentStatus = 'PAID';
       this.currentCheck.checkStatus = 'in_progress';
       this.currentCheck.lastUpdated = new Date();
-      this.saveChecks();
+      //this.saveChecks();
       this.paymentSuccess = true;
     }
   }
@@ -254,7 +254,7 @@ export class UserCheckResultsComponent implements OnInit {
     if (this.currentCheck) {
       this.currentCheck.checkStatus = 'completed';
       this.currentCheck.lastUpdated = new Date();
-      this.saveChecks();
+      //this.saveChecks();
       this.currentCheck = null;
       this.paymentSuccess = false;
     }
@@ -264,9 +264,9 @@ export class UserCheckResultsComponent implements OnInit {
     return Math.random().toString(36).substring(2, 15);
   }
 
-  private saveChecks() {
-    localStorage.setItem('userChecks', JSON.stringify(this.userChecks));
-  }
+  // private saveChecks() {
+  //   localStorage.setItem('userChecks', JSON.stringify(this.userChecks));
+  // }
 
   private loadChecks() {
     const saved = localStorage.getItem('userChecks');
@@ -713,7 +713,7 @@ analyzeTwoResults() {
     if (this.currentCheck) {
       this.currentCheck.result = res;
       this.currentCheck.checkStatus = 'completed';
-      this.saveChecks();
+     // this.saveChecks();
     }
   }
 
@@ -810,7 +810,7 @@ analyzeTwoResults() {
       if (this.currentCheck) {
         this.currentCheck.result = this.manualEntryForm.value;
         this.currentCheck.checkStatus = 'completed';
-        this.saveChecks();
+       // this.saveChecks();
       }
     } else {
       this.manualEntryForm.markAllAsTouched();
@@ -1149,7 +1149,7 @@ analyzeTwoResults() {
 
     this.userChecks.unshift(newCheck);
     this.currentCheck = newCheck;
-    this.saveChecks();
+    //this.saveChecks();
     this.newCheckForm.reset();
   }
 
@@ -1163,12 +1163,12 @@ analyzeTwoResults() {
       next: (data: any) => {
         this.currentCheck = data;
         this.userChecks.unshift(data);
-        this.saveChecks();
-        alert("Successfully started check");
+       // this.saveChecks();
+        //alert("Successfully started check");
       },
       error: (err) => {
         console.error(err);
-        alert("Failed to start check");
+        //alert("Failed to start check");
       }
     });
   }

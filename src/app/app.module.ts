@@ -31,6 +31,7 @@ import { UserSidebarComponent } from './pages/user/user-sidebar/user-sidebar.com
 import { UserCheckResultsComponent } from './pages/user/user-check-results/user-check-results.component';
 import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eligibility.component';
 import { ConfirmationModalComponent } from './pages/utilities/confirmation-modal/confirmation-modal.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 
 
@@ -57,7 +58,8 @@ import { ConfirmationModalComponent } from './pages/utilities/confirmation-modal
     UserSidebarComponent,
     UserCheckResultsComponent,
     UserEligibilityComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

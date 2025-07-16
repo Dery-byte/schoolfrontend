@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,HttpErrorResponse } from '@angular/common/http';
 import baseUrl from './helper';
+import { Observable } from 'rxjs';
+
 
 
 
@@ -176,6 +178,24 @@ getPaymentStatus(externalRef: String){
   });
   return this.http.get(`${baseUrl}/auth/eligibilityRecords/my-eligibility-records`, { headers });
 }
+
+
+
+
+
+
+
+
+
+
+resetPassword(token: string, newPassword: string): Observable<any> {
+  return this.http.post(`${baseUrl}/auth/update-password`, { token, newPassword });
+}
+requestPasswordReset(email: any): Observable<any> {
+  return this.http.post(`${baseUrl}/auth/forgotten-password`, { email });
+}
+
+
 
 
 
