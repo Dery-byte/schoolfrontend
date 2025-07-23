@@ -807,3 +807,605 @@ button:focus-visible, input:focus-visible {
   color: transparent; /* Hide text color */
   pointer-events: none; /* Disable interactions during loading */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* RIGHT SIDE REGISTER/LOGIN CSS */
+.auth-card {
+    max-width: 480px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-container {
+    padding: 2.5rem;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+    font-size: 1.75rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    color: #718096;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.auth-tabs {
+    display: flex;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #718096;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.auth-tab.active {
+    color: #4a6cf7;
+}
+
+.auth-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #4a6cf7;
+    border-radius: 2px 2px 0 0;
+}
+
+.auth-form {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #a0aec0;
+}
+
+.form-control, .password-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background-color: #f8fafc;
+}
+
+.form-control:focus, .password-input:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    background-color: white;
+}
+
+.password-input-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #a0aec0;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.toggle-password:hover {
+    color: #4a5568;
+}
+
+.password-hint {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-top: 0.25rem;
+}
+
+.name-fields {
+    display: flex;
+    gap: 1rem;
+}
+
+.name-fields .form-group {
+    flex: 1;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 0.5rem;
+}
+
+.remember-me label {
+    font-size: 0.875rem;
+    color: #4a5568;
+    margin-bottom: 0;
+}
+
+.forgot-password {
+    font-size: 0.875rem;
+    color: #4a6cf7;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+}
+
+.btn-primary:hover {
+    background-color: #3a5bd9;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.social-auth {
+    margin-top: 1.5rem;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    color: #718096;
+    font-size: 0.875rem;
+    margin: 1.5rem 0;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.divider::before {
+    margin-right: 1rem;
+}
+
+.divider::after {
+    margin-left: 1rem;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+    background-color: #f8fafc;
+}
+
+.social-btn.google {
+    color: #4a5568;
+}
+
+.social-btn.microsoft {
+    color: #4a5568;
+}
+
+.terms-agreement {
+    display: flex;
+    align-items: flex-start;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+    color: #4a5568;
+}
+
+.terms-agreement input {
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.terms-agreement a {
+    color: #4a6cf7;
+    text-decoration: none;
+}
+
+.terms-agreement a:hover {
+    text-decoration: underline;
+}
+
+.custom-alert {
+    background-color: #fff5f5;
+    color: #e53e3e;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+}
+
+.alert-content ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: #718096;
+}
+
+.switch-link {
+    background: none;
+    border: none;
+    color: #4a6cf7;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.25rem;
+    margin-left: 0.25rem;
+}
+
+.switch-link:hover {
+    text-decoration: underline;
+}
+
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        padding: 1.5rem;
+    }
+    
+    .name-fields {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .social-buttons {
+        flex-direction: column;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* NEW LEFT CARD DESIGN CSS */
+.welcome-card {
+    background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+    border-radius: 16px;
+    padding: 2.5rem;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.welcome-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+}
+
+.welcome-features {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.feature-item {
+    flex: 1;
+    min-width: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.welcome-description {
+    margin: 1.5rem 0;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.cta-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.cta-button.primary {
+    background: #fff;
+    color: #182848;
+}
+
+.cta-button.primary:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.cta-button.secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cta-button.secondary:hover {
+    border-color: white;
+    transform: translateY(-2px);
+}
+
+.download-text {
+    margin-bottom: 1rem;
+    text-align: center;
+    opacity: 0.9;
+}
+
+.badge-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.app-badge img {
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+
+.app-badge:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .welcome-card {
+        padding: 1.5rem;
+    }
+    
+    .welcome-title {
+        font-size: 2rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .feature-item {
+        min-width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+    }
+}
