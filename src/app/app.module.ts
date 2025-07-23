@@ -32,6 +32,7 @@ import { UserCheckResultsComponent } from './pages/user/user-check-results/user-
 import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eligibility.component';
 import { ConfirmationModalComponent } from './pages/utilities/confirmation-modal/confirmation-modal.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { SafeHtmlPipe } from './shared/pipes/safe-html.pipe';
 
 
 
@@ -59,7 +60,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     UserCheckResultsComponent,
     UserEligibilityComponent,
     ConfirmationModalComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,

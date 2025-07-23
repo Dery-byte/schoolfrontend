@@ -1,1 +1,246 @@
-<p>register works!</p>
+<div class="split-container">
+    <!-- Left Welcome Card -->
+    <div class="welcome-card">
+        <div class="welcome-content">
+            <h1 class="welcome-title">Welcome </h1>
+            <p class="welcome-subtitle">You're awesome!</p>
+
+            <div class="app-badges">
+                <a href="#" class="app-badge">
+                    <img src="assets/images/app-store-badge.svg" alt="Download on the App Store">
+                </a>
+                <a href="#" class="app-badge">
+                    <img src="assets/images/play-store-badge.svg" alt="Get it on Google Play">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Card with Toggleable Forms -->
+    <div class="auth-card">
+        <div class="card-container">
+            <div class="auth-tabs">
+                <button class="auth-tab" [class.active]="activeForm === 'login'" (click)="toggleForm('login')">
+                    Sign In
+                </button>
+                <button class="auth-tab" [class.active]="activeForm === 'register'" (click)="toggleForm('register')">
+                    <!-- <span *ngIf="loading" class="spinner" role="status" aria-hidden="true"></span> -->
+                    <!-- <span *ngIf="!loading"> Create Account </span> -->
+                    <span *ngIf="!loading"> Create Account </span>
+
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-form" [class.active]="activeForm === 'login'">
+                <form class="form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input [(ngModel)]="authRequest.email" ng-blur="Login.blurInput(loginForm.email)"
+                            ng-focus="Login.focusInput(loginForm.email)" ng-model="Login.user.email"
+                            class="form-control" ng-class="{ 'is-dirty': Login.isDirty(loginForm.email) }" required
+                            type="email" name="email" placeholder="Please Enter your Email" required="">
+                    </div>
+
+                    <div class="form-group password-group">
+                        <label for="password">Password</label>
+                        <div class="password-input-container">
+                            <input [(ngModel)]="authRequest.password" type="password" name="password"
+                                ng-blur="Login.blurInput(loginForm.password)"
+                                ng-focus="Login.focusInput(loginForm.password)" ng-model="Login.user.password"
+                                ng-maxlength="30" ng-minlength="6" class="form-control"
+                                ng-class="{ 'is-dirty': Login.isDirty(loginForm.password) }" required=""
+                                [type]="getPasswordType('password')" id="password" placeholder="Enter your password"
+                                class="password-input">
+                            <button type="button" class="toggle-password" (click)="togglePasswordVisibility('password')"
+                                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                                <svg [class]="getEyeIconClass('password')" viewBox="0 0 24 24" width="20" height="20">
+                                    <path
+                                        d="M12 5c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm0-10c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- <button type="submit" class="btn btn-primary" (click)="login()">
+                        <span *ngIf="loginLoading" class="spinner" role="status" aria-hidden="true"></span>
+                        <span *ngIf="!loginLoading"> Sign In </span>
+
+                    </button> -->
+
+
+                    <button type="submit" class="btn btn-primary fixed-width-btn" (click)="login()">
+                        <span *ngIf="loginLoading" class="spinner" role="status" aria-hidden="true"></span>
+                        <span *ngIf="!loginLoading">Sign In</span>
+                    </button>
+
+
+                </form>
+                <a class="forgot-password" (click)="openFogottenModal()">Forgotten Password?</a>
+
+                <div class="custom-alert" *ngIf="errorMsg.length">
+                    <div class="alert-content">
+                        <ul>
+                            <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-form" [class.active]="activeForm === 'register'">
+                <form class="form">
+
+                    <div class="form-group">
+                        <label for="reg-email">First Name</label>
+                        <input [(ngModel)]="registerRequest.firstname" type="text" name="firstname"
+                            placeholder="First name" required="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Last Name</label>
+                        <input [(ngModel)]="registerRequest.lastname" type="text" name="lastname"
+                            placeholder="Last Name" required="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Phone No.</label>
+                        <input [(ngModel)]="registerRequest.lastname" type="text" name="phonenumber"
+                            placeholder="Phone No." required="">
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" [(ngModel)]="registerRequest.email" name="email"
+                            placeholder="Email" required="">
+                    </div>
+
+                    <div class="form-group password-group">
+                        <label for="reg-password">Password</label>
+                        <div class="password-input-container">
+                            <input [(ngModel)]="registerRequest.password" type="password" name="pswd"
+                                [type]="getPasswordType('regPassword')" id="reg-password"
+                                placeholder="Create a password" class="password-input">
+                            <button type="button" class="toggle-password"
+                                (click)="togglePasswordVisibility('regPassword')"
+                                [attr.aria-label]="showRegPassword ? 'Hide password' : 'Show password'">
+                                <svg [class]="getEyeIconClass('regPassword')" viewBox="0 0 24 24" width="20"
+                                    height="20">
+                                    <path
+                                        d="M12 5c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm0-10c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group password-group">
+                        <label for="reg-confirm">Confirm Password</label>
+                        <div class="password-input-container">
+                            <input [type]="getPasswordType('confirmPassword')" id="reg-confirm"
+                                placeholder="Confirm your password" class="password-input">
+                            <button type="button" class="toggle-password"
+                                (click)="togglePasswordVisibility('confirmPassword')"
+                                [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+                                <svg [class]="getEyeIconClass('confirmPassword')" viewBox="0 0 24 24" width="20"
+                                    height="20">
+                                    <path
+                                        d="M12 5c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6zm0-10c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary fixed-width-btn" (click)="register()">
+                        <span *ngIf="loading" class="spinner" role="status" aria-hidden="true"></span>
+                        <span *ngIf="!loading">Sign up </span>
+                    </button>
+
+                </form>
+            </div>
+
+            <div class="custom-alert" *ngIf="errorMsgReg.length">
+                <div class="alert-content">
+                    <ul>
+                        <p *ngFor="let msg of errorMsgReg">{{ msg }}</p>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- <label class="label" for="chk" aria-hidden="true" *ngIf="!errorMsgReg.length">Sign up</label>
+        <div id="alertreg" class="alert alert-danger" role="alert" *ngIf="errorMsgReg.length">
+          <p style="line-height: 0.6px;" *ngFor="let msgReg of errorMsgReg">{{msgReg}}</p>
+        </div> -->
+
+
+
+
+
+            <div class="auth-switch">
+                <span>{{ switchText }}</span>
+                <button class="switch-link" (click)="toggleForm(activeForm === 'login' ? 'register' : 'login')">
+                    {{ switchLinkText }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal-overlay" *ngIf="showorgottenPasswordModal">
+    <div class="reset-form-container">
+        <!-- Modal Header -->
+        <div class="reset-form-header">
+            <h2>Reset Password</h2>
+            <button class="modal-close" (click)="closeFogottenModal()" aria-label="Close">
+                &times;
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <form class="reset-form" [formGroup]="passwordResetForm" (ngSubmit)="passwordResetRequest()">
+            <p class="form-intro">Enter your email to receive a password reset link</p>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" formControlName="email" placeholder="Enter your registered email"
+                    required>
+                <div *ngIf="passwordResetForm.get('email')?.invalid && passwordResetForm.get('email')?.touched"
+                    class="form-error">
+                    Please enter a valid email address
+                </div>
+            </div>
+            <div *ngIf="showSuccessMessage" class="success-message">
+                Password reset link sent successfully! Please check your email.
+            </div>
+            <!-- Modal Footer -->
+            <div class="form-actions">
+                <button type="" class="cancel-btn" (click)="closeFogottenModal()">Cancel</button>
+                <button type="submit" class="submit-btn" [disabled]="!passwordResetForm.valid"
+                    [class.loading]="isSubmitting">
+                    <span *ngIf="!isSubmitting">Send Reset Link</span>
+                    <span *ngIf="isSubmitting">
+                        <span class="spinnerresetpass"></span>
+                        Sending...
+                    </span>
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+</div>

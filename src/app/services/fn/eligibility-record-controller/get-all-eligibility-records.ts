@@ -9,16 +9,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { EligibilityRecord } from '../../models/eligibility-record';
-import { WaecCandidateEntity } from '../../models/waec-candidate-entity';
 
-export interface CheckEligibility$Params {
-      body: WaecCandidateEntity
+export interface GetAllEligibilityRecords$Params {
 }
 
-export function checkEligibility(http: HttpClient, rootUrl: string, params: CheckEligibility$Params, context?: HttpContext): Observable<StrictHttpResponse<EligibilityRecord>> {
-  const rb = new RequestBuilder(rootUrl, checkEligibility.PATH, 'post');
+export function getAllEligibilityRecords(http: HttpClient, rootUrl: string, params?: GetAllEligibilityRecords$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EligibilityRecord>>> {
+  const rb = new RequestBuilder(rootUrl, getAllEligibilityRecords.PATH, 'get');
   if (params) {
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -26,9 +23,9 @@ export function checkEligibility(http: HttpClient, rootUrl: string, params: Chec
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<EligibilityRecord>;
+      return r as StrictHttpResponse<Array<EligibilityRecord>>;
     })
   );
 }
 
-checkEligibility.PATH = '/auth/check-eligibilityAll';
+getAllEligibilityRecords.PATH = '/auth/eligibilityRecords/all';

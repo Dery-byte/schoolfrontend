@@ -2,6 +2,17 @@
 export interface CutoffPoints {
   [subject: string]: string;
 }
+export interface AIRecommendation {
+  id?: number;
+  programName?: string;
+  careerPath?: string | null;
+  jobOpportunities?: string;
+  futureProspects?: string;
+  alternativeOptions?: string | null;
+  improvementTips?: string | null;
+  eligibleProgram?: any | null;
+  alternativeProgram?: any | null;
+}
 
 export interface Program {
   id: string;
@@ -10,6 +21,7 @@ export interface Program {
   percentage?: number;
   admissionProbability?: number;
   explanations?: string[];
+   aiRecommendation?: AIRecommendation; // Add this line
 }
 
 export interface University {

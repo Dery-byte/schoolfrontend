@@ -8,17 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { EligibilityRecord } from '../../models/eligibility-record';
-import { WaecCandidateEntity } from '../../models/waec-candidate-entity';
+import { ExamCheckRecord } from '../../models/exam-check-record';
 
-export interface CheckEligibility$Params {
-      body: WaecCandidateEntity
+export interface GetByUser$Params {
 }
 
-export function checkEligibility(http: HttpClient, rootUrl: string, params: CheckEligibility$Params, context?: HttpContext): Observable<StrictHttpResponse<EligibilityRecord>> {
-  const rb = new RequestBuilder(rootUrl, checkEligibility.PATH, 'post');
+export function getByUser(http: HttpClient, rootUrl: string, params?: GetByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExamCheckRecord>>> {
+  const rb = new RequestBuilder(rootUrl, getByUser.PATH, 'get');
   if (params) {
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -26,9 +23,9 @@ export function checkEligibility(http: HttpClient, rootUrl: string, params: Chec
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<EligibilityRecord>;
+      return r as StrictHttpResponse<Array<ExamCheckRecord>>;
     })
   );
 }
 
-checkEligibility.PATH = '/auth/check-eligibilityAll';
+getByUser.PATH = '/auth/records/RecordsByUserId';

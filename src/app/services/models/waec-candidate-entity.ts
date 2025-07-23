@@ -7,7 +7,7 @@ export interface WaecCandidateEntity {
   cindex?: string;
   cname?: string;
   dob?: string;
-  examtype?: string;
+  examtype?: number;
   examyear?: string;
   gender?: number;
   id?: number;

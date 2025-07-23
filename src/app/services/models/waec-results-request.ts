@@ -4,7 +4,7 @@
 
 export interface WaecResultsRequest {
   cindex?: string;
-  examtype?: string;
+  examtype?: number;
   examyear?: string;
   reqref?: string;
 }

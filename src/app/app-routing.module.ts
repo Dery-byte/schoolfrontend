@@ -14,6 +14,7 @@ import { AllProgramsComponent } from './pages/admin/all-programs/all-programs.co
 import { UserCheckResultsComponent } from './pages/user/user-check-results/user-check-results.component';
 import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eligibility.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 
 
@@ -23,7 +24,10 @@ const routes: Routes = [
   {path:'activate-account', component:ActivateAccountComponent,canActivate: [activationGuard]},
 
    // 🔐 LOGIN ROUTE (default route)
-   { path: '', component: LoginComponent, pathMatch: 'full' },
+  //  { path: '', component: LoginComponent, pathMatch: 'full' },
+
+      { path: '', component: RegisterComponent, pathMatch: 'full' },
+
    {path:'reset-password', component:ResetPasswordComponent},
 
   //  {path:'activate-account', component:ActivateAccountComponent},

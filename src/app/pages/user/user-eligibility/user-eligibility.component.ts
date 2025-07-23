@@ -93,7 +93,7 @@ downloadAsPdf(result: EligibilityResult): void {
     subject: 'University Admission Eligibility Report',
     author: 'Admission Analysis System',
     keywords: 'university, admission, eligibility',
-    creator: 'Admission Analysis System'
+    creator: 'Edu App'
   });
 
   // Add title
@@ -119,7 +119,7 @@ downloadAsPdf(result: EligibilityResult): void {
   doc.setTextColor(0, 0, 0);
   doc.text('Summary', 14, 60);
   
-  // Draw summary table using autoTable function directly
+  // Draw summary table
   autoTable(doc, {
     startY: 65,
     head: [['Metric', 'Count']],
@@ -136,7 +136,6 @@ downloadAsPdf(result: EligibilityResult): void {
     }
   });
 
-  // Get the final Y position
   let yPosition = (doc as any).lastAutoTable.finalY + 15;
   
   result.universities.forEach((university, index) => {
@@ -144,14 +143,12 @@ downloadAsPdf(result: EligibilityResult): void {
     doc.setFontSize(14);
     doc.setTextColor(40, 53, 147);
     doc.text(`${university.universityName} (${university.location})`, 14, yPosition);
-    
     yPosition += 10;
     
     // Add university type
     doc.setFontSize(12);
     doc.setTextColor(81, 81, 81);
     doc.text(`Type: ${university.type}`, 14, yPosition);
-    
     yPosition += 10;
     
     // Add eligible programs if any
@@ -167,7 +164,6 @@ downloadAsPdf(result: EligibilityResult): void {
         this.formatCutoffPoints(program.cutoffPoints)
       ]);
       
-      // Use autoTable function directly
       autoTable(doc, {
         startY: yPosition,
         head: [['Program Name', 'Match %', 'Required Grades']],
@@ -185,10 +181,28 @@ downloadAsPdf(result: EligibilityResult): void {
         headStyles: {
           fillColor: [0, 100, 0],
           textColor: 255
+        },
+        didParseCell: (data) => {
+          if (data.section === 'body') {
+            data.row.height = 20; // Increase row height for better readability
+          }
         }
       });
       
       yPosition = (doc as any).lastAutoTable.finalY + 10;
+      
+      // Add AI recommendations for eligible programs
+      university.eligiblePrograms.forEach(program => {
+        if (program.aiRecommendation) {
+          yPosition = this.addAiRecommendationToPdf(doc, program, yPosition);
+          
+          // Add page break if needed
+          if (yPosition > 250) {
+            doc.addPage();
+            yPosition = 20;
+          }
+        }
+      });
     }
     
     // Add alternative programs if any
@@ -205,10 +219,10 @@ downloadAsPdf(result: EligibilityResult): void {
         program.explanations?.join('\n') || 'N/A'
       ]);
       
-      // Use autoTable function directly
       autoTable(doc, {
         startY: yPosition,
-        head: [['Program Name', 'Match %', 'Required Grades', 'Notes']],
+        // head: [['Program Name', 'Match %', 'Required Grades', 'Notes']],
+        head: [['Program Name', 'Match %', 'Required Grades']],
         body: alternativeProgramsData,
         styles: {
           cellPadding: 3,
@@ -216,10 +230,13 @@ downloadAsPdf(result: EligibilityResult): void {
           valign: 'middle'
         },
         columnStyles: {
-          0: { cellWidth: 50 },
-          1: { cellWidth: 20 },
-          2: { cellWidth: 40 },
-          3: { cellWidth: 'auto' }
+          0: { cellWidth: 60 },
+          1: { cellWidth: 25 },
+          2: { cellWidth: 'auto' }
+          // 0: { cellWidth: 50 },
+          // 1: { cellWidth: 20 },
+          // 2: { cellWidth: 40 },
+          // 3: { cellWidth: 'auto' }
         },
         headStyles: {
           fillColor: [205, 147, 0],
@@ -230,13 +247,31 @@ downloadAsPdf(result: EligibilityResult): void {
             doc.setFillColor(255, 255, 200);
             doc.rect(data.cell.x, data.cell.y, data.cell.width, data.cell.height, 'F');
           }
+        },
+        didParseCell: (data) => {
+          if (data.section === 'body') {
+            data.row.height = 20; // Increase row height for notes
+          }
         }
       });
       
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = (doc as any).lastAutoTable.finalY + 10;
+      
+      // Add AI recommendations for alternative programs
+      university.alternativePrograms.forEach(program => {
+        if (program.aiRecommendation) {
+          yPosition = this.addAiRecommendationToPdf(doc, program, yPosition);
+          
+          // Add page break if needed
+          if (yPosition > 250) {
+            doc.addPage();
+            yPosition = 20;
+          }
+        }
+      });
     }
     
-    // Add page break if needed
+    // Add page break if needed between universities
     if (yPosition > 250 && index < result.universities.length - 1) {
       doc.addPage();
       yPosition = 20;
@@ -250,12 +285,67 @@ downloadAsPdf(result: EligibilityResult): void {
     doc.setFontSize(10);
     doc.setTextColor(150);
     doc.text(`Page ${i} of ${pageCount}`, 105, 285, { align: 'center' });
-    doc.text('Generated by Admission Analysis System', 105, 290, { align: 'center' });
+    doc.text('By Edu App', 105, 290, { align: 'center' });
   }
   
   // Save the PDF
   doc.save(`Eligibility_Report_${result.id}.pdf`);
 }
+
+private addAiRecommendationToPdf(doc: jsPDF, program: any, yPosition: number): number {
+  const aiRec = program.aiRecommendation;
+  if (!aiRec) return yPosition;
+  
+  const leftMargin = 20;
+  const rightMargin = 190;
+  const lineHeight = 7;
+  const sectionGap = 5;
+  
+  // Add Job Opportunities section
+  if (aiRec.jobOpportunities) {
+    doc.setFontSize(12);
+    doc.setTextColor(40, 53, 147); // Navy blue
+    doc.text('Job Opportunities:', leftMargin, yPosition);
+    yPosition += lineHeight;
+    
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0); // Black
+    const jobText = this.stripHtml(aiRec.jobOpportunities);
+    const jobLines = doc.splitTextToSize(jobText, rightMargin - leftMargin);
+    doc.text(jobLines, leftMargin + 5, yPosition);
+    yPosition += jobLines.length * lineHeight + sectionGap;
+  }
+  
+  // Add Career Path section
+  // if (aiRec.futureProspects) {
+  //   doc.setFontSize(12);
+  //   doc.setTextColor(40, 53, 147); // Navy blue
+  //   doc.text('Career Path:', leftMargin, yPosition);
+  //   yPosition += lineHeight;
+    
+  //   doc.setFontSize(10);
+  //   doc.setTextColor(0, 0, 0); // Black
+  //   const careerText = this.stripHtml(aiRec.futureProspects);
+  //   const careerLines = doc.splitTextToSize(careerText, rightMargin - leftMargin);
+  //   doc.text(careerLines, leftMargin + 5, yPosition);
+  //   yPosition += careerLines.length * lineHeight + sectionGap;
+  // }
+  
+  return yPosition;
+}
+
+private stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '') // Remove HTML tags
+             .replace(/&nbsp;/g, ' ') // Replace HTML spaces
+             .replace(/\s+/g, ' ')    // Collapse multiple spaces
+             .trim();
+}
+
+// private formatCutoffPoints(cutoffPoints: any): string {
+//   return Object.entries(cutoffPoints)
+//     .map(([subject, grade]) => `${subject}: ${grade}`)
+//     .join('\n');
+// }
 
 
 

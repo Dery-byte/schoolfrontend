@@ -6,11 +6,15 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { ExamCheckRecordControllerService } from './services/exam-check-record-controller.service';
 import { WaecControllersService } from './services/waec-controllers.service';
 import { AuthenticationService } from './services/authentication.service';
+import { SmsControllerService } from './services/sms-controller.service';
 import { ProgramControllerService } from './services/program-controller.service';
+import { PaymentControllerService } from './services/payment-controller.service';
 import { EligibilityControllerService } from './services/eligibility-controller.service';
 import { UniversityControllerService } from './services/university-controller.service';
+import { EligibilityRecordControllerService } from './services/eligibility-record-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -20,11 +24,15 @@ import { UniversityControllerService } from './services/university-controller.se
   exports: [],
   declarations: [],
   providers: [
+    ExamCheckRecordControllerService,
     WaecControllersService,
     AuthenticationService,
+    SmsControllerService,
     ProgramControllerService,
+    PaymentControllerService,
     EligibilityControllerService,
     UniversityControllerService,
+    EligibilityRecordControllerService,
     ApiConfiguration
   ],
 })

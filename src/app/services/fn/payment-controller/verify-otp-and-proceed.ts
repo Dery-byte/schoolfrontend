@@ -8,15 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { EligibilityRecord } from '../../models/eligibility-record';
-import { WaecCandidateEntity } from '../../models/waec-candidate-entity';
+import { MoolrePaymentRequest } from '../../models/moolre-payment-request';
+import { MoolrePaymentResponse } from '../../models/moolre-payment-response';
 
-export interface CheckEligibility$Params {
-      body: WaecCandidateEntity
+export interface VerifyOtpAndProceed$Params {
+      body: MoolrePaymentRequest
 }
 
-export function checkEligibility(http: HttpClient, rootUrl: string, params: CheckEligibility$Params, context?: HttpContext): Observable<StrictHttpResponse<EligibilityRecord>> {
-  const rb = new RequestBuilder(rootUrl, checkEligibility.PATH, 'post');
+export function verifyOtpAndProceed(http: HttpClient, rootUrl: string, params: VerifyOtpAndProceed$Params, context?: HttpContext): Observable<StrictHttpResponse<MoolrePaymentResponse>> {
+  const rb = new RequestBuilder(rootUrl, verifyOtpAndProceed.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
@@ -26,9 +26,9 @@ export function checkEligibility(http: HttpClient, rootUrl: string, params: Chec
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<EligibilityRecord>;
+      return r as StrictHttpResponse<MoolrePaymentResponse>;
     })
   );
 }
 
-checkEligibility.PATH = '/auth/check-eligibilityAll';
+verifyOtpAndProceed.PATH = '/auth/payments/verify-otp';

@@ -11,18 +11,13 @@
         <input [(ngModel)]="registerRequest.firstname" type="text" name="firstname" placeholder="First name"
           required="">
         <input [(ngModel)]="registerRequest.lastname" type="text" name="lastname" placeholder="Last Name" required="">
-
-
-
         <input [(ngModel)]="registerRequest.email" type="email" name="email" placeholder="Email" required="">
         <!-- <input type="number" name="broj" placeholder="BrojTelefona" required=""> -->
-
 
         <input [(ngModel)]="registerRequest.password" type="password" name="pswd" placeholder="Password" required="">
         <button (click)="register()">
           <span *ngIf="loading" class="spinner" role="status" aria-hidden="true"></span>
           <span *ngIf="!loading"> Sign up </span>
-
         </button>
       </form>
     </div>
@@ -177,13 +172,6 @@
           Please enter a valid email address
         </div>
       </div>
-      <!--       
-      <div class="form-notice">
-        <svg class="notice-icon" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd"/>
-        </svg>
-        <p class="notice-text">We'll send you a secure link to reset your password</p>
-      </div> -->
       <div *ngIf="showSuccessMessage" class="success-message">
         Password reset link sent successfully! Please check your email.
       </div>
@@ -193,7 +181,7 @@
         <button type="submit" class="submit-btn" [disabled]="!passwordResetForm.valid" [class.loading]="isSubmitting">
           <span *ngIf="!isSubmitting">Send Reset Link</span>
           <span *ngIf="isSubmitting">
-            <span class="spinner"></span>
+            <span class="spinnerresetpass"></span>
             Sending...
           </span>
         </button>

@@ -13,9 +13,7 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { checkEligibility } from '../fn/eligibility-controller/check-eligibility';
 import { CheckEligibility$Params } from '../fn/eligibility-controller/check-eligibility';
-import { checkEligibility1 } from '../fn/eligibility-controller/check-eligibility-1';
-import { CheckEligibility1$Params } from '../fn/eligibility-controller/check-eligibility-1';
-import { UniversityEligibilityDto } from '../models/university-eligibility-dto';
+import { EligibilityRecord } from '../models/eligibility-record';
 
 @Injectable({ providedIn: 'root' })
 export class EligibilityControllerService extends BaseService {
@@ -32,7 +30,7 @@ export class EligibilityControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  checkEligibility$Response(params: CheckEligibility$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UniversityEligibilityDto>>> {
+  checkEligibility$Response(params: CheckEligibility$Params, context?: HttpContext): Observable<StrictHttpResponse<EligibilityRecord>> {
     return checkEligibility(this.http, this.rootUrl, params, context);
   }
 
@@ -42,34 +40,9 @@ export class EligibilityControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  checkEligibility(params: CheckEligibility$Params, context?: HttpContext): Observable<Array<UniversityEligibilityDto>> {
+  checkEligibility(params: CheckEligibility$Params, context?: HttpContext): Observable<EligibilityRecord> {
     return this.checkEligibility$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UniversityEligibilityDto>>): Array<UniversityEligibilityDto> => r.body)
-    );
-  }
-
-  /** Path part for operation `checkEligibility1()` */
-  static readonly CheckEligibility1Path = '/auth/check-eligibility/{universityType}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `checkEligibility1()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  checkEligibility1$Response(params: CheckEligibility1$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UniversityEligibilityDto>>> {
-    return checkEligibility1(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `checkEligibility1$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  checkEligibility1(params: CheckEligibility1$Params, context?: HttpContext): Observable<Array<UniversityEligibilityDto>> {
-    return this.checkEligibility1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<UniversityEligibilityDto>>): Array<UniversityEligibilityDto> => r.body)
+      map((r: StrictHttpResponse<EligibilityRecord>): EligibilityRecord => r.body)
     );
   }
 

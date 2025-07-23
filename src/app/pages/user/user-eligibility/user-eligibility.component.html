@@ -1,7 +1,5 @@
 <!-- eligibility-results.component.html -->
 
-{{records| json}}
-
 <div class="results-container">
   <!-- Loading State -->
   <div *ngIf="isLoading" class="full-page-loading">
@@ -16,93 +14,119 @@
     <div class="error-icon">!</div>
     <h3>Failed to load results</h3>
     <p>Please try again later or contact support</p>
-   
   </div>
 
-   <!-- Empty State -->
+  <!-- Empty State -->
   <div *ngIf="!isLoading && !loadingError && (!records || records.length === 0)" class="empty-state">
     <div class="empty-state-card">
       <div class="empty-icon">📭</div>
       <h3>No Results Available</h3>
       <p>We couldn't find any eligibility results. Consider checking <a routerLink="/user/checkResults/">here</a> </p>
-      <!-- <button class="action-btn" (click)="refreshSearch()">Refresh Search</button> -->
     </div>
   </div>
 
-
-
-<div class="results-container" *ngIf="!isLoading && !loadingError && records && records.length > 0">
-  <div *ngFor="let result of records" class="result-card" [class.expanded]="expandedResultId === result.id">
-    <div class="card-header" (click)="toggleExpand(result.id)">
-      <div class="header-content">
-        <h3>
-          <span *ngIf="result.examCheckRecord?.candidateName">{{ result.examCheckRecord!.candidateName }} - </span>
-          Analysis {{ result.createdAt | date:'medium' }}
-        </h3>
-        <div class="badges">
-          <span class="badge eligible">{{ getTotalEligiblePrograms(result) }} Eligible</span>
-          <span class="badge alternative">{{ getTotalAlternativePrograms(result) }} Alternatives</span>
-          <span *ngFor="let type of getUniversityTypes(result)" class="badge type">
-            {{ type }}
-          </span>
+  <!-- Results Container -->
+  <div class="results-container" *ngIf="!isLoading && !loadingError && records && records.length > 0">
+    <div *ngFor="let result of records" class="result-card" [class.expanded]="expandedResultId === result.id">
+      <div class="card-header" (click)="toggleExpand(result.id)">
+        <div class="header-content">
+          <h3>
+            <span *ngIf="result.examCheckRecord?.candidateName">{{ result.examCheckRecord!.candidateName }} - </span>
+            Analysis {{ result.createdAt | date:'medium' }}
+          </h3>
+          <div class="badges">
+            <span class="badge eligible">{{ getTotalEligiblePrograms(result) }} Eligible</span>
+            <span class="badge alternative">{{ getTotalAlternativePrograms(result) }} Alternatives</span>
+            <span *ngFor="let type of getUniversityTypes(result)" class="badge type">
+              {{ type }}
+            </span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-icon" (click)="openPreview(result); $event.stopPropagation()" title="Preview">
+            <i class="material-icons">visibility</i>
+          </button>
+          <button class="btn-icon" (click)="downloadAsJson(result); $event.stopPropagation()" title="Download JSON">
+            <i class="material-icons">download</i>
+          </button>
+          <button class="btn-icon" (click)="downloadAsPdf(result); $event.stopPropagation()" title="Download PDF">
+            <i class="material-icons">picture_as_pdf</i>
+          </button>
+          <i class="material-icons expand-icon">
+            {{ expandedResultId === result.id ? 'expand_less' : 'expand_more' }}
+          </i>
         </div>
       </div>
-      <div class="actions">
-        <button class="btn-icon" (click)="openPreview(result); $event.stopPropagation()" title="Preview">
-          <i class="material-icons">visibility</i>
-        </button>
-        <button class="btn-icon" (click)="downloadAsJson(result); $event.stopPropagation()" title="Download JSON">
-          <i class="material-icons">download</i>
-        </button>
-        <button class="btn-icon" (click)="downloadAsPdf(result); $event.stopPropagation()" title="Download PDF">
-          <i class="material-icons">picture_as_pdf</i>
-        </button>
-        <i class="material-icons expand-icon">
-          {{ expandedResultId === result.id ? 'expand_less' : 'expand_more' }}
-        </i>
-      </div>
-    </div>
 
-    <div *ngIf="expandedResultId === result.id" class="card-content">
-      <div *ngFor="let university of result.universities" class="university-section">
-        <h4>
-          {{ university.universityName }}
-          <span class="location">{{ university.location }}</span>
-          <span class="type-badge">{{ university.type }}</span>
-        </h4>
+      <div *ngIf="expandedResultId === result.id" class="card-content">
+        <div *ngFor="let university of result.universities" class="university-section">
+          <h4>
+            {{ university.universityName }}
+            <span class="location">{{ university.location }}</span>
+            <span class="type-badge">{{ university.type }}</span>
+          </h4>
 
-        <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
-          <h5>Eligible Programs</h5>
-          <div *ngFor="let program of university.eligiblePrograms" class="program-card eligible">
-            <div class="program-header">
-              <strong>{{ program.name }}</strong>
-              <span class="percentage">{{ program.percentage }}% match</span>
-            </div>
-            <div class="cutoff-points">
-              <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
-                <span class="subject-name">{{ subject }}:</span>
-                <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+          <!-- Eligible Programs Section -->
+          <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
+            <h5>Eligible Programs</h5>
+            <div *ngFor="let program of university.eligiblePrograms" class="program-card eligible">
+              <div class="program-header">
+                <strong>{{ program.name }}</strong>
+                <span class="percentage">{{ program.percentage }}% match</span>
+              </div>
+              <div class="cutoff-points">
+                <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
+                  <span class="subject-name">{{ subject }}:</span>
+                  <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+                </div>
+              </div>
+              
+              <!-- AI Recommendation Section -->
+              <div *ngIf="program.aiRecommendation" class="ai-recommendation">
+                <div class="recommendation-section">
+                  <h6>Job Opportunities</h6>
+                  <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
+                </div>
+                
+                <div class="recommendation-section">
+                  <h6>Career Path</h6>
+                  <div class="career-path-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
-          <h5>Alternative Programs</h5>
-          <div *ngFor="let program of university.alternativePrograms" class="program-card alternative">
-            <div class="program-header">
-              <strong>{{ program.name }}</strong>
-              <span class="percentage">{{ program.percentage }}% match</span>
-            </div>
-            <div class="cutoff-points">
-              <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
-                <span class="subject-name">{{ subject }}:</span>
-                <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+          <!-- Alternative Programs Section -->
+          <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
+            <h5>Alternative Programs</h5>
+            <div *ngFor="let program of university.alternativePrograms" class="program-card alternative">
+              <div class="program-header">
+                <strong>{{ program.name }}</strong>
+                <span class="percentage">{{ program.percentage }}% match</span>
               </div>
-            </div>
-            <div *ngIf="program.explanations && program.explanations.length" class="explanations">
-              <div *ngFor="let explanation of program.explanations" class="explanation">
-                {{ explanation }}
+              <div class="cutoff-points">
+                <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
+                  <span class="subject-name">{{ subject }}:</span>
+                  <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+                </div>
+              </div>
+              <div *ngIf="program.explanations && program.explanations.length" class="explanations">
+                <div *ngFor="let explanation of program.explanations" class="explanation">
+                  {{ explanation }}
+                </div>
+              </div>
+              
+              <!-- AI Recommendation for Alternative Programs -->
+              <div *ngIf="program.aiRecommendation" class="ai-recommendation">
+                <div class="recommendation-section">
+                  <h6>Job Opportunities</h6>
+                  <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
+                </div>
+                
+                <!-- <div class="recommendation-section">
+                  <h6>Career Path</h6>
+                  <div class="career-path-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -111,12 +135,6 @@
     </div>
   </div>
 </div>
-
- 
-
-
-
-
 
 <!-- Preview Modal -->
 <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
@@ -163,8 +181,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-<!-- {{records|json}} -->
