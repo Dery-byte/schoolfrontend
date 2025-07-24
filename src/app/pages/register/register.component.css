@@ -3,7 +3,7 @@
 /* ==================== */
 .split-container {
   display: flex;
-  min-height: 100vh;
+  min-height: 90vh;
   background-color: #f8f9fa;
 }
 
@@ -16,14 +16,15 @@
 }
 
 .welcome-card {
-  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  background: linear-gradient(135deg, #a5b0ca 0%, #0e1522 100%);
   color: white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   border-left: 2px solid rgb(153, 151, 151);
+  
 }
 
 .auth-card {
-  background-color: white;
+  background-color: rgb(248, 246, 246);
   flex-direction: column;
   max-width: 480px;
   margin: 2rem auto;

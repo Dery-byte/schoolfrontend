@@ -15,54 +15,7 @@
       <div class="card-body px-4 py-4">
         <form [formGroup]="newCheckForm" class="needs-validation" novalidate>
           <div class="row g-3">
-            <!-- <div class="col-md-6">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="candidateName" formControlName="candidateName"
-                  placeholder="Enter candidate's full name" required>
-                <label for="candidateName">Candidate Name</label>
-                <div class="invalid-feedback">
-                  Please provide the candidate's name.
-                </div>
-              </div>
-            </div> -->
-            <div class="col-md-6">
-
-              <!-- <div class="input-with-select">
-              <select formControlName="channel" class="network-select" required>
-                <option value="" disabled selected>Select Network</option>
-                <option value="13">MTN</option>
-                <option value="6">Vodafone</option>
-                <option value="7">AirtelTigo</option>
-              </select>
-              <input type="tel" id="mobileNumber" formControlName="payer" placeholder="0244 123 456"
-                class="phone-input">
-            </div> -->
-
-
-
-
-
-
-
-
-
-
-              <!-- <div class="form-group">
-                <div class="select-wrapper">
-                  <select class="form-select" id="examType" formControlName="examType" required
-                    aria-labelledby="examType-label" aria-describedby="examType-help examType-error">
-                    <option value="" disabled selected hidden>-- Select Exam Type --</option>
-                    <option *ngFor="let type of examTypes" [value]="type" [attr.data-cy]="'option-'+type">
-                      {{type}}
-                    </option>
-                  </select>
-                  <label id="examType-label" for="examType" class="floating-label">Exam Type</label>
-                  <div id="examType-help" class="form-text">Select the type of exam from the list</div>
-                  <div id="examType-error" class="invalid-feedback">
-                    <span>Please select an exam type.</span>
-                  </div>
-                </div>
-              </div> -->
+           <div class="col-md-6">
             </div>
           </div>
 
@@ -127,48 +80,10 @@
 
 
           <div class="text-center mt-4">
-            <!-- <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="initiateCheck()"
-              style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
-              <i class="fas fa-play-circle me-2"></i> Start New Checkss
-            </button> -->
-
-
-
-            <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="createRecords()"
+             <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="createRecords()"
               style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
               <i class="fas fa-play-circle me-2"></i> Start New Check
             </button>
-
-            <!-- <button class="close-button" (click)="openPaymentModal()" aria-label="Close">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-              </svg>
-              Open Payment Modal
-            </button> -->
-
-
-
-
-            <!-- <button class="close-button" (click)="openOtpModal()" aria-label="Close">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-              </svg>
-              Open OTP Modal
-            </button> -->
-
-
-            <!-- <button class="close-button" (click)="openWebhook()" aria-label="Close">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-              </svg>
-              Open Webhook MOdal.
-            </button> -->
-
-
-
-
-
-
           </div>
         </form>
       </div>
@@ -471,6 +386,11 @@
       </div>
     </div>
 
+
+
+
+
+
     <!-- Results Forms (shown after payment) -->
     <div *ngIf="currentCheck.paymentStatus === 'PAID'" #paymentConfirmation>
       <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
@@ -486,6 +406,144 @@
           <i class="fas fa-arrow-left me-1"></i> Back to all checks
         </button>
       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       <!-- Enhanced Tab Navigation -->
       <div class="mb-4">
@@ -510,92 +568,204 @@
         <div class="border-top border-2 border-primary"></div>
       </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+      
       <!-- Tab Content -->
       <div [ngSwitch]="activeTab">
-        <!-- GET RESULTS FORM -->
+
+
+
+
+
+
+
+
+        
+
         <div *ngSwitchCase="'auto'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-          <div class="card-header bg-white border-bottom-0 py-3">
-            <h5 class="mb-0"><i class="fas fa-cloud-download-alt me-2 text-primary"></i> Retrieve Official Results</h5>
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+<!-- BELLOW IS THE GET RESULTS FROM WAEC -->
+ 
+<div class="results-retrieval-container ">
+  <div class="retrieval-card">
+    <div class="retrieval-header">
+      <i class="retrieval-icon"></i>
+      <h3>Retrieve Official Results</h3>
+    </div>
+    
+    <form class="retrieval-form" [formGroup]="examForm" (ngSubmit)="submitFormCheck()">
+      <div class="form-grid">
+        <!-- Exam Year Select -->
+        <div class="form-field">
+          <div class="select-container">
+            <select id="examYear" formControlName="examYear" required>
+              <option value="" disabled selected>Select Year</option>
+              <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+            </select>
+            <label for="examYear">Exam Year</label>
+            <div class="error-message" 
+                 *ngIf="examForm.get('examYear')?.touched && examForm.get('examYear')?.hasError('required')">
+              Please select an exam year
+            </div>
           </div>
-          <div class="card-body">
-            <form [formGroup]="examForm" (ngSubmit)="submitFormCheck()">
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <div class="form-floating">
-                    <select class="form-select" id="examYear" formControlName="examYear" required
-                      style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                      <option value="" disabled selected>-- Select Year --</option>
-                      <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
-                    </select>
-                    <label for="examYear">Exam Year</label>
-                    <div class="invalid-feedback"
-                      *ngIf="examForm.get('examYear')?.touched && examForm.get('examYear')?.hasError('required')">
-                      Please select an exam year
-                    </div>
-                  </div>
-                </div>
+        </div>
 
-                <div class="col-md-4">
-                  <div class="form-floating">
-                    <select class="form-select" id="examType" formControlName="examType" required
-                      style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                      <option value="" disabled selected>-- Select Exam Type --</option>
-                      <option *ngFor="let g of groups" [ngValue]="g.id">{{ g.name }}</option>
-                    </select>
-                    <label for="examType">Exam Type</label>
-                    <div class="invalid-feedback"
-                      *ngIf="examForm.get('examType')?.touched && examForm.get('examType')?.hasError('required')">
-                      Please select an exam type
-                    </div>
-                  </div>
-                </div>
-
-
-
-
-
-
-
-
-                <div class="col-md-4"> <!-- Wider column to fit both -->
-                  <div class="row g-3 ">
-                    <div class="col-md-8">
-                      <div class="form-floating">
-                        <input type="text" class="form-control" id="indexNumber" placeholder="Enter Index Number"
-                          formControlName="indexNumber" required>
-                        <label for="indexNumber">Index Number</label>
-                        <div class="invalid-feedback"
-                          *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
-                          Please enter an index number
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Button (takes less space) -->
-                    <div class="col-md-4">
-                      <button type="button" class="btn btn-primary" (click)="openConfirmModal()"
-                        [disabled]="examForm.get('indexNumber')?.invalid">
-                        Confirm
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-
-
-
-              </div>
-
-              <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary px-5 rounded-pill shadow-sm"
-                  style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;"
-                  (click)="submitFormCheck()" [disabled]="!examForm.valid  || !isIndexConfirmed">
-                  <i class="fas fa-search me-2"></i> Retrieve Results
-                </button>
-              </div>
-
-            </form>
+        <!-- Exam Type Select -->
+        <div class="form-field">
+          <div class="select-container">
+            <select id="examType" formControlName="examType" required>
+              <option value="" disabled selected>Select Exam Type</option>
+              <option *ngFor="let g of groups" [ngValue]="g.id">{{ g.name }}</option>
+            </select>
+            <label for="examType">Exam Type</label>
+            <div class="error-message"
+                 *ngIf="examForm.get('examType')?.touched && examForm.get('examType')?.hasError('required')">
+              Please select an exam type
+            </div>
           </div>
+        </div>
+
+        <!-- Index Number with Confirm Button -->
+        <div class="form-field with-action">
+          <div class="input-container">
+            <input type="text" id="indexNumber" placeholder=" " formControlName="indexNumber" required>
+            <label for="indexNumber">Index Number</label>
+            <div class="error-message"
+                 *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
+              Please enter an index number
+            </div>
+          </div>
+          <button type="button" class="confirm-btn" 
+                  (click)="openConfirmModal()"
+                  [disabled]="examForm.get('indexNumber')?.invalid">
+            Confirm
+          </button>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" 
+                [disabled]="!examForm.valid || !isIndexConfirmed">
+          <i class="search-icon"></i> 
+          Retrieve Results
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <h4>Retrieving WAEC Results</h4>
+    <p>Please wait while we fetch the official results from WAEC</p>
+    <div class="progress-track">
+      <div class="progress-bar"></div>
+    </div>
+    <div class="spinner-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ABOVE IS THE GET RESULTS FROM WAEC -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
             <div class="card-body text-center py-5">
               <div class="mb-4">
@@ -617,14 +787,6 @@
                 <div class="spinner-grow text-primary mx-1" style="width: 1.5rem; height: 1.5rem;" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>
-                <!-- <div class="spinner-grow text-primary mx-1"
-                  style="width: 1.5rem; height: 1.5rem; animation-delay: 0.2s;" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div> -->
-                <!-- <div class="spinner-grow text-primary mx-1"
-                  style="width: 1.5rem; height: 1.5rem; animation-delay: 0.4s;" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div> -->
               </div>
             </div>
           </div>
@@ -889,7 +1051,7 @@
             <div class="col-md-6">
               <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-light text-center fw-bold">
-                  FIRST WAEC RESULT
+                  FIRST SITTING RESULT
                 </div>
                 <div class="card-body px-4">
                   <!-- Candidate Info -->
@@ -932,7 +1094,7 @@
             <div class="col-md-6">
               <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-light text-center fw-bold">
-                  SECOND WAEC RESULT
+                  SECOND SITTING RESULT
                 </div>
                 <div class="card-body px-4">
                   <!-- Candidate Info -->
@@ -1300,150 +1462,244 @@
 
         <!-- ADD RESULTS MANUALLY FORM -->
         <div *ngSwitchCase="'manual'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-          <div class="card-header bg-white border-bottom-0 py-3">
-            <h5 class="mb-0"><i class="fas fa-keyboard me-2 text-primary"></i> Manual Results Entry</h5>
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <!-- MANUAL ENTRY STARTS HERE -->
+          
+        <div class="card rounded-lg shadow-sm">
+  <div class="card-header bg-white border-bottom-0 py-3">
+    <h5 class="mb-0">
+      <i class="fas fa-keyboard me-2 text-primary"></i> Manual Results Entry
+    </h5>
+  </div>
+  
+  <div class="card-body">
+    <form [formGroup]="entryForm">
+      <!-- Primary Info Section -->
+      <div class="card mb-4 bg-light-subtle border-0">
+        <div class="card-body">
+          <h6 class="mb-3 text-muted">
+            <i class="fas fa-info-circle me-2"></i> Candidate Information
+          </h6>
+          
+          <div class="row g-3">
+            <!-- Index Number (full width on mobile) -->
+            <div class="col-12 col-md-4">
+              <div class="form-floating">
+                <input type="text" formControlName="indexNumber" class="form-control" id="manualIndexNumber"
+                  placeholder="Index Number" />
+                <label for="manualIndexNumber">Index Number</label>
+              </div>
+            </div>
+            
+            <!-- Exam Board and Year (50% width on mobile) -->
+            <div class="col-6 col-md-4">
+              <div class="form-floating">
+                <select class="form-select" id="examBoard" formControlName="examBoard" (change)="onBoardChange($event)">
+                  <option value="" disabled selected>Choose Exam Board</option>
+                  <option *ngFor="let board of examBoards" [value]="board">{{ board }}</option>
+                </select>
+                <label for="examBoard">Exam Board</label>
+              </div>
+            </div>
+            
+            <div class="col-6 col-md-4">
+              <div class="form-floating">
+                <select class="form-select" id="manualExamYear" formControlName="examYear">
+                  <option value="" disabled selected>Choose Year</option>
+                  <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+                </select>
+                <label for="manualExamYear">Exam Year</label>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
-            <form [formGroup]="entryForm">
-              <!-- Primary Info Section -->
-              <div class="card mb-4 border-0" style="background-color: rgba(248, 249, 250, 0.5);">
-                <div class="card-body">
-                  <h6 class="mb-3 text-muted"><i class="fas fa-info-circle me-2"></i> Candidate Information</h6>
-                  <div class="row g-3">
-                    <div class="col-md-4">
-                      <div class="form-floating">
-                        <input type="text" formControlName="indexNumber" class="form-control" id="manualIndexNumber"
-                          placeholder="Index Number" />
-                        <label for="manualIndexNumber">Index Number</label>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-floating">
-                        <select class="form-select" id="examBoard" formControlName="examBoard"
-                          (change)="onBoardChange($event)" style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                          <option value="" disabled selected>Choose Exam Board</option>
-                          <option *ngFor="let board of examBoards" [value]="board">{{ board }}</option>
-                        </select>
-                        <label for="examBoard">Exam Board</label>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-floating">
-                        <select class="form-select" id="manualExamYear" formControlName="examYear"
-                          style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                          <option value="" disabled selected>Choose Year</option>
-                          <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
-                        </select>
-                        <label for="manualExamYear">Exam Year</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        </div>
+      </div>
 
-              <!-- Subject Entry Section -->
-              <div class="card mb-4 border-0" style="background-color: rgba(248, 249, 250, 0.5);">
-                <div class="card-body">
-                  <h6 class="mb-3 text-muted"><i class="fas fa-book me-2"></i> Subject Details</h6>
-                  <div class="row g-3">
-                    <div class="col-md-3">
-                      <div class="form-floating">
-                        <select class="form-select" id="manualExamType" formControlName="examType"
-                          style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                          <option value="" disabled selected>Choose Exam Type</option>
-                          <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
-                        </select>
-                        <label for="manualExamType">Exam Type</label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-floating">
-                        <input type="text" formControlName="subject" class="form-control" id="subject"
-                          placeholder="Select Subject" />
-                        <label for="subject">Subject</label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-floating">
-                        <select class="form-select" id="grade" formControlName="grade"
-                          style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                          <option value="" disabled selected>Select Grade</option>
-                          <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
-                        </select>
-                        <label for="grade">Grade</label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-floating">
-                        <select class="form-select" id="sitting" formControlName="sitting"
-                          style="padding-top: 1.625rem; padding-bottom: 0.625rem;">
-                          <option value="" disabled selected>Select Sitting</option>
-                          <option value="May/June">May/June</option>
-                          <option value="Nov/Dec">Nov/Dec</option>
-                        </select>
-                        <label for="sitting">Sitting</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="text-center mt-3">
-                    <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm" (click)="addEntry()"
-                      style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
-                      <i class="fas fa-plus me-2"></i> Add Subject
-                    </button>
-                  </div>
-                </div>
+      <!-- Subject Entry Section -->
+      <div class="card mb-4 bg-light-subtle border-0">
+        <div class="card-body">
+          <h6 class="mb-3 text-muted">
+            <i class="fas fa-book me-2"></i> Subject Details
+          </h6>
+          
+          <div class="row g-3">
+            <div class="col-6 col-md-3">
+              <div class="form-floating">
+                <select class="form-select" id="manualExamType" formControlName="examType">
+                  <option value="" disabled selected>Choose Exam Type</option>
+                  <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
+                </select>
+                <label for="manualExamType">Exam Type</label>
               </div>
-
-              <!-- Entry Table -->
-              <div *ngIf="entries.length > 0" class="card border-0">
-                <div class="card-body px-0 pb-0">
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                      <thead class="table-light">
-                        <tr>
-                          <th class="ps-4">Index No.</th>
-                          <th>Exam Board</th>
-                          <th>Year</th>
-                          <th>Exam Type</th>
-                          <th>Subject</th>
-                          <th>Grade</th>
-                          <th>Sitting</th>
-                          <th class="pe-4 text-end">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let item of entries; let i = index">
-                          <td class="ps-4">{{ item.indexNumber }}</td>
-                          <td>{{ item.examBoard }}</td>
-                          <td>{{ item.examYear }}</td>
-                          <td>{{ item.examType }}</td>
-                          <td class="fw-bold">{{ item.subject }}</td>
-                          <td>
-                            <span class="badge rounded-pill py-1 px-3"
-                              style="background: linear-gradient(135deg, #4e54c8, #8f94fb);">{{ item.grade }}</span>
-                          </td>
-                          <td>{{ item.sitting }}</td>
-                          <td class="pe-4 text-end">
-                            <button class="btn btn-sm btn-outline-danger rounded-pill shadow-sm"
-                              (click)="removeEntry(i)">
-                              <i class="fas fa-trash-alt me-1"></i> Delete
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="text-end mt-3 pe-4">
-                    <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()"
-                      style="background: linear-gradient(135deg, #28a745, #5cb85c); border: none;">
-                      <i class="fas fa-check-circle me-2"></i> Submit for Interpretation
-                    </button>
-                  </div>
-                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+              <div class="form-floating">
+                <input type="text" formControlName="subject" class="form-control" id="subject"
+                  placeholder="Select Subject" />
+                <label for="subject">Subject</label>
               </div>
-            </form>
+            </div>
+            
+            <div class="col-6 col-md-3">
+              <div class="form-floating">
+                <select class="form-select" id="grade" formControlName="grade">
+                  <option value="" disabled selected>Select Grade</option>
+                  <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+                </select>
+                <label for="grade">Grade</label>
+              </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+              <div class="form-floating">
+                <select class="form-select" id="sitting" formControlName="sitting">
+                  <option value="" disabled selected>Select Sitting</option>
+                  <option value="May/June">May/June</option>
+                  <option value="Nov/Dec">Nov/Dec</option>
+                </select>
+                <label for="sitting">Sitting</label>
+              </div>
+            </div>
           </div>
+
+          <div class="text-center mt-3">
+            <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm" (click)="addEntry()">
+              <i class="fas fa-plus me-2"></i> Add Subject
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entry Table -->
+      <div *ngIf="entries.length > 0" class="card border-0">
+        <div class="card-body px-0 pb-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="ps-4">Index No.</th>
+                  <th>Exam Board</th>
+                  <th>Year</th>
+                  <th>Exam Type</th>
+                  <th>Subject</th>
+                  <th>Grade</th>
+                  <th>Sitting</th>
+                  <th class="pe-4 text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of entries; let i = index">
+                  <td class="ps-4">{{ item.indexNumber }}</td>
+                  <td>{{ item.examBoard }}</td>
+                  <td>{{ item.examYear }}</td>
+                  <td>{{ item.examType }}</td>
+                  <td class="fw-bold">{{ item.subject }}</td>
+                  <td>
+                    <span class="badge rounded-pill py-1 px-3 bg-primary">
+                      {{ item.grade }}
+                    </span>
+                  </td>
+                  <td>{{ item.sitting }}</td>
+                  <td class="pe-4 text-end">
+                    <button class="btn btn-sm btn-outline-danger rounded-pill shadow-sm" (click)="removeEntry(i)">
+                      <i class="fas fa-trash-alt me-1"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end mt-3 pe-4">
+            <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()">
+              <i class="fas fa-check-circle me-2"></i> Submit for Interpretation
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+          <!-- MANUAL ENTRY ENDS HERE -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
       </div>
     </div>
@@ -1533,7 +1789,7 @@
               [readonly]="isAmountFixed" min="0.01" step="0.01" autofocus (blur)="validateAmount()" />
           </div>
           <h3 class="section-title">Mobile Money Details</h3>
-          <div class="form-group">
+          <div class="form-groups">
             <label for="mobileNumber">Phone Number</label>
             <div class="input-with-select">
               <select formControlName="channel" class="network-select" required>
