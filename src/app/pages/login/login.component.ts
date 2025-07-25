@@ -1,12 +1,12 @@
-import { Component,ElementRef, ViewChild, ViewEncapsulation  } from '@angular/core';
-import {AuthenticationRequest} from '../../services/models/authentication-request';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AuthenticationRequest } from '../../services/models/authentication-request';
 import { AuthenticationService } from 'src/app/services/services';
 import { TokenService } from 'src/app/services/token/token.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl,FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { decodeToken } from 'src/app/Utilities/token.util';
 import { AuthService } from 'src/app/auth/auth.service';
-import {RegistrationRequest} from '../../services/models/registration-request';
+import { RegistrationRequest } from '../../services/models/registration-request';
 import { delay } from 'rxjs';
 import { BlurService } from 'src/app/shared/blur/blur.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
@@ -57,7 +57,7 @@ export class LoginComponent {
 
 
 
-//USER LOGOUT
+  //USER LOGOUT
 
 
 
@@ -66,7 +66,7 @@ export class LoginComponent {
 
 
 
-//USER LOGIN
+  //USER LOGIN
 
   user = {
     email: '',
@@ -74,8 +74,8 @@ export class LoginComponent {
   };
 
   success = false;
-  authRequest: AuthenticationRequest = {email: '', password: ''};
-  registerRequest: RegistrationRequest = {email: '', firstname: '', lastname: '', password: ''};
+  authRequest: AuthenticationRequest = { email: '', password: '' };
+  registerRequest: RegistrationRequest = { email: '', firstname: '', lastname: '', password: '', phoneNumber: [''] };
 
   errorMsg: Array<string> = [];
 
@@ -90,10 +90,10 @@ export class LoginComponent {
     private authenticationService: AuthenticationService,
     private tokenService: TokenService,
     private router: Router,
-    private authService:AuthService,
-        private blurService: BlurService,
-        private manualService:ManaulServiceService
-    
+    private authService: AuthService,
+    private blurService: BlurService,
+    private manualService: ManaulServiceService
+
   ) {
   }
 
@@ -102,7 +102,7 @@ export class LoginComponent {
     // await this.ss.login();
   }
 
-  
+
   login() {
     this.errorMsg = [];
     this.authenticationService.authenticate({
@@ -119,7 +119,7 @@ export class LoginComponent {
 
         if (decodedToken) {
           const username = decodedToken.sub; // 'sub' usually contains the username in JWT
-  
+
           // Store the username in AuthService
           this.authService.setUser(username);
         }
@@ -180,26 +180,26 @@ export class LoginComponent {
 
 
 
-    showSuccessMessage = false;
-    isSubmitting = false;
+  showSuccessMessage = false;
+  isSubmitting = false;
 
   apiError: string | null = null;
 
-  
- passwordResetRequest() {
+
+  passwordResetRequest() {
     if (this.passwordResetForm.invalid) return;
-          console.log('Email submitted:', this.passwordResetForm.value.email);
+    console.log('Email submitted:', this.passwordResetForm.value.email);
 
 
     this.isSubmitting = true;
     this.showSuccessMessage = false;
     this.apiError = null;
 
-   const email =this.passwordResetForm.value.email;
+    const email = this.passwordResetForm.value.email;
 
-   console.log(email);
+    console.log(email);
 
-      this.manualService.requestPasswordReset(email).subscribe({
+    this.manualService.requestPasswordReset(email).subscribe({
       next: () => {
         this.showSuccessMessage = true;
         this.passwordResetForm.reset();
@@ -214,8 +214,8 @@ export class LoginComponent {
     });
   }
 
- 
-  
+
+
   setMessageDisplayTime(): void {
     setTimeout(() => {
       this.errorMsg = [];
@@ -226,28 +226,28 @@ export class LoginComponent {
 
 
   //REGISTER
-  
+
   register() {
     this.loading = true;
     this.errorMsgReg = [];
-  
+
     this.authenticationService.register({
       body: this.registerRequest
     })
-    .pipe(delay(3000))
-    .subscribe({
-      next: () => {
-        this.loading = false;
-        // Set the flag before navigation
-        this.authService.setComingFromRegistration(true);
-        this.router.navigate(['/activate-account']);
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorMsgReg = err.error.validationErrors;
-        this.setMessageDisplayTime();
-      }
-    });
+      .pipe(delay(3000))
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          // Set the flag before navigation
+          this.authService.setComingFromRegistration(true);
+          this.router.navigate(['/activate-account']);
+        },
+        error: (err) => {
+          this.loading = false;
+          this.errorMsgReg = err.error.validationErrors;
+          this.setMessageDisplayTime();
+        }
+      });
   }
 
 }

@@ -7,4 +7,6 @@ export interface RegistrationRequest {
   firstname: string;
   lastname: string;
   password: string;
+  confirmPassword?: string;
+  phoneNumber: Array<string>;
 }

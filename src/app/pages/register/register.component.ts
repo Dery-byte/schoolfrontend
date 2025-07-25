@@ -45,10 +45,22 @@ export class RegisterComponent {
 
   success = false;
   authRequest: AuthenticationRequest = { email: '', password: '' };
-  registerRequest: RegistrationRequest = { email: '', firstname: '', lastname: '', password: '' };
+
+  registerRequest: RegistrationRequest = {
+    email: '',
+    firstname: '',
+    lastname: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: ['']
+  };
   errorMsg: Array<string> = [];
 
   errorMsgReg: Array<string> = [];
+
+  // errorMsgInternal: Array<string> = [];
+  errorMsgInternal: string[] = [];
+
 
   activeForm: 'login' | 'register' = 'login';
   // Password visibility states
@@ -142,16 +154,18 @@ export class RegisterComponent {
   }
 
 
-loginLoading=false;
+  loginLoading = false;
 
   login() {
     this.errorMsg = [];
-        this.loginLoading=true;
+    this.loginLoading = true;
+
+
     this.authenticationService.authenticate({
       body: this.authRequest
     }).subscribe({
       next: (res) => {
-                this.loginLoading=false;
+        this.loginLoading = false;
 
         const token = res.token as string;
         this.tokenService.token = token;
@@ -174,7 +188,7 @@ loginLoading=false;
         }
       },
       error: (err) => {
-                this.loginLoading=false;
+        this.loginLoading = false;
         console.log(err);
         if (err.error.validationErrors) {
           this.errorMsg = err.error.validationErrors;
@@ -189,9 +203,48 @@ loginLoading=false;
   }
 
 
+
+  validateRegistration(): boolean {
+    this.errorMsgReg = [];
+
+    if (
+      this.registerRequest.password &&
+      this.registerRequest.confirmPassword &&
+      this.registerRequest.password !== this.registerRequest.confirmPassword
+    ) {
+      this.errorMsgReg.push('Passwords do not match.');
+      return false;
+    }
+
+    return true;
+  }
+
+
+
   register() {
     this.loading = true;
     this.errorMsgReg = [];
+    this.errorMsgInternal = [];
+
+
+    console.log(this.registerRequest);
+
+
+
+    const ghanaRegex = /^(?:\+233|0)[235][0-9]{8}$/;
+    if (!ghanaRegex.test(this.registerRequest.phoneNumber[0])) {
+      this.errorMsgReg = ['Invalid phone number'];
+      this.loading = false;
+      this.setMessageDisplayTime();
+      return;
+    }
+
+    if (!this.validateRegistration()) {
+      this.loading = false;
+      this.setMessageDisplayTime();
+      return;
+    }
+
     this.authenticationService.register({
       body: this.registerRequest
     })
@@ -205,7 +258,9 @@ loginLoading=false;
         },
         error: (err) => {
           this.loading = false;
-          this.errorMsgReg = err.error.validationErrors;
+          const backendMessage = err?.error?.businessErrorDescription;
+          this.errorMsgInternal.push(backendMessage);
+                   this.errorMsgReg = err.error.validationErrors || [];
           this.setMessageDisplayTime();
         }
       });
@@ -239,6 +294,7 @@ loginLoading=false;
     setTimeout(() => {
       this.errorMsg = [];
       this.errorMsgReg = [];
+      this.errorMsgInternal=[];
       this.success = false;
     }, 3000);
   }
