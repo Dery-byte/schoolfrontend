@@ -2139,7 +2139,16 @@ p {
   transform: scale(1);
 }
 
+
+
+
+
+
+
+
+
 /* Icon containers */
+
 .icon-container {
   position: relative;
   margin-bottom: 12px;
@@ -2230,17 +2239,6 @@ p {
   border-radius: 2px;
   overflow: hidden;
 }
-
-.progress-bar {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 50%;
-  border-radius: 2px;
-  transition: all 0.5s ease;
-  transform: translateX(0%);
-}
-
 .progress-bar.auto {
   background: linear-gradient(90deg, #3b82f6, #8b5cf6);
   transform: translateX(0%);
