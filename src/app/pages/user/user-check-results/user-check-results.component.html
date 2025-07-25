@@ -91,79 +91,6 @@
 
 
     <!-- {{userChecks|json}} -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- {{userChecks|json}} -->
 
     <!-- Previous Checks List -->
@@ -227,89 +154,7 @@
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </div>
-
-
-
-
-
 
   <!-- Active Check Workflow -->
   <div *ngIf="currentCheck" class="active-check-container">
@@ -406,193 +251,88 @@
           <i class="fas fa-arrow-left me-1"></i> Back to all checks
         </button>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <!-- Enhanced Tab Navigation -->
-      <div class="mb-4">
-        <ul ngbNav #nav="ngbNav" class="nav-tabs nav-fill" style="border-bottom: none;">
-          <li ngbNavItem>
-            <a ngbNavLink class="nav-link rounded-top" [class.active]="activeTab === 'auto'">
-              <div class="d-flex flex-column align-items-center py-2 px-4" (click)="activeTab = 'auto'">
-                <i class="fas fa-cloud-download-alt fs-4 mb-2"></i>
-                <span>Get Results Automatically</span>
-              </div>
-            </a>
-          </li>
-          <li ngbNavItem>
-            <a ngbNavLink class="nav-link rounded-top" [class.active]="activeTab === 'manual'">
-              <div class="d-flex flex-column align-items-center py-2 px-4" (click)="activeTab = 'manual'">
-                <i class="fas fa-keyboard fs-4 mb-2"></i>
-                <span>Enter Results Manually</span>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <div class="border-top border-2 border-primary"></div>
-      </div>
 
 
 
 
 
-
-
-
-
-
-
+     <!-- HTML Template -->
+<div class="mb-4">
+  <div class="modern-tab-container">
+    <ul ngbNav #nav="ngbNav" class="modern-nav">
+      <li ngbNavItem class="modern-nav-item">
+        <a ngbNavLink 
+           class="modern-nav-link"
+           [class.active]="activeTab === 'auto'">
+          <div class="modern-tab-content" (click)="activeTab = 'auto'">
+            <!-- Background highlight for active state -->
+            <div class="tab-background" 
+                 [class.active]="activeTab === 'auto'"></div>
+            
+            <!-- Icon with gradient background -->
+            <div class="icon-container auto-tab" 
+                 [class.active]="activeTab === 'auto'">
+              <i class="fas fa-cloud-download-alt icon" 
+                 [class.active]="activeTab === 'auto'"></i>
+            </div>
+            
+            <!-- Text -->
+            <span class="tab-text" 
+                  [class.active]="activeTab === 'auto'">
+              Get Results<br>Automatically
+            </span>
+            
+            <!-- Active indicator dot -->
+            <div class="indicator-dot auto-dot" 
+                 [class.active]="activeTab === 'auto'"></div>
+          </div>
+        </a>
+      </li>
+      
+      <li ngbNavItem class="modern-nav-item">
+        <a ngbNavLink 
+           class="modern-nav-link"
+           [class.active]="activeTab === 'manual'">
+          <div class="modern-tab-content" (click)="activeTab = 'manual'">
+            <!-- Background highlight for active state -->
+            <div class="tab-background" 
+                 [class.active]="activeTab === 'manual'"></div>
+            
+            <!-- Icon with gradient background -->
+            <div class="icon-container manual-tab" 
+                 [class.active]="activeTab === 'manual'">
+              <i class="fas fa-keyboard icon" 
+                 [class.active]="activeTab === 'manual'"></i>
+            </div>
+            
+            <!-- Text -->
+            <span class="tab-text" 
+                  [class.active]="activeTab === 'manual'">
+              Enter Results<br>Manually
+            </span>
+            
+            <!-- Active indicator dot -->
+            <div class="indicator-dot manual-dot" 
+                 [class.active]="activeTab === 'manual'"></div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Animated progress bar -->
+  <!-- <div class="progress-container">
+    <div class="progress-bar" 
+         [class.auto]="activeTab === 'auto'"
+         [class.manual]="activeTab === 'manual'"></div>
+  </div> -->
+</div>
 
 
       
       <!-- Tab Content -->
       <div [ngSwitch]="activeTab">
-
-
-
-
-
-
-
-
-        
-
         <div *ngSwitchCase="'auto'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
          
          
@@ -696,7 +436,7 @@
         </div>
       </div>
 
-      <div class="form-actions">
+      <div *ngIf="!isLoading" class="form-actions">
         <button type="submit" class="submit-btn" 
                 [disabled]="!examForm.valid || !isIndexConfirmed">
           <i class="search-icon"></i> 
@@ -706,20 +446,48 @@
     </form>
   </div>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state">
-    <div class="loading-spinner"></div>
-    <h4>Retrieving WAEC Results</h4>
-    <p>Please wait while we fetch the official results from WAEC</p>
-    <div class="progress-track">
-      <div class="progress-bar"></div>
-    </div>
-    <div class="spinner-dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
+<div *ngIf="isLoading" class="loading-state">
+  <div class="loading-spinner">
+    <!-- Document/Certificate Icon -->
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="certificate-icon">
+      <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M16 13H8" stroke="currentColor" stroke-width="2"/>
+      <path d="M16 17H8" stroke="currentColor" stroke-width="2"/>
+      <path d="M10 9H9H8" stroke="currentColor" stroke-width="2"/>
+    </svg>
   </div>
+  
+  <div class="loading-content">
+    <!-- Main heading with graduation cap icon -->
+    <h4>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-icon">
+        <path d="M12 3L1 9L12 15L21 12.09V17H23V9L12 3Z" fill="currentColor"/>
+        <path d="M5 13.18V17.18C5 19.4 8.58 21 12 21S19 19.4 19 17.18V13.18L12 17L5 13.18Z" fill="currentColor"/>
+      </svg>
+      Retrieving WAEC Results
+    </h4>
+    
+    <!-- Description with clock icon -->
+    <p>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-icon small">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      Please give us a few moments while we fetch your official results from WAEC
+    </p>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-bar"></div>
+  </div>
+  
+  <div class="spinner-dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
 </div>
 
 
@@ -766,7 +534,7 @@
 
 
 
-          <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+          <!-- <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
             <div class="card-body text-center py-5">
               <div class="mb-4">
                 <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -776,7 +544,6 @@
               <h5 class="mb-3">Retrieving WAEC Results</h5>
               <p class="text-muted mb-4">Please wait while we fetch the official results from WAEC</p>
 
-              <!-- Animated progress bar -->
               <div class="progress mb-3" style="height: 8px; border-radius: 4px;">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                   style="width: 100%; background: linear-gradient(135deg, #4e54c8, #8f94fb);">
@@ -789,7 +556,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- {{waecresults|json}} -->
 

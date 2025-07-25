@@ -635,6 +635,8 @@ analyzeTwoResults() {
   secondResultFetched = false;
 
   fetchResultAutoAssign() {
+              this.isLoading=true;
+
     const payload = {
       cindex: this.examForm.value.indexNumber,
       examyear: this.examForm.value.examYear,
@@ -643,6 +645,8 @@ analyzeTwoResults() {
 
     this.waec.verifyWaecResult({ body: payload }).subscribe({
       next: (res) => {
+                  this.isLoading=false;
+
         if (!this.waecresults) {
           this.waecresults = res;
           console.log("Results 1 ", this.waecresults);
