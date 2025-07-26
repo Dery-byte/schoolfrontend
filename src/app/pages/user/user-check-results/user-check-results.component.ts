@@ -105,7 +105,12 @@ export class UserCheckResultsComponent implements OnInit {
 
   // userChecks: EligibilityCheck[] = [];
   newCheckForm: FormGroup;
-
+  getButtonText(check: any): string {
+    if (check.checkLimit >= 2) {
+      return 'Pay & Continue'; // Disabled but shows same text
+    }
+    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue';
+  }
   // Existing properties
   examBoards = ['WAEC', 'CTVET'];
   availableExamTypes: string[] = [];
@@ -534,96 +539,96 @@ export class UserCheckResultsComponent implements OnInit {
     });
   }
   normalizeSubject(subject: string): string {
-  const map: Record<string, string> = {
-    'ENGLISH LANG': 'ENGLISH LANGUAGE',
-    'ENGLISH LANGUAGE': 'ENGLISH LANGUAGE',
-    'MATHS': 'MATHEMATICS',
-    'MATHEMATICS(CORE)': 'MATHEMATICS',
-    'MATHEMATICS ELECTIVE': 'MATHEMATICS (ELECTIVE)',
-    // Add more if needed
-  };
+    const map: Record<string, string> = {
+      'ENGLISH LANG': 'ENGLISH LANGUAGE',
+      'ENGLISH LANGUAGE': 'ENGLISH LANGUAGE',
+      'MATHS': 'MATHEMATICS',
+      'MATHEMATICS(CORE)': 'MATHEMATICS',
+      'MATHEMATICS ELECTIVE': 'MATHEMATICS (ELECTIVE)',
+      // Add more if needed
+    };
 
-  const key = subject.trim().toUpperCase();
-  return map[key] || key;
-}
+    const key = subject.trim().toUpperCase();
+    return map[key] || key;
+  }
 
 
   gradeOrder = ['A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9'];
 
-getBetterGrade(g1: string, g2: string): string {
-  const i1 = this.gradeOrder.indexOf(g1);
-  const i2 = this.gradeOrder.indexOf(g2);
-  return i1 <= i2 ? g1 : g2;
-}
-
-analyzeTwoResults() {
-  const r1 = this.waecresults;
-  const r2 = this.waecresults2;
-
-  if (!r1 || !r1.resultDetails) {
-    console.warn('No results available to analyze');
-    return;
+  getBetterGrade(g1: string, g2: string): string {
+    const i1 = this.gradeOrder.indexOf(g1);
+    const i2 = this.gradeOrder.indexOf(g2);
+    return i1 <= i2 ? g1 : g2;
   }
 
-  this.isCheckingEligibility = true;
+  analyzeTwoResults() {
+    const r1 = this.waecresults;
+    const r2 = this.waecresults2;
 
-  let finalResultMap: Record<string, { subject: string, grade: string }> = {};
+    if (!r1 || !r1.resultDetails) {
+      console.warn('No results available to analyze');
+      return;
+    }
 
-  // Step 1: Add all from first result
-  for (const res of r1.resultDetails) {
+    this.isCheckingEligibility = true;
+
+    let finalResultMap: Record<string, { subject: string, grade: string }> = {};
+
+    // Step 1: Add all from first result
+    for (const res of r1.resultDetails) {
       const norm = this.normalizeSubject(res.subject);
 
-    finalResultMap[norm] = { subject: norm, grade: res.grade };
-  }
+      finalResultMap[norm] = { subject: norm, grade: res.grade };
+    }
 
-  // Step 2: If second result exists, compare and update
-  if (r2 && r2.resultDetails) {
-    for (const res of r2.resultDetails) {
-          const norm = this.normalizeSubject(res.subject);
+    // Step 2: If second result exists, compare and update
+    if (r2 && r2.resultDetails) {
+      for (const res of r2.resultDetails) {
+        const norm = this.normalizeSubject(res.subject);
 
-      const existing = finalResultMap[norm];
-      if (existing) {
-        const better = this.getBetterGrade(existing.grade, res.grade);
-        finalResultMap[norm] = { subject: norm, grade: better };
-      } else {
-        finalResultMap[norm] = { subject: norm, grade: res.grade };
+        const existing = finalResultMap[norm];
+        if (existing) {
+          const better = this.getBetterGrade(existing.grade, res.grade);
+          finalResultMap[norm] = { subject: norm, grade: better };
+        } else {
+          finalResultMap[norm] = { subject: norm, grade: res.grade };
+        }
       }
     }
+
+    // Step 3: Prepare analysis data
+    const analysisData = {
+      resultDetails: Object.values(finalResultMap)
+    };
+
+    console.log('Best Grades Analysis:', analysisData);
+    this.manualService.checkEligibility(analysisData).subscribe({
+      next: (data: any) => {
+        this.elligibilityResults = data;
+        this.isCheckingEligibility = false;
+
+        this.snackBar.open('Eligibility check successful!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-success']
+        });
+
+        setTimeout(() => {
+          this.router.navigate(['/user/checkEligilibilty']);
+        }, 4000);
+      },
+      error: (err) => {
+        this.isCheckingEligibility = false;
+        console.error('Eligibility check failed:', err);
+
+        this.snackBar.open('Failed to check eligibility.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
   }
-
-  // Step 3: Prepare analysis data
-  const analysisData = {
-    resultDetails: Object.values(finalResultMap)
-  };
-
-  console.log('Best Grades Analysis:', analysisData);
-  this.manualService.checkEligibility(analysisData).subscribe({
-    next: (data: any) => {
-      this.elligibilityResults = data;
-      this.isCheckingEligibility = false;
-
-      this.snackBar.open('Eligibility check successful!', 'Close', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        panelClass: ['snackbar-success']
-      });
-
-      setTimeout(() => {
-        this.router.navigate(['/user/checkEligilibilty']);
-      }, 4000);
-    },
-    error: (err) => {
-      this.isCheckingEligibility = false;
-      console.error('Eligibility check failed:', err);
-
-      this.snackBar.open('Failed to check eligibility.', 'Close', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        panelClass: ['snackbar-error']
-      });
-    }
-  });
-}
 
 
 
@@ -635,18 +640,20 @@ analyzeTwoResults() {
   secondResultFetched = false;
 
   fetchResultAutoAssign() {
-              this.isLoading=true;
+    this.isLoading = true;
 
     const payload = {
       cindex: this.examForm.value.indexNumber,
       examyear: this.examForm.value.examYear,
-      examtype: this.examForm.value.examType
+      examtype: this.examForm.value.examType,
+      // recordId: this.recordId
     };
 
-    this.waec.verifyWaecResult({ body: payload }).subscribe({
+    console.log(payload);
+    this.waec.verifyWaecResult({ body: payload, recordId: this.recordId }).subscribe({
       next: (res) => {
-                  this.isLoading=false;
-
+        this.isLoading = false;
+        this.getResultsByUser();
         if (!this.waecresults) {
           this.waecresults = res;
           console.log("Results 1 ", this.waecresults);
@@ -717,7 +724,7 @@ analyzeTwoResults() {
     if (this.currentCheck) {
       this.currentCheck.result = res;
       this.currentCheck.checkStatus = 'completed';
-     // this.saveChecks();
+      // this.saveChecks();
     }
   }
 
@@ -814,7 +821,7 @@ analyzeTwoResults() {
       if (this.currentCheck) {
         this.currentCheck.result = this.manualEntryForm.value;
         this.currentCheck.checkStatus = 'completed';
-       // this.saveChecks();
+        // this.saveChecks();
       }
     } else {
       this.manualEntryForm.markAllAsTouched();
@@ -1167,7 +1174,7 @@ analyzeTwoResults() {
       next: (data: any) => {
         this.currentCheck = data;
         this.userChecks.unshift(data);
-       // this.saveChecks();
+        // this.saveChecks();
         //alert("Successfully started check");
       },
       error: (err) => {
@@ -1193,13 +1200,26 @@ analyzeTwoResults() {
       console.log("succeffully created the records");
     }))
   }
+    isLoadingChecks: boolean = false;
 
-  getResultsByUser() {
-    this.manualService.getAllRecordsByUserID().subscribe((data => {
+
+getResultsByUser() {
+  this.isLoadingChecks = true;
+  this.manualService.getAllRecordsByUserID().subscribe({
+    next: (data) => {
       this.userChecks = data;
-      console.log(data);
-    }));
-  }
+      console.log('User checks loaded:', data);
+    },
+    error: (err) => {
+      console.error('Failed to load user checks:', err);
+      // Optional: Show error message to user
+      // this.toast.error('Failed to load verification history. Please try again.');
+    },
+    complete: () => {
+      this.isLoadingChecks = false;
+    }
+  });
+}
 
   // THE PAYMENT MODAL 
 

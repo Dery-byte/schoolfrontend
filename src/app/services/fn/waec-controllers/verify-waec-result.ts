@@ -11,6 +11,7 @@ import { RequestBuilder } from '../../request-builder';
 import { WaecResultsRequest } from '../../models/waec-results-request';
 
 export interface VerifyWaecResult$Params {
+  recordId?: string;
       body: WaecResultsRequest
 }
 
@@ -18,6 +19,7 @@ export function verifyWaecResult(http: HttpClient, rootUrl: string, params: Veri
 }>> {
   const rb = new RequestBuilder(rootUrl, verifyWaecResult.PATH, 'post');
   if (params) {
+    rb.query('recordId', params.recordId, {});
     rb.body(params.body, 'application/json');
   }
 

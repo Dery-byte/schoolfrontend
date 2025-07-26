@@ -126,6 +126,16 @@
           "waec-controllers"
         ],
         "operationId": "verifyWaecResult",
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -881,6 +891,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "checkLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
           "externalRef": {
             "type": "string"
           },
@@ -993,7 +1007,8 @@
           "email",
           "firstname",
           "lastname",
-          "password"
+          "password",
+          "phoneNumber"
         ],
         "type": "object",
         "properties": {
@@ -1010,6 +1025,15 @@
             "maxLength": 2147483647,
             "minLength": 8,
             "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

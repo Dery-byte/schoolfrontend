@@ -5,6 +5,7 @@
 import { WaecCandidateEntity } from '../models/waec-candidate-entity';
 export interface ExamCheckRecord {
   candidateName?: string;
+  checkLimit?: number;
   checkStatus?: string;
   createdAt?: string;
   externalRef?: string;
