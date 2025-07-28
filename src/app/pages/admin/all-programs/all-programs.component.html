@@ -1,131 +1,418 @@
+<!-- {{universities | json}} -->
 <div class="col-md-12">
-    <div class="card">
-      <div
-        class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 sticky-top bg-white z-3"
-        style="top: 0"
-      >
-        <h4 class="card-title mb-0">University List</h4>
-  
-        <!-- University Type -->
-        <select class="form-control w-auto" [(ngModel)]="selectedType">
-          <option value="ALL">All Universities</option>
-          <option value="PUBLIC">Public Universities</option>
-          <option value="PRIVATE">Private Universities</option>
-        </select>
-  
-        <!-- University Search -->
-        <input
-          type="text"
-          class="form-control w-auto"
-          placeholder="Search University"
-          [(ngModel)]="universitySearch"
-        />
-  
-        <!-- Program Search -->
-        <input
-          type="text"
-          class="form-control w-auto"
-          placeholder="Search Program"
-          [(ngModel)]="programSearch"
-        />
-      </div>
-  
-      <div class="card-body">
-        <div *ngIf="filteredUniversities.length > 0; else noUniversity">
-          <div
-            *ngFor="let university of filteredUniversities"
-            class="mb-4 border rounded p-3 shadow-sm"
-          >
-            <h5>
-              {{ university.name }}
-              <span class="badge bg-secondary">{{ university.type }}</span>
-            </h5>
-            <p class="mb-2">
-              <strong>Location:</strong> {{ university.location }}
-            </p>
-  
-            <h6 class="text-muted">Programs Offered</h6>
-  
-            <ng-container
-              *ngIf="
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 sticky-top bg-white z-3"
+      style="top: 0">
+      <h4 class="card-title mb-0">University List</h4>
+      <!-- University Type -->
+      <select class="form-control w-auto" [(ngModel)]="selectedType">
+        <option value="ALL">All Universities</option>
+        <option value="PUBLIC">Public Universities</option>
+        <option value="PRIVATE">Private Universities</option>
+      </select>
+
+      <!-- University Search -->
+      <input type="text" class="form-control w-auto" placeholder="Search University" [(ngModel)]="universitySearch" />
+
+      <!-- Program Search -->
+      <input type="text" class="form-control w-auto" placeholder="Search Program" [(ngModel)]="programSearch" />
+    </div>
+
+    <div class="card-body">
+      <div *ngIf="filteredUniversities.length > 0; else noUniversity">
+        <div *ngFor="let university of filteredUniversities" class="mb-4 border rounded p-3 shadow-sm">
+          <h5>
+            {{ university.name }}
+            <span class="badge bg-secondary">{{ university.type }}</span>
+          </h5>
+          <p class="mb-2">
+            <strong>Location:</strong> {{ university.location }}
+          </p>
+
+          <h6 class="text-muted">Programs Offered</h6>
+
+          <ng-container *ngIf="
                 university.programs && university.programs.length > 0;
                 else noPrograms
-              "
-            >
-              <ul class="list-group">
-                <li
-                  *ngFor="
+              ">
+            <ul class="list-group">
+              <li *ngFor="
                     let program of getVisiblePrograms(university);
                     let i = index
-                  "
-                  class="list-group-item"
-                >
-                  <div
-                    class="d-flex justify-content-between align-items-center flex-wrap"
-                  >
-                    <div>
-                      <strong>{{ i + 1 }}. {{ program.name }}</strong>
-                    </div>
-                    <div class="form-button-action">
-                      <button
-                        type="button"
-                        class="btn btn-link btn-sm btn-primary"
-                        title="Edit Program"
-                        (click)="onEditProgram(university, program)"
-                      >
-                        <i class="fa fa-edit"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-link btn-sm btn-danger"
-                        title="Delete Program"
-                        (click)="onDeleteProgram(university, program)"
-                      >
-                        <i class="fa fa-times"></i>
-                      </button>
-                    </div>
+                  " class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                  <div>
+                    <strong>{{ i + 1 }}. {{ program.name }}</strong>
                   </div>
-  
-                  <div class="mt-2 ms-3">
-                    <strong>Cutoff Points:</strong>
-                    <ul class="mb-0">
-                      <li *ngFor="let subject of getSubjects(program)">
-                        {{ subject }}:
-                        <strong>{{ program.cutoffPoints[subject] }}</strong>
-                      </li>
-                    </ul>
+                  <div class="form-button-action">
+
+
+
+
+
+
+
+
+
+
+
+                
+
+                    <button type="button" class="btn btn-link btn-sm btn-primary" title="Edit Program"
+                      (click)="openUpdateModal(program.id)">
+                      <i class="fa fa-edit"></i>
+                    </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <button type="button" class="btn btn-link btn-sm btn-danger" title="Delete Program"
+                      (click)="onDeleteProgram(program)">
+                      <i class="fa fa-times"></i>
+                    </button>
                   </div>
-                </li>
-              </ul>
-            </ng-container>
-  
-            <ng-template #noPrograms>
-              <div class="alert alert-info mt-2">
-                No programs offered by this university.
+                </div>
+
+                <div class="mt-2 ms-3">
+                  <strong>Cutoff Points:</strong>
+                  <ul class="mb-0">
+                    <li *ngFor="let subject of getSubjects(program)">
+                      {{ subject }}:
+                      <strong>{{ program.cutoffPoints[subject] }}</strong>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </ng-container>
+
+          <ng-template #noPrograms>
+            <div class="alert alert-info mt-2">
+              No programs offered by this university.
+            </div>
+          </ng-template>
+
+          <div *ngIf="university.programs.length > maxVisiblePrograms">
+            <button class="btn btn-sm btn-outline-secondary mt-2" (click)="toggleShowAll(university)">
+              {{
+              showAll[university.id]
+              ? 'Show Less'
+              : 'Show All (' + university.programs.length + ')'
+              }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noUniversity>
+        <div class="alert alert-warning text-center">
+          No universities available for the selected filters.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Edit Program Modal -->
+<div class="modal-overlay" *ngIf="showUpdateProgramModal">
+  <div class="reset-form-container program-form-container">
+    <div class="reset-form-header">
+      <h2>Update Program</h2>
+      <button class="modal-close" (click)="closeUpdateModal()" aria-label="Close">
+        &times;
+      </button>
+    </div>
+
+    <form [formGroup]="updateProgramForm" (ngSubmit)="updateProgram()" class="container-fluid">
+      <div class="card">
+        <div class="card-body">
+          <!-- Program and Category -->
+          <div class="row g-3">
+            <div class="form-group col-12 col-md-6">
+              <label for="programName">Program Name</label>
+              <input type="text" class="form-control" id="programName" formControlName="programName"
+                placeholder="Enter Program Name" />
+              <div
+                *ngIf="updateProgramForm.get('programName')?.touched && updateProgramForm.get('programName')?.invalid">
+                <small *ngIf="updateProgramForm.get('programName')?.errors?.['required']" class="text-danger">
+                  Program name is required.
+                </small>
+                <small *ngIf="updateProgramForm.get('programName')?.errors?.['minlength']" class="text-danger">
+                  Minimum 3 characters.
+                </small>
               </div>
-            </ng-template>
-  
-            <div *ngIf="university.programs.length > maxVisiblePrograms">
-              <button
-                class="btn btn-sm btn-outline-secondary mt-2"
-                (click)="toggleShowAll(university)"
-              >
-                {{
-                  showAll[university.id]
-                    ? 'Show Less'
-                    : 'Show All (' + university.programs.length + ')'
-                }}
+            </div>
+
+            <div class="form-group col-12 col-md-6">
+              <label for="category">Category</label>
+              <select class="form-select" id="category" formControlName="categoryIds">
+                <option value="">-- Select Category --</option>
+                <option *ngFor="let cat of colleges" [value]="cat.id">
+                  {{ cat.name }}
+                </option>
+              </select>
+              <div
+                *ngIf="updateProgramForm.get('categoryIds')?.touched && updateProgramForm.get('categoryIds')?.invalid">
+                <small class="text-danger">Category is Required.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cutoff Points Section -->
+          <div formArrayName="cutoffPoints" class="mt-3">
+            <h5>Cutoff Points</h5>
+            <div *ngFor="let cutoffControl of cutoffPoints.controls; let i = index" [formGroupName]="i"
+              class="row g-2 mb-2">
+              <!-- Subject Dropdown -->
+              <div class="col-md-5">
+                <select class="form-select" formControlName="subject">
+                  <option value="">-- Select Subject --</option>
+                  <option *ngFor="let s of combinedSubjects" [ngValue]="s">
+                    {{ s }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Grade Dropdown -->
+              <div class="col-md-5">
+                <select class="form-select" formControlName="grade">
+                  <option value="">-- Select Grade --</option>
+                  <option *ngFor="let g of grades" [ngValue]="g">
+                    {{ g }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Remove Button -->
+              <div class="col-md-2">
+                <button type="button" class="btn btn-danger w-100" (click)="removeSubject(i)"> <i
+                    class="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add/Submit Buttons -->
+          <div class="row mt-3 g-2">
+            <div class="col-md-6">
+              <button type="button" class="btn btn-secondary w-100" (click)="addSubject()">+ Add Subject</button>
+            </div>
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="isUpdating">
+                {{ isUpdating ? 'Updating...' : 'Update Program' }}
               </button>
             </div>
           </div>
         </div>
-  
-        <ng-template #noUniversity>
-          <div class="alert alert-warning text-center">
-            No universities available for the selected filters.
-          </div>
-        </ng-template>
       </div>
-    </div>
+    </form>
   </div>
-  
+</div>

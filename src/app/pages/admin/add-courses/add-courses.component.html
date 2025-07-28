@@ -1,21 +1,19 @@
+{{colleges|json}}
+
+
+
 <form [formGroup]="programForm" (ngSubmit)="submitForm()" class="container-fluid">
   <div class="card">
     <div class="card-header">
       <div class="card-title">Add University Program</div>
     </div>
-
     <div class="card-body">
       <!-- First Row -->
       <div class="row">
         <div class="form-group col-12 col-md-6">
           <label for="programName">Program Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="programName"
-            formControlName="programName"
-            placeholder="Enter Program Name"
-          />
+          <input type="text" class="form-control" id="programName" formControlName="programName"
+            placeholder="Enter Program Name" />
           <div *ngIf="programForm.get('programName')?.touched && programForm.get('programName')?.invalid">
             <small *ngIf="programForm.get('programName')?.errors?.['required']" class="text-danger">
               Program name is required.
@@ -27,7 +25,7 @@
         </div>
 
         <div class="form-group col-12 col-md-6">
-          <label for="uniType">University Type</label>
+          <label for="uniType">Select University Type</label>
           <select class="form-select" (change)="filterUniversities()" id="uniType" formControlName="uniType">
             <option value="">-- All --</option>
             <option value="PUBLIC">PUBLIC</option>
@@ -49,22 +47,31 @@
           </select>
         </div>
 
-        <div class="form-group col-12 col-md-6">
+        <!-- <div class="form-group col-12 col-md-6">
           <label for="category">Category</label>
           <select class="form-select" id="category" (change)="onCategoryChange($event)">
             <option value="">-- Select Category --</option>
             <option *ngFor="let cat of objectKeys(categories)" [value]="cat">{{ cat }}</option>
           </select>
+        </div> -->
+
+
+
+        <div class="form-group col-12 col-md-6">
+          <label for="category">Category</label>
+          <select class="form-select" id="category" formControlName="categoryIds" (change)="onCategoryChange($event)">
+            <option value="">-- Select Category --</option>
+            <option *ngFor="let cat of colleges" [value]="cat.id">{{ cat.name }}</option>
+          </select>
+          <div *ngIf="programForm.get('categoryIds')?.touched && programForm.get('categoryIds')?.invalid">
+            <small class="text-danger">Category is Required.</small>
+            </div>
         </div>
       </div>
 
       <!-- Cutoff Points Section -->
       <div formArrayName="cutoffPoints" class="mt-3">
-        <div
-          *ngFor="let group of cutoffPoints.controls; let i = index"
-          [formGroupName]="i"
-          class="row mb-2 g-2"
-        >
+        <div *ngFor="let group of cutoffPoints.controls; let i = index" [formGroupName]="i" class="row mb-2 g-2">
           <div class=" col-sm-5">
             <select class="form-select" formControlName="subject">
               <option value="">-- Select Subject --</option>

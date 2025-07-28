@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UniversityControllerService, ProgramControllerService } from 'src/app/services/services';
+import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 
 // Type Definitions
 // type ExamBoard = 'WAEC' | 'CTVET' | 'NAPTEX' | 'TEU';
@@ -48,7 +49,7 @@ export class AddCoursesComponent implements OnInit {
   // Manual Entry Form
   manualEntryForm!: FormGroup;
   examYears: number[] = Array.from(
-    {length: (new Date().getFullYear() - 1999)}, 
+    { length: (new Date().getFullYear() - 1999) },
     (_, i) => new Date().getFullYear() - i
   );
   showExamType = false;
@@ -100,13 +101,15 @@ export class AddCoursesComponent implements OnInit {
     private route: ActivatedRoute,
     private unive: UniversityControllerService,
     private prog: ProgramControllerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private manualService: ManaulServiceService
   ) {
     // Initialize University Program Form
     this.programForm = this.fb.group({
       universityId: ['', Validators.required],
       programName: ['', [Validators.required, Validators.minLength(3)]],
       uniType: ['', Validators.required],
+      categoryIds: ['', Validators.required],
       cutoffPoints: this.fb.array([])
     });
 
@@ -124,6 +127,7 @@ export class AddCoursesComponent implements OnInit {
 
   ngOnInit(): void {
     this.allUniversities();
+    this.getAllCategories();
   }
 
   // University Methods
@@ -167,23 +171,47 @@ export class AddCoursesComponent implements OnInit {
       return;
     }
 
-    const formData = this.programForm.value;
-    const payload = {
-      universityId: Number(formData.universityId),
-      programs: [
-        {
-          name: formData.programName,
-          cutoffPoints: formData.cutoffPoints.reduce((obj: any, curr: any) => {
-            if (curr.subject && curr.grade) {
-              obj[curr.subject] = curr.grade;
-            }
-            return obj;
-          }, {})
-        }
-      ]
-    };
+    // const formData = this.programForm.value;
 
-    this.prog.addProgramToUniversity({body: payload}).subscribe({
+    // const payload = {
+    //   universityId: Number(formData.universityId),
+    //   programs: [
+    //     {
+    //       name: formData.programName,
+    //       cutoffPoints: formData.cutoffPoints.reduce((obj: any, curr: any) => {
+    //         if (curr.subject && curr.grade) {
+    //           obj[curr.subject] = curr.grade;
+    //         }
+    //         return obj;
+    //       }, {})
+    //     }
+    //   ],
+    //     categoryIds:[Number(formData.categoryIds)],
+
+    // };
+    const formData = this.programForm.value;
+
+const payload = {
+  universityId: Number(formData.universityId),
+  programs: [
+    {
+      name: formData.programName,
+      cutoffPoints: formData.cutoffPoints.reduce((obj: any, curr: any) => {
+        if (curr.subject && curr.grade) {
+          obj[curr.subject] = curr.grade;
+        }
+        return obj;
+      }, {}),
+      categoryIds: [
+        { id: Number(formData.categoryIds) }  // Changed to match Insomnia structure
+      ]
+    }
+  ]
+};
+
+
+console.log(payload);
+    this.prog.addProgramToUniversity({ body: payload }).subscribe({
       next: (res) => {
         this.snackBar.open(`${formData.programName} has been added!`, 'Close', {
           duration: 3000,
@@ -206,7 +234,7 @@ export class AddCoursesComponent implements OnInit {
     const selectElement = event.target as HTMLSelectElement;
     const category = selectElement.value;
     this.availableSubjects = this.categories[category] || [];
-  
+
     // Reset cutoff points
     this.cutoffPoints.clear();
     this.addSubject(); // add initial input if needed
@@ -261,7 +289,7 @@ export class AddCoursesComponent implements OnInit {
       this.currentSubjects = this.subjectDatabase.CTVET.TEU;
       this.currentGrades = this.gradeOptions.TEU;
     }
-    
+
     // Clear existing result details
     while (this.resultsDetails.length !== 0) {
       this.resultsDetails.removeAt(0);
@@ -270,7 +298,7 @@ export class AddCoursesComponent implements OnInit {
 
   onCTVETExamTypeChange(event: Event) {
     const cTVETExamType = (event.target as HTMLSelectElement).value;
-    
+
     if (cTVETExamType === 'NAPTEX') {
       this.currentSubjects = this.subjectDatabase.CTVET.NAPTEX;
       this.currentGrades = this.gradeOptions.NAPTEX;
@@ -278,7 +306,7 @@ export class AddCoursesComponent implements OnInit {
       this.currentSubjects = this.subjectDatabase.CTVET.TEU;
       this.currentGrades = this.gradeOptions.TEU;
     }
-    
+
     // Clear existing result details and add one empty row
     while (this.resultsDetails.length !== 0) {
       this.resultsDetails.removeAt(0);
@@ -289,12 +317,12 @@ export class AddCoursesComponent implements OnInit {
   onExamTypeChange(event: Event) {
     const examType = (event.target as HTMLSelectElement).value as WASSCEType;
     const examBoard = this.manualEntryForm.get('examBoard')?.value as ExamBoard;
-    
+
     if (examBoard === 'WAEC' && examType) {
       this.currentSubjects = this.subjectDatabase.WAEC[examType];
       this.currentGrades = this.gradeOptions[examType];
     }
-    
+
     // Clear existing result details and add one empty row
     while (this.resultsDetails.length !== 0) {
       this.resultsDetails.removeAt(0);
@@ -310,4 +338,44 @@ export class AddCoursesComponent implements OnInit {
       this.manualEntryForm.markAllAsTouched();
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+  // cat:any;
+
+  colleges: { id: number, name: string }[] = [
+    // { "id": 1, "name": "Engineering" }, 
+    // { "id": 2, "name": "Social Sciences" }
+  ];
+  getAllCategories() {
+    this.manualService.getAllCategories().subscribe({
+      next: (res: any) => {
+        this.colleges = res;
+      },
+      error: (err) => {
+      }
+    });
+  }
+
+  // categoryError: string = '';
+  // isSubmitted: boolean = false;
+  //   // Call this when submitting your form
+  // validateCategory(): boolean {
+  //   if (!this.categoryId) { // Assuming you store the selected category ID
+  //     this.categoryError = 'Please select a category';
+  //     this.isSubmitted = true;
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
+
 }

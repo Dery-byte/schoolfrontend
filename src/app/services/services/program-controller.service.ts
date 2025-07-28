@@ -13,6 +13,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addProgramToUniversity } from '../fn/program-controller/add-program-to-university';
 import { AddProgramToUniversity$Params } from '../fn/program-controller/add-program-to-university';
+import { getProgramsByCategoryId } from '../fn/program-controller/get-programs-by-category-id';
+import { GetProgramsByCategoryId$Params } from '../fn/program-controller/get-programs-by-category-id';
+import { getProgramsByCategoryName } from '../fn/program-controller/get-programs-by-category-name';
+import { GetProgramsByCategoryName$Params } from '../fn/program-controller/get-programs-by-category-name';
 import { getProgramsByUniversity } from '../fn/program-controller/get-programs-by-university';
 import { GetProgramsByUniversity$Params } from '../fn/program-controller/get-programs-by-university';
 import { Program } from '../models/program';
@@ -69,6 +73,56 @@ export class ProgramControllerService extends BaseService {
    */
   getProgramsByUniversity(params: GetProgramsByUniversity$Params, context?: HttpContext): Observable<Array<Program>> {
     return this.getProgramsByUniversity$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Program>>): Array<Program> => r.body)
+    );
+  }
+
+  /** Path part for operation `getProgramsByCategoryId()` */
+  static readonly GetProgramsByCategoryIdPath = '/auth/programs/by-category/{categoryId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProgramsByCategoryId()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProgramsByCategoryId$Response(params: GetProgramsByCategoryId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Program>>> {
+    return getProgramsByCategoryId(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProgramsByCategoryId$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProgramsByCategoryId(params: GetProgramsByCategoryId$Params, context?: HttpContext): Observable<Array<Program>> {
+    return this.getProgramsByCategoryId$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Program>>): Array<Program> => r.body)
+    );
+  }
+
+  /** Path part for operation `getProgramsByCategoryName()` */
+  static readonly GetProgramsByCategoryNamePath = '/auth/programs/by-category-name/{categoryName}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProgramsByCategoryName()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProgramsByCategoryName$Response(params: GetProgramsByCategoryName$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Program>>> {
+    return getProgramsByCategoryName(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProgramsByCategoryName$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProgramsByCategoryName(params: GetProgramsByCategoryName$Params, context?: HttpContext): Observable<Array<Program>> {
+    return this.getProgramsByCategoryName$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Program>>): Array<Program> => r.body)
     );
   }

@@ -3,7 +3,10 @@ import { HttpClient, HttpHeaders, HttpParams,HttpErrorResponse } from '@angular/
 import baseUrl from './helper';
 import { Observable } from 'rxjs';
 
-
+interface ApiCategory {
+  id: number;
+  name: string;
+}
 
 
 
@@ -196,7 +199,49 @@ requestPasswordReset(email: any): Observable<any> {
 }
 
 
+  // getAllCategories(): Observable<ApiCategory[]> {
+  //   return this.http.get<ApiCategory[]>(`${baseUrl}/auth/categories/getAll`);
+  // }
+
+    getAllCategories() {
+    return this.http.get(`${baseUrl}/auth/categories/getAll`);
+  }
+
+deleteProgram(programId: number) {
+  const payload = { programId }; // This creates { programId: [value] }
+  return this.http.delete(`${baseUrl}/auth/programs/deleteById`, {
+    body: payload,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
 
 
+
+
+
+
+
+
+// updateProgram(programId: number, updateData: any) {
+//   const payload = {
+//     programId: programId,
+//     name: updateData.name,
+//     cutoffPoints: updateData.cutoffPoints,
+//     categoryIds: updateData.categories.map((cat: any) => ({ id: cat.id }))
+//   };
+//   return this.http.put(`${baseUrl}/auth/programs/updateProgram`, payload, {
+//     headers: { 'Content-Type': 'application/json' }
+//   });
+// }
+
+updateProgram(payload: any): Observable<any> {
+  return this.http.put(`${baseUrl}/auth/programs/updateProgram`, payload, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+getProgramById(productId: number){
+  return this.http.get(`${baseUrl}/auth/programs/getProgramById/${productId}`)
+}
 
 }

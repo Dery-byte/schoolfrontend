@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ExamCheckRecordControllerService } from './services/exam-check-record-controller.service';
+import { CategoryControllerService } from './services/category-controller.service';
 import { WaecControllersService } from './services/waec-controllers.service';
 import { AuthenticationService } from './services/authentication.service';
 import { SmsControllerService } from './services/sms-controller.service';
@@ -25,6 +26,7 @@ import { EligibilityRecordControllerService } from './services/eligibility-recor
   declarations: [],
   providers: [
     ExamCheckRecordControllerService,
+    CategoryControllerService,
     WaecControllersService,
     AuthenticationService,
     SmsControllerService,
