@@ -244,4 +244,9 @@ getProgramById(productId: number){
   return this.http.get(`${baseUrl}/auth/programs/getProgramById/${productId}`)
 }
 
+
+getUniversityById(uiversityId: number){
+  return this.http.get(`${baseUrl}/auth/programs/getProgramById/${uiversityId}`)
+}
+
 }

@@ -1,4 +1,5 @@
 <!-- University List -->
+
 <div class="col-md-12">
     <div class="card">
       <div class="card-header">
@@ -36,10 +37,11 @@
                       data-bs-toggle="tooltip"
                       title="Edit University"
                       class="btn btn-link btn-primary"
-                      (click)="editUniversity(university)"
+                      (click)="openEditUniversityModal(university.id!)"
                     >
                       <i class="fa fa-edit"></i>
                     </button>
+
                     <!-- Remove Button -->
                     <button
                       type="button"
@@ -65,3 +67,93 @@
     </div>
   </div>
   
+
+
+
+
+
+
+  <!-- EDIT UNIVERSITY MODAL -->
+
+<!-- Edit University Modal -->
+<div class="modal-overlay" *ngIf="showEditUniversityModal">
+  <div class="reset-form-container program-form-container">
+    <div class="reset-form-header">
+      <h2>Edit University</h2>
+      <button class="modal-close" (click)="closeEditUniversityModal()" aria-label="Close">
+        &times;
+      </button>
+    </div>
+
+    <form [formGroup]="editUniversityForm" (ngSubmit)="updateUniversity()" class="container-fluid">
+      <div class="card">
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- University Name -->
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="universityName">University Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="universityName"
+                  formControlName="universityName"
+                  placeholder="Enter University Name"
+                />
+                <div *ngIf="editUniversityForm.get('universityName')?.touched && editUniversityForm.get('universityName')?.invalid" class="text-danger">
+                  University name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="category">Category</label>
+                <select
+                  class="form-select"
+                  id="category"
+                  formControlName="category"
+                >
+                  <option value="">-- Select Category --</option>
+                  <option *ngFor="let cat of categories" [value]="cat">
+                    {{ cat }}
+                  </option>
+                </select>
+                <div *ngIf="editUniversityForm.get('category')?.touched && editUniversityForm.get('category')?.invalid" class="text-danger">
+                  Category is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="location"
+                  formControlName="location"
+                  placeholder="Enter Location"
+                />
+                <div *ngIf="editUniversityForm.get('location')?.touched && editUniversityForm.get('location')?.invalid" class="text-danger">
+                  Location is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="row mt-3">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="isUpdating">
+                {{ isUpdating ? 'Updating...' : 'Update University' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
