@@ -24,7 +24,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: -13px;
 }
 
 .modal-close {
@@ -34,10 +34,10 @@
     cursor: pointer;
 }
 
-.form-intro {
+/* .form-intro {
     margin-bottom: 1.5rem;
     color: #666;
-}
+} */
 
 .cutoff-row {
     display: flex;
@@ -141,7 +141,7 @@
 
 .modal-overlay {
   position: fixed;
-  top: 0;
+  top: 30px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -153,9 +153,9 @@
 }
 
 .reset-form-container {
-  background: white;
+  background: rgb(24, 4, 95);
   padding: 2rem;
   border-radius: 8px;
-  max-height: 90vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
