@@ -246,7 +246,21 @@ getProgramById(productId: number){
 
 
 getUniversityById(uiversityId: number){
-  return this.http.get(`${baseUrl}/auth/programs/getProgramById/${uiversityId}`)
+  return this.http.get(`${baseUrl}/auth/getUniversityById/${uiversityId}`)
 }
+
+
+deleteUniversity(universityId: number) {
+  const payload = { universityId }; // This creates { programId: [value] }
+  return this.http.delete(`${baseUrl}/auth/deleteUniversityById/${universityId}`)
+}
+
+
+updateUniverity(payload: any): Observable<any> {
+  return this.http.put(`${baseUrl}/auth/updateUniverity`, payload, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
 
 }

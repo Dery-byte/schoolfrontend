@@ -5,45 +5,12 @@ import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-
-// interface University {
-//   name: string;
-//   type: string; // e.g., 'Private', 'Public', etc.
-//   location: string;
-//   // add other relevant fields if needed
-// }
-
 @Component({
   selector: 'app-all-universities',
   templateUrl: './all-universities.component.html',
   styleUrls: ['./all-universities.component.css'],
 })
 export class AllUniversitiesComponent {
-  // universities = [
-  // { id: 1, name: 'University of Ghana', location: 'Legon, Accra, Ghana', type: 'PUBLIC' },
-  // { id: 2, name: 'Kwame Nkrumah University of Science and Technology', location: 'Kumasi, Ghana', type: 'PUBLIC' },
-  // { id: 3, name: 'University of Cape Coast', location: 'Cape Coast, Ghana', type: 'PUBLIC' },
-  // { id: 4, name: 'University for Development Studies', location: 'Tamale, Ghana', type: 'PUBLIC' },
-  // { id: 5, name: 'University of Education, Winneba', location: 'Winneba, Ghana', type: 'PUBLIC' },
-  // { id: 6, name: 'Ashesi University', location: 'Berekuso, Eastern Region, Ghana', type: 'PRIVATE' },
-  // { id: 7, name: 'Ghana Institute of Management and Public Administration', location: 'Accra, Ghana', type: 'PUBLIC' },
-  // { id: 8, name: 'University of Energy and Natural Resources', location: 'Sunyani, Ghana', type: 'PUBLIC' },
-  // { id: 9, name: 'Accra Institute of Technology', location: 'Accra, Ghana', type: 'PRIVATE' },
-  // { id: 10, name: 'Central University', location: 'Miotso near Dawhenya, Ghana', type: 'PRIVATE' },
-  // { id: 11, name: 'Presbyterian University, Ghana', location: 'Abetifi-Kwahu, Ghana', type: 'PRIVATE' },
-  // { id: 12, name: 'Pentecost University', location: 'Sowutuom, Accra, Ghana', type: 'PRIVATE' },
-  // { id: 13, name: 'Valley View University', location: 'Oyibi, Accra, Ghana', type: 'PRIVATE' },
-  // { id: 14, name: 'Koforidua Technical University', location: 'Koforidua, Eastern Region, Ghana', type: 'PUBLIC' },
-  // { id: 15, name: 'Takoradi Technical University', location: 'Takoradi, Western Region, Ghana', type: 'PUBLIC' },
-  // { id: 16, name: 'Tamale Technical University', location: 'Tamale, Northern Region, Ghana', type: 'PUBLIC' },
-  // { id: 17, name: 'Ho Technical University', location: 'Ho, Volta Region, Ghana', type: 'PUBLIC' },
-  // { id: 18, name: 'Sunyani Technical University', location: 'Sunyani, Bono Region, Ghana', type: 'PUBLIC' },
-  // { id: 19, name: 'Bolgatanga Technical University', location: 'Bolgatanga, Upper East Region, Ghana', type: 'PUBLIC' },
-  // { id: 20, name: 'Cape Coast Technical University', location: 'Cape Coast, Central Region, Ghana', type: 'PUBLIC' }
-  // ];
-
-  // filteredUniversities = this.universities;
-
   selectedType = 'ALL';
   universities: University[] = [];
   filteredUniversities: University[] = [];
@@ -146,7 +113,6 @@ editUniversityForm: FormGroup;
 // Add these methods
 openEditUniversityModal(universityid: number): void {
 this.selectedUniversityId = universityid;
-
     this.manualService.getUniversityById(this.selectedUniversityId).subscribe({
 next: (universities) => {
         this.editUniversityData = universities;
@@ -161,7 +127,7 @@ next: (universities) => {
  },
       error: (err) => {
         console.error('Failed to load program:', err);
-        this.snackBar.open('Failed to load program details', 'Close', {
+        this.snackBar.open('Failed to load University details', 'Close', {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
@@ -195,23 +161,57 @@ updateUniversity(): void {
   };
 
   this.isUpdating = true;
-  // this.unive.updateUniversity(payload).subscribe({
-  //   next: () => {
-  //     this.isUpdating = false;
-  //     this.snackBar.open('University updated successfully!', 'Close', {
-  //       duration: 3000,
-  //       panelClass: ['success-snackbar']
-  //     });
-  //     this.closeEditUniversityModal();
-  //     this.allUniversity(); // Refresh data
-  //   },
-  //   error: (err) => {
-  //     this.isUpdating = false;
-  //     this.snackBar.open(`Update failed: ${err.error?.message || err.message}`, 'Close', {
-  //       duration: 5000,
-  //       panelClass: ['error-snackbar']
-  //     });
-  //   }
-  // });
+  this.manualService.updateUniverity(payload).subscribe({
+    next: () => {
+      this.isUpdating = false;
+      this.snackBar.open('University updated successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+      this.closeEditUniversityModal();
+      this.allUniversity(); // Refresh data
+    },
+    error: (err) => {
+      this.isUpdating = false;
+      this.snackBar.open(`Update failed: ${err.error?.message || err.message}`, 'Close', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  });
 }
+
+
+
+onDeleteUniversity(university: any): void {
+    console.log(university.id);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete "${university.name}". This action cannot be undone!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.manualService.deleteUniversity(university.id).subscribe({
+          next: () => {
+            this.snackBar.open(`"${university.name}" deleted successfully`, 'Close', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+            this.allUniversity();
+          },
+          error: (err) => {
+            this.snackBar.open(`Failed to delete program: ${err.error.message || err.message}`, 'Close', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
+  }
 }
