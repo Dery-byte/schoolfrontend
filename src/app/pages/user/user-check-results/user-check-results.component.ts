@@ -103,6 +103,10 @@ interface Biodata {
 })
 export class UserCheckResultsComponent implements OnInit {
 
+@ViewChild('target') targetElement!: ElementRef;
+  isLoading = false;     // Loading state
+  submitSuccess = false; // Track submission success
+  proceedButtonClicked = false; // Track if "Proceed" was clicked
 
 
   biodata: Biodata = {
@@ -510,6 +514,7 @@ export class UserCheckResultsComponent implements OnInit {
 
   }
 
+  
 
 
 
@@ -539,8 +544,9 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-  isLoading = false;  // Loading state flag
-  submitSuccess = false;  // Success state flag
+
+  //isLoading = false;  // Loading state flag
+  //submitSuccess = false;  // Success state flag
 
 
 
@@ -551,6 +557,17 @@ export class UserCheckResultsComponent implements OnInit {
     } else {
       this.createBiodata();
 
+    }
+  }
+
+  // Scroll to target H2
+  scrollToTarget() {
+        this.proceedButtonClicked = true; // Hide form and show H2
+    if (this.hasBiodata()) { // Only scroll if biodata is valid/submitted
+      this.targetElement.nativeElement.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
     }
   }
 

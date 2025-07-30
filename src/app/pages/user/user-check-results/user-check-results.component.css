@@ -496,7 +496,7 @@
 
   /* Mobile Money Details */
   .form-group {
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
   }
 
   label {
@@ -1239,8 +1239,8 @@
 
 
 .form-group {
-  margin-bottom: 1.5rem;
-  position: relative;
+  /* margin-bottom: 1.5rem;
+  position: relative; */
 }
 
 .select-wrapper {
@@ -2766,4 +2766,32 @@ p {
   .alert-content::before {
     background-color: #b91c1c;
   }
+}
+
+
+
+
+
+
+
+/* For the form buttons container */
+.form-group {
+  /* display: flex; */
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-outline-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* For the Proceed button */
+.btn-outline-secondary {
+  margin-left: auto; /* This pushes it to the right */
+  order: 2; /* Ensures it stays on the right */
+}
+
+/* If you want some spacing between the buttons */
+.btn-primary {
+  margin-right: 10px;
 }
