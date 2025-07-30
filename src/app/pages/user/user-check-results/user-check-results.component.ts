@@ -72,7 +72,7 @@ interface EligibilityCheck {
   createdAt: Date;
   lastUpdated: Date;
   result?: any;
-  
+
 }
 
 
@@ -84,8 +84,8 @@ interface ExistingColleges {
 }
 
 
- interface Biodata {
-  id:string,
+interface Biodata {
+  id: string,
   firstName: string;
   middleName?: string;  // Optional field
   lastName: string;
@@ -106,7 +106,7 @@ export class UserCheckResultsComponent implements OnInit {
 
 
   biodata: Biodata = {
-    id:'',
+    id: '',
     firstName: '',
     middleName: '',
     lastName: '',
@@ -116,11 +116,11 @@ export class UserCheckResultsComponent implements OnInit {
     dob: '',
     gender: ''
   };
- @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
-  
+  @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
+
   showDropdown = false;
   searchTerm = '';
-  
+
   // Current attendees (both selected and available)
   allColleges: ExistingColleges[] = [
     { id: 1, name: 'Nancy King', isRequired: false, selected: false },
@@ -139,8 +139,8 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   get availableColleges(): ExistingColleges[] {
-    return this.allColleges.filter(a => 
-      !a.isRequired && 
+    return this.allColleges.filter(a =>
+      !a.isRequired &&
       !a.selected &&
       a.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
@@ -175,23 +175,21 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-get hasMinimumSelection(): boolean {
-  const selectedCount = this.allColleges.filter(a => a.selected || a.isRequired).length;
-  return selectedCount >= 3;
-}
+  get hasMinimumSelection(): boolean {
+    const selectedCount = this.allColleges.filter(a => a.selected || a.isRequired).length;
+    return selectedCount >= 3;
+  }
 
-// logSelectedAttendeeIds(): void {
-//   if (!this.hasMinimumSelection) {
-//     alert('Please select at least 3 colleges');
-//     return;
-//   }
-  
-//   const selectedAttendees = this.allAttendees.filter(a => a.selected || a.isRequired);
-//   const selectedIds = selectedAttendees.map(a => a.id);
-//   console.log('Selected College IDs:', selectedIds);
-// }
+  // logSelectedAttendeeIds(): void {
+  //   if (!this.hasMinimumSelection) {
+  //     alert('Please select at least 3 colleges');
+  //     return;
+  //   }
 
-
+  //   const selectedAttendees = this.allAttendees.filter(a => a.selected || a.isRequired);
+  //   const selectedIds = selectedAttendees.map(a => a.id);
+  //   console.log('Selected College IDs:', selectedIds);
+  // }
 
 
 
@@ -199,7 +197,9 @@ get hasMinimumSelection(): boolean {
 
 
 
-get selectedCount(): number {
+
+
+  get selectedCount(): number {
     return this.allColleges.filter(a => a.selected || a.isRequired).length;
   }
 
@@ -219,10 +219,10 @@ get selectedCount(): number {
   logSelectedAttendeeIds(): void {
     const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
     const selectedIds = selectedAttendees.map(a => a.id);
-    
+
     console.log('Selected College IDs:', selectedIds);
     alert(`Selected College IDs: ${selectedIds.join(', ')}`);
-    
+
     // In a real app, you might:
     // - Send to an API
     // - Update a form control
@@ -297,7 +297,7 @@ get selectedCount(): number {
 
 
 
-  
+
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
   @Input() statusData: any;
   @Input() paymentCompleted: boolean = false;
@@ -455,12 +455,12 @@ get selectedCount(): number {
   }
 
 
-getColleges(){
-this.manualService.getAllCategories().subscribe({
-   next: (colleges:any) => {
-         this.allColleges= colleges;
+  getColleges() {
+    this.manualService.getAllCategories().subscribe({
+      next: (colleges: any) => {
+        this.allColleges = colleges;
 
-         console.log(this.allColleges);
+        console.log(this.allColleges);
       },
       error: (err) => {
         console.error('Failed to load Colleges:', err);
@@ -469,8 +469,8 @@ this.manualService.getAllCategories().subscribe({
           panelClass: ['error-snackbar']
         });
       }
-})
-}
+    })
+  }
 
   resumeCheck(checkId: string) {
     console.log(checkId);
@@ -482,22 +482,22 @@ this.manualService.getAllCategories().subscribe({
 
     this.getBiodataBYRecordId();
   }
-  getBiodataBYRecordId(){
+  getBiodataBYRecordId() {
     this.manualService.getBoidataByRecordId(this.recordId).subscribe({
-   next: (data:any) => {
-         this.biodata= data;
+      next: (data: any) => {
+        this.biodata = data;
 
-         console.log(this.biodata);
+        console.log(this.biodata);
       },
       error: (err) => {
         console.error('Failed to load BoidData:', err);
-        this.snackBar.open('Failed to load Collegesy details', 'Close', {
+        this.snackBar.open('Please Kindly provide your Biodata', 'Close', {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
       }
-})
-    
+    })
+
   }
 
 
@@ -534,94 +534,103 @@ this.manualService.getAllCategories().subscribe({
 
 
 
-submitBiodata() {
-  // Check if we're creating new biodata or updating existing
-  if (!this.biodata.id) {
-    this.createBiodata();
-  } else {
-    this.updateBiodata();
+  submitBiodata() {
+    // Check if we're creating new biodata or updating existing
+    if (this.biodata.id) {
+      this.updateBiodata();
+    } else {
+      this.createBiodata();
+
+    }
   }
-}
 
-private createBiodata() {
-  const formattedData = {
-    ...this.biodata,
-    dob: this.formatDate(this.biodata.dob),
-    record: { id: this.recordId },
-    id: this.biodata.id
-  };
+  private createBiodata() {
+    const formattedData = {
+      ...this.biodata,
+      dob: this.formatDate(this.biodata.dob),
+      record: { id: this.recordId },
+      id: this.biodata.id
+    };
 
-  this.isLoading = true;
-  this.submitSuccess = false;
+    this.isLoading = true;
+    this.submitSuccess = false;
 
-  this.manualService.addBiodata(formattedData).subscribe({
-    next: (response) => {
-      this.handleSuccessResponse(response, 'Biodata submitted successfully!');
-      this.getBiodataBYRecordId(); // Refresh the data after creation
-    },
-    error: (err) => {
+    this.manualService.addBiodata(formattedData).subscribe({
+      next: (response) => {
+        this.handleSuccessResponse(response, 'Biodata submitted successfully!');
+        this.getBiodataBYRecordId(); // Refresh the data after creation
+        // this.setMessageDisplayTime();
+
+      },
+      error: (err) => {
         this.isLoading = false;
 
-       this.errorMsg = err.error.validationErrors;
-          this.errorMsg.push(err.error.error);
-          this.setMessageDisplayTime();
-      // this.handleErrors('Error submitting biodata:', err);
-    }
-  });
-}
+        this.errorMsg = err.error.validationErrors;
+        this.errorMsg.push(err.error.error);
+        this.setMessageDisplayTime();
+        // this.handleErrors('Error submitting biodata:', err);
+      }
+    });
+  }
 
 
-errorMsg: Array<string> = [];
+  errorMsg: Array<string> = [];
 
   errorMsgReg: Array<string> = [];
-setMessageDisplayTime(): void {
+  setMessageDisplayTime(): void {
     setTimeout(() => {
       this.errorMsg = [];
       this.errorMsgReg = [];
-        this.submitSuccess = false;
+      this.submitSuccess = false;
 
     }, 3000);
   }
-private updateBiodata() {
-  this.isLoading = true;
-  this.submitSuccess = false;
+  private updateBiodata() {
+    this.isLoading = true;
+    this.submitSuccess = false;
 
-  this.manualService.updateBiodata(this.biodata).subscribe({
-    next: (response) => {
-      this.handleSuccessResponse(response, 'Biodata updated successfully!');
-    },
-    error: (err) => {
-                        this.isLoading = false;
+    this.manualService.updateBiodata(this.biodata).subscribe({
+      next: (response) => {
+        this.handleSuccessResponse(response, 'Biodata updated successfully!');
+      },
+      error: (err) => {
+        this.isLoading = false;
 
-         this.errorMsg = err.error.validationErrors;
-          this.errorMsg.push(err.error.error);
+        this.errorMsg = err.error.validationErrors;
+        this.errorMsg.push(err.error.error);
 
-          this.setMessageDisplayTime();
-    }
-  });
-}
+        this.setMessageDisplayTime();
+      }
+    });
+  }
 
-private formatDate(dateString: string): string | null {
-  return dateString ? new Date(dateString).toISOString().split('T')[0] : null;
-}
+  private formatDate(dateString: string): string | null {
+    return dateString ? new Date(dateString).toISOString().split('T')[0] : null;
+  }
 
-private handleSuccessResponse(response: any, message: string) {
-  this.isLoading = false;
-  this.submitSuccess = true;
-  console.log('Success:', response);
-  alert(message);
-}
-
-// private handleErrors(errorContext: string, error: any) {
-//   this.isLoading = false;
-//   console.error(errorContext, error);
-//   alert(`${errorContext.split(':')[0]} Please try again.`);
-// }
+  private handleSuccessResponse(response: any, message: string) {
+    this.isLoading = false;
+    this.submitSuccess = true;
+    console.log('Success:', response);
+    // alert(message);
+  }
 
 
-resetForm() {
+  hasBiodata(): boolean {
+    return (this.isValidBiodata() || this.submitSuccess);
+  }
+
+  private isValidBiodata(): boolean {
+    return !!this.biodata.id &&
+      !!this.biodata.firstName &&
+      !!this.biodata.lastName &&
+      !!this.biodata.email;
+  }
+
+
+  resetForm() {
     this.biodata = {
-      id:'',
+      id: '',
       firstName: '',
       middleName: '',
       lastName: '',
@@ -635,7 +644,7 @@ resetForm() {
     this.submitSuccess = false;
   }
 
-  
+
   // submitBiodata(){
   //   alert(this.recordId);
   // }
@@ -883,7 +892,7 @@ resetForm() {
     const selectedIds = selectedAttendees.map(a => a.id);
 
     console.log(selectedIds);
-    
+
     console.log('Selected College IDs:', selectedIds);
     alert(`Selected College IDs: ${selectedIds.join(', ')}`);
     if (!this.waecresults || !this.waecresults.resultDetails) {
@@ -1588,26 +1597,26 @@ resetForm() {
       console.log("succeffully created the records");
     }))
   }
-    isLoadingChecks: boolean = false;
+  isLoadingChecks: boolean = false;
 
 
-getResultsByUser() {
-  this.isLoadingChecks = true;
-  this.manualService.getAllRecordsByUserID().subscribe({
-    next: (data) => {
-      this.userChecks = data;
-      console.log('User checks loaded:', data);
-    },
-    error: (err) => {
-      console.error('Failed to load user checks:', err);
-      // Optional: Show error message to user
-      // this.toast.error('Failed to load verification history. Please try again.');
-    },
-    complete: () => {
-      this.isLoadingChecks = false;
-    }
-  });
-}
+  getResultsByUser() {
+    this.isLoadingChecks = true;
+    this.manualService.getAllRecordsByUserID().subscribe({
+      next: (data) => {
+        this.userChecks = data;
+        console.log('User checks loaded:', data);
+      },
+      error: (err) => {
+        console.error('Failed to load user checks:', err);
+        // Optional: Show error message to user
+        // this.toast.error('Failed to load verification history. Please try again.');
+      },
+      complete: () => {
+        this.isLoadingChecks = false;
+      }
+    });
+  }
 
   // THE PAYMENT MODAL 
 

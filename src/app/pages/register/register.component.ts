@@ -98,7 +98,6 @@ export class RegisterComponent {
         break;
     }
   }
-
   getPasswordType(field: 'password' | 'regPassword' | 'confirmPassword'): string {
     switch (field) {
       case 'password': return this.showPassword ? 'text' : 'password';

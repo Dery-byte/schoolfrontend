@@ -401,8 +401,8 @@
 
 
 
-      {{biodata|json}}
-      <h2>Hellow there</h2>
+      <!-- {{biodata|json}}
+      <h2>Hellow there</h2> -->
       <div class="custom-alert" *ngIf="errorMsg.length">
         <div class="alert-content">
           <ul>
@@ -467,24 +467,13 @@
                   </div>
                 </div>
               </div>
-
-
-
-
-
-
-
-
-
-              <div class="form-row">
+             <div class="form-row">
                 <div class="form-group col-md-4">
                   <div class="form-floating">
                     <input type="date" class="form-control" id="dob" [(ngModel)]="biodata.dob" name="dob" required>
                     <label for="gender">Date of Birth</label>
-
                   </div>
                 </div>
-
                 <div class="form-group col-md-4">
                   <div class="form-floating">
                     <select class="form-select" id="gender" formControlName="gender" [(ngModel)]="biodata.gender">
@@ -492,14 +481,11 @@
                       <option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
-                      <!-- <option value="Other">Other</option> -->
                     </select>
                     <label for="gender">Gender</label>
-
                   </div>
                 </div>
               </div>
-
               <div class="form-group">
                 <button type="submit" class="btn btn-primary" [disabled]="isLoading || biodataForm.invalid">
                   {{biodata.id}}
@@ -511,7 +497,6 @@
                     {{ biodata.id ? 'Updating...' : 'Submitting...' }}
                   </span>
                 </button>
-
                 <button *ngIf="biodata.id" type="button" class="btn btn-outline-secondary ml-2" (click)="resetForm()"
                   [disabled]="isLoading">
                   Reset Form
@@ -522,7 +507,7 @@
         </div>
       </div>
 
-      <h2>Hellow there</h2>
+      <!-- <h2 *ngIf="!hasBiodata()">Hellow there the is sis below the form</h2> -->
 
 
 
@@ -532,10 +517,13 @@
 
 
 
+<div *ngIf="hasBiodata()">
 
-
-      <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
+      <div  class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
         style="background-color: rgba(13, 110, 253, 0.1);">
+
+        <span>Thank you for submitting, provide to check you eligibility!</span>
+
         <div class="d-flex align-items-center">
           <i class="fas fa-user-graduate me-3 fs-4 text-primary"></i>
           <div>
@@ -602,14 +590,11 @@
             </li>
           </ul>
         </div>
-
-        <!-- Animated progress bar -->
-        <!-- <div class="progress-container">
-    <div class="progress-bar" 
-         [class.auto]="activeTab === 'auto'"
-         [class.manual]="activeTab === 'manual'"></div>
-  </div> -->
       </div>
+
+
+
+      
 
 
 
@@ -1764,6 +1749,7 @@
 
         </div>
       </div>
+      </div> <!-- CONDITION TO HIDE THE CHECK RESULTS DIV ENDS HERE -->
     </div>
   </div>
 </div>
