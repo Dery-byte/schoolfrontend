@@ -493,6 +493,7 @@ export class UserCheckResultsComponent implements OnInit {
     this.currentCheck=null;
     this.resetForm();
       this.recordId = '';  // Clear the stored ID
+      this.showH2Message=false;
       
 }
   getBiodataBYRecordId() {
@@ -562,6 +563,7 @@ export class UserCheckResultsComponent implements OnInit {
 
   // Scroll to target H2
   scrollToTarget() {
+    this.showH2Message=true
         this.proceedButtonClicked = true; // Hide form and show H2
     if (this.hasBiodata()) { // Only scroll if biodata is valid/submitted
       this.targetElement.nativeElement.scrollIntoView({ 
@@ -571,8 +573,11 @@ export class UserCheckResultsComponent implements OnInit {
     }
   }
 
+    showH2Message = false;       // Toggles h2 visibility
+
+
   private createBiodata() {
-        alert(this.recordId);
+        // alert(this.recordId);
 
     const formattedData = {
       ...this.biodata,
