@@ -241,8 +241,8 @@ export class ManaulServiceService {
 
 
 
-  getBoidataByRecordId(recordIdId: number){
-  return this.http.get(`${baseUrl}/auth/biodata/byrecordId/${recordIdId}`)
+  getBoidataByRecordId(recordId: number){
+  return this.http.get(`${baseUrl}/auth/biodata/byrecordId/${recordId}`)
 }
 
   updateBiodata(payload: any): Observable<any> {

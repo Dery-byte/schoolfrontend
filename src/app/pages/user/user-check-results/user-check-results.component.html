@@ -488,7 +488,7 @@
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-primary" [disabled]="isLoading || biodataForm.invalid">
-                  {{biodata.id}}
+                  <!-- {{biodata.id}} -->
                   <span *ngIf="!isLoading">
                     {{ biodata.id ? 'Update Biodata' : 'Submit Biodata' }}
                   </span>
@@ -531,9 +531,12 @@
             <strong class="fs-5">{{biodata.firstName}} {{biodata.lastName}}</strong>
           </div>
         </div>
-        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
+        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="goBackToList()">
           <i class="fas fa-arrow-left me-1"></i> Back to all checks
         </button>
+        <!-- <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
+          <i class="fas fa-arrow-left me-1"></i> Back to all checks
+        </button> -->
       </div>
       <!-- Enhanced Tab Navigation -->
 

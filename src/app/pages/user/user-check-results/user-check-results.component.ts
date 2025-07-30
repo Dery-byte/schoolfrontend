@@ -94,7 +94,7 @@ interface Biodata {
   address: string;
   dob: string;  // or Date if you prefer
   gender?: string;  // Optional field
-  recordId?: string;  // If you need to associate with a record
+  //record?: string;  // If you need to associate with a record
 }
 @Component({
   selector: 'app-user-check-results',
@@ -114,7 +114,8 @@ export class UserCheckResultsComponent implements OnInit {
     phoneNumber: '',
     address: '',
     dob: '',
-    gender: ''
+    gender: '',
+   // record:''
   };
   @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
 
@@ -482,12 +483,21 @@ export class UserCheckResultsComponent implements OnInit {
 
     this.getBiodataBYRecordId();
   }
+
+
+  goBackToList() {
+    this.currentCheck=null;
+    this.resetForm();
+      this.recordId = '';  // Clear the stored ID
+      
+}
   getBiodataBYRecordId() {
     this.manualService.getBoidataByRecordId(this.recordId).subscribe({
       next: (data: any) => {
         this.biodata = data;
 
         console.log(this.biodata);
+        this.recordId='';
       },
       error: (err) => {
         console.error('Failed to load BoidData:', err);
@@ -545,13 +555,16 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   private createBiodata() {
+        alert(this.recordId);
+
     const formattedData = {
       ...this.biodata,
       dob: this.formatDate(this.biodata.dob),
       record: { id: this.recordId },
-      id: this.biodata.id
+      //id: this.biodata.id
     };
 
+    console.log(formattedData);
     this.isLoading = true;
     this.submitSuccess = false;
 
@@ -585,6 +598,8 @@ export class UserCheckResultsComponent implements OnInit {
 
     }, 3000);
   }
+
+
   private updateBiodata() {
     this.isLoading = true;
     this.submitSuccess = false;
@@ -639,7 +654,7 @@ export class UserCheckResultsComponent implements OnInit {
       address: '',
       dob: '',
       gender: '',
-      recordId: ''
+      //record: ''
     };
     this.submitSuccess = false;
   }
