@@ -15,6 +15,7 @@ import { UserCheckResultsComponent } from './pages/user/user-check-results/user-
 import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eligibility.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { CollegesComponent } from './pages/admin/colleges/colleges.component';
 
 
 
@@ -43,7 +44,9 @@ const routes: Routes = [
         {path:'addUni', component:AddUniversityComponent},
         { path: 'addPrograms', component: AddCoursesComponent },
         { path: 'universities', component: AllUniversitiesComponent },
-        {path:'programs', component:AllProgramsComponent}
+        {path:'programs', component:AllProgramsComponent},
+        {path:'colleges', component:CollegesComponent}
+
         // {path:'allFarms', component:AllFarmsComponent}
         // {path:'allFarms', component:AllFarmsComponent}
 

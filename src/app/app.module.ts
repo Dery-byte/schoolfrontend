@@ -33,6 +33,7 @@ import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eli
 import { ConfirmationModalComponent } from './pages/utilities/confirmation-modal/confirmation-modal.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { SafeHtmlPipe } from './shared/pipes/safe-html.pipe';
+import { CollegesComponent } from './pages/admin/colleges/colleges.component';
 
 
 
@@ -61,7 +62,8 @@ import { SafeHtmlPipe } from './shared/pipes/safe-html.pipe';
     UserEligibilityComponent,
     ConfirmationModalComponent,
     ResetPasswordComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    CollegesComponent
   ],
   imports: [
     BrowserModule,

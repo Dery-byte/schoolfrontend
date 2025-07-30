@@ -2276,3 +2276,509 @@ p {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MULTI-SELECT */
+
+
+
+
+
+
+/* attendee-selector.component.css */
+.attendee-selector {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+}
+
+
+.add-attendee-container {
+  position: relative;
+  flex-shrink: 0; 
+}
+
+.add-attendee-btn:hover {
+  background-color: #e0e0e0;
+}
+.attendee-pill {
+  padding: 6px 12px;
+  background-color: #f5f5f5;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9em;
+  border: 1px solid #ddd;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.remove-btn {
+  cursor: pointer;
+  color: #999;
+  font-size: 0.8em;
+  margin-left: 4px;
+  transition: color 0.2s ease;
+}
+
+.remove-btn:hover {
+  color: #666;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid #eee;
+  outline: none;
+}
+
+.dropdown-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.no-results {
+  padding: 8px 12px;
+  color: #999;
+  font-style: italic;
+}
+
+
+.log-button:hover {
+  background-color: #45a049;
+}
+
+.log-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Add to your existing CSS */
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.log-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Add these styles to your existing CSS */
+/* Add these styles to your existing CSS */
+
+/* College selection section */
+.section {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* College selection controls */
+.add-attendee-container {
+  position: relative;
+  display: inline-block;
+}
+
+.add-attendee-btn {
+  padding: 8px 16px;
+  background-color: #f0f8ff;
+  border: 1px dashed #3f51b5;
+  border-radius: 20px;
+  color: #3f51b5;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.add-attendee-btn:hover:not(.disabled) {
+  background-color: #e1f0ff;
+}
+
+.add-attendee-btn.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.selection-info {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.selection-info.error {
+  color: #f44336;
+  font-weight: 500;
+}
+
+/* Selected colleges list */
+.attendee-list-container {
+  min-height: 60px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #f9f9f9;
+}
+
+.attendee-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.attendee-pill {
+  padding: 6px 14px;
+  background-color: #e3f2fd;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #1976d2;
+}
+
+.remove-btn {
+  margin-left: 6px;
+  color: #90caf9;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.remove-btn:hover {
+  color: #f44336;
+}
+
+/* Dropdown styles (keep your existing dropdown styles) */
+
+/* Full width button */
+.w-100 {
+  width: 100%;
+}
+
+.py-2 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.top-row {
+  align-items: flex-start;
+}
+
+.bottom-row {
+  margin-top: 10px;
+}
+
+.left-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.right-buttons {
+  margin-left: auto;
+}
+
+.attendee-list-container {
+  min-height: 60px;
+  border: 1px solid #eee9e9;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #070707;
+}
+
+.attendee-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  color: rgb(14, 2, 34);
+  
+}
+
+.btn {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #3f51b5;
+  border-color: #3f51b5;
+}
+
+.btn-primary:hover {
+  background-color: #303f9f;
+  border-color: #303f9f;
+}
+
+.btn-primary:disabled {
+  background-color: #9fa8da;
+  border-color: #9fa8da;
+}
+
+.btn-outline-secondary {
+  border-color: #3f51b5;
+  color: #3f51b5;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #e8eaf6;
+}
+
+.btn-outline-secondary:disabled {
+  color: #9fa8da;
+  border-color: #9fa8da;
+}
+
+
+
+
+
+.btn-download {
+  font-weight: 20;
+  width: auto;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* 
+.custom-alert {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.alert-content ul {
+  margin: 0;
+  padding-left: 1.25rem;
+} */
+
+
+
+
+/* Error Alert Container */
+.custom-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+  max-width: 400px;
+  width: calc(100% - 40px);
+  animation: slideInFromRight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+
+/* Alert Content */
+.alert-content {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid #dc2626;
+  display: flex;
+  gap: 12px;
+  transform: translateX(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.alert-content::before {
+  content: "!";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.alert-content ul {
+  margin: 0;
+  padding: 0 0 0 8px;
+  list-style-type: none;
+}
+
+.alert-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.alert-content p:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+/* Animation */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Exit Animation (when alert is removed) */
+.custom-alert.alert-exit {
+  animation: slideOutToRight 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .custom-alert {
+    top: 16px;
+    right: 16px;
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+  
+  .alert-content {
+    padding: 12px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .alert-content {
+    background-color: #2c0a0a;
+    color: #fca5a5;
+    border-left-color: #b91c1c;
+  }
+  
+  .alert-content::before {
+    background-color: #b91c1c;
+  }
+}

@@ -455,20 +455,6 @@
 /* ============= */
 /* ALERTS & MESSAGES */
 /* ============= */
-.custom-alert {
-  background-color: #fff5f5;
-  color: #e53e3e;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1.5rem 0;
-  font-size: 0.875rem;
-}
-
-.alert-content ul {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
 .success-message {
   background-color: #ecfdf5;
   color: #065f46;

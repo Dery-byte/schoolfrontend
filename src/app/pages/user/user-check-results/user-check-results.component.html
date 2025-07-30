@@ -1,3 +1,87 @@
+<!-- <div class="section">
+  <h2>Colleges - Choose at most 3</h2>
+  <div class="attendee-list-container">
+    <div class="add-attendee-container">
+      <div class="add-attendee-btn" (click)="toggleDropdown()" [class.disabled]="reachedMaxSelection">
+        + Add Colleges
+      </div>
+      <div class="dropdown" *ngIf="showDropdown">
+        <input type="text" class="search-input" placeholder="Search colleges..." [(ngModel)]="searchTerm"
+          (click)="$event.stopPropagation()">
+        <div class="dropdown-list">
+          <div *ngFor="let attendee of availableAttendees" class="dropdown-item" (click)="addAttendee(attendee)">
+            {{ attendee.name }}
+          </div>
+          <div *ngIf="availableAttendees.length === 0" class="no-results">
+            No colleges found
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="attendee-list">
+      <div *ngFor="let attendee of optionalAttendees" class="attendee-pill">
+        {{ attendee.name }}
+        <span class="remove-btn" (click)="removeAttendee($event, attendee)">✗</span>
+      </div>
+    </div>
+  </div>
+  <div class="selection-info" [class.error]="reachedMaxSelection">
+    {{ selectedCount }}/3 colleges selected
+  </div>
+  <button class="log-button" (click)="logSelectedAttendeeIds()" [disabled]="selectedCount === 0">
+    Log Selected College IDs
+  </button>
+</div>
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- Main Container with premium styling -->
 <div class="container-fluid px-0">
   <!-- New Check Creation (shown when no active check) -->
@@ -96,31 +180,34 @@
     <!-- Previous Checks List -->
 
 
-   <div *ngIf="isLoadingChecks" class="loading-state">
-  <div class="loading-content">
-    <h4>
-      <!-- Records/Document SVG Icon -->
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-icon">
-        <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" fill="currentColor"/>
-        <path d="M14 2V8H20" fill="currentColor" opacity="0.5"/>
-        <path d="M16 13H8V11H16V13Z" fill="white"/>
-        <path d="M16 17H8V15H16V17Z" fill="white"/>
-        <path d="M10 9H9V10H10V9Z" fill="white"/>
-      </svg>
-      Loading Records
-    </h4>
-    <p>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-icon small">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-        <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
-      </svg>
-      Please give us a few moments while we load your previous Records
-    </p>
-  </div>
-  <div class="progress-track">
-    <div class="progress-bar"></div>
-  </div>
-</div>
+    <div *ngIf="isLoadingChecks" class="loading-state">
+      <div class="loading-content">
+        <h4>
+          <!-- Records/Document SVG Icon -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="inline-icon">
+            <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
+              fill="currentColor" />
+            <path d="M14 2V8H20" fill="currentColor" opacity="0.5" />
+            <path d="M16 13H8V11H16V13Z" fill="white" />
+            <path d="M16 17H8V15H16V17Z" fill="white" />
+            <path d="M10 9H9V10H10V9Z" fill="white" />
+          </svg>
+          Loading Records
+        </h4>
+        <p>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="inline-icon small">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
+          </svg>
+          Please give us a few moments while we load your previous Records
+        </p>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
 
 
 
@@ -309,13 +396,151 @@
 
     <!-- Results Forms (shown after payment) -->
     <div *ngIf="currentCheck.paymentStatus === 'PAID'" #paymentConfirmation>
+
+
+
+
+
+      {{biodata|json}}
+      <h2>Hellow there</h2>
+      <div class="custom-alert" *ngIf="errorMsg.length">
+        <div class="alert-content">
+          <ul>
+            <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Biodata Form</h4>
+
+            <!-- Success Message -->
+            <div *ngIf="submitSuccess" class="alert alert-success">
+              Biodata {{ biodata.id ? 'updated' : 'submitted' }} successfully!
+            </div>
+
+            <form (ngSubmit)="submitBiodata()" #biodataForm="ngForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="firstName" [(ngModel)]="biodata.firstName"
+                      name="firstName" required>
+                    <label for="firstName">First Name</label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="middleName" [(ngModel)]="biodata.middleName"
+                      name="middleName" required>
+                    <label for="middleName">Middle Name</label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="lastName" [(ngModel)]="biodata.lastName" name="lastName"
+                      required>
+                    <label for="lastName">Last Name</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="email" [(ngModel)]="biodata.email" name="email"
+                      required>
+                    <label for="email">Email</label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="phoneNumber" [(ngModel)]="biodata.phoneNumber"
+                      name="phoneNumber" required>
+                    <label for="phoneNumber">Phone Number</label>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="address" [(ngModel)]="biodata.address" name="address"
+                      required>
+                    <label for="address">Address</label>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="dob" [(ngModel)]="biodata.dob" name="dob" required>
+                    <label for="gender">Date of Birth</label>
+
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <select class="form-select" id="gender" formControlName="gender" [(ngModel)]="biodata.gender">
+                      <option value="" selected>Choose Gender
+                      <option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <!-- <option value="Other">Other</option> -->
+                    </select>
+                    <label for="gender">Gender</label>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary" [disabled]="isLoading || biodataForm.invalid">
+                  {{biodata.id}}
+                  <span *ngIf="!isLoading">
+                    {{ biodata.id ? 'Update Biodata' : 'Submit Biodata' }}
+                  </span>
+                  <span *ngIf="isLoading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    {{ biodata.id ? 'Updating...' : 'Submitting...' }}
+                  </span>
+                </button>
+
+                <button *ngIf="biodata.id" type="button" class="btn btn-outline-secondary ml-2" (click)="resetForm()"
+                  [disabled]="isLoading">
+                  Reset Form
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <h2>Hellow there</h2>
+
+
+
+
+
+
+
+
+
+
+
       <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
         style="background-color: rgba(13, 110, 253, 0.1);">
         <div class="d-flex align-items-center">
           <i class="fas fa-user-graduate me-3 fs-4 text-primary"></i>
           <div>
             <h6 class="mb-0">Currently processing check for:</h6>
-            <strong class="fs-5">{{currentCheck.candidateName}}</strong>
+            <strong class="fs-5">{{biodata.firstName}} {{biodata.lastName}}</strong>
           </div>
         </div>
         <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
@@ -783,33 +1008,78 @@
               </div>
 
               <!-- Summary and Actions -->
-              <div class="d-flex justify-content-between align-items-center mt-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                  <span class="badge bg-light text-dark rounded-pill py-2 px-3">
+                  <span class="badge bg-light text-dark rounded-pill">
                     <i class="fas fa-book me-2"></i> {{waecresults.resultDetails.length}} Subjects
                   </span>
                 </div>
                 <div>
-
-
-                  <!-- {{currentCheck|json}} -->
-                  <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeOneResults()"
-                    [disabled]="isCheckingEligibility">
-                    <span *ngIf="!isCheckingEligibility">
-                      <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-                    </span>
-                    <span *ngIf="isCheckingEligibility">
-                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Checking...
-                    </span>
+                  <button class="btn btn-outline-secondary rounded-pill shadow-sm btn-download"
+                    (click)="downloadResultsPDF()">
+                    <i class="fas fa-download me-2"></i> Download Results
                   </button>
-                  <button class="btn btn-outline-secondary rounded-pill shadow-sm" (click)="downloadResultsPDF()">
-                    <i class="fas fa-download me-2"></i> Download PDF
-                  </button>
-
-
                 </div>
               </div>
+
+              <!-- COLLEGE SELECTION SECTION -->
+              <div class="section">
+                <h2>Colleges - Choose at most 3</h2>
+
+                <!-- College Selection Controls -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="add-attendee-container">
+                      <div class="add-attendee-btn" (click)="toggleDropdown()" [class.disabled]="reachedMaxSelection">
+                        + Select College(s)
+                      </div>
+                      <div class="dropdown" *ngIf="showDropdown">
+                        <input type="text" class="search-input" placeholder="Search colleges..."
+                          [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+                        <div class="dropdown-list">
+                          <div *ngFor="let college of availableColleges" class="dropdown-item"
+                            (click)="addAttendee(college)">
+                            {{ college.name }}
+                          </div>
+                          <div *ngIf="availableColleges.length === 0" class="no-results">
+                            No colleges found
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="selection-info" [class.error]="reachedMaxSelection">
+                      {{ selectedCount }}/3 colleges selected
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Selected colleges list -->
+                <div class="attendee-list-container mb-3">
+                  <div class="attendee-list">
+                    <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                      {{ college.name }}
+                      <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Check Eligibility Button (full width) -->
+                <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeOneResults()"
+                  [disabled]="isCheckingEligibility || selectedCount === 0">
+                  <span *ngIf="!isCheckingEligibility">
+                    <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                  </span>
+                  <span *ngIf="isCheckingEligibility">
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Checking...
+                  </span>
+                </button>
+              </div>
+
+
+
+
+
             </div>
           </div>
 

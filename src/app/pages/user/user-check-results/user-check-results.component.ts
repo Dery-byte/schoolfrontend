@@ -13,7 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { BlurService } from 'src/app/shared/blur/blur.service';
-import { Router } from '@angular/router';
+import { Router, TitleStrategy } from '@angular/router';
 
 
 // interface EligibilityCheck {
@@ -72,14 +72,232 @@ interface EligibilityCheck {
   createdAt: Date;
   lastUpdated: Date;
   result?: any;
+  
 }
 
+
+interface ExistingColleges {
+  id: number;
+  name: string;
+  isRequired: boolean;
+  selected: boolean;
+}
+
+
+ interface Biodata {
+  id:string,
+  firstName: string;
+  middleName?: string;  // Optional field
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  dob: string;  // or Date if you prefer
+  gender?: string;  // Optional field
+  recordId?: string;  // If you need to associate with a record
+}
 @Component({
   selector: 'app-user-check-results',
   templateUrl: './user-check-results.component.html',
   styleUrls: ['./user-check-results.component.css']
 })
 export class UserCheckResultsComponent implements OnInit {
+
+
+
+  biodata: Biodata = {
+    id:'',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    dob: '',
+    gender: ''
+  };
+ @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
+  
+  showDropdown = false;
+  searchTerm = '';
+  
+  // Current attendees (both selected and available)
+  allColleges: ExistingColleges[] = [
+    { id: 1, name: 'Nancy King', isRequired: false, selected: false },
+    { id: 2, name: 'Nancy Davolio', isRequired: false, selected: false },
+    { id: 3, name: 'Robert Davolio', isRequired: false, selected: false },
+    { id: 4, name: 'Michael Smith', isRequired: false, selected: false },
+    { id: 5, name: 'Emily Johnson', isRequired: false, selected: false }
+  ];
+
+  get requiredColleges(): ExistingColleges[] {
+    return this.allColleges.filter(a => a.isRequired);
+  }
+
+  get optionalColleges(): ExistingColleges[] {
+    return this.allColleges.filter(a => !a.isRequired && a.selected);
+  }
+
+  get availableColleges(): ExistingColleges[] {
+    return this.allColleges.filter(a => 
+      !a.isRequired && 
+      !a.selected &&
+      a.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  toggleDropdown(): void {
+    this.showDropdown = !this.showDropdown;
+    if (!this.showDropdown) {
+      this.searchTerm = '';
+    }
+  }
+
+  // addAttendee(attendee: Attendee): void {
+  //   attendee.selected = true;
+  //   this.showDropdown = false;
+  //   this.searchTerm = '';
+  //   this.emitSelectedAttendees();
+  // }
+
+  removeAttendee(event: Event, attendee: ExistingColleges): void {
+    event.stopPropagation();
+    if (!attendee.isRequired) {
+      attendee.selected = false;
+      this.emitSelectedAttendees();
+    }
+  }
+
+  private emitSelectedAttendees(): void {
+    const selected = this.allColleges.filter(a => a.selected || a.isRequired);
+    this.selectedAttendees.emit(selected);
+  }
+
+
+
+get hasMinimumSelection(): boolean {
+  const selectedCount = this.allColleges.filter(a => a.selected || a.isRequired).length;
+  return selectedCount >= 3;
+}
+
+// logSelectedAttendeeIds(): void {
+//   if (!this.hasMinimumSelection) {
+//     alert('Please select at least 3 colleges');
+//     return;
+//   }
+  
+//   const selectedAttendees = this.allAttendees.filter(a => a.selected || a.isRequired);
+//   const selectedIds = selectedAttendees.map(a => a.id);
+//   console.log('Selected College IDs:', selectedIds);
+// }
+
+
+
+
+
+
+
+
+
+get selectedCount(): number {
+    return this.allColleges.filter(a => a.selected || a.isRequired).length;
+  }
+
+  get reachedMaxSelection(): boolean {
+    return this.selectedCount >= 3;
+  }
+
+  addAttendee(attendee: ExistingColleges): void {
+    if (!this.reachedMaxSelection) {
+      attendee.selected = true;
+      this.showDropdown = false;
+      this.searchTerm = '';
+      this.emitSelectedAttendees();
+    }
+  }
+
+  logSelectedAttendeeIds(): void {
+    const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
+    const selectedIds = selectedAttendees.map(a => a.id);
+    
+    console.log('Selected College IDs:', selectedIds);
+    alert(`Selected College IDs: ${selectedIds.join(', ')}`);
+    
+    // In a real app, you might:
+    // - Send to an API
+    // - Update a form control
+    // - Navigate to another page
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
   @Input() statusData: any;
   @Input() paymentCompleted: boolean = false;
@@ -221,6 +439,7 @@ export class UserCheckResultsComponent implements OnInit {
     this.manualForm();
     this.loadChecks();
     this.getResultsByUser();
+    this.getColleges();
 
   }
 
@@ -235,12 +454,24 @@ export class UserCheckResultsComponent implements OnInit {
     }
   }
 
-  // resumeCheck(checkId: string) {
-  //   this.currentCheck = this.userChecks.find(c => c.id === checkId) || null;
-  //   if (this.currentCheck?.paymentStatus === 'paid') {
-  //     this.paymentSuccess = true;
-  //   }
-  // }
+
+getColleges(){
+this.manualService.getAllCategories().subscribe({
+   next: (colleges:any) => {
+         this.allColleges= colleges;
+
+         console.log(this.allColleges);
+      },
+      error: (err) => {
+        console.error('Failed to load Colleges:', err);
+        this.snackBar.open('Failed to load Collegesy details', 'Close', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+})
+}
+
   resumeCheck(checkId: string) {
     console.log(checkId);
     this.recordId = checkId;
@@ -248,7 +479,166 @@ export class UserCheckResultsComponent implements OnInit {
     if (this.currentCheck?.paymentStatus === 'PAID') {
       this.paymentSuccess = true;
     }
+
+    this.getBiodataBYRecordId();
   }
+  getBiodataBYRecordId(){
+    this.manualService.getBoidataByRecordId(this.recordId).subscribe({
+   next: (data:any) => {
+         this.biodata= data;
+
+         console.log(this.biodata);
+      },
+      error: (err) => {
+        console.error('Failed to load BoidData:', err);
+        this.snackBar.open('Failed to load Collegesy details', 'Close', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+})
+    
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  isLoading = false;  // Loading state flag
+  submitSuccess = false;  // Success state flag
+
+
+
+submitBiodata() {
+  // Check if we're creating new biodata or updating existing
+  if (!this.biodata.id) {
+    this.createBiodata();
+  } else {
+    this.updateBiodata();
+  }
+}
+
+private createBiodata() {
+  const formattedData = {
+    ...this.biodata,
+    dob: this.formatDate(this.biodata.dob),
+    record: { id: this.recordId },
+    id: this.biodata.id
+  };
+
+  this.isLoading = true;
+  this.submitSuccess = false;
+
+  this.manualService.addBiodata(formattedData).subscribe({
+    next: (response) => {
+      this.handleSuccessResponse(response, 'Biodata submitted successfully!');
+      this.getBiodataBYRecordId(); // Refresh the data after creation
+    },
+    error: (err) => {
+        this.isLoading = false;
+
+       this.errorMsg = err.error.validationErrors;
+          this.errorMsg.push(err.error.error);
+          this.setMessageDisplayTime();
+      // this.handleErrors('Error submitting biodata:', err);
+    }
+  });
+}
+
+
+errorMsg: Array<string> = [];
+
+  errorMsgReg: Array<string> = [];
+setMessageDisplayTime(): void {
+    setTimeout(() => {
+      this.errorMsg = [];
+      this.errorMsgReg = [];
+        this.submitSuccess = false;
+
+    }, 3000);
+  }
+private updateBiodata() {
+  this.isLoading = true;
+  this.submitSuccess = false;
+
+  this.manualService.updateBiodata(this.biodata).subscribe({
+    next: (response) => {
+      this.handleSuccessResponse(response, 'Biodata updated successfully!');
+    },
+    error: (err) => {
+                        this.isLoading = false;
+
+         this.errorMsg = err.error.validationErrors;
+          this.errorMsg.push(err.error.error);
+
+          this.setMessageDisplayTime();
+    }
+  });
+}
+
+private formatDate(dateString: string): string | null {
+  return dateString ? new Date(dateString).toISOString().split('T')[0] : null;
+}
+
+private handleSuccessResponse(response: any, message: string) {
+  this.isLoading = false;
+  this.submitSuccess = true;
+  console.log('Success:', response);
+  alert(message);
+}
+
+// private handleErrors(errorContext: string, error: any) {
+//   this.isLoading = false;
+//   console.error(errorContext, error);
+//   alert(`${errorContext.split(':')[0]} Please try again.`);
+// }
+
+
+resetForm() {
+    this.biodata = {
+      id:'',
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+      dob: '',
+      gender: '',
+      recordId: ''
+    };
+    this.submitSuccess = false;
+  }
+
+  
+  // submitBiodata(){
+  //   alert(this.recordId);
+  // }
 
   cancelCurrentCheck() {
     this.currentCheck = null;
@@ -334,8 +724,6 @@ export class UserCheckResultsComponent implements OnInit {
     });
     console.log('Formatted Response:', response);
   }
-
-  isLoading: boolean = false;
 
 
   // confirmAction() {
@@ -491,6 +879,13 @@ export class UserCheckResultsComponent implements OnInit {
   // ) {}
 
   analyzeOneResults() {
+    const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
+    const selectedIds = selectedAttendees.map(a => a.id);
+
+    console.log(selectedIds);
+    
+    console.log('Selected College IDs:', selectedIds);
+    alert(`Selected College IDs: ${selectedIds.join(', ')}`);
     if (!this.waecresults || !this.waecresults.resultDetails) {
       console.warn('No results available to analyze');
       return;
@@ -506,37 +901,30 @@ export class UserCheckResultsComponent implements OnInit {
     };
 
     console.log('Analysis Data:', analysisData);
-    this.manualService.checkEligibility(analysisData).subscribe({
-      next: (data: any) => {
-        this.elligibilityResults = data;
-        this.isCheckingEligibility = false;
-
-        // ✅ Show success snackbar
-        this.snackBar.open('Eligibility check successful!', 'Close', {
-          duration: 3000,
-          verticalPosition: 'bottom',
-          panelClass: ['snackbar-success']  // Optional: define in styles.css
-        });
-
-        // ✅ Navigate to another route (e.g., to /eligibility-results)
-        setTimeout(() => {
-          this.router.navigate(['/user/checkEligilibilty'], {
-            // state: { result: data }
-          });
-        }, 4000); // Delay in milliseconds
-      },
-      error: (err) => {
-        this.isCheckingEligibility = false;
-        console.error('Eligibility check failed:', err);
-
-        // ❌ Show error snackbar
-        this.snackBar.open('Failed to check eligibility.', 'Close', {
-          duration: 3000,
-          verticalPosition: 'bottom',
-          panelClass: ['snackbar-error']
-        });
-      }
-    });
+    // this.manualService.checkEligibility(analysisData).subscribe({
+    //   next: (data: any) => {
+    //     this.elligibilityResults = data;
+    //     this.isCheckingEligibility = false;
+    //     this.snackBar.open('Eligibility check successful!', 'Close', {
+    //       duration: 3000,
+    //       verticalPosition: 'bottom',
+    //       panelClass: ['snackbar-success']
+    //     });
+    //     setTimeout(() => {
+    //       this.router.navigate(['/user/checkEligilibilty'], {
+    //       });
+    //     }, 4000);
+    //   },
+    //   error: (err) => {
+    //     this.isCheckingEligibility = false;
+    //     console.error('Eligibility check failed:', err);
+    //     this.snackBar.open('Failed to check eligibility.', 'Close', {
+    //       duration: 3000,
+    //       verticalPosition: 'bottom',
+    //       panelClass: ['snackbar-error']
+    //     });
+    //   }
+    // });
   }
   normalizeSubject(subject: string): string {
     const map: Record<string, string> = {
