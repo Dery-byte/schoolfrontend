@@ -496,20 +496,41 @@ export class UserCheckResultsComponent implements OnInit {
       this.showH2Message=false;
       
 }
+
+
+get fullName(): string {
+  if (!this.biodata) return '';
+  const firstName = this.biodata.firstName || '';
+  const middleName = this.biodata.middleName || '';
+  const lastName = this.biodata.lastName || '';
+  return [firstName, middleName, lastName]
+    .filter(name => name?.trim()) // Optional chaining + trim
+    .join(' ');
+}
+
+isBioDataLoading:boolean=false;
+
   getBiodataBYRecordId() {
+    this.isBioDataLoading=true;
     this.manualService.getBoidataByRecordId(this.recordId).subscribe({
       next: (data: any) => {
         this.biodata = data;
-
+      this.enteredName = this.fullName; // Use the getter
         console.log(this.biodata);
-        this.recordId='';
+        //this.recordId='';
+        this.isBioDataLoading = false;
       },
       error: (err) => {
+        this.isBioDataLoading=false;
         console.error('Failed to load BoidData:', err);
-        this.snackBar.open('Please Kindly provide your Biodata', 'Close', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
+        
+        // this.snackBar.open('Please Kindly provide your Biodata', 'Close', {
+        //   duration: 3000,
+        //   panelClass: ['error-snackbar']
+        // });
+      },
+       complete: () => {
+        this.isBioDataLoading = false;
       }
     })
 
@@ -985,7 +1006,7 @@ export class UserCheckResultsComponent implements OnInit {
     const key = subject.trim().toUpperCase();
     return map[key] || key;
   }
-
+candinateName:any;
 
   gradeOrder = ['A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9'];
 
@@ -1073,6 +1094,45 @@ export class UserCheckResultsComponent implements OnInit {
   errorMessage: any;
   secondResultFetched = false;
 
+
+  // candinateName:any;
+  normalizeName(name: string): string {
+  if (!name) return '';
+
+  // Step 1: Replace hyphens with spaces and normalize
+  let normalized = name
+    .toLowerCase()
+    .replace(/-/g, ' ')   // Replace hyphens with spaces
+    .replace(/\s+/g, ' ') // Collapse multiple spaces
+    .trim();
+
+  // Step 2: Split into parts, sort alphabetically, and rejoin
+  const nameParts = normalized.split(' ');
+  const sortedParts = nameParts.sort(); // Alphabetical order
+  return sortedParts.join(' ');
+}
+
+//   normalizeName(name: string): string {
+//   if (!name) return '';
+//   return name
+//     .toLowerCase()    // Case insensitive
+//     .replace(/\s+/g, ' ')  // Replace multiple spaces with one
+//     .trim()           // Remove leading/trailing spaces
+//     .replace(/[^a-z ]/g, ''); // Remove special chars (optional)
+// }
+
+namesMatch(): boolean {
+  return this.normalizeName(this.enteredName) === this.normalizeName(this.candinateName);
+}
+
+
+
+
+
+
+
+
+  enteredName:any;
   fetchResultAutoAssign() {
     this.isLoading = true;
 
@@ -1084,18 +1144,22 @@ export class UserCheckResultsComponent implements OnInit {
     };
 
     console.log(payload);
+
+    console.log("This is the record ID ", this.recordId);
     this.waec.verifyWaecResult({ body: payload, recordId: this.recordId }).subscribe({
       next: (res) => {
         this.isLoading = false;
         this.getResultsByUser();
         if (!this.waecresults) {
           this.waecresults = res;
+          this.candinateName = this.waecresults.cname;
+          this.openNameComparisonModal();
           console.log("Results 1 ", this.waecresults);
         } else if (!this.waecresults2) {
           this.waecresults2 = res;
           this.secondResultFetched = true; // 🚨 set flag to true
-
           console.log("Results 2 ", this.waecresults2);
+          this.openNameComparisonModal();
 
         } else {
           // Both already filled
@@ -1673,12 +1737,6 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-
-
-
-
-
-
   // Submit payment
   externalRef: string = ''; // Add this at the top of your component
 
@@ -1748,6 +1806,7 @@ export class UserCheckResultsComponent implements OnInit {
         if (paymentStatus.txStatus === 1) {
           this.paymentsucceDetails = paymentStatus;
           console.log("This is the payment Status ", paymentStatus);
+          this.loadChecks();
           clearInterval(this.intervalId); // Stop polling on success
           // this.handlePaymentSuccess();
         } else if (paymentStatus.txStatus === -1) {
@@ -2270,6 +2329,26 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
+
+
+
+
+
+
+
+
+  showNameComparisonModal: boolean = false;
+
+openNameComparisonModal() {
+  if (this.enteredName && this.candinateName) {
+    this.showNameComparisonModal = true;
+  }
+}
+
+closeNameComparisonModal() {
+  this.showNameComparisonModal = false;
+  this.candinateName='';
+}
 
 
 

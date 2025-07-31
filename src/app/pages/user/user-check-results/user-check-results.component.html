@@ -237,16 +237,16 @@
           <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
               <tr>
-                <th class="ps-4">Candidate</th>
+                <!-- <th class="ps-4">Candidate</th> -->
                 <th>Date</th>
                 <th>Payment</th>
                 <th>Status</th>
-                <th class="pe-4 text-end">Action</th>
+                <th class="">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let check of userChecks" class="check-row" style="cursor: pointer;">
-                <td class="ps-4 fw-bold">{{check.candidateName}}</td>
+                <!-- <td class="ps-4 fw-bold">{{check.candidateName}}</td> -->
                 <td>{{check.createdAt | date:'mediumDate'}}</td>
                 <td>
                   <span class="badge rounded-pill py-1 px-3" [ngClass]="{
@@ -268,8 +268,8 @@
                     {{check.checkStatus | titlecase}}
                   </span>
                 </td>
-                <td class="pe-4 text-end">
-                  <div class="d-flex flex-column align-items-end gap-1">
+                <td class="">
+                  <div class="flex-column align-items-center gap-1">
                     <!-- Dynamic Button -->
                     <button class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
               'btn-outline-primary': check.paymentStatus === 'PAID' && check.checkLimit < 2,
@@ -412,8 +412,121 @@
       </div>
       <div class="col-lg-12">
 
+        <div *ngIf="isBioDataLoading" class="loading-state">
+          <div class="loading-content">
+            <h4>
+              <!-- Records/Document SVG Icon -->
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="inline-icon">
+                <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
+                  fill="currentColor" />
+                <path d="M14 2V8H20" fill="currentColor" opacity="0.5" />
+                <path d="M16 13H8V11H16V13Z" fill="white" />
+                <path d="M16 17H8V15H16V17Z" fill="white" />
+                <path d="M10 9H9V10H10V9Z" fill="white" />
+              </svg>
+              Please Wait, a while
+            </h4>
+            <p>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="inline-icon small">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
+              </svg>
+              Thanks for your patience..
+            </p>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
 
-        <div class="card" *ngIf="!showH2Message" >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="card" *ngIf="!showH2Message && !isBioDataLoading">
+          <div class="loading-state">
+            <div class="loading-content">
+              <h4>
+                <!-- Records/Document SVG Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  class="inline-icon">
+                  <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
+                    fill="currentColor" />
+                  <path d="M14 2V8H20" fill="currentColor" opacity="0.5" />
+                  <path d="M16 13H8V11H16V13Z" fill="white" />
+                  <path d="M16 17H8V15H16V17Z" fill="white" />
+                  <path d="M10 9H9V10H10V9Z" fill="white" />
+                </svg>
+                Take a few moments to fill out this form.
+                Make sure the name fields corresponds to your WAEC registration name!
+              </h4>
+              <p>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  class="inline-icon small">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                  <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
+                </svg>
+                Thanks for your patience..
+              </p>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <div class="card-body">
             <h4 class="card-title mb-4">Biodata Form</h4>
 
@@ -434,7 +547,7 @@
                 <div class="form-group col-md-4">
                   <div class="form-floating">
                     <input type="text" class="form-control" id="middleName" [(ngModel)]="biodata.middleName"
-                      name="middleName" required>
+                      name="middleName">
                     <label for="middleName">Middle Name</label>
                   </div>
                 </div>
@@ -473,13 +586,13 @@
                 <div class="form-group col-md-4">
                   <div class="form-floating">
                     <input type="date" class="form-control" id="dob" [(ngModel)]="biodata.dob" name="dob" required>
-                    <label for="gender">Date of Birth</label>
+                    <label for="date">Date of Birth</label>
                   </div>
                 </div>
                 <div class="form-group col-md-4">
                   <div class="form-floating">
                     <select class="form-select" id="gender" name="gender" [(ngModel)]="biodata.gender">
-                      <option value="" >Choose Gender
+                      <option value="">Choose Gender
                       <option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -499,103 +612,119 @@
                     {{ biodata.id ? 'Updating...' : 'Submitting...' }}
                   </span>
                 </button>
-    <button 
-      type="button" 
-      class="btn btn-outline-secondary ml-2" 
-      (click)="scrollToTarget()"
-      [disabled]="!hasBiodata()"
-    >
-      Proceed
-    </button>
+                <button type="button" class="btn btn-outline-secondary ml-2" (click)="scrollToTarget()"
+                  [disabled]="!hasBiodata()">
+                  Proceed
+                </button>
               </div>
             </form>
+          </div>
         </div>
-      </div>
 
-    <!-- <h2 *ngIf="showH2Message">Hello there, this replaces the form!</h2> -->
-      <!-- <h2 >Hellow there the is sis below the form</h2> -->
-
+        <!-- <h2 *ngIf="showH2Message">Hello there, this replaces the form!</h2> -->
+        <!-- <h2 >Hellow there the is sis below the form</h2> -->
 
 
 
-<!-- *ngIf="!hasBiodata()" -->
-      <!-- <div *ngIf="hasBiodata()"> -->
-              <div *ngIf="showH2Message">
-        <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
-          style="background-color: rgba(13, 110, 253, 0.1);">
+
+        <!-- *ngIf="!hasBiodata()" -->
+        <!-- <div *ngIf="hasBiodata()"> -->
+        <div *ngIf="showH2Message">
+
+          <!-- <strong class="fs-5">{{ enteredName }}</strong>
+          <strong class="fs-5">WAEC Candidate Name: {{ candinateName }}</strong>
+
+          <div *ngIf="enteredName && candinateName" class="mt-2">
+            <span class="badge" [ngClass]="{
+    'bg-success': namesMatch(),
+    'bg-danger': !namesMatch()
+  }">
+              {{ namesMatch() ? '✔ Names Match' : '✖ Names Differ' }}
+            </span>
+
+            <small *ngIf="!namesMatch()" class="text-muted d-block mt-1">
+              (Comparison is case and space insensitive)
+            </small>
+          </div> -->
+
+
+
 
           <span>Thank you for submitting, proceed to check you eligibility!</span>
 
-          <div class="d-flex align-items-center">
-            <i class="fas fa-user-graduate me-3 fs-4 text-primary"></i>
-            <div>
-              <h6 class="mb-0">Currently processing check for:</h6>
-              <strong class="fs-5">{{biodata.firstName}} {{biodata.lastName}}</strong>
+          <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
+            style="background-color: rgba(13, 110, 253, 0.1);">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-user-graduate me-3 fs-4 text-primary"></i>
+              <div>
+                <h6 class="mb-0">Currently processing check for:</h6>
+                <strong class="fs-5">{{enteredName}} </strong>
+                <!-- <strong class="fs-5"> This is the waec candinate Name:{{candinateName}} </strong> -->
+              </div>
             </div>
-          </div>
-          <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="goBackToList()">
-            <i class="fas fa-arrow-left me-1"></i> Back to all checks
-          </button>
-          <!-- <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="goBackToList()">
+              <i class="fas fa-arrow-left me-1"></i> Back to all checks
+            </button>
+            <!-- <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
           <i class="fas fa-arrow-left me-1"></i> Back to all checks
         </button> -->
-        </div>
-        <!-- Enhanced Tab Navigation -->
-
-
-
-
-
-        <!-- HTML Template -->
-        <div class="mb-4">
-          <div class="modern-tab-container">
-            <ul ngbNav #nav="ngbNav" class="modern-nav">
-              <li ngbNavItem class="modern-nav-item">
-                <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
-                  <div class="modern-tab-content" (click)="activeTab = 'auto'">
-                    <!-- Background highlight for active state -->
-                    <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
-
-                    <!-- Icon with gradient background -->
-                    <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
-                      <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
-                    </div>
-
-                    <!-- Text -->
-                    <span class="tab-text" [class.active]="activeTab === 'auto'">
-                      Get Results<br>Automatically
-                    </span>
-
-                    <!-- Active indicator dot -->
-                    <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
-                  </div>
-                </a>
-              </li>
-
-              <li ngbNavItem class="modern-nav-item">
-                <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'manual'">
-                  <div class="modern-tab-content" (click)="activeTab = 'manual'">
-                    <!-- Background highlight for active state -->
-                    <div class="tab-background" [class.active]="activeTab === 'manual'"></div>
-
-                    <!-- Icon with gradient background -->
-                    <div class="icon-container manual-tab" [class.active]="activeTab === 'manual'">
-                      <i class="fas fa-keyboard icon" [class.active]="activeTab === 'manual'"></i>
-                    </div>
-
-                    <!-- Text -->
-                    <span class="tab-text" [class.active]="activeTab === 'manual'">
-                      Enter Results<br>Manually
-                    </span>
-
-                    <!-- Active indicator dot -->
-                    <div class="indicator-dot manual-dot" [class.active]="activeTab === 'manual'"></div>
-                  </div>
-                </a>
-              </li>
-            </ul>
           </div>
-        </div>
+          <!-- Enhanced Tab Navigation -->
+
+
+
+
+
+          <!-- HTML Template -->
+          <div class="mb-4">
+            <div class="modern-tab-container">
+              <ul ngbNav #nav="ngbNav" class="modern-nav">
+                <li ngbNavItem class="modern-nav-item">
+                  <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
+                    <div class="modern-tab-content" (click)="activeTab = 'auto'">
+                      <!-- Background highlight for active state -->
+                      <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
+
+                      <!-- Icon with gradient background -->
+                      <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
+                        <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
+                      </div>
+
+                      <!-- Text -->
+                      <span class="tab-text" [class.active]="activeTab === 'auto'">
+                        Get Results<br>Automatically
+                      </span>
+
+                      <!-- Active indicator dot -->
+                      <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
+                    </div>
+                  </a>
+                </li>
+
+                <li ngbNavItem class="modern-nav-item">
+                  <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'manual'">
+                    <div class="modern-tab-content" (click)="activeTab = 'manual'">
+                      <!-- Background highlight for active state -->
+                      <div class="tab-background" [class.active]="activeTab === 'manual'"></div>
+
+                      <!-- Icon with gradient background -->
+                      <div class="icon-container manual-tab" [class.active]="activeTab === 'manual'">
+                        <i class="fas fa-keyboard icon" [class.active]="activeTab === 'manual'"></i>
+                      </div>
+
+                      <!-- Text -->
+                      <span class="tab-text" [class.active]="activeTab === 'manual'">
+                        Enter Results<br>Manually
+                      </span>
+
+                      <!-- Active indicator dot -->
+                      <div class="indicator-dot manual-dot" [class.active]="activeTab === 'manual'"></div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
 
 
 
@@ -603,176 +732,135 @@
 
 
 
-        <!-- Tab Content -->
-        <div [ngSwitch]="activeTab">
-          <div *ngSwitchCase="'auto'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+          <!-- Tab Content -->
+          <div [ngSwitch]="activeTab">
+            <div *ngSwitchCase="'auto'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
 
 
 
 
 
 
-            <!-- BELLOW IS THE GET RESULTS FROM WAEC -->
+              <!-- BELLOW IS THE GET RESULTS FROM WAEC -->
 
-            <div class="results-retrieval-container ">
-              <div class="retrieval-card">
-                <div class="retrieval-header">
-                  <i class="retrieval-icon"></i>
-                  <h3>Retrieve Official Results</h3>
-                </div>
+              <div class="results-retrieval-container ">
+                <div class="retrieval-card">
+                  <div class="retrieval-header">
+                    <i class="retrieval-icon"></i>
+                    <h3>Retrieve Official Results</h3>
+                  </div>
 
-                <form class="retrieval-form" [formGroup]="examForm" (ngSubmit)="submitFormCheck()">
-                  <div class="form-grid">
-                    <!-- Exam Year Select -->
-                    <div class="form-field">
-                      <div class="select-container">
-                        <select id="examYear" formControlName="examYear" required>
-                          <option value="" disabled selected>Select Year</option>
-                          <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
-                        </select>
-                        <label for="examYear">Exam Year</label>
-                        <div class="error-message"
-                          *ngIf="examForm.get('examYear')?.touched && examForm.get('examYear')?.hasError('required')">
-                          Please select an exam year
+                  <form class="retrieval-form" [formGroup]="examForm" (ngSubmit)="submitFormCheck()">
+                    <div class="form-grid">
+                      <!-- Exam Year Select -->
+                      <div class="form-field">
+                        <div class="select-container">
+                          <select id="examYear" formControlName="examYear" required>
+                            <option value="" disabled selected>Select Year</option>
+                            <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+                          </select>
+                          <label for="examYear">Exam Year</label>
+                          <div class="error-message"
+                            *ngIf="examForm.get('examYear')?.touched && examForm.get('examYear')?.hasError('required')">
+                            Please select an exam year
+                          </div>
                         </div>
+                      </div>
+
+                      <!-- Exam Type Select -->
+                      <div class="form-field">
+                        <div class="select-container">
+                          <select id="examType" formControlName="examType" required>
+                            <option value="" disabled selected>Select Exam Type</option>
+                            <option *ngFor="let g of groups" [ngValue]="g.id">{{ g.name }}</option>
+                          </select>
+                          <label for="examType">Exam Type</label>
+                          <div class="error-message"
+                            *ngIf="examForm.get('examType')?.touched && examForm.get('examType')?.hasError('required')">
+                            Please select an exam type
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Index Number with Confirm Button -->
+                      <div class="form-field with-action">
+                        <div class="input-container">
+                          <input type="text" id="indexNumber" placeholder=" " formControlName="indexNumber" required>
+                          <label for="indexNumber">Index Number</label>
+                          <div class="error-message"
+                            *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
+                            Please enter an index number
+                          </div>
+                        </div>
+                        <button type="button" class="confirm-btn" (click)="openConfirmModal()"
+                          [disabled]="examForm.get('indexNumber')?.invalid">
+                          Confirm
+                        </button>
                       </div>
                     </div>
 
-                    <!-- Exam Type Select -->
-                    <div class="form-field">
-                      <div class="select-container">
-                        <select id="examType" formControlName="examType" required>
-                          <option value="" disabled selected>Select Exam Type</option>
-                          <option *ngFor="let g of groups" [ngValue]="g.id">{{ g.name }}</option>
-                        </select>
-                        <label for="examType">Exam Type</label>
-                        <div class="error-message"
-                          *ngIf="examForm.get('examType')?.touched && examForm.get('examType')?.hasError('required')">
-                          Please select an exam type
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Index Number with Confirm Button -->
-                    <div class="form-field with-action">
-                      <div class="input-container">
-                        <input type="text" id="indexNumber" placeholder=" " formControlName="indexNumber" required>
-                        <label for="indexNumber">Index Number</label>
-                        <div class="error-message"
-                          *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
-                          Please enter an index number
-                        </div>
-                      </div>
-                      <button type="button" class="confirm-btn" (click)="openConfirmModal()"
-                        [disabled]="examForm.get('indexNumber')?.invalid">
-                        Confirm
+                    <div *ngIf="!isLoading" class="form-actions">
+                      <button type="submit" class="submit-btn" [disabled]="!examForm.valid || !isIndexConfirmed">
+                        <i class="search-icon"></i>
+                        Retrieve Results
                       </button>
                     </div>
+                  </form>
+                </div>
+
+                <div *ngIf="isLoading" class="loading-state">
+                  <div class="loading-spinner">
+                    <!-- Document/Certificate Icon -->
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                      class="certificate-icon">
+                      <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
+                        stroke="currentColor" stroke-width="2" fill="none" />
+                      <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" fill="none" />
+                      <path d="M16 13H8" stroke="currentColor" stroke-width="2" />
+                      <path d="M16 17H8" stroke="currentColor" stroke-width="2" />
+                      <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" />
+                    </svg>
                   </div>
 
-                  <div *ngIf="!isLoading" class="form-actions">
-                    <button type="submit" class="submit-btn" [disabled]="!examForm.valid || !isIndexConfirmed">
-                      <i class="search-icon"></i>
-                      Retrieve Results
-                    </button>
+                  <div class="loading-content">
+                    <!-- Main heading with graduation cap icon -->
+                    <h4>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="inline-icon">
+                        <path d="M12 3L1 9L12 15L21 12.09V17H23V9L12 3Z" fill="currentColor" />
+                        <path d="M5 13.18V17.18C5 19.4 8.58 21 12 21S19 19.4 19 17.18V13.18L12 17L5 13.18Z"
+                          fill="currentColor" />
+                      </svg>
+                      Retrieving WAEC Results
+                    </h4>
+
+                    <!-- Description with clock icon -->
+                    <p>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="inline-icon small">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                        <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
+                      </svg>
+                      Please give us a few moments while we fetch your official results from WAEC
+                    </p>
                   </div>
-                </form>
-              </div>
 
-              <div *ngIf="isLoading" class="loading-state">
-                <div class="loading-spinner">
-                  <!-- Document/Certificate Icon -->
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                    class="certificate-icon">
-                    <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
-                      stroke="currentColor" stroke-width="2" fill="none" />
-                    <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" fill="none" />
-                    <path d="M16 13H8" stroke="currentColor" stroke-width="2" />
-                    <path d="M16 17H8" stroke="currentColor" stroke-width="2" />
-                    <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" />
-                  </svg>
-                </div>
+                  <div class="progress-track">
+                    <div class="progress-bar"></div>
+                  </div>
 
-                <div class="loading-content">
-                  <!-- Main heading with graduation cap icon -->
-                  <h4>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                      class="inline-icon">
-                      <path d="M12 3L1 9L12 15L21 12.09V17H23V9L12 3Z" fill="currentColor" />
-                      <path d="M5 13.18V17.18C5 19.4 8.58 21 12 21S19 19.4 19 17.18V13.18L12 17L5 13.18Z"
-                        fill="currentColor" />
-                    </svg>
-                    Retrieving WAEC Results
-                  </h4>
-
-                  <!-- Description with clock icon -->
-                  <p>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                      class="inline-icon small">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                      <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                    Please give us a few moments while we fetch your official results from WAEC
-                  </p>
-                </div>
-
-                <div class="progress-track">
-                  <div class="progress-bar"></div>
-                </div>
-
-                <div class="spinner-dots">
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                  <div class="dot"></div>
+                  <div class="spinner-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                  </div>
                 </div>
               </div>
-            </div>
 
 
 
-            <!-- ABOVE IS THE GET RESULTS FROM WAEC -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+              <!-- ABOVE IS THE GET RESULTS FROM WAEC -->
+              <!-- <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
             <div class="card-body text-center py-5">
               <div class="mb-4">
                 <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -796,969 +884,488 @@
             </div>
           </div> -->
 
-            <!-- {{waecresults|json}} -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- Results Display Section -->
-            <div *ngIf="waecresults && !secondResultFetched" class="card border-0 mt-4"
-              style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-              <div class="card-header bg-white border-bottom-0 py-3">
-                <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for
-                  {{waecresults.cname}}
-                </h5>
-              </div>
-              <div class="card-body">
-                <!-- Candidate Summary -->
-                <div class="row mb-4">
-                  <div class="col-md-4">
-                    <div class="d-flex align-items-center mb-3">
-                      <i class="fas fa-id-card me-3 text-muted fs-4"></i>
-                      <div>
-                        <h6 class="mb-0 text-muted small">Index Number</h6>
-                        <p class="mb-0 fw-bold">{{waecresults.cindex}}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="d-flex align-items-center mb-3">
-                      <i class="fas fa-calendar-alt me-3 text-muted fs-4"></i>
-                      <div>
-                        <h6 class="mb-0 text-muted small">Date of Birth</h6>
-                        <p class="mb-0 fw-bold">{{waecresults.dob}}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="d-flex align-items-center mb-3">
-                      <i class="fas fa-graduation-cap me-3 text-muted fs-4"></i>
-                      <div>
-                        <h6 class="mb-0 text-muted small">Exam Year</h6>
-                        <p class="mb-0 fw-bold">{{waecresults.examyear}}</p>
-                      </div>
-                    </div>
-                  </div>
+              <!-- {{waecresults|json}} -->
+
+              <!-- Results Display Section -->
+              <div *ngIf="waecresults && !secondResultFetched" class="card border-0 mt-4"
+                style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                  <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for
+                    {{waecresults.cname}}
+                  </h5>
                 </div>
-                <!-- Results Table -->
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                      <tr>
-                        <th class="ps-4">Subject Code</th>
-                        <th>Subject</th>
-                        <th>Grade</th>
-                        <th class="pe-4">Interpretation</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let result of waecresults.resultDetails">
-                        <td class="ps-4">{{result.subjectcode}}</td>
-                        <td class="fw-bold">{{result.subject}}</td>
-                        <td>
-                          <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+                <div class="card-body">
+                  <!-- Candidate Summary -->
+                  <div class="row mb-4">
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-id-card me-3 text-muted fs-4"></i>
+                        <div>
+                          <h6 class="mb-0 text-muted small">Index Number</h6>
+                          <p class="mb-0 fw-bold">{{waecresults.cindex}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-calendar-alt me-3 text-muted fs-4"></i>
+                        <div>
+                          <h6 class="mb-0 text-muted small">Date of Birth</h6>
+                          <p class="mb-0 fw-bold">{{waecresults.dob}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-graduation-cap me-3 text-muted fs-4"></i>
+                        <div>
+                          <h6 class="mb-0 text-muted small">Exam Year</h6>
+                          <p class="mb-0 fw-bold">{{waecresults.examyear}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Results Table -->
+                  <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                      <thead class="table-light">
+                        <tr>
+                          <th class="ps-4">Subject Code</th>
+                          <th>Subject</th>
+                          <th>Grade</th>
+                          <th class="pe-4">Interpretation</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let result of waecresults.resultDetails">
+                          <td class="ps-4">{{result.subjectcode}}</td>
+                          <td class="fw-bold">{{result.subject}}</td>
+                          <td>
+                            <span class="badge rounded-pill py-2 px-3" [ngClass]="{
                   'bg-success': result.grade === 'A1' || result.grade === 'B2' || result.grade === 'B3',
                   'bg-primary': result.grade === 'C4' || result.grade === 'C5' || result.grade === 'C6',
                   'bg-warning': result.grade === 'D7' || result.grade === 'E8',
                   'bg-danger': result.grade === 'F9'
                 }">
-                            {{result.grade}}
-                          </span>
-                        </td>
-                        <td class="pe-4">{{result.interpretation}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                              {{result.grade}}
+                            </span>
+                          </td>
+                          <td class="pe-4">{{result.interpretation}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Summary and Actions -->
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <span class="badge bg-light text-dark rounded-pill">
+                        <i class="fas fa-book me-2"></i> {{waecresults.resultDetails.length}} Subjects
+                      </span>
+                    </div>
+                    <div>
+                      <button class="btn btn-outline-secondary rounded-pill shadow-sm btn-download"
+                        (click)="downloadResultsPDF()">
+                        <i class="fas fa-download me-2"></i> Download Results
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- COLLEGE SELECTION SECTION -->
+                  <div class="section">
+                    <h2>Colleges - Choose at most 3</h2>
+
+                    <!-- College Selection Controls -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="add-attendee-container">
+                          <div class="add-attendee-btn" (click)="toggleDropdown()"
+                            [class.disabled]="reachedMaxSelection">
+                            + Select College(s)
+                          </div>
+                          <div class="dropdown" *ngIf="showDropdown">
+                            <input type="text" class="search-input" placeholder="Search colleges..."
+                              [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+                            <div class="dropdown-list">
+                              <div *ngFor="let college of availableColleges" class="dropdown-item"
+                                (click)="addAttendee(college)">
+                                {{ college.name }}
+                              </div>
+                              <div *ngIf="availableColleges.length === 0" class="no-results">
+                                No colleges found
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="selection-info" [class.error]="reachedMaxSelection">
+                          {{ selectedCount }}/3 colleges selected
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selected colleges list -->
+                    <div class="attendee-list-container mb-3">
+                      <div class="attendee-list">
+                        <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                          {{ college.name }}
+                          <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Check Eligibility Button (full width) -->
+                    <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeOneResults()"
+                      [disabled]="isCheckingEligibility || selectedCount === 0">
+                      <span *ngIf="!isCheckingEligibility">
+                        <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                      </span>
+                      <span *ngIf="isCheckingEligibility">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Checking...
+                      </span>
+                    </button>
+                  </div>
+
+
+
+
+
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div class="row mt-4" *ngIf="waecresults && waecresults2">
+                <!-- First WAEC Result -->
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light text-center fw-bold">
+                      FIRST SITTING RESULT
+                    </div>
+                    <div class="card-body px-4">
+                      <!-- Candidate Info -->
+                      <div class="mt-4 border-top pt-3 text-muted small">
+                        <p><strong>Name:</strong> {{ waecresults.cname }}</p>
+                        <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
+                        <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
+                        <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
+                      </div>
+                      <table class="table table-bordered table-striped text-center">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>Interpretation</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let res of waecresults.resultDetails">
+                            <td>{{ res.subject }}</td>
+                            <td>
+                              <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
+                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
+                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
+                  'bg-danger': res.grade === 'F9'
+                }">{{ res.grade }}</span>
+                            </td>
+                            <td>{{ res.interpretation?.trim() }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Summary and Actions -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <div>
-                    <span class="badge bg-light text-dark rounded-pill">
-                      <i class="fas fa-book me-2"></i> {{waecresults.resultDetails.length}} Subjects
-                    </span>
-                  </div>
-                  <div>
-                    <button class="btn btn-outline-secondary rounded-pill shadow-sm btn-download"
-                      (click)="downloadResultsPDF()">
-                      <i class="fas fa-download me-2"></i> Download Results
+                <!-- Second WAEC Result -->
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light text-center fw-bold">
+                      SECOND SITTING RESULT
+                    </div>
+                    <div class="card-body px-4">
+                      <!-- Candidate Info -->
+                      <div class="mt-4 border-top pt-3 text-muted small">
+                        <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
+                        <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
+                        <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
+                        <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
+                      </div>
+                      <table class="table table-bordered table-striped text-center">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>Interpretation</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let res of waecresults2.resultDetails">
+                            <td>{{ res.subject }}</td>
+                            <td>
+                              <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
+                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
+                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
+                  'bg-danger': res.grade === 'F9'
+                }">{{ res.grade }}</span>
+                            </td>
+                            <td>{{ res.interpretation?.trim() }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+
+                    </div>
+                    <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeTwoResults()"
+                      [disabled]="isCheckingEligibility">
+                      <span *ngIf="!isCheckingEligibility">
+                        <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                      </span>
+                      <span *ngIf="isCheckingEligibility">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Checking...
+                      </span>
                     </button>
                   </div>
                 </div>
+              </div>
 
-                <!-- COLLEGE SELECTION SECTION -->
-                <div class="section">
-                  <h2>Colleges - Choose at most 3</h2>
+              <!-- ELEGIBILITY DISPLAY ENDS -->
+              <!-- {{elligibilityResults|json}} -->
 
-                  <!-- College Selection Controls -->
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex align-items-center gap-3">
-                      <div class="add-attendee-container">
-                        <div class="add-attendee-btn" (click)="toggleDropdown()" [class.disabled]="reachedMaxSelection">
-                          + Select College(s)
-                        </div>
-                        <div class="dropdown" *ngIf="showDropdown">
-                          <input type="text" class="search-input" placeholder="Search colleges..."
-                            [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
-                          <div class="dropdown-list">
-                            <div *ngFor="let college of availableColleges" class="dropdown-item"
-                              (click)="addAttendee(college)">
-                              {{ college.name }}
+
+              <!-- CONFIRM INDEX NUMBER MODAL -->
+
+              <!-- Confirm Modal -->
+              <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirmModalLabel">Confirm Index Number</h5>
+                      <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                      <input type="text" [(ngModel)]="confirmInput" class="form-control"
+                        placeholder="Re-enter Index Number">
+                      <div *ngIf="showMismatchError" class="text-danger mt-2">
+                        Index numbers do not match.
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                      <button type="button" class="btn btn-success" (click)="verifyConfirmation()">Confirm</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+            </div>
+            <!-- ADD RESULTS MANUALLY FORM -->
+            <div *ngSwitchCase="'manual'" class="card border-0 mb-4"
+              style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+              <!-- MANUAL ENTRY STARTS HERE -->
+
+              <div class="card rounded-lg shadow-sm">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                  <h5 class="mb-0">
+                    <i class="fas fa-keyboard me-2 text-primary"></i> Manual Results Entry
+                  </h5>
+                </div>
+
+                <div class="card-body">
+                  <form [formGroup]="entryForm">
+                    <!-- Primary Info Section -->
+                    <div class="card mb-4 bg-light-subtle border-0">
+                      <div class="card-body">
+                        <h6 class="mb-3 text-muted">
+                          <i class="fas fa-info-circle me-2"></i> Candidate Information
+                        </h6>
+
+                        <div class="row g-3">
+                          <!-- Index Number (full width on mobile) -->
+                          <div class="col-12 col-md-4">
+                            <div class="form-floating">
+                              <input type="text" formControlName="indexNumber" class="form-control"
+                                id="manualIndexNumber" placeholder="Index Number" />
+                              <label for="manualIndexNumber">Index Number</label>
                             </div>
-                            <div *ngIf="availableColleges.length === 0" class="no-results">
-                              No colleges found
+                          </div>
+
+                          <!-- Exam Board and Year (50% width on mobile) -->
+                          <div class="col-6 col-md-4">
+                            <div class="form-floating">
+                              <select class="form-select" id="examBoard" formControlName="examBoard"
+                                (change)="onBoardChange($event)">
+                                <option value="" disabled selected>Choose Exam Board</option>
+                                <option *ngFor="let board of examBoards" [value]="board">{{ board }}</option>
+                              </select>
+                              <label for="examBoard">Exam Board</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-4">
+                            <div class="form-floating">
+                              <select class="form-select" id="manualExamYear" formControlName="examYear">
+                                <option value="" disabled selected>Choose Year</option>
+                                <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+                              </select>
+                              <label for="manualExamYear">Exam Year</label>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="selection-info" [class.error]="reachedMaxSelection">
-                        {{ selectedCount }}/3 colleges selected
+                    </div>
+
+                    <!-- Subject Entry Section -->
+                    <div class="card mb-4 bg-light-subtle border-0">
+                      <div class="card-body">
+                        <h6 class="mb-3 text-muted">
+                          <i class="fas fa-book me-2"></i> Subject Details
+                        </h6>
+
+                        <div class="row g-3">
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <select class="form-select" id="manualExamType" formControlName="examType">
+                                <option value="" disabled selected>Choose Exam Type</option>
+                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
+                              </select>
+                              <label for="manualExamType">Exam Type</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <input type="text" formControlName="subject" class="form-control" id="subject"
+                                placeholder="Select Subject" />
+                              <label for="subject">Subject</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <select class="form-select" id="grade" formControlName="grade">
+                                <option value="" disabled selected>Select Grade</option>
+                                <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+                              </select>
+                              <label for="grade">Grade</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <select class="form-select" id="sitting" formControlName="sitting">
+                                <option value="" disabled selected>Select Sitting</option>
+                                <option value="May/June">May/June</option>
+                                <option value="Nov/Dec">Nov/Dec</option>
+                              </select>
+                              <label for="sitting">Sitting</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="text-center mt-3">
+                          <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm"
+                            (click)="addEntry()">
+                            <i class="fas fa-plus me-2"></i> Add Subject
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Selected colleges list -->
-                  <div class="attendee-list-container mb-3">
-                    <div class="attendee-list">
-                      <div *ngFor="let college of optionalColleges" class="attendee-pill">
-                        {{ college.name }}
-                        <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                    <!-- Entry Table -->
+                    <div *ngIf="entries.length > 0" class="card border-0">
+                      <div class="card-body px-0 pb-0">
+                        <div class="table-responsive">
+                          <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                              <tr>
+                                <th class="ps-4">Index No.</th>
+                                <th>Exam Board</th>
+                                <th>Year</th>
+                                <th>Exam Type</th>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                                <th>Sitting</th>
+                                <th class="pe-4 text-end">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of entries; let i = index">
+                                <td class="ps-4">{{ item.indexNumber }}</td>
+                                <td>{{ item.examBoard }}</td>
+                                <td>{{ item.examYear }}</td>
+                                <td>{{ item.examType }}</td>
+                                <td class="fw-bold">{{ item.subject }}</td>
+                                <td>
+                                  <span class="badge rounded-pill py-1 px-3 bg-primary">
+                                    {{ item.grade }}
+                                  </span>
+                                </td>
+                                <td>{{ item.sitting }}</td>
+                                <td class="pe-4 text-end">
+                                  <button class="btn btn-sm btn-outline-danger rounded-pill shadow-sm"
+                                    (click)="removeEntry(i)">
+                                    <i class="fas fa-trash-alt me-1"></i> Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="text-end mt-3 pe-4">
+                          <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()">
+                            <i class="fas fa-check-circle me-2"></i> Submit for Interpretation
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Check Eligibility Button (full width) -->
-                  <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeOneResults()"
-                    [disabled]="isCheckingEligibility || selectedCount === 0">
-                    <span *ngIf="!isCheckingEligibility">
-                      <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-                    </span>
-                    <span *ngIf="isCheckingEligibility">
-                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Checking...
-                    </span>
-                  </button>
+                  </form>
                 </div>
-
-
-
-
-
               </div>
+
+
+              <!-- MANUAL ENTRY ENDS HERE -->
+
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <div class="row mt-4" *ngIf="waecresults && waecresults2">
-              <!-- First WAEC Result -->
-              <div class="col-md-6">
-                <div class="card border-0 shadow-sm mb-4">
-                  <div class="card-header bg-light text-center fw-bold">
-                    FIRST SITTING RESULT
-                  </div>
-                  <div class="card-body px-4">
-                    <!-- Candidate Info -->
-                    <div class="mt-4 border-top pt-3 text-muted small">
-                      <p><strong>Name:</strong> {{ waecresults.cname }}</p>
-                      <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
-                      <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
-                      <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
-                    </div>
-                    <table class="table table-bordered table-striped text-center">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Subject</th>
-                          <th>Grade</th>
-                          <th>Interpretation</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let res of waecresults.resultDetails">
-                          <td>{{ res.subject }}</td>
-                          <td>
-                            <span class="badge rounded-pill py-2 px-3" [ngClass]="{
-                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
-                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
-                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
-                  'bg-danger': res.grade === 'F9'
-                }">{{ res.grade }}</span>
-                          </td>
-                          <td>{{ res.interpretation?.trim() }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
-
-                  </div>
-                </div>
-              </div>
-
-              <!-- Second WAEC Result -->
-              <div class="col-md-6">
-                <div class="card border-0 shadow-sm mb-4">
-                  <div class="card-header bg-light text-center fw-bold">
-                    SECOND SITTING RESULT
-                  </div>
-                  <div class="card-body px-4">
-                    <!-- Candidate Info -->
-                    <div class="mt-4 border-top pt-3 text-muted small">
-                      <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
-                      <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
-                      <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
-                      <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
-                    </div>
-                    <table class="table table-bordered table-striped text-center">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Subject</th>
-                          <th>Grade</th>
-                          <th>Interpretation</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let res of waecresults2.resultDetails">
-                          <td>{{ res.subject }}</td>
-                          <td>
-                            <span class="badge rounded-pill py-2 px-3" [ngClass]="{
-                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
-                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
-                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
-                  'bg-danger': res.grade === 'F9'
-                }">{{ res.grade }}</span>
-                          </td>
-                          <td>{{ res.interpretation?.trim() }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
-
-                  </div>
-                  <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeTwoResults()"
-                    [disabled]="isCheckingEligibility">
-                    <span *ngIf="!isCheckingEligibility">
-                      <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-                    </span>
-                    <span *ngIf="isCheckingEligibility">
-                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Checking...
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- ELEGIBILITY DISPLAY STARTS -->
-
-
-            <!-- ELEGIBILITY DISPLAY ENDS -->
-            <!-- {{elligibilityResults|json}} -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- CONFIRM INDEX NUMBER MODAL -->
-
-            <!-- Confirm Modal -->
-            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
-              aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirm Index Number</h5>
-                    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
-                  </div>
-
-                  <div class="modal-body">
-                    <input type="text" [(ngModel)]="confirmInput" class="form-control"
-                      placeholder="Re-enter Index Number">
-                    <div *ngIf="showMismatchError" class="text-danger mt-2">
-                      Index numbers do not match.
-                    </div>
-                  </div>
-
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-                    <button type="button" class="btn btn-success" (click)="verifyConfirmation()">Confirm</button>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
-
-
-
-          <!-- ADD RESULTS MANUALLY FORM -->
-          <div *ngSwitchCase="'manual'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- MANUAL ENTRY STARTS HERE -->
-
-            <div class="card rounded-lg shadow-sm">
-              <div class="card-header bg-white border-bottom-0 py-3">
-                <h5 class="mb-0">
-                  <i class="fas fa-keyboard me-2 text-primary"></i> Manual Results Entry
-                </h5>
-              </div>
-
-              <div class="card-body">
-                <form [formGroup]="entryForm">
-                  <!-- Primary Info Section -->
-                  <div class="card mb-4 bg-light-subtle border-0">
-                    <div class="card-body">
-                      <h6 class="mb-3 text-muted">
-                        <i class="fas fa-info-circle me-2"></i> Candidate Information
-                      </h6>
-
-                      <div class="row g-3">
-                        <!-- Index Number (full width on mobile) -->
-                        <div class="col-12 col-md-4">
-                          <div class="form-floating">
-                            <input type="text" formControlName="indexNumber" class="form-control" id="manualIndexNumber"
-                              placeholder="Index Number" />
-                            <label for="manualIndexNumber">Index Number</label>
-                          </div>
-                        </div>
-
-                        <!-- Exam Board and Year (50% width on mobile) -->
-                        <div class="col-6 col-md-4">
-                          <div class="form-floating">
-                            <select class="form-select" id="examBoard" formControlName="examBoard"
-                              (change)="onBoardChange($event)">
-                              <option value="" disabled selected>Choose Exam Board</option>
-                              <option *ngFor="let board of examBoards" [value]="board">{{ board }}</option>
-                            </select>
-                            <label for="examBoard">Exam Board</label>
-                          </div>
-                        </div>
-
-                        <div class="col-6 col-md-4">
-                          <div class="form-floating">
-                            <select class="form-select" id="manualExamYear" formControlName="examYear">
-                              <option value="" disabled selected>Choose Year</option>
-                              <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
-                            </select>
-                            <label for="manualExamYear">Exam Year</label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Subject Entry Section -->
-                  <div class="card mb-4 bg-light-subtle border-0">
-                    <div class="card-body">
-                      <h6 class="mb-3 text-muted">
-                        <i class="fas fa-book me-2"></i> Subject Details
-                      </h6>
-
-                      <div class="row g-3">
-                        <div class="col-6 col-md-3">
-                          <div class="form-floating">
-                            <select class="form-select" id="manualExamType" formControlName="examType">
-                              <option value="" disabled selected>Choose Exam Type</option>
-                              <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
-                            </select>
-                            <label for="manualExamType">Exam Type</label>
-                          </div>
-                        </div>
-
-                        <div class="col-6 col-md-3">
-                          <div class="form-floating">
-                            <input type="text" formControlName="subject" class="form-control" id="subject"
-                              placeholder="Select Subject" />
-                            <label for="subject">Subject</label>
-                          </div>
-                        </div>
-
-                        <div class="col-6 col-md-3">
-                          <div class="form-floating">
-                            <select class="form-select" id="grade" formControlName="grade">
-                              <option value="" disabled selected>Select Grade</option>
-                              <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
-                            </select>
-                            <label for="grade">Grade</label>
-                          </div>
-                        </div>
-
-                        <div class="col-6 col-md-3">
-                          <div class="form-floating">
-                            <select class="form-select" id="sitting" formControlName="sitting">
-                              <option value="" disabled selected>Select Sitting</option>
-                              <option value="May/June">May/June</option>
-                              <option value="Nov/Dec">Nov/Dec</option>
-                            </select>
-                            <label for="sitting">Sitting</label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="text-center mt-3">
-                        <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm" (click)="addEntry()">
-                          <i class="fas fa-plus me-2"></i> Add Subject
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Entry Table -->
-                  <div *ngIf="entries.length > 0" class="card border-0">
-                    <div class="card-body px-0 pb-0">
-                      <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                          <thead class="table-light">
-                            <tr>
-                              <th class="ps-4">Index No.</th>
-                              <th>Exam Board</th>
-                              <th>Year</th>
-                              <th>Exam Type</th>
-                              <th>Subject</th>
-                              <th>Grade</th>
-                              <th>Sitting</th>
-                              <th class="pe-4 text-end">Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let item of entries; let i = index">
-                              <td class="ps-4">{{ item.indexNumber }}</td>
-                              <td>{{ item.examBoard }}</td>
-                              <td>{{ item.examYear }}</td>
-                              <td>{{ item.examType }}</td>
-                              <td class="fw-bold">{{ item.subject }}</td>
-                              <td>
-                                <span class="badge rounded-pill py-1 px-3 bg-primary">
-                                  {{ item.grade }}
-                                </span>
-                              </td>
-                              <td>{{ item.sitting }}</td>
-                              <td class="pe-4 text-end">
-                                <button class="btn btn-sm btn-outline-danger rounded-pill shadow-sm"
-                                  (click)="removeEntry(i)">
-                                  <i class="fas fa-trash-alt me-1"></i> Delete
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="text-end mt-3 pe-4">
-                        <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()">
-                          <i class="fas fa-check-circle me-2"></i> Submit for Interpretation
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-
-            <!-- MANUAL ENTRY ENDS HERE -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          </div>
-        </div>
-      </div> <!-- CONDITION TO HIDE THE CHECK RESULTS DIV ENDS HERE -->
+        </div> <!-- CONDITION TO HIDE THE CHECK RESULTS DIV ENDS HERE -->
+      </div>
     </div>
   </div>
-</div>
 
 
 
@@ -1820,47 +1427,378 @@
 
 
 
-<!-- //MODAL HTML TEMPLATE -->
+  <!-- //MODAL HTML TEMPLATE -->
 
-<div class="modal-backdrop" *ngIf="showPaymentModal">
-  <div class="payment-modal">
-    <div class="modal-content-container">
-      <!-- Header with progress indicator -->
-      <div class="modal-header">
-        <div class="progress-step active">Complete Payment</div>
-        <button class="close-button" (click)="closePaymentModal()" aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-          </svg>
-        </button>
+  <div class="modal-backdrop" *ngIf="showPaymentModal">
+    <div class="payment-modal">
+      <div class="modal-content-container">
+        <!-- Header with progress indicator -->
+        <div class="modal-header">
+          <div class="progress-step active">Complete Payment</div>
+          <button class="close-button" (click)="closePaymentModal()" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+        <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
+          <div class="form-scroll-container">
+            <h3 class="section-title">Payment Amount</h3>
+            <div class="form-group amount-group">
+              <div class="currency-prefix">GHS</div>
+              <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
+                [readonly]="isAmountFixed" min="0.01" step="0.01" autofocus (blur)="validateAmount()" />
+            </div>
+            <h3 class="section-title">Mobile Money Details</h3>
+            <div class="form-groups">
+              <label for="mobileNumber">Phone Number</label>
+              <div class="input-with-select">
+                <select formControlName="channel" class="network-select" required>
+                  <option value="" disabled selected>Select Network</option>
+                  <option value="13">MTN</option>
+                  <option value="6">Vodafone</option>
+                  <option value="7">AirtelTigo</option>
+                </select>
+                <input type="tel" id="mobileNumber" formControlName="payer" placeholder="0244 123 456"
+                  class="phone-input">
+              </div>
+              <!-- Add validation message -->
+              <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
+                class="error-message">
+                Please select a mobile network
+              </div>
+            </div>
+            <div class="info-box">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                  fill="#EFF6FF" stroke="#3B82F6" />
+                <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+                <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              <p>You'll receive a payment request on your phone</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="submit-button" [disabled]="!paymentForm.valid">
+              <span *ngIf="!processingPayment">Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}}</span>
+              <span *ngIf="processingPayment" class="processing">
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+                </svg>
+                Processing...
+              </span>
+            </button>
+          </div>
+        </form>
       </div>
-      <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- OTP VERIFICATION MODAL -->
+  <div class="modal-backdrop" *ngIf="showOtpModal" @fadeInOut>
+    <div class="otp-modal">
+      <div class="modal-content-container">
+        <!-- Header with close button -->
+        <div class="modal-header">
+          <h2 class="modal-title">Verify Payment</h2>
+          <button class="close-button" (click)="closeOtpModal()" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()">
+          <div class="form-container">
+            <!-- OTP Instructions -->
+            <div class="otp-instructions">
+              <p>We've sent a 6-digit verification code to your phone number ending with
+                <strong>{{lastFourDigits}}</strong>
+              </p>
+            </div>
+
+            <!-- OTP Input Fields -->
+            <div class="otp-input-group">
+              <ng-container *ngFor="let field of [0,1,2,3,4,5]; let i = index">
+                <input #otpInput type="text" maxlength="1" class="otp-digit"
+                  [class.error]="otpForm.get('digit'+i)?.invalid && otpForm.get('digit'+i)?.touched"
+                  formControlName="digit{{i}}" (input)="handleInput($event, i)" (keydown)="handleKeyDown($event, i)"
+                  (paste)="handlePaste($event)" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*">
+              </ng-container>
+
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="otpError" class="error-message">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                  fill="#FEF2F2" stroke="#EF4444" />
+                <path d="M8 5V9" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
+                <path d="M8 12H8.01" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              {{otpError}}
+            </div>
+
+            <!-- Resend OTP Option -->
+            <div class="otp-resend">
+              <p>Didn't receive the code?
+                <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
+                  Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
+                </button>
+              </p>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="modal-footer">
+            <button type="submit" class="submit-button" [disabled]="otpForm.invalid || verifyingOTP">
+              <span *ngIf="!verifyingOTP">Verify Payment</span>
+              <span *ngIf="verifyingOTP" class="processing">
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+                </svg>
+                Verifying...
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- WAITING FOR WEBHOOK- to update payment Status -->
+  <div class="modal-backdrop" *ngIf="showWebHook">
+
+    <div class="payment-status-modal" [class.show]="showWebHook">
+      <div (click)="closeModal()"></div>
+
+      <div class="modal-card">
+        <!-- Processing State -->
+        <div class="modal-body" *ngIf="!paymentsucceDetails">
+          <div class="processing-header">
+            <div class="spinner-container">
+              <div class="spinnerpaystatus"></div>
+            </div>
+            <h3 class="modal-title">Complete Payment on Your Phone</h3>
+          </div>
+          <div class="payment-instructions">
+            <p class="instruction-text">Please approve the payment request on your mobile device to continue</p>
+            <div class="countdown-timer">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                  d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                <path fill="currentColor" d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+              </svg>
+              <span>Waiting for confirmation...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success State -->
+        <div class="modal-body success-state" *ngIf="paymentsucceDetails">
+          <div class="checkmark-container">
+            <svg class="checkmark-animated" width="80" height="80" viewBox="0 0 80 80">
+              <!-- Circle background (optional) -->
+              <circle cx="40" cy="40" r="38" fill="#f8fafc" />
+
+              <!-- Animated circle -->
+              <circle class="checkmark-circle" cx="40" cy="40" r="36" fill="none" stroke="#4CAF50" stroke-width="4"
+                stroke-dasharray="226" stroke-dashoffset="226" />
+
+              <!-- Animated check -->
+              <path class="checkmark-check" d="M25,40 l12,12 l23-23" fill="none" stroke="#4CAF50" stroke-width="4"
+                stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" />
+            </svg>
+          </div>
+          <!-- {{paymentsucceDetails| json}} -->
+          <h3 class="modal-title">Payment Successful!</h3>
+          <p class="success-message">Your payment has been processed successfully</p>
+          <div class="payment-details success-details">
+            <div class="detail-row">
+              <span class="detail-label">Date:</span>
+              <span class="detail-value">{{ paymentsucceDetails?.timestamp | date }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Amount:</span>
+              <span class="detail-value">{{ paymentsucceDetails.amount | currency:'GHS':'GH₵ ':'1.2-2' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Transaction ID:</span>
+              <span class="detail-value">{{ paymentsucceDetails?.transactionId }}</span>
+            </div>
+          </div>
+          <button class="action-button" (click)="closeWebhook()">
+            Proceed
+            <i class="fas fa-arrow-right ms-2"></i>
+          </button>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- SHOW NAMES COMAPARISONS -->
+
+  <div class="modal-backdrop" *ngIf="showNameComparisonModal">
+    <div class="payment-modal">
+      <div class="modal-content-container">
+        <!-- Header -->
+        <div class="modal-header">
+          <div class="progress-step active">Name Verification</div>
+          <button class="close-button" (click)="closeNameComparisonModal()" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Content -->
         <div class="form-scroll-container">
-          <h3 class="section-title">Payment Amount</h3>
-          <div class="form-group amount-group">
-            <div class="currency-prefix">GHS</div>
-            <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
-              [readonly]="isAmountFixed" min="0.01" step="0.01" autofocus (blur)="validateAmount()" />
-          </div>
-          <h3 class="section-title">Mobile Money Details</h3>
-          <div class="form-groups">
-            <label for="mobileNumber">Phone Number</label>
-            <div class="input-with-select">
-              <select formControlName="channel" class="network-select" required>
-                <option value="" disabled selected>Select Network</option>
-                <option value="13">MTN</option>
-                <option value="6">Vodafone</option>
-                <option value="7">AirtelTigo</option>
-              </select>
-              <input type="tel" id="mobileNumber" formControlName="payer" placeholder="0244 123 456"
-                class="phone-input">
+          <h3 class="section-title">Name Comparison</h3>
+
+          <div class="comparison-row">
+            <div class="name-column">
+              <label>Entered Name</label>
+              <div class="name-value">{{enteredName || 'Not provided'}}</div>
             </div>
-            <!-- Add validation message -->
-            <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
-              class="error-message">
-              Please select a mobile network
+
+            <div class="name-column">
+              <label>WAEC Candidate Name</label>
+              <div class="name-value">{{candinateName || 'Not available'}}</div>
             </div>
           </div>
+
+          <div class="comparison-result" [ngClass]="{
+          'success': namesMatch(),
+          'warning': !namesMatch()
+        }">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path *ngIf="namesMatch()" d="M16.6666 5L7.49992 14.1667L3.33325 10" stroke="#16A34A" stroke-width="2"
+                stroke-linecap="round" />
+              <path *ngIf="!namesMatch()" d="M5 5L15 15M15 5L5 15" stroke="#DC2626" stroke-width="2"
+                stroke-linecap="round" />
+            </svg>
+            <span>{{ namesMatch() ? 'Names Match' : 'Names Do Not Match' }}</span>
+          </div>
+
+          <div *ngIf="!namesMatch()" class="normalized-comparison">
+            <h4 class="section-subtitle">Normalized Comparison</h4>
+            <div class="comparison-details">
+              <div>
+                <label>Entered Name:</label>
+                <code>"{{ normalizeName(enteredName) }}"</code>
+              </div>
+              <div>
+                <label>WAEC Name:</label>
+                <code>"{{ normalizeName(candinateName) }}"</code>
+              </div>
+            </div>
+          </div>
+
           <div class="info-box">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path
@@ -1869,262 +1807,16 @@
               <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
               <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
             </svg>
-            <p>You'll receive a payment request on your phone</p>
+            <p>Comparison is case, space, and order insensitive. Hyphens are treated as spaces.</p>
           </div>
         </div>
+
+        <!-- Footer -->
         <div class="modal-footer">
-          <button type="submit" class="submit-button" [disabled]="!paymentForm.valid">
-            <span *ngIf="!processingPayment">Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}}</span>
-            <span *ngIf="processingPayment" class="processing">
-              <svg class="spinner" viewBox="0 0 50 50">
-                <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
-              </svg>
-              Processing...
-            </span>
+          <button type="button" class="submit-button" (click)="closeNameComparisonModal()">
+            Close Verification
           </button>
         </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- OTP VERIFICATION MODAL -->
-<div class="modal-backdrop" *ngIf="showOtpModal" @fadeInOut>
-  <div class="otp-modal">
-    <div class="modal-content-container">
-      <!-- Header with close button -->
-      <div class="modal-header">
-        <h2 class="modal-title">Verify Payment</h2>
-        <button class="close-button" (click)="closeOtpModal()" aria-label="Close">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-          </svg>
-        </button>
-      </div>
-
-      <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()">
-        <div class="form-container">
-          <!-- OTP Instructions -->
-          <div class="otp-instructions">
-            <p>We've sent a 6-digit verification code to your phone number ending with
-              <strong>{{lastFourDigits}}</strong>
-            </p>
-          </div>
-
-          <!-- OTP Input Fields -->
-          <div class="otp-input-group">
-            <ng-container *ngFor="let field of [0,1,2,3,4,5]; let i = index">
-              <input #otpInput type="text" maxlength="1" class="otp-digit"
-                [class.error]="otpForm.get('digit'+i)?.invalid && otpForm.get('digit'+i)?.touched"
-                formControlName="digit{{i}}" (input)="handleInput($event, i)" (keydown)="handleKeyDown($event, i)"
-                (paste)="handlePaste($event)" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*">
-            </ng-container>
-
-          </div>
-
-          <!-- Error Message -->
-          <div *ngIf="otpError" class="error-message">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                fill="#FEF2F2" stroke="#EF4444" />
-              <path d="M8 5V9" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
-              <path d="M8 12H8.01" stroke="#EF4444" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            {{otpError}}
-          </div>
-
-          <!-- Resend OTP Option -->
-          <div class="otp-resend">
-            <p>Didn't receive the code?
-              <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
-                Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
-              </button>
-            </p>
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="modal-footer">
-          <button type="submit" class="submit-button" [disabled]="otpForm.invalid || verifyingOTP">
-            <span *ngIf="!verifyingOTP">Verify Payment</span>
-            <span *ngIf="verifyingOTP" class="processing">
-              <svg class="spinner" viewBox="0 0 50 50">
-                <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
-              </svg>
-              Verifying...
-            </span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- WAITING FOR WEBHOOK- to update payment Status -->
-<div class="modal-backdrop" *ngIf="showWebHook">
-
-  <div class="payment-status-modal" [class.show]="showWebHook">
-    <div (click)="closeModal()"></div>
-
-    <div class="modal-card">
-      <!-- Processing State -->
-      <div class="modal-body" *ngIf="!paymentsucceDetails">
-        <div class="processing-header">
-          <div class="spinner-container">
-            <div class="spinnerpaystatus"></div>
-          </div>
-          <h3 class="modal-title">Complete Payment on Your Phone</h3>
-        </div>
-        <div class="payment-instructions">
-          <p class="instruction-text">Please approve the payment request on your mobile device to continue</p>
-          <div class="countdown-timer">
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-              <path fill="currentColor" d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-            </svg>
-            <span>Waiting for confirmation...</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Success State -->
-      <div class="modal-body success-state" *ngIf="paymentsucceDetails">
-        <div class="checkmark-container">
-          <svg class="checkmark-animated" width="80" height="80" viewBox="0 0 80 80">
-            <!-- Circle background (optional) -->
-            <circle cx="40" cy="40" r="38" fill="#f8fafc" />
-
-            <!-- Animated circle -->
-            <circle class="checkmark-circle" cx="40" cy="40" r="36" fill="none" stroke="#4CAF50" stroke-width="4"
-              stroke-dasharray="226" stroke-dashoffset="226" />
-
-            <!-- Animated check -->
-            <path class="checkmark-check" d="M25,40 l12,12 l23-23" fill="none" stroke="#4CAF50" stroke-width="4"
-              stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" />
-          </svg>
-        </div>
-        <!-- {{paymentsucceDetails| json}} -->
-        <h3 class="modal-title">Payment Successful!</h3>
-        <p class="success-message">Your payment has been processed successfully</p>
-        <div class="payment-details success-details">
-          <div class="detail-row">
-            <span class="detail-label">Date:</span>
-            <span class="detail-value">{{ paymentsucceDetails?.timestamp | date }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Amount:</span>
-            <span class="detail-value">{{ paymentsucceDetails.amount | currency:'GHS':'GH₵ ':'1.2-2' }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Transaction ID:</span>
-            <span class="detail-value">{{ paymentsucceDetails?.transactionId }}</span>
-          </div>
-        </div>
-
-
-        <!-- <button class="btn btn-sm rounded-pill shadow-sm" style="min-width: 120px;">
-          {{ paymentsucceDetails.txStatus === 1 ? 'Proceed' : 'Pay & Continue' }}
-          <i class="fas fa-arrow-right ms-2"></i>
-        </button> -->
-
-
-
-
-
-        <button class="action-button" (click)="closeWebhook()">
-          Proceed
-          <i class="fas fa-arrow-right ms-2"></i>
-        </button>
-
-
       </div>
     </div>
   </div>
-</div>
