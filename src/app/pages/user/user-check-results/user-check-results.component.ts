@@ -103,7 +103,7 @@ interface Biodata {
 })
 export class UserCheckResultsComponent implements OnInit {
 
-@ViewChild('target') targetElement!: ElementRef;
+  @ViewChild('target') targetElement!: ElementRef;
   isLoading = false;     // Loading state
   submitSuccess = false; // Track submission success
   proceedButtonClicked = false; // Track if "Proceed" was clicked
@@ -119,7 +119,7 @@ export class UserCheckResultsComponent implements OnInit {
     address: '',
     dob: '',
     gender: '',
-   // record:''
+    // record:''
   };
   @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
 
@@ -490,53 +490,53 @@ export class UserCheckResultsComponent implements OnInit {
 
 
   goBackToList() {
-    this.currentCheck=null;
+    this.currentCheck = null;
     this.resetForm();
-      this.recordId = '';  // Clear the stored ID
-      this.showH2Message=false;
-      
-}
+    this.recordId = '';  // Clear the stored ID
+    this.showH2Message = false;
+
+  }
 
 
-get fullName(): string {
-  if (!this.biodata) return '';
-  const firstName = this.biodata.firstName || '';
-  const middleName = this.biodata.middleName || '';
-  const lastName = this.biodata.lastName || '';
-  return [firstName, middleName, lastName]
-    .filter(name => name?.trim()) // Optional chaining + trim
-    .join(' ');
-}
+  get fullName(): string {
+    if (!this.biodata) return '';
+    const firstName = this.biodata.firstName || '';
+    const middleName = this.biodata.middleName || '';
+    const lastName = this.biodata.lastName || '';
+    return [firstName, middleName, lastName]
+      .filter(name => name?.trim()) // Optional chaining + trim
+      .join(' ');
+  }
 
-isBioDataLoading:boolean=false;
+  isBioDataLoading: boolean = false;
 
   getBiodataBYRecordId() {
-    this.isBioDataLoading=true;
+    this.isBioDataLoading = true;
     this.manualService.getBoidataByRecordId(this.recordId).subscribe({
       next: (data: any) => {
         this.biodata = data;
-      this.enteredName = this.fullName; // Use the getter
+        this.enteredName = this.fullName; // Use the getter
         console.log(this.biodata);
         //this.recordId='';
         this.isBioDataLoading = false;
       },
       error: (err) => {
-        this.isBioDataLoading=false;
+        this.isBioDataLoading = false;
         console.error('Failed to load BoidData:', err);
-        
+
         // this.snackBar.open('Please Kindly provide your Biodata', 'Close', {
         //   duration: 3000,
         //   panelClass: ['error-snackbar']
         // });
       },
-       complete: () => {
+      complete: () => {
         this.isBioDataLoading = false;
       }
     })
 
   }
 
-  
+
 
 
 
@@ -584,21 +584,21 @@ isBioDataLoading:boolean=false;
 
   // Scroll to target H2
   scrollToTarget() {
-    this.showH2Message=true
-        this.proceedButtonClicked = true; // Hide form and show H2
+    this.showH2Message = true
+    this.proceedButtonClicked = true; // Hide form and show H2
     if (this.hasBiodata()) { // Only scroll if biodata is valid/submitted
-      this.targetElement.nativeElement.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+      this.targetElement.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   }
 
-    showH2Message = false;       // Toggles h2 visibility
+  showH2Message = false;       // Toggles h2 visibility
 
 
   private createBiodata() {
-        // alert(this.recordId);
+    // alert(this.recordId);
 
     const formattedData = {
       ...this.biodata,
@@ -1006,7 +1006,7 @@ isBioDataLoading:boolean=false;
     const key = subject.trim().toUpperCase();
     return map[key] || key;
   }
-candinateName:any;
+  candinateName: any;
 
   gradeOrder = ['A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9'];
 
@@ -1097,42 +1097,42 @@ candinateName:any;
 
   // candinateName:any;
   normalizeName(name: string): string {
-  if (!name) return '';
+    if (!name) return '';
 
-  // Step 1: Replace hyphens with spaces and normalize
-  let normalized = name
-    .toLowerCase()
-    .replace(/-/g, ' ')   // Replace hyphens with spaces
-    .replace(/\s+/g, ' ') // Collapse multiple spaces
-    .trim();
+    // Step 1: Replace hyphens with spaces and normalize
+    let normalized = name
+      .toLowerCase()
+      .replace(/-/g, ' ')   // Replace hyphens with spaces
+      .replace(/\s+/g, ' ') // Collapse multiple spaces
+      .trim();
 
-  // Step 2: Split into parts, sort alphabetically, and rejoin
-  const nameParts = normalized.split(' ');
-  const sortedParts = nameParts.sort(); // Alphabetical order
-  return sortedParts.join(' ');
-}
+    // Step 2: Split into parts, sort alphabetically, and rejoin
+    const nameParts = normalized.split(' ');
+    const sortedParts = nameParts.sort(); // Alphabetical order
+    return sortedParts.join(' ');
+  }
 
-//   normalizeName(name: string): string {
-//   if (!name) return '';
-//   return name
-//     .toLowerCase()    // Case insensitive
-//     .replace(/\s+/g, ' ')  // Replace multiple spaces with one
-//     .trim()           // Remove leading/trailing spaces
-//     .replace(/[^a-z ]/g, ''); // Remove special chars (optional)
-// }
+  //   normalizeName(name: string): string {
+  //   if (!name) return '';
+  //   return name
+  //     .toLowerCase()    // Case insensitive
+  //     .replace(/\s+/g, ' ')  // Replace multiple spaces with one
+  //     .trim()           // Remove leading/trailing spaces
+  //     .replace(/[^a-z ]/g, ''); // Remove special chars (optional)
+  // }
 
-namesMatch(): boolean {
-  return this.normalizeName(this.enteredName) === this.normalizeName(this.candinateName);
-}
-
-
+  namesMatch(): boolean {
+    return this.normalizeName(this.enteredName) === this.normalizeName(this.candinateName);
+  }
 
 
 
 
 
 
-  enteredName:any;
+
+
+  enteredName: any;
   fetchResultAutoAssign() {
     this.isLoading = true;
 
@@ -1807,6 +1807,7 @@ namesMatch(): boolean {
           this.paymentsucceDetails = paymentStatus;
           console.log("This is the payment Status ", paymentStatus);
           this.loadChecks();
+          this.getResultsByUser();
           clearInterval(this.intervalId); // Stop polling on success
           // this.handlePaymentSuccess();
         } else if (paymentStatus.txStatus === -1) {
@@ -2302,6 +2303,8 @@ namesMatch(): boolean {
 
 
   closeWebhook() {
+    this.loadChecks();
+    this.getResultsByUser();
     this.showWebHook = false;
   }
 
@@ -2339,16 +2342,16 @@ namesMatch(): boolean {
 
   showNameComparisonModal: boolean = false;
 
-openNameComparisonModal() {
-  if (this.enteredName && this.candinateName) {
-    this.showNameComparisonModal = true;
+  openNameComparisonModal() {
+    if (this.enteredName && this.candinateName) {
+      this.showNameComparisonModal = true;
+    }
   }
-}
 
-closeNameComparisonModal() {
-  this.showNameComparisonModal = false;
-  this.candinateName='';
-}
+  closeNameComparisonModal() {
+    this.showNameComparisonModal = false;
+    this.candinateName = '';
+  }
 
 
 
