@@ -50,4 +50,5 @@ export interface EligibilityResult {
   createdAt: string;
   examCheckRecord: ExamCheckRecord | null;
   universities: University[];
+  selectedCategories:string;
 }

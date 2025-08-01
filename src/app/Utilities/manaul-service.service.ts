@@ -24,7 +24,7 @@ export class ManaulServiceService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-    return this.http.post(`${baseUrl}/auth/check-eligibilityAll`, payload,
+    return this.http.post(`${baseUrl}/auth/check-eligibility`, payload,
       { headers }
 
     )

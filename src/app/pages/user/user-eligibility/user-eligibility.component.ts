@@ -397,4 +397,27 @@ private formatCutoffPoints(cutoffPoints: { [subject: string]: string }): string 
     return Array.from(types);
   }
 
+
+
+
+  // eligibility-results.component.ts
+
+
+// Check if any programs exist in a specific category
+hasProgramsInCategory(programs: any[], category: string): boolean {
+  if (!programs || !category) return false;
+  return programs.some(program => 
+    program.categories?.includes(category)
+  );
+}
+
+// Filter programs by category
+getProgramsByCategory(programs: any[], category: string): any[] {
+  if (!programs || !category) return [];
+  return programs.filter(program => 
+    program.categories?.includes(category)
+  );
+}
+
+
 }

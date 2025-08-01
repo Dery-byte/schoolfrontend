@@ -952,7 +952,7 @@ export class UserCheckResultsComponent implements OnInit {
     console.log(selectedIds);
 
     console.log('Selected College IDs:', selectedIds);
-    alert(`Selected College IDs: ${selectedIds.join(', ')}`);
+    // alert(`Selected College IDs: ${selectedIds.join(', ')}`);
     if (!this.waecresults || !this.waecresults.resultDetails) {
       console.warn('No results available to analyze');
       return;
@@ -964,34 +964,35 @@ export class UserCheckResultsComponent implements OnInit {
       resultDetails: this.waecresults.resultDetails.map((result: any) => ({
         subject: result.subject,
         grade: result.grade,
-      }))
+      })),
+      categoryIds:selectedIds
     };
 
     console.log('Analysis Data:', analysisData);
-    // this.manualService.checkEligibility(analysisData).subscribe({
-    //   next: (data: any) => {
-    //     this.elligibilityResults = data;
-    //     this.isCheckingEligibility = false;
-    //     this.snackBar.open('Eligibility check successful!', 'Close', {
-    //       duration: 3000,
-    //       verticalPosition: 'bottom',
-    //       panelClass: ['snackbar-success']
-    //     });
-    //     setTimeout(() => {
-    //       this.router.navigate(['/user/checkEligilibilty'], {
-    //       });
-    //     }, 4000);
-    //   },
-    //   error: (err) => {
-    //     this.isCheckingEligibility = false;
-    //     console.error('Eligibility check failed:', err);
-    //     this.snackBar.open('Failed to check eligibility.', 'Close', {
-    //       duration: 3000,
-    //       verticalPosition: 'bottom',
-    //       panelClass: ['snackbar-error']
-    //     });
-    //   }
-    // });
+    this.manualService.checkEligibility(analysisData).subscribe({
+      next: (data: any) => {
+        this.elligibilityResults = data;
+        this.isCheckingEligibility = false;
+        this.snackBar.open('Eligibility check successful!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-success']
+        });
+        setTimeout(() => {
+          this.router.navigate(['/user/checkEligilibilty'], {
+          });
+        }, 4000);
+      },
+      error: (err) => {
+        this.isCheckingEligibility = false;
+        console.error('Eligibility check failed:', err);
+        this.snackBar.open('Failed to check eligibility.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
   }
   normalizeSubject(subject: string): string {
     const map: Record<string, string> = {

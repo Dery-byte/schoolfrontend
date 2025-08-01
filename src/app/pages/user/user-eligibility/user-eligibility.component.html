@@ -67,7 +67,7 @@
           </h4>
 
           <!-- Eligible Programs Section -->
-          <div *ngIf="university.eligiblePrograms.length > 0" class="programs-section">
+          <div *ngIf="university.eligiblePrograms!.length > 0" class="programs-section">
             <h5>Eligible Programs</h5>
             <div *ngFor="let program of university.eligiblePrograms" class="program-card eligible">
               <div class="program-header">
@@ -90,43 +90,64 @@
                 
                 <div class="recommendation-section">
                   <h6>Career Path</h6>
-                  <div class="career-path-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
+                  <div class="career-path-content" [innerHTML]="program.aiRecommendation.careerPath | safeHtml"></div>
+                </div>
+
+                <div class="recommendation-section">
+                  <h6>Future Prospects</h6>
+                  <div class="future-prospects-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Alternative Programs Section -->
-          <div *ngIf="university.alternativePrograms.length > 0" class="programs-section">
+          <!-- Alternative Programs Section - Grouped by Categories -->
+          <div *ngIf="university!.alternativePrograms!.length > 0" class="programs-section">
             <h5>Alternative Programs</h5>
-            <div *ngFor="let program of university.alternativePrograms" class="program-card alternative">
-              <div class="program-header">
-                <strong>{{ program.name }}</strong>
-                <span class="percentage">{{ program.percentage }}% match</span>
-              </div>
-              <div class="cutoff-points">
-                <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
-                  <span class="subject-name">{{ subject }}:</span>
-                  <span class="grade">{{ program.cutoffPoints[subject] }}</span>
-                </div>
-              </div>
-              <div *ngIf="program.explanations && program.explanations.length" class="explanations">
-                <div *ngFor="let explanation of program.explanations" class="explanation">
-                  {{ explanation }}
-                </div>
-              </div>
-              
-              <!-- AI Recommendation for Alternative Programs -->
-              <div *ngIf="program.aiRecommendation" class="ai-recommendation">
-                <div class="recommendation-section">
-                  <h6>Job Opportunities</h6>
-                  <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
-                </div>
+            
+            <!-- Loop through selected categories -->
+            <div *ngFor="let category of result.selectedCategories" class="category-section">
+              <!-- Only show category if it has programs -->
+              <div *ngIf="hasProgramsInCategory(university.alternativePrograms, category)">
+                <h6 class="category-title">{{ category }}</h6>
                 
-                <!-- <div class="recommendation-section">
-                  <h6>Career Path</h6>
-                  <div class="career-path-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
-                </div> -->
+                <!-- Programs in this category -->
+                <div *ngFor="let program of getProgramsByCategory(university.alternativePrograms, category)" 
+                     class="program-card alternative">
+                  <div class="program-header">
+                    <strong>{{ program.name }}</strong>
+                    <span class="percentage">{{ program.percentage }}% match</span>
+                  </div>
+                  <div class="cutoff-points">
+                    <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
+                      <span class="subject-name">{{ subject }}:</span>
+                      <span class="grade">{{ program.cutoffPoints[subject] }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="program.explanations?.length" class="explanations">
+                    <div *ngFor="let explanation of program.explanations" class="explanation">
+                      {{ explanation }}
+                    </div>
+                  </div>
+                  
+                  <!-- AI Recommendation for Alternative Programs -->
+                  <div *ngIf="program.aiRecommendation" class="ai-recommendation">
+                    <div class="recommendation-section">
+                      <h6>Job Opportunities</h6>
+                      <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
+                    </div>
+                    
+                    <div class="recommendation-section">
+                      <h6>Career Path</h6>
+                      <div class="career-path-content" [innerHTML]="program.aiRecommendation.careerPath | safeHtml"></div>
+                    </div>
+
+                    <div class="recommendation-section">
+                      <h6>Future Prospects</h6>
+                      <div class="future-prospects-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
