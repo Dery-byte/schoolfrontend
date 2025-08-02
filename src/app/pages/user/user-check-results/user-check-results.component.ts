@@ -598,8 +598,7 @@ export class UserCheckResultsComponent implements OnInit {
 
 
   private createBiodata() {
-    // alert(this.recordId);
-
+    alert(this.recordId);
     const formattedData = {
       ...this.biodata,
       dob: this.formatDate(this.biodata.dob),

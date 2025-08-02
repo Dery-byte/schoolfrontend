@@ -48,7 +48,7 @@ export interface EligibilityResult {
   id: string;
   userId: string;
   createdAt: string;
-  examCheckRecord: ExamCheckRecord | null;
+  examCheckRecord: ExamCheckRecord;
   universities: University[];
   selectedCategories:string;
 }
