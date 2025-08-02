@@ -1,6 +1,6 @@
 <!-- eligibility-results.component.html -->
 
-{{records|json}}
+<!-- {{records|json}} -->
 
 <div class="results-container">
   <!-- Loading State -->
@@ -48,9 +48,9 @@
           <button class="btn-icon" (click)="openPreview(result); $event.stopPropagation()" title="Preview">
             <i class="material-icons">visibility</i>
           </button>
-          <button class="btn-icon" (click)="downloadAsJson(result); $event.stopPropagation()" title="Download JSON">
+          <!-- <button class="btn-icon" (click)="downloadAsJson(result); $event.stopPropagation()" title="Download JSON">
             <i class="material-icons">download</i>
-          </button>
+          </button> -->
           <button class="btn-icon" (click)="downloadAsPdf(result); $event.stopPropagation()" title="Download PDF">
             <i class="material-icons">picture_as_pdf</i>
           </button>
