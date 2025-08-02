@@ -491,7 +491,7 @@ private addAIInsights(doc: jsPDF, program: any, startY: number): number {
     
     // Left colored accent bar
     doc.setFillColor(iconColor[0], iconColor[1], iconColor[2]);
-    doc.roundedRect(30, y, 4, blockHeight, 2, 2, 'F');
+    doc.roundedRect(30, y, 2, blockHeight, 1, 1, 'F');
 
     // Title with icon styling
     doc.setFont('helvetica', 'bold');
