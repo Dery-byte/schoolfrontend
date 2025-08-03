@@ -1,5 +1,15 @@
 
-  {{ records | json}}
+  {{ records| json}}
+
+  <!-- <div *ngFor="let record of records">
+  <div *ngIf="record.examCheckRecord">
+    Candidate Name: {{ record.examCheckRecord.candidateName }}
+  </div>
+  <div *ngIf="!record.examCheckRecord">
+    No Exam Record Found.
+  </div>
+</div> -->
+
 
 <div class="results-container">
   <!-- Loading State -->

@@ -862,6 +862,7 @@ export class UserCheckResultsComponent implements OnInit {
         reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
+                    this.openNameComparisonModal();
           this.fetchResultAutoAssign(); // Proceed only if user confirms
         }
         // else do nothing if canceled
@@ -964,10 +965,12 @@ export class UserCheckResultsComponent implements OnInit {
         subject: result.subject,
         grade: result.grade,
       })),
-      categoryIds:selectedIds
+      categoryIds:selectedIds,
+      checkRecordId: this.recordId
     };
 
     console.log('Analysis Data:', analysisData);
+    
     this.manualService.checkEligibility(analysisData).subscribe({
       next: (data: any) => {
         this.elligibilityResults = data;
@@ -1133,6 +1136,8 @@ export class UserCheckResultsComponent implements OnInit {
 
 
   enteredName: any;
+
+  
   fetchResultAutoAssign() {
     this.isLoading = true;
 
@@ -1159,7 +1164,7 @@ export class UserCheckResultsComponent implements OnInit {
           this.waecresults2 = res;
           this.secondResultFetched = true; // 🚨 set flag to true
           console.log("Results 2 ", this.waecresults2);
-          this.openNameComparisonModal();
+          // this.openNameComparisonModal();
 
         } else {
           // Both already filled
@@ -2346,13 +2351,16 @@ export class UserCheckResultsComponent implements OnInit {
     if (this.enteredName && this.candinateName) {
       this.showNameComparisonModal = true;
     }
+    document.body.style.overflow = 'hidden';
+    this.blurService.setBlur(true);
   }
 
   closeNameComparisonModal() {
     this.showNameComparisonModal = false;
     this.candinateName = '';
+    document.body.style.overflow = '';
+    this.blurService.setBlur(false);
   }
-
 
 
 }
