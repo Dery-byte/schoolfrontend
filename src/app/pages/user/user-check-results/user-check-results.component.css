@@ -312,7 +312,7 @@
     top: 0;
     left: 0;
     right: 0;
-    bottom: 30;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
@@ -320,6 +320,17 @@
     z-index: 1000;
     backdrop-filter: blur(2px);
   }
+
+
+  /* .modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+} */
 
   /* Payment Modal */
   .payment-modal {
@@ -937,15 +948,6 @@
   visibility: visible;
 }
 
-/* .modal-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-} */
 
 .modal-card {
   position: relative;
@@ -2869,4 +2871,15 @@ p {
   border-radius: 4px;
   font-family: monospace;
   display: inline-block;
+}
+
+
+
+.modal-contents {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
 }

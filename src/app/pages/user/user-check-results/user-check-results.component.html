@@ -319,10 +319,6 @@
     <!-- Results Forms (shown after payment) -->
     <div *ngIf="currentCheck.paymentStatus === 'PAID'" #paymentConfirmation>
 
-
-
-
-
       <!-- {{biodata|json}}
       <h2>Hellow there</h2> -->
       <div class="custom-alert" *ngIf="errorMsg.length">
@@ -362,51 +358,6 @@
             <div class="progress-bar"></div>
           </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <div class="card" *ngIf="!showH2Message && !isBioDataLoading">
           <div class="loading-state">
@@ -451,12 +402,10 @@
 
           <div class="card-body">
             <h4 class="card-title mb-4">Biodata Form</h4>
-
             <!-- Success Message -->
             <div *ngIf="submitSuccess" class="alert alert-success">
               Biodata {{ biodata.id ? 'updated' : 'submitted' }} successfully!
             </div>
-
             <form (ngSubmit)="submitBiodata()" #biodataForm="ngForm">
               <div class="form-row">
                 <div class="form-group col-md-4">
@@ -657,12 +606,6 @@
           <!-- Tab Content -->
           <div [ngSwitch]="activeTab">
             <div *ngSwitchCase="'auto'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-
-
-
-
-
-
               <!-- BELLOW IS THE GET RESULTS FROM WAEC -->
 
               <div class="results-retrieval-container ">
@@ -807,9 +750,18 @@
           </div> -->
               <!-- {{waecresults|json}} -->
 
+              <h1>
+                <hr>
+              </h1>
+
               <!-- Results Display Section -->
               <div *ngIf="waecresults && !secondResultFetched && !showNameComparisonModal" class="card border-0 mt-4"
                 style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+
+                <button (click)="confirmRemoveResult()" class="btn btn-outline-danger btn-sm"
+                  style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
+                  <i class="fas fa-trash-alt me-1"></i> Remove Result
+                </button>
                 <div class="card-header bg-white border-bottom-0 py-3">
                   <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for
                     {{waecresults.cname}}
@@ -1730,3 +1682,17 @@
       </div>
     </div>
   </div>
+
+
+
+  <!-- Confirm Remove Modal -->
+<div class="modal-backdrop" *ngIf="showRemoveConfirmModal">
+  <div class="modal-contents">
+    <h5>Confirm Removal</h5>
+    <p>Are you sure you want to remove this WAEC result for <strong>{{ waecresults?.cname }}</strong>?</p>
+    <div class="d-flex justify-content-end mt-4">
+      <button class="btn btn-secondary me-2" (click)="cancelRemove()">Cancel</button>
+      <button class="btn btn-danger" (click)="confirmRemove()">Yes, Remove</button>
+    </div>
+  </div>
+</div>

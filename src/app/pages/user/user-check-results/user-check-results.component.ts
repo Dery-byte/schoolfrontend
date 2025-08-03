@@ -1137,7 +1137,7 @@ export class UserCheckResultsComponent implements OnInit {
 
   enteredName: any;
 
-  
+
   fetchResultAutoAssign() {
     this.isLoading = true;
 
@@ -2361,6 +2361,29 @@ export class UserCheckResultsComponent implements OnInit {
     document.body.style.overflow = '';
     this.blurService.setBlur(false);
   }
+
+
+showRemoveConfirmModal = false;
+
+confirmRemoveResult() {
+  this.showRemoveConfirmModal = true;
+}
+
+cancelRemove() {
+  this.showRemoveConfirmModal = false;
+}
+
+confirmRemove() {
+  this.clearWaecResult();
+  this.showRemoveConfirmModal = false;
+}
+
+clearWaecResult() {
+  this.waecresults = null;
+  this.waecresults2 = null;
+  this.secondResultFetched = false;
+}
+
 
 
 }
