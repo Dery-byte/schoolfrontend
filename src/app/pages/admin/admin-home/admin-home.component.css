@@ -1,0 +1,109 @@
+.custom-caption {
+  caption-side: top;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #082757; /* Bootstrap primary color */
+  text-align: left;
+  padding-bottom: 0.5rem;
+  padding-left: 0.25rem;
+  letter-spacing: 0.5px;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+
+
+.card-custom {
+  background-color: #2e2d2d;
+padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+ margin-bottom: 1.5rem;
+  transition: box-shadow 0.3s ease;
+}
+
+
+
+.card-category>button{
+    margin-bottom: 10px;
+    font-size: 15px;
+    
+}
+
+
+/* Style for table header */
+.custom-thead th {
+  background-color: #080808;
+  color: #fff;
+ font-weight: 60;
+  text-align: left;
+  font-size: 13px;
+}
+
+/* Style for table data cells */
+.custom-td {
+ padding: 10px 12px;
+  font-size: 13px;
+  vertical-align: middle;
+  color: #333;
+  background-color: #f9f9f9;
+  border-color: #dee2e6;
+}
+
+/* Optional: Alternate row shading */
+.custom-table tbody tr:nth-child(even) .custom-td {
+  background-color: #f1f1f1;
+}
+
+.statsButton{
+  background-color: rgb(24, 23, 23);
+}
+
+
+
+
+
+
+
+
+
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.pagination-controls button {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+  cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.pagination-controls span.active {
+  border-color: #007bff;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.pagination-controls span:hover:not(.active) {
+  background-color: #f1f1f1;
+}
+
+.page-info {
+  margin-left: 15px;
+}

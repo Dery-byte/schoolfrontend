@@ -34,6 +34,8 @@ import { ConfirmationModalComponent } from './pages/utilities/confirmation-modal
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { SafeHtmlPipe } from './shared/pipes/safe-html.pipe';
 import { CollegesComponent } from './pages/admin/colleges/colleges.component';
+import { NgChartsModule } from 'ng2-charts';
+
 
 
 @NgModule({
@@ -72,7 +74,8 @@ import { CollegesComponent } from './pages/admin/colleges/colleges.component';
     ReactiveFormsModule,
     MatSnackBarModule,
     BrowserAnimationsModule,
-    NgbNavModule
+    NgbNavModule,
+    NgChartsModule
     
   ],
   providers: [],

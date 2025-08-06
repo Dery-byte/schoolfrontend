@@ -27,7 +27,7 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Farmers</p>
+                <p class="card-category">Reports Created</p>
                 <h4 class="card-title">1,294</h4>
               </div>
             </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Clients</p>
+                <p class="card-category">Users</p>
                 <h4 class="card-title">{{ totalClients }}</h4>
               </div>
             </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Sales</p>
+                <p class="card-category">Revenue</p>
                 <h4 class="card-title">
                   {{ totalSales | currency : "GHS" : "₵ " : "1.2-2" }}
                 </h4>
@@ -86,7 +86,7 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Orders</p>
+                <p class="card-category">Revenue</p>
                 <h4 class="card-title">{{ totalOrders }}</h4>
               </div>
             </div>
@@ -158,10 +158,9 @@
               </div>
             </div>
 
-           <canvas baseChart [data]="{ labels: chartLabels, datasets: chartData }" [options]="chartOptions"
+               <canvas baseChart [data]="{ labels: chartLabels, datasets: chartData }" [options]="chartOptions"
               [type]="'line'">
             </canvas>
-
 
 
 
@@ -449,7 +448,7 @@
       <div class="card card-round">
         <div class="card-body">
           <div class="card-head-row card-tools-still-right">
-            <div class="card-title">New Customers</div>
+            <div class="card-title">New Users</div>
             <div class="card-tools">
               <div class="dropdown">
                 <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton"
