@@ -250,4 +250,90 @@ export class ManaulServiceService {
       headers: { 'Content-Type': 'application/json' }
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //Services for ADMIN HOME
+
+   getAllPaymentInfo(){
+    return this.http.get(`${baseUrl}/auth/payment-status/getAllPayments`)
+  }
+  getNonAdminSummary() {
+    return this.http.get(`${baseUrl}/auth/latestUsersSummary`);
+  }
+
+  getNonAdminCount() {
+    return this.http.get(`${baseUrl}/auth/count`);
+  }
+
+  getTotalOrders() {
+    return this.http.get(`${baseUrl}/auth/order/count`);
+  }
+
+  getTotalSales() {
+    return this.http.get(`${baseUrl}/auth/order/total-sales`);
+  }
+
+  getNonAdminlasteJoined() {
+    return this.http.get(`${baseUrl}/auth/non-admins`);
+  }
+
+
+
+    revenueFiltering(year: number, month: number) {
+    const params = new HttpParams()
+      .set('year', year.toString())
+      .set('month', month.toString());
+
+    return this.http.get(`${baseUrl}/auth/order/revenueDaily`, { params });
+  }
+
+
+    revenueMonthly(year: number): Observable<any[]> {
+    // const params = new HttpParams()
+    //   .set('year', year.toString())
+    return this.http.get<any[]>(
+      `${baseUrl}/auth/order/revenueMonthly?year=${year}`
+    );
+  }
+
+  monthlyOrders(year: number): Observable<any[]> {
+    // const params = new HttpParams()
+    //   .set('year', year.toString())
+    return this.http.get<any[]>(
+      `${baseUrl}/auth/order/ordersMonthly?year=${year}`
+    );
+  }
+
+  monthlyReturns(year: number): Observable<any[]> {
+    // const params = new HttpParams()
+    //   .set('year', year.toString())
+    return this.http.get<any[]>(
+      `${baseUrl}/auth/return/monthlyReturns?year=${year}`
+    );
+  }
 }

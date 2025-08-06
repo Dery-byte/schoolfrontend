@@ -203,20 +203,35 @@ export class RegisterComponent {
 
 
 
+  // validateRegistration(): boolean {
+  //   this.errorMsgReg = [];
+  //   if (
+  //     this.registerRequest.password &&
+  //     this.registerRequest.confirmPassword &&
+  //     this.registerRequest.password !== this.registerRequest.confirmPassword
+  //   ) {
+  //     this.errorMsgReg.push('Passwords do not match.');
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
+
   validateRegistration(): boolean {
-    this.errorMsgReg = [];
+  this.errorMsgReg = [];
 
-    if (
-      this.registerRequest.password &&
-      this.registerRequest.confirmPassword &&
-      this.registerRequest.password !== this.registerRequest.confirmPassword
-    ) {
-      this.errorMsgReg.push('Passwords do not match.');
-      return false;
-    }
-
-    return true;
+  if (!this.registerRequest.password || !this.registerRequest.confirmPassword) {
+    this.errorMsgReg.push('Password and Confirm Password are required.');
+    return false;
   }
+
+  if (this.registerRequest.password !== this.registerRequest.confirmPassword) {
+    this.errorMsgReg.push('Passwords do not match.');
+    return false;
+  }
+
+  return true;
+}
 
 
 

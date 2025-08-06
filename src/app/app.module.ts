@@ -36,8 +36,6 @@ import { SafeHtmlPipe } from './shared/pipes/safe-html.pipe';
 import { CollegesComponent } from './pages/admin/colleges/colleges.component';
 
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,7 +72,7 @@ import { CollegesComponent } from './pages/admin/colleges/colleges.component';
     ReactiveFormsModule,
     MatSnackBarModule,
     BrowserAnimationsModule,
-    NgbNavModule,
+    NgbNavModule
     
   ],
   providers: [],

@@ -206,7 +206,7 @@ downloadAsPdf(result: EligibilityResult): void {
   
   doc.setFontSize(18);
   doc.setTextColor(0, 123, 191);
-  doc.text(result.examCheckRecord?.id || 'Candidate', 105, 85, { align: 'center' });
+  doc.text(result.examCheckRecord?.candidateName || 'Candidate', 105, 85, { align: 'center' });
 
   doc.setFontSize(9);
   doc.setTextColor(120, 120, 120);
