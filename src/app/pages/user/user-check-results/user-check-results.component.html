@@ -1027,7 +1027,7 @@
 
 
                     </div>
-                    <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeTwoResults()"
+                    <!-- <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeTwoResults()"
                       [disabled]="isCheckingEligibility">
                       <span *ngIf="!isCheckingEligibility">
                         <i class="fas fa-chart-bar me-2"></i>Check Eligibility
@@ -1036,7 +1036,62 @@
                         <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                         Checking...
                       </span>
+                    </button> -->
+
+
+                       <!-- COLLEGE SELECTION SECTION -->
+                  <div class="section">
+                    <h2>Colleges - Choose at most 3</h2>
+
+                    <!-- College Selection Controls -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="add-attendee-container">
+                          <div class="add-attendee-btn" (click)="toggleDropdown()"
+                            [class.disabled]="reachedMaxSelection">
+                            + Select College(s)
+                          </div>
+                          <div class="dropdown" *ngIf="showDropdown">
+                            <input type="text" class="search-input" placeholder="Search colleges..."
+                              [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+                            <div class="dropdown-list">
+                              <div *ngFor="let college of availableColleges" class="dropdown-item"
+                                (click)="addAttendee(college)">
+                                {{ college.name }}
+                              </div>
+                              <div *ngIf="availableColleges.length === 0" class="no-results">
+                                No colleges found
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="selection-info" [class.error]="reachedMaxSelection">
+                          {{ selectedCount }}/3 colleges selected
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selected colleges list -->
+                    <div class="attendee-list-container mb-3">
+                      <div class="attendee-list">
+                        <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                          {{ college.name }}
+                          <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Check Eligibility Button (full width) -->
+                    <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeTwoResults()"
+                      [disabled]="isCheckingEligibility || selectedCount === 0">
+                      <span *ngIf="!isCheckingEligibility">
+                        <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                      </span>
+                      <span *ngIf="isCheckingEligibility">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Checking...
+                      </span>
                     </button>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -1233,11 +1288,66 @@
                             </tbody>
                           </table>
                         </div>
-                        <div class="text-end mt-3 pe-4">
+
+                         <!-- COLLEGE SELECTION SECTION -->
+                  <div class="section">
+                    <h2>Colleges - Choose at most 3</h2>
+
+                    <!-- College Selection Controls -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="add-attendee-container">
+                          <div class="add-attendee-btn" (click)="toggleDropdown()"
+                            [class.disabled]="reachedMaxSelection">
+                            + Select College(s)
+                          </div>
+                          <div class="dropdown" *ngIf="showDropdown">
+                            <input type="text" class="search-input" placeholder="Search colleges..."
+                              [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+                            <div class="dropdown-list">
+                              <div *ngFor="let college of availableColleges" class="dropdown-item"
+                                (click)="addAttendee(college)">
+                                {{ college.name }}
+                              </div>
+                              <div *ngIf="availableColleges.length === 0" class="no-results">
+                                No colleges found
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="selection-info" [class.error]="reachedMaxSelection">
+                          {{ selectedCount }}/3 colleges selected
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selected colleges list -->
+                    <div class="attendee-list-container mb-3">
+                      <div class="attendee-list">
+                        <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                          {{ college.name }}
+                          <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Check Eligibility Button (full width) -->
+                    <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="checkEligibilityManualEntry()"
+                      [disabled]="isCheckingEligibility || selectedCount === 0">
+                      <span *ngIf="!isCheckingEligibility">
+                        <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                      </span>
+                      <span *ngIf="isCheckingEligibility">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Checking...
+                      </span>
+                    </button>
+                  </div>
+                        <!-- <div class="text-end mt-3 pe-4">
                           <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()">
                             <i class="fas fa-check-circle me-2"></i> Submit for Interpretation
                           </button>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </form>

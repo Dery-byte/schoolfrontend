@@ -134,7 +134,7 @@ export class UserCheckResultsComponent implements OnInit {
     address: '',
     dob: '',
     gender: '',
-    region:''
+    region: ''
     // record:''
   };
   @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
@@ -712,7 +712,7 @@ export class UserCheckResultsComponent implements OnInit {
       address: '',
       dob: '',
       gender: '',
-      region:''
+      region: ''
       //record: ''
     };
     this.submitSuccess = false;
@@ -798,15 +798,6 @@ export class UserCheckResultsComponent implements OnInit {
     this.entries.splice(index, 1);
   }
 
-  getFormattedResponse(): void {
-    const response = this.entries.map(entry => {
-      return {
-        subject: entry.subject,
-        grade: entry.grade,
-      };
-    });
-    console.log('Formatted Response:', response);
-  }
 
 
   // confirmAction() {
@@ -879,7 +870,7 @@ export class UserCheckResultsComponent implements OnInit {
         reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          this.openNameComparisonModal();
+          // this.openNameComparisonModal();
           this.fetchResultAutoAssign(); // Proceed only if user confirms
         }
         // else do nothing if canceled
@@ -1013,6 +1004,58 @@ export class UserCheckResultsComponent implements OnInit {
       }
     });
   }
+
+
+
+  checkEligibilityManualEntry(): void {
+    const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
+    const selectedIds = selectedAttendees.map(a => a.id);
+
+    console.log(selectedIds);
+    console.log(this.recordId);
+      
+    const response = {
+      resultDetails: this.entries.map((entry: any) => ({
+         subject: entry.subject,
+        grade: entry.grade,
+      })),
+      categoryIds: selectedIds,
+      checkRecordId: this.recordId
+    };
+
+    this.manualService.checkEligibility(response).subscribe({
+      next: (data: any) => {
+        this.elligibilityResults = data;
+        this.isCheckingEligibility = false;
+        this.snackBar.open('Eligibility check successful!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-success']
+        });
+        setTimeout(() => {
+          this.router.navigate(['/user/checkEligilibilty'], {
+          });
+        }, 4000);
+      },
+      error: (err) => {
+        this.isCheckingEligibility = false;
+        console.error('Eligibility check failed:', err);
+        this.snackBar.open('Failed to check eligibility.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-error']
+        });
+      }
+    });
+    console.log('Formatted Response:', response);
+  }
+
+
+
+
+
+
+
   normalizeSubject(subject: string): string {
     const map: Record<string, string> = {
       'ENGLISH LANG': 'ENGLISH LANGUAGE',
@@ -1037,6 +1080,12 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   analyzeTwoResults() {
+     const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
+    const selectedIds = selectedAttendees.map(a => a.id);
+
+    console.log(selectedIds);
+
+    console.log('Selected College IDs:', selectedIds);
     const r1 = this.waecresults;
     const r2 = this.waecresults2;
 
@@ -1073,8 +1122,21 @@ export class UserCheckResultsComponent implements OnInit {
 
     // Step 3: Prepare analysis data
     const analysisData = {
-      resultDetails: Object.values(finalResultMap)
+      resultDetails: Object.values(finalResultMap),
+        categoryIds: selectedIds,
+      checkRecordId: this.recordId
     };
+
+
+
+    //    const analysisData = {
+    //   resultDetails: this.waecresults.resultDetails.map((result: any) => ({
+    //     subject: result.subject,
+    //     grade: result.grade,
+    //   })),
+    //   categoryIds: selectedIds,
+    //   checkRecordId: this.recordId
+    // };
 
     console.log('Best Grades Analysis:', analysisData);
     this.manualService.checkEligibility(analysisData).subscribe({
@@ -2375,8 +2437,9 @@ export class UserCheckResultsComponent implements OnInit {
   closeNameComparisonModal() {
     this.showNameComparisonModal = false;
     this.candinateName = '';
-    document.body.style.overflow = '';
-    this.blurService.setBlur(false);
+    document.body.style.overflow = 'auto';
+   this.blurService.setBlur(false);
+    
   }
 
 
@@ -2438,7 +2501,7 @@ export class UserCheckResultsComponent implements OnInit {
       { apiValue: GhanaRegion.UPPER_WEST, display: 'Upper West' },
       { apiValue: GhanaRegion.UPPER_EAST, display: 'Upper East' },
       { apiValue: GhanaRegion.VOLTA, display: 'Volta' },
-        { apiValue: GhanaRegion.WESTERN, display: 'Western' },
+      { apiValue: GhanaRegion.WESTERN, display: 'Western' },
       { apiValue: GhanaRegion.EASTERN, display: 'Eastern' },
 
     ];
