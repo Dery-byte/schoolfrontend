@@ -279,61 +279,91 @@ export class ManaulServiceService {
 
   //Services for ADMIN HOME
 
-   getAllPaymentInfo(){
-    return this.http.get(`${baseUrl}/auth/payment-status/getAllPayments`)
-  }
-  getNonAdminSummary() {
-    return this.http.get(`${baseUrl}/auth/latestUsersSummary`);
-  }
-
-  getNonAdminCount() {
-    return this.http.get(`${baseUrl}/auth/count`);
-  }
-
-  getTotalOrders() {
-    return this.http.get(`${baseUrl}/auth/order/count`);
-  }
-
-  getTotalSales() {
-    return this.http.get(`${baseUrl}/auth/order/total-sales`);
-  }
-
-  getNonAdminlasteJoined() {
-    return this.http.get(`${baseUrl}/auth/non-admins`);
+  getTotalRecordStats() {
+    return this.http.get(`${baseUrl}/auth/records/stats`);
   }
 
 
+  
+  //   revenueFiltering(year: number, month: number) {
+  //   const params = new HttpParams()
+  //     .set('year', year.toString())
+  //     .set('month', month.toString());
 
-    revenueFiltering(year: number, month: number) {
+  //   return this.http.get(`${baseUrl}/auth/payment-status/revenueWeekly`, { params });
+  // }
+
+
+      revenueFiltering(year: number, month: number) {
     const params = new HttpParams()
       .set('year', year.toString())
       .set('month', month.toString());
 
-    return this.http.get(`${baseUrl}/auth/order/revenueDaily`, { params });
+    return this.http.get(`${baseUrl}/auth/payment-status/revenuesDaily`, { params });
   }
 
+    getTotalEligibilityRecords() {
+    return this.http.get(`${baseUrl}/auth/eligibilityRecords/count`);
+  }
+ getAllPaymentInfo(){
+    return this.http.get(`${baseUrl}/auth/payment-status/getAllPayments`)
+  }
+    
+  getNonAdminSummary() {
+    return this.http.get(`${baseUrl}/auth/latestUsersSummary`);
+  }
+  getNonAdminCount() {
+    return this.http.get(`${baseUrl}/auth/count`);
+  }
+  getTotalRevenue() {
+    return this.http.get(`${baseUrl}/auth/payment-status/total-revenue`);
+  }
 
     revenueMonthly(year: number): Observable<any[]> {
     // const params = new HttpParams()
     //   .set('year', year.toString())
     return this.http.get<any[]>(
-      `${baseUrl}/auth/order/revenueMonthly?year=${year}`
+      `${baseUrl}/auth/payment-status/revenueMonthly?year=${year}`
     );
   }
-
-  monthlyOrders(year: number): Observable<any[]> {
+  monthlyEligibilityStats(year: number): Observable<any[]> {
     // const params = new HttpParams()
     //   .set('year', year.toString())
     return this.http.get<any[]>(
-      `${baseUrl}/auth/order/ordersMonthly?year=${year}`
+      `${baseUrl}/auth/eligibilityRecords/monthlyStats?year=${year}`
     );
   }
 
-  monthlyReturns(year: number): Observable<any[]> {
+
+
+
+
+
+
+  monthlyExamRecords(year: number): Observable<any[]> {
     // const params = new HttpParams()
     //   .set('year', year.toString())
     return this.http.get<any[]>(
-      `${baseUrl}/auth/return/monthlyReturns?year=${year}`
+      `${baseUrl}/auth/records/monthlyStats?year=${year}`
     );
   }
+
+
+
+
+
+
+
+
+  biodataStats() {
+    return this.http.get(`${baseUrl}/auth/biodata/stats`);
+  }
+
+  getAllRegions(){
+    return this.http.get(`${baseUrl}/auth/biodata/getAllRegions`);
+  }
+
+
+
+
 }

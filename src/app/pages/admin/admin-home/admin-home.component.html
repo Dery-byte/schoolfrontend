@@ -11,6 +11,21 @@
 
 
 <!-- {{paymentInfo | json}} -->
+
+
+<!-- {{totalRecords | json}}
+
+
+{{dailySales|json}}
+
+{{totalRevenue|json}} -->
+
+
+<!-- {{totalEligibilityRecords}} -->
+
+<!-- {{paymentInfo | json}} -->
+
+<!-- {{bioStats| json}} -->
 <div class="page-inner">
   <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
 
@@ -27,8 +42,8 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Reports Created</p>
-                <h4 class="card-title">1,294</h4>
+                <p class="card-category">Record Created</p>
+                <h4 class="card-title">{{totalRecords.totalRecords}}</h4>
               </div>
             </div>
           </div>
@@ -46,8 +61,8 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Users</p>
-                <h4 class="card-title">{{ totalClients }}</h4>
+                <p class="card-category">Report Generated</p>
+                <h4 class="card-title">{{ totalEligibilityRecords }}</h4>
               </div>
             </div>
           </div>
@@ -65,11 +80,10 @@
             </div>
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
-                <p class="card-category">Revenue</p>
-                <h4 class="card-title">
-                  {{ totalSales | currency : "GHS" : "₵ " : "1.2-2" }}
-                </h4>
+                <p class="card-category">Users</p>
+                <h4 class="card-title">{{ totalClients }}</h4>
               </div>
+
             </div>
           </div>
         </div>
@@ -87,7 +101,9 @@
             <div class="col col-stats ms-3 ms-sm-0">
               <div class="numbers">
                 <p class="card-category">Revenue</p>
-                <h4 class="card-title">{{ totalOrders }}</h4>
+                <h4 class="card-title">
+                  {{ totalRevenue | currency : "GHS" : "₵ " : "1.2-2" }}
+                </h4>
               </div>
             </div>
           </div>
@@ -158,7 +174,7 @@
               </div>
             </div>
 
-               <canvas baseChart [data]="{ labels: chartLabels, datasets: chartData }" [options]="chartOptions"
+            <canvas baseChart [data]="{ labels: chartLabels, datasets: chartData }" [options]="chartOptions"
               [type]="'line'">
             </canvas>
 
@@ -307,6 +323,7 @@
                 <tr>
                   <th>Date</th>
                   <th>Amount (₵)</th>
+                  <!-- <th> Count</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -317,6 +334,10 @@
                   <td class="custom-td">
                     {{ sale.totalAmount | number : "1.2-2" }}
                   </td>
+
+                  <!-- <td class="custom-td">
+                    {{ sale.transactionCount }}
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -333,16 +354,40 @@
       <div class="card card-round">
         <div class="card-body pb-0" *ngIf="dailySales.length > 0">
           <div class="h5 fw-bold mb-2 float-end text-primary">
-            ₵{{ totalRevenue | number : "1.2-2" }}
+            ₵{{ totalRevenueWeekly | number : "1.2-2" }}
           </div>
           <p class="h5 mb-2 fw-bold">Total Revenue:</p>
         </div>
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <div class="row">
     <div class="col-md-12">
       <div class="card card-round">
+
+
         <div class="card-header">
           <div class="card-head-row card-tools-still-right">
             <h4 class="card-title">Users Geolocation</h4>
@@ -359,14 +404,63 @@
             </div>
           </div>
           <p class="card-category">
-            Map of the distribution of users around the world
+            Map of the distribution of users around the Country
           </p>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
               <div class="table-responsive table-hover table-sales">
                 <table class="table">
+                  <tbody>
+                    <tr *ngFor="let region of bioStats.regions">
+                      <td>
+                        <div class="flag">
+                          <div class="flag">
+                            <img src="assets/logo/OTCLogo.png" height="20" width="20" style="border-radius: 30px;" />
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ region.region }}</td>
+                      <td class="text-end">{{ region.count }}</td>
+                      <td class="text-end">{{ region.percentage | number:'1.2-2' }}%</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- <table class="table">
                   <tbody>
                     <tr>
                       <td>
@@ -429,7 +523,9 @@
                       <td class="text-end">11.63%</td>
                     </tr>
                   </tbody>
-                </table>
+                </table> -->
+
+
               </div>
             </div>
             <div class="col-md-6">
@@ -441,6 +537,13 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+
+
   </div>
 
   <div class="row">

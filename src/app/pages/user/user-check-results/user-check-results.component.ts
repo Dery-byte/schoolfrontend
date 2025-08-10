@@ -30,6 +30,19 @@ import { Router, TitleStrategy } from '@angular/router';
 
 
 
+export enum GhanaRegion {
+  GREATER_ACCRA = 'GREATER_ACCRA',
+  ASHANTI = 'ASHANTI',
+  BRONG_AHAFO = 'BRONG_AHAFO',
+  CENTRAL = 'CENTRAL',
+  EASTERN = 'EASTERN',
+  NORTHERN = 'NORTHERN',
+  UPPER_EAST = 'UPPER_EAST',
+  UPPER_WEST = 'UPPER_WEST',
+  VOLTA = 'VOLTA',
+  WESTERN = 'WESTERN',
+}
+
 declare module 'jspdf' {
   interface jsPDF {
     autoTable: (options: any) => jsPDF;
@@ -94,6 +107,7 @@ interface Biodata {
   address: string;
   dob: string;  // or Date if you prefer
   gender?: string;  // Optional field
+  region: string;  // Optional field
   //record?: string;  // If you need to associate with a record
 }
 @Component({
@@ -107,7 +121,8 @@ export class UserCheckResultsComponent implements OnInit {
   isLoading = false;     // Loading state
   submitSuccess = false; // Track submission success
   proceedButtonClicked = false; // Track if "Proceed" was clicked
-
+  allRegions: string[] = []; // Stores raw region names from API
+  // regionOptions: { apiValue: GhanaRegion, display: string }[] = [];
 
   biodata: Biodata = {
     id: '',
@@ -119,6 +134,7 @@ export class UserCheckResultsComponent implements OnInit {
     address: '',
     dob: '',
     gender: '',
+    region:''
     // record:''
   };
   @Output() selectedAttendees = new EventEmitter<ExistingColleges[]>();
@@ -203,7 +219,6 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-
   get selectedCount(): number {
     return this.allColleges.filter(a => a.selected || a.isRequired).length;
   }
@@ -226,7 +241,7 @@ export class UserCheckResultsComponent implements OnInit {
     const selectedIds = selectedAttendees.map(a => a.id);
 
     console.log('Selected College IDs:', selectedIds);
-    alert(`Selected College IDs: ${selectedIds.join(', ')}`);
+    // alert(`Selected College IDs: ${selectedIds.join(', ')}`);
 
     // In a real app, you might:
     // - Send to an API
@@ -445,6 +460,7 @@ export class UserCheckResultsComponent implements OnInit {
     this.loadChecks();
     this.getResultsByUser();
     this.getColleges();
+    this.getAllRegions();
 
   }
 
@@ -598,7 +614,7 @@ export class UserCheckResultsComponent implements OnInit {
 
 
   private createBiodata() {
-    alert(this.recordId);
+    // alert(this.recordId);
     const formattedData = {
       ...this.biodata,
       dob: this.formatDate(this.biodata.dob),
@@ -696,6 +712,7 @@ export class UserCheckResultsComponent implements OnInit {
       address: '',
       dob: '',
       gender: '',
+      region:''
       //record: ''
     };
     this.submitSuccess = false;
@@ -862,7 +879,7 @@ export class UserCheckResultsComponent implements OnInit {
         reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
-                    this.openNameComparisonModal();
+          this.openNameComparisonModal();
           this.fetchResultAutoAssign(); // Proceed only if user confirms
         }
         // else do nothing if canceled
@@ -965,12 +982,12 @@ export class UserCheckResultsComponent implements OnInit {
         subject: result.subject,
         grade: result.grade,
       })),
-      categoryIds:selectedIds,
+      categoryIds: selectedIds,
       checkRecordId: this.recordId
     };
 
     console.log('Analysis Data:', analysisData);
-    
+
     this.manualService.checkEligibility(analysisData).subscribe({
       next: (data: any) => {
         this.elligibilityResults = data;
@@ -2363,26 +2380,73 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
 
-showRemoveConfirmModal = false;
+  showRemoveConfirmModal = false;
 
-confirmRemoveResult() {
-  this.showRemoveConfirmModal = true;
-}
+  confirmRemoveResult() {
+    this.showRemoveConfirmModal = true;
+  }
 
-cancelRemove() {
-  this.showRemoveConfirmModal = false;
-}
+  cancelRemove() {
+    this.showRemoveConfirmModal = false;
+  }
 
-confirmRemove() {
-  this.clearWaecResult();
-  this.showRemoveConfirmModal = false;
-}
+  confirmRemove() {
+    this.clearWaecResult();
+    this.showRemoveConfirmModal = false;
+  }
 
-clearWaecResult() {
-  this.waecresults = null;
-  this.waecresults2 = null;
-  this.secondResultFetched = false;
-}
+  clearWaecResult() {
+    this.waecresults = null;
+    this.waecresults2 = null;
+    this.secondResultFetched = false;
+  }
+
+
+
+
+
+  regionOptions: { apiValue: GhanaRegion, display: string }[] = [];
+  // biodata = { region: null as GhanaRegion | null }; // Stores enum value
+
+
+  getAllRegions() {
+    this.manualService.getAllRegions().subscribe({
+      next: (regions: any) => {
+        this.allRegions = regions;
+        this.prepareRegionOptions();
+
+        console.log(this.allRegions);
+      },
+      error: (err) => {
+        console.error('Failed to load Colleges:', err);
+        // this.snackBar.open('Failed to load Collegesy details', 'Close', {
+        //   duration: 3000,
+        //   panelClass: ['error-snackbar']
+        // });
+      }
+    })
+  }
+
+
+  private prepareRegionOptions() {
+    this.regionOptions = [
+      { apiValue: GhanaRegion.GREATER_ACCRA, display: 'Greater Accra' },
+      { apiValue: GhanaRegion.ASHANTI, display: 'Ashanti' },
+      { apiValue: GhanaRegion.BRONG_AHAFO, display: 'Brong Ahafo' },
+      { apiValue: GhanaRegion.CENTRAL, display: 'Central' },
+      { apiValue: GhanaRegion.NORTHERN, display: 'Northern' },
+      { apiValue: GhanaRegion.UPPER_WEST, display: 'Upper West' },
+      { apiValue: GhanaRegion.UPPER_EAST, display: 'Upper East' },
+      { apiValue: GhanaRegion.VOLTA, display: 'Volta' },
+        { apiValue: GhanaRegion.WESTERN, display: 'Western' },
+      { apiValue: GhanaRegion.EASTERN, display: 'Eastern' },
+
+    ];
+  }
+
+
+
+
 
 
 

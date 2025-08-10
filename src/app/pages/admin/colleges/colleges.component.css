@@ -1,15 +1,16 @@
 /* Modal Overlay */
 .modal-overlay {
-  position: fixed;
+ position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(43, 38, 41, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
+  backdrop-filter: blur(0.1px);
 }
 
 /* Modal Container */
@@ -59,5 +60,98 @@
 @media (max-width: 768px) {
   .reset-form-container {
     width: 95%;
+  }
+}
+
+
+
+/* SPINNER */
+
+/* Modern Spinner Styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 300px;
+}
+
+.spinner {
+  animation: rotate 2s linear infinite;
+}
+
+.spinner .path {
+  stroke: #4a6bff;
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+.loading-text {
+  margin: 20px 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.loading-text-words {
+  display: inline-block;
+  opacity: 0;
+  animation: bounce 2s infinite;
+}
+
+.loading-text-words:nth-child(1) { animation-delay: 0.1s; }
+.loading-text-words:nth-child(2) { animation-delay: 0.2s; }
+.loading-text-words:nth-child(3) { animation-delay: 0.3s; }
+.loading-text-words:nth-child(4) { animation-delay: 0.4s; }
+.loading-text-words:nth-child(5) { animation-delay: 0.5s; }
+.loading-text-words:nth-child(6) { animation-delay: 0.6s; }
+.loading-text-words:nth-child(7) { animation-delay: 0.7s; }
+
+.progress-indicator {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-top: 15px;
+}
+
+/* Animations */
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 0.7;
   }
 }

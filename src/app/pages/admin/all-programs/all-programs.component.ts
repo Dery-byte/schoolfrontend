@@ -36,6 +36,7 @@ export class AllProgramsComponent {
   selectedProgramId: number | null = null;
   currentProgram: any = null;
   isLoading = false;
+  isLoadingUniversities = false;
   maxVisiblePrograms = 3;
   showAll: { [universityId: number]: boolean } = {};
   expandedUniversityIds = new Set<number>();
@@ -214,8 +215,11 @@ export class AllProgramsComponent {
   }
   // University and program listing methods
   allPrograms() {
+    this.isLoadingUniversities =true;
     this.unive.getAllUniversities().subscribe((data: any) => {
       this.universities = data;
+          this.isLoadingUniversities =false;
+
     });
   }
 

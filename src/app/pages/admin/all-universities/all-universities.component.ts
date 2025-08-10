@@ -16,7 +16,7 @@ export class AllUniversitiesComponent {
   filteredUniversities: University[] = [];
 
 
-
+  isLoading = false;
 
   constructor(private fb: FormBuilder,
     private manualService: ManaulServiceService,
@@ -34,18 +34,29 @@ export class AllUniversitiesComponent {
   }
 
   allUniversity() {
+    this.isLoading = true;
+
     this.uni.getAllUniversities().subscribe((data) => {
       this.universities = data;
+      this.isLoading = false;
+
       this.filterUniversities();
     });
   }
   filterUniversities(): void {
+    this.isLoading = true;
+
     if (this.selectedType === 'ALL') {
       this.filteredUniversities = this.universities;
+      this.isLoading = false;
+
     } else {
       this.filteredUniversities = this.universities.filter(
         (university) => university.type === this.selectedType
+
       );
+      this.isLoading = false;
+
     }
   }
 

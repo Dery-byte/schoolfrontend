@@ -19,6 +19,33 @@
     </div>
 
     <div class="card-body">
+<!-- Modern Loading Spinner -->
+<div *ngIf="isLoadingUniversities" class="loading-overlay">
+  <div class="loading-content">
+    <!-- Modern spinner with SVG animation -->
+    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+      <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+    </svg>
+    
+    <!-- Loading text with fade animation -->
+    <div class="loading-text">
+      <span class="loading-text-words">L</span>
+      <span class="loading-text-words">O</span>
+      <span class="loading-text-words">A</span>
+      <span class="loading-text-words">D</span>
+      <span class="loading-text-words">I</span>
+      <span class="loading-text-words">N</span>
+      <span class="loading-text-words">G</span>
+    </div>
+    
+    <!-- Optional progress indicator -->
+    <div class="progress-indicator">Fetching universities and Programs...</div>
+  </div>
+</div>
+
+
+<div *ngIf="!isLoadingUniversities" >
+
       <div *ngIf="filteredUniversities.length > 0; else noUniversity">
         <div *ngFor="let university of filteredUniversities" class="mb-4 border rounded p-3 shadow-sm">
           <h5>
@@ -122,6 +149,7 @@
           </div>
         </div>
       </div>
+      </div>
 
       <ng-template #noUniversity>
         <div class="alert alert-warning text-center">
@@ -129,6 +157,11 @@
         </div>
       </ng-template>
     </div>
+
+
+
+
+
   </div>
 </div>
 

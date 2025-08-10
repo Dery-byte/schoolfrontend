@@ -12,14 +12,14 @@ interface RevenueMonthly {
   totalAmount: number;
 }
 
-interface OrdersMonthly {
+interface RecordsMonthly {
   month: number;
-  totalOrders: number;
+  totalRecords: number;
 }
 
-interface ReturnsMonthly {
+interface EligibilityMonthly {
   month: number;
-  totalReturns: number;
+  recordCount: number;
 }
 @Component({
   selector: 'app-admin-home',
@@ -30,10 +30,12 @@ export class AdminHomeComponent {
 
   
   totalOrders: any = 0;
-  totalSales: any = 0;
+  totalRevenue: any = 0;
   userSummary: any = {};
   totalClients: any = 0;
 
+  bioStats:any;
+  totalRecords:any;
   constructor(private manualService: ManaulServiceService) {
     this.generateMonths();
     this.generateYears();
@@ -43,15 +45,12 @@ export class AdminHomeComponent {
 
   ngOnInit(): void {
     this.getTotalOrders();
-    this.getTotalSales();
+    this.getTotalRevenue();
     this.getNonAdminLatestJoinedSummary();
     this.getTotalClients();
-
-
-    // this.fetchMonthlyStats(new Date().getFullYear());
-    // this.monthlyOrders(new Date().getFullYear());
-    // this.monthlyReturns(new Date().getFullYear());
+    this.getTotalEligilibilityRecords();
     this.getPaymentInfo();
+    this.biodataStats();
   }
   paymentInfo: any;
   paginatedData: any[] = [];
@@ -132,16 +131,16 @@ export class AdminHomeComponent {
     return pages;
   }
 
-
   getTotalOrders() {
-    this.manualService.getTotalOrders().subscribe((data: any) => {
-      this.totalOrders = data;
+    this.manualService.getTotalRecordStats().subscribe((data: any) => {
+      this.totalRecords = data;
     });
   }
 
-  getTotalSales() {
-    this.manualService.getTotalSales().subscribe((data: any) => {
-      this.totalSales = data;
+  getTotalRevenue() {
+    this.manualService.getTotalRevenue().subscribe((data: any) => {
+      console.log(data);
+      this.totalRevenue = data;
     });
 
   }
@@ -155,6 +154,7 @@ export class AdminHomeComponent {
 
   getTotalClients() {
     this.manualService.getNonAdminCount().subscribe((data) => {
+      console.log(data, "No-Admin Count");
       this.totalClients = data;
     });
   }
@@ -185,6 +185,7 @@ export class AdminHomeComponent {
   years: number[] = [];
   dailySales: any[] = [];
 
+totalEligibilityRecords:number=0;
 
   selectedMonth: string | null = null;
   selectedYear: number | null = null;
@@ -216,17 +217,18 @@ export class AdminHomeComponent {
 
 
 
-  // revFiltering(){
-  //   this.manualService.revenueFiltering().subscribe((data:any)=>{
-
-  //   });
-  // }
-
-
-
+  getTotalEligilibilityRecords(){
+    this.manualService.getTotalEligibilityRecords().subscribe((data:any)=>{
+      console.log(data);
+this.totalEligibilityRecords=data;
+    });
+  }
 
 
-  totalRevenue: number = 0;
+
+
+
+  totalRevenueWeekly: number = 0;
 
 
 
@@ -244,7 +246,7 @@ export class AdminHomeComponent {
           next: (data) => {
 
             this.dailySales = data as any[];
-            this.totalRevenue = this.calculateTotalRevenue(this.dailySales);
+            this.totalRevenueWeekly = this.calculateTotalRevenue(this.dailySales);
             // ✅ control when to show the message
             this.dataLoaded = true;
             if (this.dailySales.length === 0) {
@@ -270,10 +272,7 @@ export class AdminHomeComponent {
   getMonthName(month: number): string {
     return new Date(0, month - 1).toLocaleString('default', { month: 'long' });
   }
-
-
-
-  calculateTotalRevenue(sales: any[]): number {
+ calculateTotalRevenue(sales: any[]): number {
     return sales.reduce((sum, s) => sum + s.totalAmount, 0);
   }
 
@@ -321,12 +320,6 @@ export class AdminHomeComponent {
 
 
   // THE DASHBOARD CHART
-
-
-
-
-
-
   exportData() {
     alert('Export triggered!');
   }
@@ -383,7 +376,7 @@ export class AdminHomeComponent {
         },
         title: {
           display: true,
-          text: 'Orders'
+          text: 'Eligibility'
         }
       },
       yReturns: {
@@ -396,7 +389,7 @@ export class AdminHomeComponent {
         },
         title: {
           display: true,
-          text: 'Returns'
+          text: 'Records'
         },
         offset: true
       }
@@ -429,26 +422,25 @@ export class AdminHomeComponent {
 
 
   fetchMonthlyStats(year: number) {
-
     forkJoin({
       revenue: this.manualService.revenueMonthly(year),
-      orders: this.manualService.monthlyOrders(year),
-      returns: this.manualService.monthlyReturns(year)
+      Eligibility: this.manualService.monthlyEligibilityStats(year),
+      Records: this.manualService.monthlyExamRecords(year)
     }).subscribe(
       ({
         revenue,
-        orders,
-        returns
+        Eligibility,
+        Records
       }: {
         revenue: RevenueMonthly[];
-        orders: OrdersMonthly[];
-        returns: ReturnsMonthly[];
+        Eligibility: EligibilityMonthly[];
+        Records: RecordsMonthly[];
       }) => {
         const fullYearData = Array.from({ length: 12 }, (_, i) => ({
           month: i + 1,
           revenue: 0,
-          orders: 0,
-          returns: 0
+          Eligibility: 0,
+          Records: 0
         }));
 
         revenue.forEach((d: RevenueMonthly) => {
@@ -456,14 +448,14 @@ export class AdminHomeComponent {
           if (index !== -1) fullYearData[index].revenue = d.totalAmount;
         });
 
-        orders.forEach((d: OrdersMonthly) => {
+        Eligibility.forEach((d: EligibilityMonthly) => {
           const index = fullYearData.findIndex(f => f.month === d.month);
-          if (index !== -1) fullYearData[index].orders = d.totalOrders;
+          if (index !== -1) fullYearData[index].Eligibility = d.recordCount;
         });
 
-        returns.forEach((d: ReturnsMonthly) => {
+        Records.forEach((d: RecordsMonthly) => {
           const index = fullYearData.findIndex(f => f.month === d.month);
-          if (index !== -1) fullYearData[index].returns = d.totalReturns;
+          if (index !== -1) fullYearData[index].Records = d.totalRecords;
         });
         this.selectedYear = year;
 
@@ -492,8 +484,8 @@ export class AdminHomeComponent {
             yAxisID: 'yRevenue'
           },
           {
-            label: 'Orders',
-            data: fullYearData.map(d => d.orders),
+            label: 'Eligibility',
+            data: fullYearData.map(d => d.Eligibility),
             backgroundColor: 'rgba(255, 206, 86, 0.3)',
             borderColor: 'rgba(255, 206, 86, 1)',
             fill: true,
@@ -502,8 +494,8 @@ export class AdminHomeComponent {
             yAxisID: 'yOrders'
           },
           {
-            label: 'Returns',
-            data: fullYearData.map(d => d.returns),
+            label: 'Records',
+            data: fullYearData.map(d => d.Records),
             backgroundColor: 'rgba(255, 99, 132, 0.3)',
             borderColor: 'rgba(255, 99, 132, 1)',
             fill: true,
@@ -512,17 +504,17 @@ export class AdminHomeComponent {
             yAxisID: 'yReturns'
           }
         ];
-
-
-
-
-
-
-
       }
     );
   }
 
+
+
+  biodataStats(){
+      this.manualService.biodataStats().subscribe((data: any) => {
+      this.bioStats = data;
+    });
+  }
 
 
 

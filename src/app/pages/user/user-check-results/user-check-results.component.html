@@ -161,8 +161,8 @@
               <tr>
                 <!-- <th class="ps-4">Candidate</th> -->
                 <th>Date</th>
-                <th>Payment</th>
-                <th>Status</th>
+                <th>Payment Status</th>
+                <th>Progress</th>
                 <th class="">Action</th>
               </tr>
             </thead>
@@ -462,15 +462,30 @@
                 </div>
                 <div class="form-group col-md-4">
                   <div class="form-floating">
-                    <select class="form-select" id="gender" name="gender" [(ngModel)]="biodata.gender">
-                      <option value="">Choose Gender
-                      <option>
+                    <select required class="form-select" id="gender" class="form-control" name="gender" [(ngModel)]="biodata.gender">
+                      <option [ngValue]="null">Choose Gender</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                     </select>
                     <label for="gender">Gender</label>
                   </div>
                 </div>
+
+                <!-- {{biodata|json}} -->
+                <div class="form-group col-md-4">
+                  <div class="form-floating">
+                    <select class="form-select" class="form-control" id="region" name="region" [(ngModel)]="biodata.region">
+                      <option [ngValue]="null">Choose Region</option>
+                      <option *ngFor="let option of regionOptions" [ngValue]="option.apiValue">
+                        {{option.display}}
+                      </option>
+                    </select>
+                    <label for="region">Region</label>
+                  </div>
+                </div>
+
+
+
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-primary" [disabled]="isLoading || biodataForm.invalid">
@@ -503,7 +518,6 @@
         <div *ngIf="showH2Message">
 
           <!-- <strong class="fs-5">{{ enteredName }}</strong>
-          <strong class="fs-5">WAEC Candidate Name: {{ candinateName }}</strong>
 
           <div *ngIf="enteredName && candinateName" class="mt-2">
             <span class="badge" [ngClass]="{
@@ -1686,13 +1700,13 @@
 
 
   <!-- Confirm Remove Modal -->
-<div class="modal-backdrop" *ngIf="showRemoveConfirmModal">
-  <div class="modal-contents">
-    <h5>Confirm Removal</h5>
-    <p>Are you sure you want to remove this WAEC result for <strong>{{ waecresults?.cname }}</strong>?</p>
-    <div class="d-flex justify-content-end mt-4">
-      <button class="btn btn-secondary me-2" (click)="cancelRemove()">Cancel</button>
-      <button class="btn btn-danger" (click)="confirmRemove()">Yes, Remove</button>
+  <div class="modal-backdrop" *ngIf="showRemoveConfirmModal">
+    <div class="modal-contents">
+      <h5>Confirm Removal</h5>
+      <p>Are you sure you want to remove this WAEC result for <strong>{{ waecresults?.cname }}</strong>?</p>
+      <div class="d-flex justify-content-end mt-4">
+        <button class="btn btn-secondary me-2" (click)="cancelRemove()">Cancel</button>
+        <button class="btn btn-danger" (click)="confirmRemove()">Yes, Remove</button>
+      </div>
     </div>
   </div>
-</div>

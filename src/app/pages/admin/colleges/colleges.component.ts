@@ -24,6 +24,7 @@ export class CollegesComponent implements OnInit {
   showEditCollegeModal: boolean = false;
   isUpdating: boolean = false;
   selectedCollege: any;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -49,12 +50,17 @@ export class CollegesComponent implements OnInit {
 
   // Load all categories from API
   getAllCategories(): void {
+    this.isLoading = true;
     this.manualService.getAllCategories().subscribe({
       next: (res: any) => {
         this.colleges = res;
+            this.isLoading = false;
+
         this.filteredColleges = [...this.colleges]; // Initialize filtered list
       },
       error: (err) => {
+            this.isLoading = false;
+
         this.snackBar.open('Failed to load categories', 'Close', {
           duration: 3000,
           panelClass: ['snackbar-error']
