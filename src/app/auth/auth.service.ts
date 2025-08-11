@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 export interface UserSession {
     username: string;
+    fullName:string;
     roles: string[];
   }
 
@@ -38,13 +39,17 @@ export class AuthService {
     return this.generatedAuth.authenticate({ body: authRequest }).pipe(
       map((response) => {
         const token = response.token;
-  
+this.setUser(response!.fullName);
+
+  console.log(response);
         if (typeof token === 'string') {
           this.tokenService.token = token;
-          this.setUserFromToken(token);
+          // this.setUser(response.fullName);
+          // this.setUserFromToken(token);
           const decoded = decodeToken(token);
           if (decoded?.sub) {
-            this.setUser(decoded.sub);
+            // this.setUser(response.fullName);
+            // this.setUser(decoded.sub);
           }
   
           return decoded;
@@ -65,39 +70,53 @@ export class AuthService {
     return this.comingFromRegistration;
   }
 
-  setUserFromToken(token: string): void {
-    const decoded = decodeToken(token);
-    if (decoded?.sub) {
-      const user: UserSession = {
-        username: decoded.sub,
-        roles: decoded.authorities || []
-      };
-      this.userSubject.next(user);
-    }
-  }
+  // setUserFromToken(token: string): void {
+  //   const decoded = decodeToken(token);
+  //   if (decoded?.sub) {
+  //     const user: UserSession = {
+  //       username: decoded.sub,
+  //       roles: decoded.authorities || []
+  //     };
+  //     this.userSubject.next(user);
+  //   }
+  // }
   
 
 //   setUser(username: string): void {
 //     this.currentUser = username;
 //   }
 
-setUser(username: string): void {
-    this.currentUserSubject.next(username);
-  }
+// setUser(username: string): void {
+//     this.currentUserSubject.next(username);
+//   }
 
 
 
-  initializeUserFromToken(): void {
-    const token = this.tokenService.token;
-    if (!token) return;
+  // initializeUserFromToken(): void {
+  //   const token = this.tokenService.token;
+  //   if (!token) return;
   
-    const decoded = decodeToken(token);
-    const username = decoded?.sub;
+  //   const decoded = decodeToken(token);
+  //   const username = decoded?.sub;
   
-    if (username) {
-      this.setUser(username);
-    }
+  //   if (username) {
+  //     this.setUser(username);
+  //   }
+  // }
+
+
+  setUser(fullName: any): void {
+  localStorage.setItem('fullName', fullName); // ✅ Save in localStorage
+  this.currentUserSubject.next(fullName);
+}
+
+initializeUserFromToken(): void {
+  const savedName = localStorage.getItem('fullName'); // ✅ Load from localStorage
+  if (savedName) {
+    this.currentUserSubject.next(savedName);
   }
+}
+
   
 
 
@@ -158,8 +177,8 @@ isLoggedIn(): boolean {
     return this.userSubject.value?.roles || [];
   }
 
-  getUsername(): string | null {
-    return this.userSubject.value?.username || null;
-  }
+  // getUsername(): string | null {
+  //   return this.userSubject.value?.fullName || null;
+  // }
   
 }

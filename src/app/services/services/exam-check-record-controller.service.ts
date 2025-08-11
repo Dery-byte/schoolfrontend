@@ -15,11 +15,20 @@ import { create } from '../fn/exam-check-record-controller/create';
 import { Create$Params } from '../fn/exam-check-record-controller/create';
 import { delete$ } from '../fn/exam-check-record-controller/delete';
 import { Delete$Params } from '../fn/exam-check-record-controller/delete';
+import { ExamCheckMonthlySummary } from '../models/exam-check-monthly-summary';
 import { ExamCheckRecord } from '../models/exam-check-record';
+import { ExamCheckRecordDto } from '../models/exam-check-record-dto';
+import { ExamRecordStatsDto } from '../models/exam-record-stats-dto';
 import { getById } from '../fn/exam-check-record-controller/get-by-id';
 import { GetById$Params } from '../fn/exam-check-record-controller/get-by-id';
 import { getByUser } from '../fn/exam-check-record-controller/get-by-user';
 import { GetByUser$Params } from '../fn/exam-check-record-controller/get-by-user';
+import { getExamRecordStats } from '../fn/exam-check-record-controller/get-exam-record-stats';
+import { GetExamRecordStats$Params } from '../fn/exam-check-record-controller/get-exam-record-stats';
+import { getFilteredStats } from '../fn/exam-check-record-controller/get-filtered-stats';
+import { GetFilteredStats$Params } from '../fn/exam-check-record-controller/get-filtered-stats';
+import { getMonthlyStats } from '../fn/exam-check-record-controller/get-monthly-stats';
+import { GetMonthlyStats$Params } from '../fn/exam-check-record-controller/get-monthly-stats';
 import { update } from '../fn/exam-check-record-controller/update';
 import { Update$Params } from '../fn/exam-check-record-controller/update';
 import { updateCandidate } from '../fn/exam-check-record-controller/update-candidate';
@@ -183,6 +192,81 @@ export class ExamCheckRecordControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getExamRecordStats()` */
+  static readonly GetExamRecordStatsPath = '/auth/records/stats';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getExamRecordStats()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getExamRecordStats$Response(params?: GetExamRecordStats$Params, context?: HttpContext): Observable<StrictHttpResponse<ExamRecordStatsDto>> {
+    return getExamRecordStats(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getExamRecordStats$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getExamRecordStats(params?: GetExamRecordStats$Params, context?: HttpContext): Observable<ExamRecordStatsDto> {
+    return this.getExamRecordStats$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ExamRecordStatsDto>): ExamRecordStatsDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getFilteredStats()` */
+  static readonly GetFilteredStatsPath = '/auth/records/stats/filtered';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getFilteredStats()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFilteredStats$Response(params?: GetFilteredStats$Params, context?: HttpContext): Observable<StrictHttpResponse<ExamRecordStatsDto>> {
+    return getFilteredStats(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getFilteredStats$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFilteredStats(params?: GetFilteredStats$Params, context?: HttpContext): Observable<ExamRecordStatsDto> {
+    return this.getFilteredStats$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ExamRecordStatsDto>): ExamRecordStatsDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getMonthlyStats()` */
+  static readonly GetMonthlyStatsPath = '/auth/records/monthlyStats';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMonthlyStats()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMonthlyStats$Response(params: GetMonthlyStats$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExamCheckMonthlySummary>>> {
+    return getMonthlyStats(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMonthlyStats$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMonthlyStats(params: GetMonthlyStats$Params, context?: HttpContext): Observable<Array<ExamCheckMonthlySummary>> {
+    return this.getMonthlyStats$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ExamCheckMonthlySummary>>): Array<ExamCheckMonthlySummary> => r.body)
+    );
+  }
+
   /** Path part for operation `getByUser()` */
   static readonly GetByUserPath = '/auth/records/RecordsByUserId';
 
@@ -192,7 +276,7 @@ export class ExamCheckRecordControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getByUser$Response(params?: GetByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExamCheckRecord>>> {
+  getByUser$Response(params?: GetByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExamCheckRecordDto>>> {
     return getByUser(this.http, this.rootUrl, params, context);
   }
 
@@ -202,9 +286,9 @@ export class ExamCheckRecordControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getByUser(params?: GetByUser$Params, context?: HttpContext): Observable<Array<ExamCheckRecord>> {
+  getByUser(params?: GetByUser$Params, context?: HttpContext): Observable<Array<ExamCheckRecordDto>> {
     return this.getByUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ExamCheckRecord>>): Array<ExamCheckRecord> => r.body)
+      map((r: StrictHttpResponse<Array<ExamCheckRecordDto>>): Array<ExamCheckRecordDto> => r.body)
     );
   }
 

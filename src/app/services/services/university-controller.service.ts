@@ -13,18 +13,47 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addUniversity } from '../fn/university-controller/add-university';
 import { AddUniversity$Params } from '../fn/university-controller/add-university';
+import { deleteUniversityById } from '../fn/university-controller/delete-university-by-id';
+import { DeleteUniversityById$Params } from '../fn/university-controller/delete-university-by-id';
 import { getAllUniversities } from '../fn/university-controller/get-all-universities';
 import { GetAllUniversities$Params } from '../fn/university-controller/get-all-universities';
 import { getUniversitiesByType } from '../fn/university-controller/get-universities-by-type';
 import { GetUniversitiesByType$Params } from '../fn/university-controller/get-universities-by-type';
-import { getUniversityById } from '../fn/university-controller/get-university-by-id';
-import { GetUniversityById$Params } from '../fn/university-controller/get-university-by-id';
+import { getUniversityById1 } from '../fn/university-controller/get-university-by-id-1';
+import { GetUniversityById1$Params } from '../fn/university-controller/get-university-by-id-1';
 import { University } from '../models/university';
+import { updateUniversity } from '../fn/university-controller/update-university';
+import { UpdateUniversity$Params } from '../fn/university-controller/update-university';
 
 @Injectable({ providedIn: 'root' })
 export class UniversityControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateUniversity()` */
+  static readonly UpdateUniversityPath = '/auth/updateUniverity';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateUniversity()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUniversity$Response(params: UpdateUniversity$Params, context?: HttpContext): Observable<StrictHttpResponse<University>> {
+    return updateUniversity(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateUniversity$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUniversity(params: UpdateUniversity$Params, context?: HttpContext): Observable<University> {
+    return this.updateUniversity$Response(params, context).pipe(
+      map((r: StrictHttpResponse<University>): University => r.body)
+    );
   }
 
   /** Path part for operation `addUniversity()` */
@@ -49,31 +78,6 @@ export class UniversityControllerService extends BaseService {
   addUniversity(params: AddUniversity$Params, context?: HttpContext): Observable<Array<University>> {
     return this.addUniversity$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<University>>): Array<University> => r.body)
-    );
-  }
-
-  /** Path part for operation `getUniversityById()` */
-  static readonly GetUniversityByIdPath = '/auth/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUniversityById()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUniversityById$Response(params: GetUniversityById$Params, context?: HttpContext): Observable<StrictHttpResponse<University>> {
-    return getUniversityById(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUniversityById$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUniversityById(params: GetUniversityById$Params, context?: HttpContext): Observable<University> {
-    return this.getUniversityById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<University>): University => r.body)
     );
   }
 
@@ -102,6 +106,31 @@ export class UniversityControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getUniversityById1()` */
+  static readonly GetUniversityById1Path = '/auth/getUniversityById/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUniversityById1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUniversityById1$Response(params: GetUniversityById1$Params, context?: HttpContext): Observable<StrictHttpResponse<University>> {
+    return getUniversityById1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUniversityById1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUniversityById1(params: GetUniversityById1$Params, context?: HttpContext): Observable<University> {
+    return this.getUniversityById1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<University>): University => r.body)
+    );
+  }
+
   /** Path part for operation `getAllUniversities()` */
   static readonly GetAllUniversitiesPath = '/auth/all';
 
@@ -124,6 +153,31 @@ export class UniversityControllerService extends BaseService {
   getAllUniversities(params?: GetAllUniversities$Params, context?: HttpContext): Observable<Array<University>> {
     return this.getAllUniversities$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<University>>): Array<University> => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteUniversityById()` */
+  static readonly DeleteUniversityByIdPath = '/auth/deleteUniversityById/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteUniversityById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUniversityById$Response(params: DeleteUniversityById$Params, context?: HttpContext): Observable<StrictHttpResponse<University>> {
+    return deleteUniversityById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteUniversityById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteUniversityById(params: DeleteUniversityById$Params, context?: HttpContext): Observable<University> {
+    return this.deleteUniversityById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<University>): University => r.body)
     );
   }
 

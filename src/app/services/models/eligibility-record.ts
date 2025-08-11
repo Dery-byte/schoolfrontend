@@ -8,6 +8,7 @@ export interface EligibilityRecord {
   createdAt?: string;
   examCheckRecord?: ExamCheckRecord;
   id?: string;
+  selectedCategories?: Array<string>;
   universities?: Array<UniversityEligibility>;
   userId?: string;
 }

@@ -8,16 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { University } from '../../models/university';
+import { EligibilityRecord } from '../../models/eligibility-record';
 
-export interface GetUniversityById$Params {
-  id: number;
+export interface GetAllRecords$Params {
 }
 
-export function getUniversityById(http: HttpClient, rootUrl: string, params: GetUniversityById$Params, context?: HttpContext): Observable<StrictHttpResponse<University>> {
-  const rb = new RequestBuilder(rootUrl, getUniversityById.PATH, 'get');
+export function getAllRecords(http: HttpClient, rootUrl: string, params?: GetAllRecords$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EligibilityRecord>>> {
+  const rb = new RequestBuilder(rootUrl, getAllRecords.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -25,9 +23,9 @@ export function getUniversityById(http: HttpClient, rootUrl: string, params: Get
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<University>;
+      return r as StrictHttpResponse<Array<EligibilityRecord>>;
     })
   );
 }
 
-getUniversityById.PATH = '/auth/{id}';
+getAllRecords.PATH = '/auth/eligibilityRecords';

@@ -31,6 +31,36 @@
     }
   ],
   "paths": {
+    "/auth/updateUniverity": {
+      "put": {
+        "tags": [
+          "university-controller"
+        ],
+        "operationId": "updateUniversity",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUniversityDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/University"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/records/{id}": {
       "get": {
         "tags": [
@@ -120,57 +150,47 @@
         }
       }
     },
-    "/auth/categories/{id}": {
-      "get": {
+    "/auth/programs/updateProgram": {
+      "put": {
         "tags": [
-          "category-controller"
+          "program-controller"
         ],
-        "operationId": "getCategoryById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
+        "operationId": "updateProgram",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgramDTO"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Category"
+                  "$ref": "#/components/schemas/Program"
                 }
               }
             }
           }
         }
-      },
+      }
+    },
+    "/auth/categories/upateCategory": {
       "put": {
         "tags": [
           "category-controller"
         ],
-        "operationId": "updateCategory",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+        "operationId": "updateUniversity_1",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CategoryRequest"
+                "$ref": "#/components/schemas/UpdateCategoryDTO"
               }
             }
           },
@@ -188,12 +208,14 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/auth/biodata/{id}": {
+      "get": {
         "tags": [
-          "category-controller"
+          "biodata-controller"
         ],
-        "operationId": "deleteCategory",
+        "operationId": "getBiodataById",
         "parameters": [
           {
             "name": "id",
@@ -201,13 +223,163 @@
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int32"
             }
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BiodataDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "updateBiodata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Biodata"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Biodata"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "deleteBiodata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/biodata/updateBiodata": {
+      "put": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "updateBiodata_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Biodata"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Biodata"
+                }
+              }
+            }
           }
         }
       }
@@ -500,6 +672,36 @@
         }
       }
     },
+    "/auth/payment-status": {
+      "post": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "createPaymentStatus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentStatuss"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatuss"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/forgotten-password": {
       "post": {
         "tags": [
@@ -523,7 +725,7 @@
         }
       }
     },
-    "/auth/check-eligibilityAll": {
+    "/auth/check-eligibility": {
       "post": {
         "tags": [
           "eligibility-controller"
@@ -533,7 +735,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WaecCandidateEntity"
+                "$ref": "#/components/schemas/EligibilityRequest"
               }
             }
           },
@@ -576,6 +778,49 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/biodata/addBiodata": {
+      "post": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "createBiodata",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Biodata"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Biodata"
                 }
               }
             }
@@ -732,37 +977,6 @@
         }
       }
     },
-    "/auth/{id}": {
-      "get": {
-        "tags": [
-          "university-controller"
-        ],
-        "operationId": "getUniversityById",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/University"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/type/{type}": {
       "get": {
         "tags": [
@@ -800,6 +1014,100 @@
         }
       }
     },
+    "/auth/records/stats": {
+      "get": {
+        "tags": [
+          "exam-check-record-controller"
+        ],
+        "operationId": "getExamRecordStats",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamRecordStatsDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/records/stats/filtered": {
+      "get": {
+        "tags": [
+          "exam-check-record-controller"
+        ],
+        "operationId": "getFilteredStats",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamRecordStatsDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/records/monthlyStats": {
+      "get": {
+        "tags": [
+          "exam-check-record-controller"
+        ],
+        "operationId": "getMonthlyStats",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExamCheckMonthlySummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/records/RecordsByUserId": {
       "get": {
         "tags": [
@@ -814,7 +1122,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ExamCheckRecord"
+                    "$ref": "#/components/schemas/ExamCheckRecordDTO"
                   }
                 }
               }
@@ -850,6 +1158,37 @@
                   "items": {
                     "$ref": "#/components/schemas/Program"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/programs/getProgramById/{id}": {
+      "get": {
+        "tags": [
+          "program-controller"
+        ],
+        "operationId": "getUniversityById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
                 }
               }
             }
@@ -954,6 +1293,667 @@
         }
       }
     },
+    "/auth/payment-status/user": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getRevenueByUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/transaction/{transactionId}": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getPaymentByTransaction",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatuss"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/total-revenue": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getTotalRevenue",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/revenuesDaily": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getDailyPaymentStats",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "statusCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DailyPaymentSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/revenueWeekly": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getWeeklyRevenue",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "maximum": 9999,
+              "minimum": 2000,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "maximum": 12,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeeklyRevenueSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/revenueMonthly": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getMonthlyRevenue",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthlyRevenueSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/revenueDaily": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getDailyPaymentStats_1",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DailyPaymentSummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/period": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getRevenueBetweenDates",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/getAllPayments": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getAllPaymentStatuses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentStatuss"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/forFarmer": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "paymentForFarmer",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentStatusResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/external/{externalRef}": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getByExternalRef",
+        "parameters": [
+          {
+            "name": "externalRef",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatuss"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/byId/{id}": {
+      "get": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatuss"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/latestUsersSummary": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "getLatestUsersSummary",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 6
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserSummaryDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/latest/non-admins": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "getLatestNonAdminUsers",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/getUniversityById/{id}": {
+      "get": {
+        "tags": [
+          "university-controller"
+        ],
+        "operationId": "getUniversityById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/University"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/eligibilityRecords": {
+      "get": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "getAllRecords",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EligibilityRecord"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/eligibilityRecords/{id}": {
+      "get": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "getRecordById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EligibilityRecord"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "deleteRecord",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/eligibilityRecords/user/{userId}": {
+      "get": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "getRecordsByUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EligibilityRecord"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/eligibilityRecords/user/{userId}/count": {
+      "get": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "getRecordsCountByUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/eligibilityRecords/my-eligibility-records": {
       "get": {
         "tags": [
@@ -970,6 +1970,61 @@
                   "items": {
                     "$ref": "#/components/schemas/EligibilityRecord"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/eligibilityRecords/monthlyStats": {
+      "get": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "getMonthlyStats_1",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EligibilityMonthlySummary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/eligibilityRecords/count": {
+      "get": {
+        "tags": [
+          "eligibility-record-controller"
+        ],
+        "operationId": "getTotalRecordsCount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
                 }
               }
             }
@@ -1000,6 +2055,58 @@
         }
       }
     },
+    "/auth/count": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "getNonAdminCount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/categories/getCategoryById/{id}": {
+      "get": {
+        "tags": [
+          "category-controller"
+        ],
+        "operationId": "getCategoryById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/categories/getAll": {
       "get": {
         "tags": [
@@ -1016,6 +2123,209 @@
                   "items": {
                     "$ref": "#/components/schemas/Category"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/biodata/stats": {
+      "get": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "getRegionStatistics",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionStatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/biodata/search": {
+      "get": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "findByEmail",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Biodata"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/biodata/getAll": {
+      "get": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "getAllBiodata",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BiodataDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/biodata/getAllRegions": {
+      "get": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "getAllRegions",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "ASHANTI",
+                      "BRONG_AHAFO",
+                      "CENTRAL",
+                      "EASTERN",
+                      "GREATER_ACCRA",
+                      "NORTHERN",
+                      "UPPER_EAST",
+                      "UPPER_WEST",
+                      "VOLTA",
+                      "WESTERN"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/biodata/byrecordId/{recordId}": {
+      "get": {
+        "tags": [
+          "biodata-controller"
+        ],
+        "operationId": "getBiodataByRecordId",
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BiodataResponse"
                 }
               }
             }
@@ -1068,17 +2378,289 @@
           }
         }
       }
+    },
+    "/auth/programs/deleteById": {
+      "delete": {
+        "tags": [
+          "program-controller"
+        ],
+        "operationId": "deleteProgram",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteProgramRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/payment-status/{id}": {
+      "delete": {
+        "tags": [
+          "payment-status-controller"
+        ],
+        "operationId": "deleteById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/deleteUniversityById/{id}": {
+      "delete": {
+        "tags": [
+          "university-controller"
+        ],
+        "operationId": "deleteUniversityById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/University"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/categories/deleteCategoryById/{id}": {
+      "delete": {
+        "tags": [
+          "category-controller"
+        ],
+        "operationId": "deleteCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "UpdateUniversityDTO": {
+        "required": [
+          "id",
+          "location",
+          "name",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PUBLIC",
+              "PRIVATE"
+            ]
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Program": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cutoffPoints": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "categories": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        }
+      },
+      "University": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PUBLIC",
+              "PRIVATE"
+            ]
+          },
+          "programs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Program"
+            }
+          }
+        }
+      },
+      "Biodata": {
+        "required": [
+          "address",
+          "email",
+          "firstName",
+          "lastName",
+          "phoneNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Male",
+              "Female"
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "pattern": "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$",
+            "type": "string"
+          },
+          "address": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "dob": {
+            "type": "string",
+            "format": "date"
+          },
+          "record": {
+            "$ref": "#/components/schemas/ExamCheckRecord"
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "ASHANTI",
+              "BRONG_AHAFO",
+              "CENTRAL",
+              "EASTERN",
+              "GREATER_ACCRA",
+              "NORTHERN",
+              "UPPER_EAST",
+              "UPPER_WEST",
+              "VOLTA",
+              "WESTERN"
+            ]
+          }
+        }
+      },
       "ExamCheckRecord": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
-          },
-          "userId": {
             "type": "string"
           },
           "candidateName": {
@@ -1112,6 +2694,101 @@
           },
           "waecCandidateEntity": {
             "$ref": "#/components/schemas/WaecCandidateEntity"
+          },
+          "biodata": {
+            "$ref": "#/components/schemas/Biodata"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "GrantedAuthority": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "accountLocked": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrantedAuthority"
+            }
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
           }
         }
       },
@@ -1171,18 +2848,7 @@
           }
         }
       },
-      "CategoryRequest": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "Category": {
+      "CategoryIdDTO": {
         "type": "object",
         "properties": {
           "id": {
@@ -1190,6 +2856,51 @@
             "format": "int64"
           },
           "name": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateProgramDTO": {
+        "type": "object",
+        "properties": {
+          "programId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "cutoffPoints": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "categoryIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryIdDTO"
+            }
+          }
+        }
+      },
+      "UpdateCategoryDTO": {
+        "required": [
+          "description",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
             "type": "string"
           }
         }
@@ -1272,18 +2983,6 @@
           }
         }
       },
-      "CategoryIdDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
       "ProgramRequestDTO": {
         "required": [
           "universityId"
@@ -1318,31 +3017,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CategoryIdDTO"
-            }
-          }
-        }
-      },
-      "Program": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "cutoffPoints": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          },
-          "categories": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Category"
             }
           }
         }
@@ -1471,10 +3145,104 @@
           }
         }
       },
+      "PaymentStatuss": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "txStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payer": {
+            "type": "string"
+          },
+          "payee": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "externalRef": {
+            "type": "string"
+          },
+          "thirdPartyRef": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
       "ForgottenPasswordRequest": {
         "type": "object",
         "properties": {
           "email": {
+            "type": "string"
+          }
+        }
+      },
+      "EligibilityRequest": {
+        "required": [
+          "categoryIds",
+          "resultDetails"
+        ],
+        "type": "object",
+        "properties": {
+          "resultDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultDetail"
+            }
+          },
+          "universityType": {
+            "type": "string"
+          },
+          "checkRecordId": {
+            "type": "string"
+          },
+          "categoryIds": {
+            "maxItems": 2147483647,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "ResultDetail": {
+        "type": "object",
+        "properties": {
+          "subjectcode": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "grade": {
+            "type": "string"
+          },
+          "interpretation": {
             "type": "string"
           }
         }
@@ -1546,6 +3314,12 @@
           },
           "universityEligibility": {
             "$ref": "#/components/schemas/UniversityEligibility"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -1569,6 +3343,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/UniversityEligibility"
+            }
+          },
+          "selectedCategories": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         }
@@ -1601,6 +3381,12 @@
           },
           "universityEligibility": {
             "$ref": "#/components/schemas/UniversityEligibility"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -1639,6 +3425,20 @@
           }
         }
       },
+      "CategoryRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
       "AuthenticationRequest": {
         "required": [
           "email",
@@ -1661,38 +3461,146 @@
         "properties": {
           "token": {
             "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
           }
         }
       },
-      "University": {
+      "ExamRecordStatsDTO": {
         "type": "object",
         "properties": {
-          "id": {
+          "totalRecords": {
             "type": "integer",
             "format": "int64"
           },
-          "name": {
-            "type": "string"
+          "paidRecords": {
+            "type": "integer",
+            "format": "int64"
           },
-          "location": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "PUBLIC",
-              "PRIVATE"
-            ]
-          },
-          "programs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Program"
-            }
+          "pendingRecords": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
-      "PaymentStatuss": {
+      "ExamCheckMonthlySummary": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ExamCheckRecordDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "candidateName": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string",
+            "enum": [
+              "PAID",
+              "FAILED",
+              "PENDING"
+            ]
+          },
+          "checkStatus": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "checkLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "externalRef": {
+            "type": "string"
+          },
+          "waecCandidateEntity": {
+            "$ref": "#/components/schemas/WaecCandidateEntity"
+          }
+        }
+      },
+      "DailyPaymentSummary": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionCount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "WeeklyRevenueSummary": {
+        "type": "object",
+        "properties": {
+          "weekNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmount": {
+            "type": "number"
+          },
+          "transactionCount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "MonthlyRevenueSummary": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "transactionCount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PaymentStatusResponseDTO": {
         "type": "object",
         "properties": {
           "id": {
@@ -1733,6 +3641,350 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/UserSummaryDTOs"
+          }
+        }
+      },
+      "UserSummaryDTOs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phoneNummber": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          }
+        }
+      },
+      "PageUserSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserSummaryDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "signupDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "PageUser": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EligibilityMonthlySummary": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "universityCount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "BiodataDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Male",
+              "Female"
+            ]
+          },
+          "dob": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "ASHANTI",
+              "BRONG_AHAFO",
+              "CENTRAL",
+              "EASTERN",
+              "GREATER_ACCRA",
+              "NORTHERN",
+              "UPPER_EAST",
+              "UPPER_WEST",
+              "VOLTA",
+              "WESTERN"
+            ]
+          }
+        }
+      },
+      "RegionStatsDTO": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "RegionStatsResponse": {
+        "type": "object",
+        "properties": {
+          "totalBiodata": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegionStatsDTO"
+            }
+          }
+        }
+      },
+      "BiodataResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Male",
+              "Female"
+            ]
+          },
+          "dob": {
+            "type": "string",
+            "format": "date"
+          },
+          "recordId": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "ASHANTI",
+              "BRONG_AHAFO",
+              "CENTRAL",
+              "EASTERN",
+              "GREATER_ACCRA",
+              "NORTHERN",
+              "UPPER_EAST",
+              "UPPER_WEST",
+              "VOLTA",
+              "WESTERN"
+            ]
+          }
+        }
+      },
+      "DeleteProgramRequest": {
+        "type": "object",
+        "properties": {
+          "programId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       }

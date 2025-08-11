@@ -168,6 +168,10 @@ export class RegisterComponent {
 
         const token = res.token as string;
         this.tokenService.token = token;
+        const username = res.fullName;
+                  this.authService.setUser(username);
+                  console.log(username);
+
 
         // Use the utility to decode the token
         const decodedToken = decodeToken(token);
@@ -175,7 +179,7 @@ export class RegisterComponent {
         console.log(token);
 
         if (decodedToken) {
-          const username = decodedToken.sub; // 'sub' usually contains the username in JWT
+          // const username = decodedToken.sub; // 'sub' usually contains the username in JWT
 
           // Store the username in AuthService
           this.authService.setUser(username);

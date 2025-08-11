@@ -119,9 +119,7 @@ export class LoginComponent {
 
         if (decodedToken) {
           const username = decodedToken.sub; // 'sub' usually contains the username in JWT
-
-          // Store the username in AuthService
-          this.authService.setUser(username);
+    this.authService.setUser(res.fullName || username); // ✅ change here
         }
         if (decodedToken && decodedToken.authorities) {
           this.navigateBasedOnRole(decodedToken.authorities);

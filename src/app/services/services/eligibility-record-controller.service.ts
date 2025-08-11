@@ -11,16 +11,156 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteRecord } from '../fn/eligibility-record-controller/delete-record';
+import { DeleteRecord$Params } from '../fn/eligibility-record-controller/delete-record';
+import { EligibilityMonthlySummary } from '../models/eligibility-monthly-summary';
 import { EligibilityRecord } from '../models/eligibility-record';
 import { getAllEligibilityRecords } from '../fn/eligibility-record-controller/get-all-eligibility-records';
 import { GetAllEligibilityRecords$Params } from '../fn/eligibility-record-controller/get-all-eligibility-records';
+import { getAllRecords } from '../fn/eligibility-record-controller/get-all-records';
+import { GetAllRecords$Params } from '../fn/eligibility-record-controller/get-all-records';
 import { getEligibilityRecordsForUser } from '../fn/eligibility-record-controller/get-eligibility-records-for-user';
 import { GetEligibilityRecordsForUser$Params } from '../fn/eligibility-record-controller/get-eligibility-records-for-user';
+import { getMonthlyStats1 } from '../fn/eligibility-record-controller/get-monthly-stats-1';
+import { GetMonthlyStats1$Params } from '../fn/eligibility-record-controller/get-monthly-stats-1';
+import { getRecordById } from '../fn/eligibility-record-controller/get-record-by-id';
+import { GetRecordById$Params } from '../fn/eligibility-record-controller/get-record-by-id';
+import { getRecordsByUser } from '../fn/eligibility-record-controller/get-records-by-user';
+import { GetRecordsByUser$Params } from '../fn/eligibility-record-controller/get-records-by-user';
+import { getRecordsCountByUser } from '../fn/eligibility-record-controller/get-records-count-by-user';
+import { GetRecordsCountByUser$Params } from '../fn/eligibility-record-controller/get-records-count-by-user';
+import { getTotalRecordsCount } from '../fn/eligibility-record-controller/get-total-records-count';
+import { GetTotalRecordsCount$Params } from '../fn/eligibility-record-controller/get-total-records-count';
 
 @Injectable({ providedIn: 'root' })
 export class EligibilityRecordControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `getAllRecords()` */
+  static readonly GetAllRecordsPath = '/auth/eligibilityRecords';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllRecords()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllRecords$Response(params?: GetAllRecords$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EligibilityRecord>>> {
+    return getAllRecords(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllRecords$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllRecords(params?: GetAllRecords$Params, context?: HttpContext): Observable<Array<EligibilityRecord>> {
+    return this.getAllRecords$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<EligibilityRecord>>): Array<EligibilityRecord> => r.body)
+    );
+  }
+
+  /** Path part for operation `getRecordById()` */
+  static readonly GetRecordByIdPath = '/auth/eligibilityRecords/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRecordById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecordById$Response(params: GetRecordById$Params, context?: HttpContext): Observable<StrictHttpResponse<EligibilityRecord>> {
+    return getRecordById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRecordById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecordById(params: GetRecordById$Params, context?: HttpContext): Observable<EligibilityRecord> {
+    return this.getRecordById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<EligibilityRecord>): EligibilityRecord => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteRecord()` */
+  static readonly DeleteRecordPath = '/auth/eligibilityRecords/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteRecord()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteRecord$Response(params: DeleteRecord$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteRecord(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteRecord$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteRecord(params: DeleteRecord$Params, context?: HttpContext): Observable<void> {
+    return this.deleteRecord$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getRecordsByUser()` */
+  static readonly GetRecordsByUserPath = '/auth/eligibilityRecords/user/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRecordsByUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecordsByUser$Response(params: GetRecordsByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EligibilityRecord>>> {
+    return getRecordsByUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRecordsByUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecordsByUser(params: GetRecordsByUser$Params, context?: HttpContext): Observable<Array<EligibilityRecord>> {
+    return this.getRecordsByUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<EligibilityRecord>>): Array<EligibilityRecord> => r.body)
+    );
+  }
+
+  /** Path part for operation `getRecordsCountByUser()` */
+  static readonly GetRecordsCountByUserPath = '/auth/eligibilityRecords/user/{userId}/count';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRecordsCountByUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecordsCountByUser$Response(params: GetRecordsCountByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getRecordsCountByUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRecordsCountByUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecordsCountByUser(params: GetRecordsCountByUser$Params, context?: HttpContext): Observable<number> {
+    return this.getRecordsCountByUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `getEligibilityRecordsForUser()` */
@@ -45,6 +185,56 @@ export class EligibilityRecordControllerService extends BaseService {
   getEligibilityRecordsForUser(params?: GetEligibilityRecordsForUser$Params, context?: HttpContext): Observable<Array<EligibilityRecord>> {
     return this.getEligibilityRecordsForUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<EligibilityRecord>>): Array<EligibilityRecord> => r.body)
+    );
+  }
+
+  /** Path part for operation `getMonthlyStats1()` */
+  static readonly GetMonthlyStats1Path = '/auth/eligibilityRecords/monthlyStats';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMonthlyStats1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMonthlyStats1$Response(params: GetMonthlyStats1$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<EligibilityMonthlySummary>>> {
+    return getMonthlyStats1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMonthlyStats1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMonthlyStats1(params: GetMonthlyStats1$Params, context?: HttpContext): Observable<Array<EligibilityMonthlySummary>> {
+    return this.getMonthlyStats1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<EligibilityMonthlySummary>>): Array<EligibilityMonthlySummary> => r.body)
+    );
+  }
+
+  /** Path part for operation `getTotalRecordsCount()` */
+  static readonly GetTotalRecordsCountPath = '/auth/eligibilityRecords/count';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTotalRecordsCount()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTotalRecordsCount$Response(params?: GetTotalRecordsCount$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getTotalRecordsCount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTotalRecordsCount$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTotalRecordsCount(params?: GetTotalRecordsCount$Params, context?: HttpContext): Observable<number> {
+    return this.getTotalRecordsCount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

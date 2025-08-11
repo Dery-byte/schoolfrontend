@@ -10,43 +10,43 @@ import { Router } from '@angular/router';
 })
 export class UserHeaderComponent {
 
-    
-    userName: string | null = null;
-    roles:any[]=[];
-    users:any;
-  
-  
-      constructor(private authenticationService: AuthenticationService,
-        private authService:AuthService,
-            private router: Router,
-        
-      ) {
-        
-      }
-    ngOnInit() {
-  
-      this.authService.user$.subscribe(user => {
-        this.userName = user;
-        console.log(user);
-      });
-      // Load user from local storage on refresh
-      // this.userName = this.authService.getUser();
-  this.authService.initializeUserFromToken();
-  
-    }
-  
-  
-    logout() {
-      this.userName = null;
-      localStorage.removeItem('token');
-      this.authService.logout();
-    
-      this.router.navigate(['/']).then(() => {
-        window.location.reload(); // optional — only if you need a full reload
-      });
-    }
-    
-  
-  
+
+  userName: string | null = null;
+  roles: any[] = [];
+  users: any;
+
+
+  constructor(private authenticationService: AuthenticationService,
+    private authService: AuthService,
+    private router: Router,
+
+  ) {
+
+  }
+  ngOnInit() {
+
+    this.authService.user$.subscribe(fullName => {
+      this.userName = fullName;
+      console.log(fullName);
+    });
+    // Load user from local storage on refresh
+    // this.userName = this.authService.getUser();
+    this.authService.initializeUserFromToken();
+
+  }
+
+
+  logout() {
+    this.userName = null;
+    localStorage.removeItem('token');
+    this.authService.logout();
+
+    this.router.navigate(['/']).then(() => {
+      window.location.reload(); // optional — only if you need a full reload
+    });
+  }
+
+
+
 
 }

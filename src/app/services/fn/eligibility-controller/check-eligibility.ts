@@ -9,10 +9,10 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { EligibilityRecord } from '../../models/eligibility-record';
-import { WaecCandidateEntity } from '../../models/waec-candidate-entity';
+import { EligibilityRequest } from '../../models/eligibility-request';
 
 export interface CheckEligibility$Params {
-      body: WaecCandidateEntity
+      body: EligibilityRequest
 }
 
 export function checkEligibility(http: HttpClient, rootUrl: string, params: CheckEligibility$Params, context?: HttpContext): Observable<StrictHttpResponse<EligibilityRecord>> {
@@ -31,4 +31,4 @@ export function checkEligibility(http: HttpClient, rootUrl: string, params: Chec
   );
 }
 
-checkEligibility.PATH = '/auth/check-eligibilityAll';
+checkEligibility.PATH = '/auth/check-eligibility';

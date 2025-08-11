@@ -30,4 +30,4 @@ export function getCategoryById(http: HttpClient, rootUrl: string, params: GetCa
   );
 }
 
-getCategoryById.PATH = '/auth/categories/{id}';
+getCategoryById.PATH = '/auth/categories/getCategoryById/{id}';

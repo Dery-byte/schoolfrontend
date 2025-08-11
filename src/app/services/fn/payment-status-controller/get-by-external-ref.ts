@@ -8,19 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Category } from '../../models/category';
-import { CategoryRequest } from '../../models/category-request';
+import { PaymentStatuss } from '../../models/payment-statuss';
 
-export interface UpdateCategory$Params {
-  id: number;
-      body: CategoryRequest
+export interface GetByExternalRef$Params {
+  externalRef: string;
 }
 
-export function updateCategory(http: HttpClient, rootUrl: string, params: UpdateCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<Category>> {
-  const rb = new RequestBuilder(rootUrl, updateCategory.PATH, 'put');
+export function getByExternalRef(http: HttpClient, rootUrl: string, params: GetByExternalRef$Params, context?: HttpContext): Observable<StrictHttpResponse<PaymentStatuss>> {
+  const rb = new RequestBuilder(rootUrl, getByExternalRef.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
-    rb.body(params.body, 'application/json');
+    rb.path('externalRef', params.externalRef, {});
   }
 
   return http.request(
@@ -28,9 +25,9 @@ export function updateCategory(http: HttpClient, rootUrl: string, params: Update
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Category>;
+      return r as StrictHttpResponse<PaymentStatuss>;
     })
   );
 }
 
-updateCategory.PATH = '/auth/categories/{id}';
+getByExternalRef.PATH = '/auth/payment-status/external/{externalRef}';

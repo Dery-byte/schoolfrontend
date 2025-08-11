@@ -22,7 +22,7 @@ export class EligibilityControllerService extends BaseService {
   }
 
   /** Path part for operation `checkEligibility()` */
-  static readonly CheckEligibilityPath = '/auth/check-eligibilityAll';
+  static readonly CheckEligibilityPath = '/auth/check-eligibility';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

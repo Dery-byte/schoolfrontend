@@ -18,6 +18,14 @@ import { confirm } from '../fn/authentication/confirm';
 import { Confirm$Params } from '../fn/authentication/confirm';
 import { forgottenPassword } from '../fn/authentication/forgotten-password';
 import { ForgottenPassword$Params } from '../fn/authentication/forgotten-password';
+import { getLatestNonAdminUsers } from '../fn/authentication/get-latest-non-admin-users';
+import { GetLatestNonAdminUsers$Params } from '../fn/authentication/get-latest-non-admin-users';
+import { getLatestUsersSummary } from '../fn/authentication/get-latest-users-summary';
+import { GetLatestUsersSummary$Params } from '../fn/authentication/get-latest-users-summary';
+import { getNonAdminCount } from '../fn/authentication/get-non-admin-count';
+import { GetNonAdminCount$Params } from '../fn/authentication/get-non-admin-count';
+import { PageUser } from '../models/page-user';
+import { PageUserSummaryDto } from '../models/page-user-summary-dto';
 import { register } from '../fn/authentication/register';
 import { Register$Params } from '../fn/authentication/register';
 import { resetPassword } from '../fn/authentication/reset-password';
@@ -130,6 +138,81 @@ export class AuthenticationService extends BaseService {
   authenticate(params: Authenticate$Params, context?: HttpContext): Observable<AuthenticationResponse> {
     return this.authenticate$Response(params, context).pipe(
       map((r: StrictHttpResponse<AuthenticationResponse>): AuthenticationResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getLatestUsersSummary()` */
+  static readonly GetLatestUsersSummaryPath = '/auth/latestUsersSummary';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLatestUsersSummary()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLatestUsersSummary$Response(params?: GetLatestUsersSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<PageUserSummaryDto>> {
+    return getLatestUsersSummary(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getLatestUsersSummary$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLatestUsersSummary(params?: GetLatestUsersSummary$Params, context?: HttpContext): Observable<PageUserSummaryDto> {
+    return this.getLatestUsersSummary$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageUserSummaryDto>): PageUserSummaryDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getLatestNonAdminUsers()` */
+  static readonly GetLatestNonAdminUsersPath = '/auth/latest/non-admins';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLatestNonAdminUsers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLatestNonAdminUsers$Response(params?: GetLatestNonAdminUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageUser>> {
+    return getLatestNonAdminUsers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getLatestNonAdminUsers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLatestNonAdminUsers(params?: GetLatestNonAdminUsers$Params, context?: HttpContext): Observable<PageUser> {
+    return this.getLatestNonAdminUsers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageUser>): PageUser => r.body)
+    );
+  }
+
+  /** Path part for operation `getNonAdminCount()` */
+  static readonly GetNonAdminCountPath = '/auth/count';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getNonAdminCount()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNonAdminCount$Response(params?: GetNonAdminCount$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getNonAdminCount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getNonAdminCount$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNonAdminCount(params?: GetNonAdminCount$Params, context?: HttpContext): Observable<number> {
+    return this.getNonAdminCount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

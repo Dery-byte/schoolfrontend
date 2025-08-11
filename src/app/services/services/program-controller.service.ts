@@ -13,18 +13,49 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addProgramToUniversity } from '../fn/program-controller/add-program-to-university';
 import { AddProgramToUniversity$Params } from '../fn/program-controller/add-program-to-university';
+import { deleteProgram } from '../fn/program-controller/delete-program';
+import { DeleteProgram$Params } from '../fn/program-controller/delete-program';
 import { getProgramsByCategoryId } from '../fn/program-controller/get-programs-by-category-id';
 import { GetProgramsByCategoryId$Params } from '../fn/program-controller/get-programs-by-category-id';
 import { getProgramsByCategoryName } from '../fn/program-controller/get-programs-by-category-name';
 import { GetProgramsByCategoryName$Params } from '../fn/program-controller/get-programs-by-category-name';
 import { getProgramsByUniversity } from '../fn/program-controller/get-programs-by-university';
 import { GetProgramsByUniversity$Params } from '../fn/program-controller/get-programs-by-university';
+import { getUniversityById } from '../fn/program-controller/get-university-by-id';
+import { GetUniversityById$Params } from '../fn/program-controller/get-university-by-id';
 import { Program } from '../models/program';
+import { updateProgram } from '../fn/program-controller/update-program';
+import { UpdateProgram$Params } from '../fn/program-controller/update-program';
 
 @Injectable({ providedIn: 'root' })
 export class ProgramControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateProgram()` */
+  static readonly UpdateProgramPath = '/auth/programs/updateProgram';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateProgram()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateProgram$Response(params: UpdateProgram$Params, context?: HttpContext): Observable<StrictHttpResponse<Program>> {
+    return updateProgram(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateProgram$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateProgram(params: UpdateProgram$Params, context?: HttpContext): Observable<Program> {
+    return this.updateProgram$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Program>): Program => r.body)
+    );
   }
 
   /** Path part for operation `addProgramToUniversity()` */
@@ -77,6 +108,31 @@ export class ProgramControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getUniversityById()` */
+  static readonly GetUniversityByIdPath = '/auth/programs/getProgramById/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUniversityById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUniversityById$Response(params: GetUniversityById$Params, context?: HttpContext): Observable<StrictHttpResponse<Program>> {
+    return getUniversityById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUniversityById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUniversityById(params: GetUniversityById$Params, context?: HttpContext): Observable<Program> {
+    return this.getUniversityById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Program>): Program => r.body)
+    );
+  }
+
   /** Path part for operation `getProgramsByCategoryId()` */
   static readonly GetProgramsByCategoryIdPath = '/auth/programs/by-category/{categoryId}';
 
@@ -124,6 +180,35 @@ export class ProgramControllerService extends BaseService {
   getProgramsByCategoryName(params: GetProgramsByCategoryName$Params, context?: HttpContext): Observable<Array<Program>> {
     return this.getProgramsByCategoryName$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Program>>): Array<Program> => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteProgram()` */
+  static readonly DeleteProgramPath = '/auth/programs/deleteById';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteProgram()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  deleteProgram$Response(params: DeleteProgram$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return deleteProgram(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteProgram$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  deleteProgram(params: DeleteProgram$Params, context?: HttpContext): Observable<{
+}> {
+    return this.deleteProgram$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 

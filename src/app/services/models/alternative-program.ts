@@ -7,6 +7,7 @@ import { UniversityEligibility } from '../models/university-eligibility';
 export interface AlternativeProgram {
   admissionProbability?: number;
   aiRecommendation?: AiRecommendation;
+  categories?: Array<string>;
   cutoffPoints?: {
 [key: string]: string;
 };

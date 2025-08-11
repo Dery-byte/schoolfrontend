@@ -6,15 +6,17 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { UniversityControllerService } from './services/university-controller.service';
 import { ExamCheckRecordControllerService } from './services/exam-check-record-controller.service';
+import { ProgramControllerService } from './services/program-controller.service';
 import { CategoryControllerService } from './services/category-controller.service';
+import { BiodataControllerService } from './services/biodata-controller.service';
 import { WaecControllersService } from './services/waec-controllers.service';
 import { AuthenticationService } from './services/authentication.service';
 import { SmsControllerService } from './services/sms-controller.service';
-import { ProgramControllerService } from './services/program-controller.service';
 import { PaymentControllerService } from './services/payment-controller.service';
+import { PaymentStatusControllerService } from './services/payment-status-controller.service';
 import { EligibilityControllerService } from './services/eligibility-controller.service';
-import { UniversityControllerService } from './services/university-controller.service';
 import { EligibilityRecordControllerService } from './services/eligibility-record-controller.service';
 
 /**
@@ -25,15 +27,17 @@ import { EligibilityRecordControllerService } from './services/eligibility-recor
   exports: [],
   declarations: [],
   providers: [
+    UniversityControllerService,
     ExamCheckRecordControllerService,
+    ProgramControllerService,
     CategoryControllerService,
+    BiodataControllerService,
     WaecControllersService,
     AuthenticationService,
     SmsControllerService,
-    ProgramControllerService,
     PaymentControllerService,
+    PaymentStatusControllerService,
     EligibilityControllerService,
-    UniversityControllerService,
     EligibilityRecordControllerService,
     ApiConfiguration
   ],

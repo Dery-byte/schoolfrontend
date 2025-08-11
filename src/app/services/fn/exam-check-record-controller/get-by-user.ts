@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ExamCheckRecord } from '../../models/exam-check-record';
+import { ExamCheckRecordDto } from '../../models/exam-check-record-dto';
 
 export interface GetByUser$Params {
 }
 
-export function getByUser(http: HttpClient, rootUrl: string, params?: GetByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExamCheckRecord>>> {
+export function getByUser(http: HttpClient, rootUrl: string, params?: GetByUser$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ExamCheckRecordDto>>> {
   const rb = new RequestBuilder(rootUrl, getByUser.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getByUser(http: HttpClient, rootUrl: string, params?: GetByUser$
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ExamCheckRecord>>;
+      return r as StrictHttpResponse<Array<ExamCheckRecordDto>>;
     })
   );
 }

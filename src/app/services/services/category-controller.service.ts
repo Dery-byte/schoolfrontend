@@ -20,8 +20,8 @@ import { getAllCategories } from '../fn/category-controller/get-all-categories';
 import { GetAllCategories$Params } from '../fn/category-controller/get-all-categories';
 import { getCategoryById } from '../fn/category-controller/get-category-by-id';
 import { GetCategoryById$Params } from '../fn/category-controller/get-category-by-id';
-import { updateCategory } from '../fn/category-controller/update-category';
-import { UpdateCategory$Params } from '../fn/category-controller/update-category';
+import { updateUniversity1 } from '../fn/category-controller/update-university-1';
+import { UpdateUniversity1$Params } from '../fn/category-controller/update-university-1';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryControllerService extends BaseService {
@@ -29,78 +29,28 @@ export class CategoryControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getCategoryById()` */
-  static readonly GetCategoryByIdPath = '/auth/categories/{id}';
+  /** Path part for operation `updateUniversity1()` */
+  static readonly UpdateUniversity1Path = '/auth/categories/upateCategory';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getCategoryById()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCategoryById$Response(params: GetCategoryById$Params, context?: HttpContext): Observable<StrictHttpResponse<Category>> {
-    return getCategoryById(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getCategoryById$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCategoryById(params: GetCategoryById$Params, context?: HttpContext): Observable<Category> {
-    return this.getCategoryById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Category>): Category => r.body)
-    );
-  }
-
-  /** Path part for operation `updateCategory()` */
-  static readonly UpdateCategoryPath = '/auth/categories/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateCategory()` instead.
+   * To access only the response body, use `updateUniversity1()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateCategory$Response(params: UpdateCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<Category>> {
-    return updateCategory(this.http, this.rootUrl, params, context);
+  updateUniversity1$Response(params: UpdateUniversity1$Params, context?: HttpContext): Observable<StrictHttpResponse<Category>> {
+    return updateUniversity1(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateCategory$Response()` instead.
+   * To access the full response (for headers, for example), `updateUniversity1$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  updateCategory(params: UpdateCategory$Params, context?: HttpContext): Observable<Category> {
-    return this.updateCategory$Response(params, context).pipe(
+  updateUniversity1(params: UpdateUniversity1$Params, context?: HttpContext): Observable<Category> {
+    return this.updateUniversity1$Response(params, context).pipe(
       map((r: StrictHttpResponse<Category>): Category => r.body)
-    );
-  }
-
-  /** Path part for operation `deleteCategory()` */
-  static readonly DeleteCategoryPath = '/auth/categories/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteCategory()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteCategory$Response(params: DeleteCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return deleteCategory(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteCategory$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteCategory(params: DeleteCategory$Params, context?: HttpContext): Observable<void> {
-    return this.deleteCategory$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
@@ -129,6 +79,31 @@ export class CategoryControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getCategoryById()` */
+  static readonly GetCategoryByIdPath = '/auth/categories/getCategoryById/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCategoryById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCategoryById$Response(params: GetCategoryById$Params, context?: HttpContext): Observable<StrictHttpResponse<Category>> {
+    return getCategoryById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCategoryById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCategoryById(params: GetCategoryById$Params, context?: HttpContext): Observable<Category> {
+    return this.getCategoryById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Category>): Category => r.body)
+    );
+  }
+
   /** Path part for operation `getAllCategories()` */
   static readonly GetAllCategoriesPath = '/auth/categories/getAll';
 
@@ -151,6 +126,31 @@ export class CategoryControllerService extends BaseService {
   getAllCategories(params?: GetAllCategories$Params, context?: HttpContext): Observable<Array<Category>> {
     return this.getAllCategories$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Category>>): Array<Category> => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteCategory()` */
+  static readonly DeleteCategoryPath = '/auth/categories/deleteCategoryById/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteCategory()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCategory$Response(params: DeleteCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteCategory(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteCategory$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCategory(params: DeleteCategory$Params, context?: HttpContext): Observable<void> {
+    return this.deleteCategory$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

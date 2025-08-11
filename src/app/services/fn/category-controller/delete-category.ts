@@ -29,4 +29,4 @@ export function deleteCategory(http: HttpClient, rootUrl: string, params: Delete
   );
 }
 
-deleteCategory.PATH = '/auth/categories/{id}';
+deleteCategory.PATH = '/auth/categories/deleteCategoryById/{id}';
