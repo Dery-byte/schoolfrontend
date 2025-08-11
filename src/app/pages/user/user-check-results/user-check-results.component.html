@@ -680,12 +680,35 @@
                       </div>
                     </div>
 
-                    <div *ngIf="!isLoading" class="form-actions">
-                      <button type="submit" class="submit-btn" [disabled]="!examForm.valid || !isIndexConfirmed">
+
+                    <!-- <div *ngIf="!isLoading" class="form-actions">
+                      <button type="submit" class="submit-btn"
+                        [disabled]="!examForm.valid || !isIndexConfirmed || isLimitReached">
                         <i class="search-icon"></i>
                         Retrieve Results
                       </button>
+                    </div> -->
+
+
+                    <div *ngIf="!isLoading" class="form-actions">
+                      <ng-container *ngIf="!isLimitReached; else limitReached">
+                        <button type="submit" class="submit-btn" [disabled]="!examForm.valid || !isIndexConfirmed">
+                          {{currentCheck.checkLimit}}
+                          <i class="search-icon"></i> Retrieve Results
+                        </button>
+                      </ng-container>
                     </div>
+                    <div class="form-actions">
+                      <ng-template #limitReached>
+                        <span class="badge bg-danger text-white py-1 px-2 rounded-pill">
+                          <i class="fas fa-ban me-1"></i> Request Limit Reached
+                        </span>
+                      </ng-template>
+                    </div>
+
+
+
+
                   </form>
                 </div>
 
@@ -946,6 +969,7 @@
 
 
               <div class="row mt-4" *ngIf="waecresults && waecresults2">
+
                 <!-- First WAEC Result -->
                 <div class="col-md-6">
                   <div class="card border-0 shadow-sm mb-4">
@@ -953,13 +977,13 @@
                       FIRST SITTING RESULT
                     </div>
                     <div class="card-body px-4">
-                      <!-- Candidate Info -->
                       <div class="mt-4 border-top pt-3 text-muted small">
                         <p><strong>Name:</strong> {{ waecresults.cname }}</p>
                         <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
                         <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
                         <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
                       </div>
+
                       <table class="table table-bordered table-striped text-center">
                         <thead class="table-light">
                           <tr>
@@ -983,26 +1007,28 @@
                           </tr>
                         </tbody>
                       </table>
-
-
                     </div>
                   </div>
                 </div>
 
                 <!-- Second WAEC Result -->
                 <div class="col-md-6">
+                  <button (click)="confirmRemoveResult()" class="btn btn-outline-danger btn-sm"
+                    style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
+                    <i class="fas fa-trash-alt me-1"></i> Remove Results
+                  </button>
                   <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-light text-center fw-bold">
                       SECOND SITTING RESULT
                     </div>
                     <div class="card-body px-4">
-                      <!-- Candidate Info -->
                       <div class="mt-4 border-top pt-3 text-muted small">
                         <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
                         <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
                         <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
                         <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
                       </div>
+
                       <table class="table table-bordered table-striped text-center">
                         <thead class="table-light">
                           <tr>
@@ -1026,86 +1052,74 @@
                           </tr>
                         </tbody>
                       </table>
-
-
                     </div>
-                    <!-- <button class="btn btn-primary rounded-pill shadow-sm me-2" (click)="analyzeTwoResults()"
-                      [disabled]="isCheckingEligibility">
-                      <span *ngIf="!isCheckingEligibility">
-                        <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-                      </span>
-                      <span *ngIf="isCheckingEligibility">
-                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        Checking...
-                      </span>
-                    </button> -->
-
-
-
-
-
                   </div>
                 </div>
 
-
-                <!-- COLLEGE SELECTION SECTION -->
                 <!-- College Selection Section -->
-                <!-- <div class="section"> -->
+                <div class="col-12 mt-4">
+                  <div class="section">
+                    <h2>Colleges - Choose at most 3</h2>
 
-                  <!-- College Selection Controls -->
-                  <div class="row mb-3">
-                                      <h2>Colleges - Choose at most 3</h2>
+                    <!-- College Selection Controls -->
+                    <div class="row mb-3 position-relative">
+                      <div class="col-12">
+                        <button class="btn btn-secondary w-100" (click)="toggleDropdown()"
+                          [class.disabled]="reachedMaxSelection">
+                          + Select College(s)
+                        </button>
 
-                    <div class="col-12">
-                      <div class="add-attendee-btn w-100 text-center" (click)="toggleDropdown()"
-                        [class.disabled]="reachedMaxSelection">
-                        + Select College(s)
-                      </div>
-                      <div class="dropdown" *ngIf="showDropdown">
-                        <input type="text" class="search-input" placeholder="Search colleges..."
-                          [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
-                        <div class="dropdown-list">
+                        <!-- Dropdown aligned under button -->
+                        <div class="dropdown-menu w-100 p-2 mt-1 show" *ngIf="showDropdown"
+                          style="max-height: 250px; overflow-y: auto;">
+                          <input type="text" class="form-control mb-2" placeholder="Search colleges..."
+                            [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+
                           <div *ngFor="let college of availableColleges" class="dropdown-item"
                             (click)="addAttendee(college)">
                             {{ college.name }}
                           </div>
-                          <div *ngIf="availableColleges.length === 0" class="no-results">
+
+                          <div *ngIf="availableColleges.length === 0" class="dropdown-item text-muted">
                             No colleges found
                           </div>
                         </div>
+                        <div class="selection-info" [class.error]="reachedMaxSelection">
+                          {{ selectedCount }}/3 colleges selected
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selected Colleges List -->
+                    <div class="attendee-list-container mb-3">
+                      <div class="attendee-list">
+                        <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                          {{ college.name }}
+                          <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Check Eligibility Button -->
+                    <div class="row">
+                      <div class="col-12">
+                        <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeTwoResults()"
+                          [disabled]="isCheckingEligibility || selectedCount === 0">
+                          <span *ngIf="!isCheckingEligibility">
+                            <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                          </span>
+                          <span *ngIf="isCheckingEligibility">
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Checking...
+                          </span>
+                        </button>
                       </div>
                     </div>
                   </div>
-
-                  <!-- Selected colleges list -->
-                  <div class="attendee-list-container mb-3">
-                    <div class="attendee-list">
-                      <div *ngFor="let college of optionalColleges" class="attendee-pill">
-                        {{ college.name }}
-                        <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Check Eligibility Button (full width) -->
-                  <div class="row">
-                    <div class="col-12">
-                      <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeTwoResults()"
-                        [disabled]="isCheckingEligibility || selectedCount === 0">
-                        <span *ngIf="!isCheckingEligibility">
-                          <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-                        </span>
-                        <span *ngIf="isCheckingEligibility">
-                          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                          Checking...
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                <!-- </div> -->
-
+                </div>
 
               </div>
+
 
               <!-- ELEGIBILITY DISPLAY ENDS -->
               <!-- {{elligibilityResults|json}} -->

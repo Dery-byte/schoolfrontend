@@ -85,6 +85,8 @@ interface EligibilityCheck {
   createdAt: Date;
   lastUpdated: Date;
   result?: any;
+  checkLimit?: number;
+
 
 }
 
@@ -349,6 +351,7 @@ export class UserCheckResultsComponent implements OnInit {
     }
     return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue';
   }
+
   // Existing properties
   examBoards = ['WAEC', 'CTVET'];
   availableExamTypes: string[] = [];
@@ -901,6 +904,9 @@ export class UserCheckResultsComponent implements OnInit {
     return Object.keys(cutoffPoints);
   }
 
+  get isLimitReached(): boolean {
+    return (this.currentCheck?.checkLimit ?? 0) >= 2;
+  }
 
 
 
@@ -1013,10 +1019,10 @@ export class UserCheckResultsComponent implements OnInit {
 
     console.log(selectedIds);
     console.log(this.recordId);
-      
+
     const response = {
       resultDetails: this.entries.map((entry: any) => ({
-         subject: entry.subject,
+        subject: entry.subject,
         grade: entry.grade,
       })),
       categoryIds: selectedIds,
@@ -1080,7 +1086,7 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   analyzeTwoResults() {
-     const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
+    const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
     const selectedIds = selectedAttendees.map(a => a.id);
 
     console.log(selectedIds);
@@ -1123,7 +1129,7 @@ export class UserCheckResultsComponent implements OnInit {
     // Step 3: Prepare analysis data
     const analysisData = {
       resultDetails: Object.values(finalResultMap),
-        categoryIds: selectedIds,
+      categoryIds: selectedIds,
       checkRecordId: this.recordId
     };
 
@@ -1233,14 +1239,25 @@ export class UserCheckResultsComponent implements OnInit {
     this.waec.verifyWaecResult({ body: payload, recordId: this.recordId }).subscribe({
       next: (res) => {
         this.isLoading = false;
-        this.getResultsByUser();
+        // this.getResultsByUser();
         if (!this.waecresults) {
           this.waecresults = res;
+          this.currentCheck!.checkLimit = (this.currentCheck!.checkLimit ?? 0) + 1;
+
           this.candinateName = this.waecresults.cname;
+          this.resumeCheck(this.recordId);
+          console.log("This is the record ID ", this.recordId)
+          this.getResultsByUser();
           this.openNameComparisonModal();
           console.log("Results 1 ", this.waecresults);
         } else if (!this.waecresults2) {
           this.waecresults2 = res;
+          this.resumeCheck(this.recordId);
+          this.currentCheck!.checkLimit = (this.currentCheck!.checkLimit ?? 0) + 1;
+
+
+          // this.getResultsByUser();
+
           this.secondResultFetched = true; // 🚨 set flag to true
           console.log("Results 2 ", this.waecresults2);
           // this.openNameComparisonModal();
@@ -2438,8 +2455,8 @@ export class UserCheckResultsComponent implements OnInit {
     this.showNameComparisonModal = false;
     this.candinateName = '';
     document.body.style.overflow = 'auto';
-   this.blurService.setBlur(false);
-    
+    this.blurService.setBlur(false);
+
   }
 
 

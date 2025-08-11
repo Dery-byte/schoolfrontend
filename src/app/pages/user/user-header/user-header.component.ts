@@ -27,6 +27,7 @@ export class UserHeaderComponent {
   
       this.authService.user$.subscribe(user => {
         this.userName = user;
+        console.log(user);
       });
       // Load user from local storage on refresh
       // this.userName = this.authService.getUser();

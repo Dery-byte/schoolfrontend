@@ -2883,3 +2883,10 @@ p {
   max-width: 400px;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
 }
+
+
+
+.add-attendee-btn1{
+  display: block;   /* make it span full width */
+  width: 100%;      /* take full column width */
+}
