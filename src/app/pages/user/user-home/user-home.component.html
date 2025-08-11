@@ -1,176 +1,103 @@
-
-
-<div class="dashboard-welcome-section">
-  <div class="welcome-card">
-    <div class="welcome-header">
-      <div class="welcome-text">
-        <h5 class="welcome-title">Welcome Back!</h5>
-        <p class="welcome-subtitle">Eligibility Checker Dashboard</p>
-      </div>
-      <div class="welcome-image">
-        <img src="assets/images/profile-img.png" alt="Welcome illustration" />
-      </div>
+<!-- Dashboard Header -->
+<header class="dashboard-header">
+  <div class="header-content">
+    <div class="header-text">
+      <span class="status-badge">
+        <span class="pulse-dot"></span>
+        Dashboard
+      </span>
+      <h1 class="welcome-title">
+        Welcome , <span class="gradient-text">{{userName}}!</span>
+      </h1>
+      <p class="welcome-subtitle">Your personalized university matching hub</p>
     </div>
     
-    <div class="welcome-content">
-      <div class="feature-intro">
-        <h3 class="feature-title">Find Your Future – Instantly</h3>
-        <div class="feature-description">
-          <p>Our platform is designed to revolutionize how students discover tertiary education opportunities. By leveraging advanced matching algorithms, we simplify the complex process of finding institutions that align with your academic profile.</p>
-          
-          <div class="feature-steps">
-            <div class="step">
-              <span class="step-icon">1</span>
-              <div class="step-content">
-                <h6>Secure Registration</h6>
-                <p>Create your account and complete payment to unlock our comprehensive eligibility checker.</p>
-              </div>
-            </div>
-            
-            <div class="step">
-              <span class="step-icon">2</span>
-              <div class="step-content">
-                <h6>Academic Profile</h6>
-                <p>Enter your subjects, grades, and program preferences to build your personalized academic profile.</p>
-              </div>
-            </div>
-            
-            <div class="step">
-              <span class="step-icon">3</span>
-              <div class="step-content">
-                <h6>Smart Matching</h6>
-                <p>Our system analyzes thousands of institutions to identify perfect matches for your qualifications.</p>
-              </div>
-            </div>
-          </div>
-          
-          <p class="conclusion">Save time and reduce uncertainty with our streamlined admission search process that provides clear, actionable guidance for your educational journey.</p>
+    <div class="profile-progress-card">
+      <div class="progress-illustration">
+        <lottie-player 
+          [src]="'assets/animations/profile-complete.json'" 
+          background="transparent" 
+          speed="1" 
+          style="width: 36px; height: 36px;" 
+          loop 
+          autoplay>
+        </lottie-player>
+      </div>
+      <div class="progress-details">
+        <p class="progress-label">Profile completion</p>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width]="profileCompletion + '%'"></div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</header>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="col-lg-12">
-  <div class="card">
-    <div class="card-body">
-      <h4 class="card-title mb-4"> Biodata Form</h4>
-      <form>
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" />
-          </div>
-          <div class="form-group col-md-4">
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" />
-          </div>
-           <div class="form-group col-md-4">
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter email" />
-          </div>
-          <div class="form-group col-md-4">
-            <label for="phone">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" />
-          </div>
-            <div class="form-group col-md-4">
-            <label for="phone">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="dob">Date of Birth</label>
-            <input type="date" class="form-control" id="dob" />
-          </div>
-          <div class="form-group col-md-4">
-            <label for="gender">Gender</label>
-            <select class="form-control" id="gender">
-              <option selected disabled>Select gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-          </div>
-           <div class="form-group col-md-4">
-            <label for="gender">Gender</label>
-            <select class="form-control" id="gender">
-              <option selected disabled>Select gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+<!-- Main Dashboard Card -->
+<main class="dashboard-card">
+  <!-- Card Header -->
+  <div class="card-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h2 class="card-title">Find Your Perfect University Match</h2>
+        <p class="card-subtitle">
+          Our AI-powered platform analyzes thousands of institutions to find the best matches 
+          for your academic profile and aspirations.
+        </p>
+      </div>
+      <button class="primary-button" (click)="startMatching()">
+        Start Matching <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
   </div>
 
+  <!-- Card Content -->
+  <div class="card-content">
+    <!-- Process Steps -->
+    <div class="process-steps">
+      <div class="step-card" *ngFor="let step of steps; let i = index">
+        <div class="step-number">{{ i + 1 }}</div>
+        <div class="step-icon">
+          <lottie-player 
+            [src]="step.animation" 
+            background="transparent" 
+            speed="1" 
+            style="width: 32px; height: 32px;" 
+            loop 
+            autoplay>
+          </lottie-player>
+        </div>
+        <h3 class="step-title">{{ step.title }}</h3>
+        <p class="step-description">{{ step.description }}</p>
+        <a href="#" class="step-link">
+          {{ step.linkText }}
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
 
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <p class="stat-label">{{ stat.label }}</p>
+        <p class="stat-value">{{ stat.value }}</p>
+      </div>
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!-- end row -->
-</div>
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h3 class="cta-title">Ready to find your perfect match?</h3>
+      <p class="cta-subtitle">
+        Join thousands of students who've discovered their ideal universities through our platform.
+      </p>
+      <div class="cta-buttons">
+        <button class="primary-button">
+          Start Free Trial
+        </button>
+        <button class="secondary-button">
+          <i class="fas fa-play-circle"></i> Watch Demo
+        </button>
+      </div>
+    </div>
+  </div>
+</main>

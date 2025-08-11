@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 
@@ -79,6 +80,8 @@ import { NgChartsModule } from 'ng2-charts';
     
   ],
   providers: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA], // Add this line
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
