@@ -7,7 +7,7 @@
         Dashboard
       </span>
       <h1 class="welcome-title">
-        Welcome , <span class="gradient-text">{{userName}}!</span>
+        Welcome, <span class="gradient-text">{{userName}}!</span>
       </h1>
       <p class="welcome-subtitle">Your personalized university matching hub</p>
     </div>
@@ -45,7 +45,7 @@
           for your academic profile and aspirations.
         </p>
       </div>
-      <button class="primary-button" (click)="startMatching()">
+      <button class="primary-button" routerLink="/user/checkResults">
         Start Matching <i class="fas fa-arrow-right"></i>
       </button>
     </div>
@@ -91,11 +91,11 @@
         Join thousands of students who've discovered their ideal universities through our platform.
       </p>
       <div class="cta-buttons">
-        <button class="primary-button">
-          Start Free Trial
+        <button class="primary-button" routerLink="/user/checkResults">
+          Start <i class="fas fa-arrow-right"></i>
         </button>
         <button class="secondary-button">
-          <i class="fas fa-play-circle"></i> Watch Demo
+          <i class="fas fa-play-circle"></i> View sample Report
         </button>
       </div>
     </div>

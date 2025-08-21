@@ -204,7 +204,7 @@
 
                     <!-- Status Indicators -->
                     <div *ngIf="check.paymentStatus === 'PAID'" class="d-flex gap-2">
-                      <span *ngIf="check.checkLimit >= 0" class="badge bg-info text-white py-1 px-2 rounded-pill">
+                      <span *ngIf="check.checkLimit >= 0" class="badge bg-info text-white py-1 px-1 rounded-pill">
                         <i class="fas fa-check-circle me-1"></i>
                         Requests: {{check.checkLimit}}/2
                       </span>
@@ -673,27 +673,17 @@
                             Please enter an index number
                           </div>
                         </div>
-                        <button type="button" class="confirm-btn" (click)="openConfirmModal()"
+                        <!-- <button type="button" class="confirm-btn" (click)="openConfirmModal()"
                           [disabled]="examForm.get('indexNumber')?.invalid">
                           Confirm
-                        </button>
+                        </button> -->
                       </div>
                     </div>
 
-
-                    <!-- <div *ngIf="!isLoading" class="form-actions">
-                      <button type="submit" class="submit-btn"
-                        [disabled]="!examForm.valid || !isIndexConfirmed || isLimitReached">
-                        <i class="search-icon"></i>
-                        Retrieve Results
-                      </button>
-                    </div> -->
-
-
                     <div *ngIf="!isLoading" class="form-actions">
                       <ng-container *ngIf="!isLimitReached; else limitReached">
-                        <button type="submit" class="submit-btn" [disabled]="!examForm.valid || !isIndexConfirmed">
-                          {{currentCheck.checkLimit}}
+                        <button type="submit" class="submit-btn" [disabled]="!examForm.valid">
+                          <!-- {{currentCheck.checkLimit}} -->
                           <i class="search-icon"></i> Retrieve Results
                         </button>
                       </ng-container>
@@ -705,10 +695,6 @@
                         </span>
                       </ng-template>
                     </div>
-
-
-
-
                   </form>
                 </div>
 
@@ -842,7 +828,7 @@
                     <table class="table table-hover align-middle">
                       <thead class="table-light">
                         <tr>
-                          <th class="ps-4">Subject Code</th>
+                          <!-- <th class="ps-4">Subject Code</th> -->
                           <th>Subject</th>
                           <th>Grade</th>
                           <th class="pe-4">Interpretation</th>
@@ -850,9 +836,27 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let result of waecresults.resultDetails">
-                          <td class="ps-4">{{result.subjectcode}}</td>
+                          <!-- <td class="ps-4">{{result.subjectcode}}</td> -->
                           <td class="fw-bold">{{result.subject}}</td>
+
+
                           <td>
+                            <span class="badge rounded-pill py-2 px-3" style="color:#ffffff" [ngClass]="{
+          'bg-success': result.grade === 'A1',
+          'bg-info': result.grade === 'B2',
+          'bg-primary': result.grade === 'B3',
+          'bg-secondary': result.grade === 'C4',
+          'bg-dark': result.grade === 'C5',
+          'bg-warning': result.grade === 'C6',
+          'bg-orange': result.grade === 'D7',
+          'bg-purple': result.grade === 'E8',
+          'bg-danger': result.grade === 'F9'
+        }">
+                              {{ result.grade }}
+                            </span>
+                          </td>
+
+                          <!-- <td>
                             <span class="badge rounded-pill py-2 px-3" [ngClass]="{
                   'bg-success': result.grade === 'A1' || result.grade === 'B2' || result.grade === 'B3',
                   'bg-primary': result.grade === 'C4' || result.grade === 'C5' || result.grade === 'C6',
@@ -861,7 +865,7 @@
                 }">
                               {{result.grade}}
                             </span>
-                          </td>
+                          </td> -->
                           <td class="pe-4">{{result.interpretation}}</td>
                         </tr>
                       </tbody>
@@ -885,7 +889,7 @@
 
                   <!-- COLLEGE SELECTION SECTION -->
                   <div class="section">
-                    <h2>Colleges - Choose at most 3</h2>
+                    <h2>Field of Study - Choose at most 3</h2>
 
                     <!-- College Selection Controls -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -997,12 +1001,20 @@
                             <td>{{ res.subject }}</td>
                             <td>
                               <span class="badge rounded-pill py-2 px-3" [ngClass]="{
-                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
-                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
-                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
-                  'bg-danger': res.grade === 'F9'
-                }">{{ res.grade }}</span>
+          'bg-success': res.grade === 'A1',
+          'bg-info': res.grade === 'B2',
+          'bg-primary': res.grade === 'B3',
+          'bg-secondary': res.grade === 'C4',
+          'bg-dark': res.grade === 'C5',
+          'bg-warning': res.grade === 'C6',
+          'bg-orange': res.grade === 'D7',
+          'bg-purple': res.grade === 'E8',
+          'bg-danger': res.grade === 'F9'
+        }">
+                                {{ res.grade }}
+                              </span>
                             </td>
+
                             <td>{{ res.interpretation?.trim() }}</td>
                           </tr>
                         </tbody>
@@ -1042,12 +1054,20 @@
                             <td>{{ res.subject }}</td>
                             <td>
                               <span class="badge rounded-pill py-2 px-3" [ngClass]="{
-                  'bg-success': res.grade === 'A1' || res.grade === 'B2' || res.grade === 'B3',
-                  'bg-primary': res.grade === 'C4' || res.grade === 'C5' || res.grade === 'C6',
-                  'bg-warning': res.grade === 'D7' || res.grade === 'E8',
-                  'bg-danger': res.grade === 'F9'
-                }">{{ res.grade }}</span>
+          'bg-success': res.grade === 'A1',
+          'bg-info': res.grade === 'B2',
+          'bg-primary': res.grade === 'B3',
+          'bg-secondary': res.grade === 'C4',
+          'bg-dark': res.grade === 'C5',
+          'bg-warning': res.grade === 'C6',
+          'bg-orange': res.grade === 'D7',
+          'bg-purple': res.grade === 'E8',
+          'bg-danger': res.grade === 'F9'
+        }">
+                                {{ res.grade }}
+                              </span>
                             </td>
+
                             <td>{{ res.interpretation?.trim() }}</td>
                           </tr>
                         </tbody>
@@ -1772,7 +1792,7 @@
       <div class="modal-content-container">
         <!-- Header -->
         <div class="modal-header">
-          <div class="progress-step active">Name Verification</div>
+          <div class="progress-step active">Results Verification</div>
           <button class="close-button" (click)="closeNameComparisonModal()" aria-label="Close">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
@@ -1782,7 +1802,7 @@
 
         <!-- Content -->
         <div class="form-scroll-container">
-          <h3 class="section-title">Name Comparison</h3>
+          <!-- <h3 class="section-title">Name Comparison</h3> -->
 
           <div class="comparison-row">
             <div class="name-column">
@@ -1797,19 +1817,21 @@
           </div>
 
           <div class="comparison-result" [ngClass]="{
-          'success': namesMatch(),
           'warning': !namesMatch()
         }">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path *ngIf="namesMatch()" d="M16.6666 5L7.49992 14.1667L3.33325 10" stroke="#16A34A" stroke-width="2"
-                stroke-linecap="round" />
+              <!-- <path *ngIf="namesMatch()" d="M16.6666 5L7.49992 14.1667L3.33325 10" stroke="#16A34A" stroke-width="2"
+                stroke-linecap="round" /> -->
               <path *ngIf="!namesMatch()" d="M5 5L15 15M15 5L5 15" stroke="#DC2626" stroke-width="2"
                 stroke-linecap="round" />
             </svg>
-            <span>{{ namesMatch() ? 'Names Match' : 'Names Do Not Match' }}</span>
+            <span style="font-weight: bolder;">{{ namesMatch() ? 'Names Match' : 'We couldn’t verify that this results  belong to you. Please check your details, DELETE RESULTS and try again.' }}</span>
           </div>
 
-          <div *ngIf="!namesMatch()" class="normalized-comparison">
+
+
+
+          <!-- <div *ngIf="!namesMatch()" class="normalized-comparison">
             <h4 class="section-subtitle">Normalized Comparison</h4>
             <div class="comparison-details">
               <div>
@@ -1821,7 +1843,7 @@
                 <code>"{{ normalizeName(candinateName) }}"</code>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- Footer -->
@@ -1842,7 +1864,7 @@
       <h5>Confirm Removal</h5>
       <p>Are you sure you want to remove this WAEC result for <strong>{{ waecresults?.cname }}</strong>?</p>
       <div class="d-flex justify-content-end mt-4">
-        <button class="btn btn-secondary me-2" (click)="cancelRemove()">Cancel</button>
+        <button class="btn btn-secondary me-2" style="margin-right: 10px;" (click)="cancelRemove()">Cancel</button>
         <button class="btn btn-danger" (click)="confirmRemove()">Yes, Remove</button>
       </div>
     </div>

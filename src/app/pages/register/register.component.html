@@ -321,7 +321,7 @@
 
 
 
-<div class="modal-overlay" *ngIf="showorgottenPasswordModal">
+<div style="color: black;" class="modal-overlay" *ngIf="showorgottenPasswordModal">
     <div class="reset-form-container">
         <!-- Modal Header -->
         <div class="reset-form-header">
@@ -330,13 +330,14 @@
                 &times;
             </button>
         </div>
-
         <!-- Modal Body -->
-        <form class="reset-form" [formGroup]="passwordResetForm" (ngSubmit)="passwordResetRequest()">
-            <p class="form-intro">Enter your email to receive a password reset link</p>
+        <form class="reset-form" [formGroup]="passwordResetForm" (ngSubmit)="passwordResetRequest()"
+            *ngIf="!showSuccessMessage">
+            <!-- <p class="form-intro">Enter your email to receive a password reset link</p> -->
 
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label for="email">Enter your email to receive a password reset link</label>
+
                 <input type="email" id="email" class="form-control" formControlName="email"
                     placeholder="Enter your registered email" required>
                 <div *ngIf="passwordResetForm.get('email')?.invalid && passwordResetForm.get('email')?.touched"
@@ -344,12 +345,10 @@
                     Please enter a valid email address
                 </div>
             </div>
-            <div *ngIf="showSuccessMessage" class="success-message">
-                Password reset link sent successfully! Please check your email.
-            </div>
+
             <!-- Modal Footer -->
             <div class="form-actions">
-                <button type="" class="cancel-btn" (click)="closeFogottenModal()">Cancel</button>
+                <button type="button" class="cancel-btn" (click)="closeFogottenModal()">Cancel</button>
                 <button type="submit" class="submit-btn" [disabled]="!passwordResetForm.valid"
                     [class.loading]="isSubmitting">
                     <span *ngIf="!isSubmitting">Send Reset Link</span>
@@ -361,6 +360,10 @@
             </div>
         </form>
 
-
+        <!-- Success message display -->
+        <div *ngIf="showSuccessMessage" class="success-message-container">
+            <p class="success-message">Password reset link sent successfully! Please check your email.</p>
+            <button class="go-to-login-btn" (click)="closeFogottenModal()">Close</button>
+        </div>
     </div>
 </div>

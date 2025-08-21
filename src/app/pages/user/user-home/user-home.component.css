@@ -309,6 +309,7 @@
 }
 
 .card-title {
+  color: hsl(0, 8%, 93%);
   font-size: var(--text-2xl);
   font-weight: 700;
   line-height: 1.3;

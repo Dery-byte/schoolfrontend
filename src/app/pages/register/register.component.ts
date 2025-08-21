@@ -168,7 +168,7 @@ export class RegisterComponent {
 
         const token = res.token as string;
         this.tokenService.token = token;
-        const username = res.fullName;
+        const username = res.lastName;
                   this.authService.setUser(username);
                   console.log(username);
 
@@ -356,5 +356,6 @@ export class RegisterComponent {
     this.showorgottenPasswordModal = false;
     document.body.style.overflow = '';
     this.blurService.setBlur(false);
+    this.showSuccessMessage=false;
   }
 }

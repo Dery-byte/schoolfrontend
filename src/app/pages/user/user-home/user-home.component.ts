@@ -42,12 +42,7 @@ export class UserHomeComponent {
     { label: 'Avg. Time Saved', value: '120h' }
   ];
 
-  startMatching() {
-    // Implement matching logic
-    console.log('Matching process started');
-  }
-
-
+ 
 
 
 

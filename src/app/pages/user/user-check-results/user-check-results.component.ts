@@ -349,7 +349,7 @@ export class UserCheckResultsComponent implements OnInit {
     if (check.checkLimit >= 2) {
       return 'Pay & Continue'; // Disabled but shows same text
     }
-    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue';
+    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue ';
   }
 
   // Existing properties
@@ -803,85 +803,99 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-  // confirmAction() {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: "You won't be able to revert this!",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Yes, proceed!',
-  //     cancelButtonText: 'No, cancel',
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       // User confirmed
-  //       console.log('Confirmed!');
-  //     } else {
-  //       // User cancelled or dismissed
-  //       console.log('Cancelled');
-  //     }
-  //   });
-  // }
 
+
+
+
+
+
+
+async submitFormCheck() {
+  if (this.examForm.valid) {
+    try {
+      // First prompt for index number re-entry
+      const firstResult = await Swal.fire({
+        title: 'Re-enter Index Number',
+        input: 'text',
+        inputLabel: 'Please re-enter your index number for verification',
+        inputPlaceholder: 'Enter your index number',
+        showCancelButton: true,
+        confirmButtonText: 'Verify',
+        cancelButtonText: 'Cancel',
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Please enter your index number';
+          }
+          return null;
+        }
+      });
+
+      if (firstResult.isConfirmed) {
+        const reenteredIndex = firstResult.value;
+        const originalIndex = this.examForm.value.indexNumber;
+        
+        if (reenteredIndex === originalIndex) {
+          // Index numbers match, proceed with confirmation
+          const secondResult = await Swal.fire({
+            title: 'CONFIRM INDEX NUMBER',
+            html: `<h3 style="margin: 0; font-weight: bold;">${originalIndex}</h3>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, submit',
+            cancelButtonText: 'No, cancel',
+            reverseButtons: true,
+          });
+
+          if (secondResult.isConfirmed) {
+            this.isIndexConfirmed = true;
+            this.fetchResultAutoAssign();
+          }
+        } else {
+          // Index numbers don't match
+          await Swal.fire({
+            title: 'Error',
+            text: 'Index number does not match. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error in form submission:', error);
+    }
+  } else {
+    this.examForm.markAllAsTouched();
+  }
+}
 
   // submitFormCheck() {
-  //   if (this.examForm.valid) {
-  //     this.isLoading = true;
-
-  //     const requestPayload = {
-  //       cindex: this.examForm.value.indexNumber,
-  //       examyear: this.examForm.value.examYear,
-  //       examtype: this.examForm.value.examType
-  //     };
-
-  //     console.log(requestPayload);
-  //     this.waec.verifyWaecResult({ body: requestPayload }).subscribe({
-  //       next: (res) => {
-  //         this.waecresults = res;
-  //         this.isLoading = false;
-
-  //         localStorage.setItem("candidate", JSON.stringify(this.waecresults));
-  //         console.log('Success:', res);
-  //         this.examForm.reset();
-
-  //         // Mark check as completed if payment was made
-  //         if (this.currentCheck) {
-  //           this.currentCheck.result = res;
-  //           this.currentCheck.checkStatus = 'completed';
-  //           this.saveChecks();
-  //         }
-  //       },
-  //       error: (err) => {
-  //         this.isLoading = false;
-
-  //         console.error('Error:', err);
+  //   if (this.examForm.valid && this.isIndexConfirmed) {
+  //     // Use SweetAlert2 for confirmation dialog
+  //     Swal.fire({
+  //       title: 'CONFIRM INDEX NUMBER',
+  //       html: `<h3 style="margin: 0; font-weight: bold;">${this.examForm.value.indexNumber}</h3>`,
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonText: 'Yes, submit',
+  //       cancelButtonText: 'No, cancel',
+  //       reverseButtons: true,
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         // this.openNameComparisonModal();
+  //         this.fetchResultAutoAssign(); // Proceed only if user confirms
   //       }
+  //       // else do nothing if canceled
   //     });
   //   } else {
   //     this.examForm.markAllAsTouched();
   //   }
   // }
-  submitFormCheck() {
-    if (this.examForm.valid && this.isIndexConfirmed) {
-      // Use SweetAlert2 for confirmation dialog
-      Swal.fire({
-        title: 'CONFIRM INDEX NUMBER',
-        html: `<h3 style="margin: 0; font-weight: bold;">${this.examForm.value.indexNumber}</h3>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, submit',
-        cancelButtonText: 'No, cancel',
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // this.openNameComparisonModal();
-          this.fetchResultAutoAssign(); // Proceed only if user confirms
-        }
-        // else do nothing if canceled
-      });
-    } else {
-      this.examForm.markAllAsTouched();
-    }
-  }
+
+
+
+
+
+
 
   // Add this method to your component class
   getSimplifiedResults(): { subject: string, grade: string }[] {
@@ -907,43 +921,6 @@ export class UserCheckResultsComponent implements OnInit {
   get isLimitReached(): boolean {
     return (this.currentCheck?.checkLimit ?? 0) >= 2;
   }
-
-
-
-
-
-
-
-  // analyzeResults() {
-  //   if (!this.waecresults || !this.waecresults.resultDetails) {
-  //     console.warn('No results available to analyze');
-  //     return;
-  //   }
-  //     this.isCheckingEligibility = true;
-  //   // Create the properly formatted JSON structure
-  //   const analysisData = {
-  //     resultDetails: this.waecresults.resultDetails.map((result: any) => ({
-  //       subject: result.subject,
-  //       grade: result.grade,
-  //     }))
-  //   };
-  //   // Log to console
-  //   console.log('Analysis Data:', analysisData);
-  //   console.log('Formatted Analysis Data:', JSON.stringify(analysisData, null, 2));
-  //   // Send to eligibility service
-  //   this.manualService.checkEligibility(analysisData).subscribe({
-  //     next: (data: any) => {
-  //       this.elligibilityResults = data;
-
-  //       console.log("This is the elligibility Results ", data)
-  //             this.isCheckingEligibility = false; // Reset loading state
-  //     },
-  //     error: (err) => {
-  //             this.isCheckingEligibility = false; // Additional safety
-  //       console.error('Eligibility check failed:', err);
-  //     }
-  //   });
-  // }
 
 
 
@@ -1525,28 +1502,6 @@ export class UserCheckResultsComponent implements OnInit {
         2: { cellWidth: 20 },
         3: { cellWidth: 40 }
       },
-      // didDrawCell: (data: any) => {
-      //   if (data.section === 'body' && data.column.index === 2) {
-      //     const grade = data.cell.raw;
-      //     const ctx = doc;
-
-      //     let fillColor: [number, number, number] | null = null;
-      //     if (['A1', 'B2', 'B3'].includes(grade)) fillColor = [46, 125, 50];      // Green
-      //     else if (['C4', 'C5', 'C6'].includes(grade)) fillColor = [30, 136, 229]; // Blue
-      //     else if (['D7', 'E8'].includes(grade)) fillColor = [255, 193, 7];       // Yellow
-      //     else if (grade === 'F9') fillColor = [198, 40, 40];                     // Red
-
-      //     if (fillColor) {
-      //       ctx.setFillColor(...fillColor);
-      //       ctx.circle(data.cell.x + 10, data.cell.y + 7, 5, 'F');
-      //       ctx.setTextColor(255, 255, 255);
-      //       ctx.text(grade, data.cell.x + 10, data.cell.y + 9, { align: 'center' });
-      //       ctx.setTextColor(0, 0, 0); // Reset for next cell
-      //     }
-      //   }
-      // }
-
-
     });
 
     // Footer
@@ -1596,7 +1551,6 @@ export class UserCheckResultsComponent implements OnInit {
   }
   isIndexConfirmed: boolean = false; // Track confirmation status
 
-
   verifyConfirmation() {
     const original = this.examForm.get('indexNumber')?.value;
     if (this.confirmInput === original) {
@@ -1608,140 +1562,6 @@ export class UserCheckResultsComponent implements OnInit {
       this.showMismatchError = true;
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // openConfirmationModal() {
-  //   const modalRef = this.modalService.open(ConfirmationModalComponent, {
-  //     centered: true,
-  //     backdrop: 'static'
-  //   });
-
-  //   // Customize modal inputs
-  //   modalRef.componentInstance.title = 'Confirm Index Number';
-  //   modalRef.componentInstance.message = `You entered: }. Is this correct?`;
-  //   modalRef.componentInstance.confirmText = 'Yes, Retrieve Results';
-  //   modalRef.componentInstance.cancelText = 'No, Edit';
-
-  //   modalRef.result.then((result) => {
-  //     if (result) {
-  //     }
-  //   }).catch(() => {
-  //     // Handle dismissal
-  //     console.log('Modal dismissed');
-  //   });
-  // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   // Check Management Methods
@@ -1775,9 +1595,19 @@ export class UserCheckResultsComponent implements OnInit {
         this.userChecks.unshift(data);
         // this.saveChecks();
         //alert("Successfully started check");
+
+        // Extract the record ID from the response
+        this.recordId = data.id || data._id || data.recordId || data.checkId;
+
+        // Optional: Save the ID to localStorage or service if needed elsewhere
+        // localStorage.setItem('currentRecordId', this.recordId);
+
+        console.log('Record created with ID:', this.recordId);
       },
       error: (err) => {
         console.error(err);
+        this.recordId = null; // Reset on error
+
         //alert("Failed to start check");
       }
     });
@@ -2368,6 +2198,7 @@ export class UserCheckResultsComponent implements OnInit {
     // Optionally mark field as touched
     this.otpForm.get(`digit${index}`)?.markAsTouched();
   }
+
 
   handleKeyDown(event: KeyboardEvent, index: number): void {
     const key = event.key;

@@ -1859,7 +1859,8 @@ select:not([value=""]) + label {
 
 .badge {
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
+  /* padding: 0.5rem 0.75rem; */
+  margin-top: 3px;
 }
 
 /* Responsive Adjustments */
@@ -2517,7 +2518,18 @@ p {
   display: flex;
   align-items: center;
   font-size: 0.9rem;
-  color: #1976d2;
+  font-weight: bolder;
+  color: #022b55;
+}
+
+.bg-orange {
+  background-color: orange !important;
+  color: #fff;
+}
+
+.bg-purple {
+  background-color: purple !important;
+  color: #fff;
 }
 
 .remove-btn {
@@ -2595,7 +2607,7 @@ p {
   border: 1px solid #eee9e9;
   border-radius: 8px;
   padding: 10px;
-  background-color: #070707;
+  background-color: #f0f0f0;
 }
 
 .attendee-list {
