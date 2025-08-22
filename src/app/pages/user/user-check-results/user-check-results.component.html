@@ -683,7 +683,6 @@
                     <div *ngIf="!isLoading" class="form-actions">
                       <ng-container *ngIf="!isLimitReached; else limitReached">
                         <button type="submit" class="submit-btn" [disabled]="!examForm.valid">
-                          <!-- {{currentCheck.checkLimit}} -->
                           <i class="search-icon"></i> Retrieve Results
                         </button>
                       </ng-container>
@@ -1495,7 +1494,7 @@
             </div>
             <h3 class="section-title">Mobile Money Details</h3>
             <div class="form-groups">
-              <label for="mobileNumber">Phone Number</label>
+              <!-- <label for="mobileNumber">Phone Number</label> -->
               <div class="input-with-select">
                 <select formControlName="channel" class="network-select" required>
                   <option value="" disabled selected>Select Network</option>
@@ -1503,7 +1502,7 @@
                   <option value="6">Vodafone</option>
                   <option value="7">AirtelTigo</option>
                 </select>
-                <input type="tel" id="mobileNumber" formControlName="payer" placeholder="0244 123 456"
+                <input type="tel" id="mobileNumber" formControlName="payer" placeholder="XXXX XXX XXX"
                   class="phone-input">
               </div>
               <!-- Add validation message -->
@@ -1615,11 +1614,10 @@
           <div class="form-container">
             <!-- OTP Instructions -->
             <div class="otp-instructions">
-              <p>We've sent a 6-digit verification code to your phone number ending with
-                <strong>{{lastFourDigits}}</strong>
+              <p style="color:#0b0f50; font-weight: bolder; background-color: #ebebeb;">We've sent a 6-digit verification code to your phone number ending with
+                <!-- <strong>{{lastFourDigits}}</strong> -->
               </p>
             </div>
-
             <!-- OTP Input Fields -->
             <div class="otp-input-group">
               <ng-container *ngFor="let field of [0,1,2,3,4,5]; let i = index">

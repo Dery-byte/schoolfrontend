@@ -457,11 +457,10 @@ export class UserCheckResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm(1.00); // Sets fixed amount to GHS 50.00
-
     this.initForm();
     this.manualForm();
     this.loadChecks();
-    this.getResultsByUser();
+    // this.getResultsByUser();
     this.getColleges();
     this.getAllRegions();
 
@@ -1737,9 +1736,9 @@ async submitFormCheck() {
         if (paymentStatus.txStatus === 1) {
           this.paymentsucceDetails = paymentStatus;
           console.log("This is the payment Status ", paymentStatus);
+          clearInterval(this.intervalId); // Stop polling on success
           this.loadChecks();
           this.getResultsByUser();
-          clearInterval(this.intervalId); // Stop polling on success
           // this.handlePaymentSuccess();
         } else if (paymentStatus.txStatus === -1) {
           console.log("This is the payment Status ", paymentStatus);
@@ -1945,7 +1944,7 @@ async submitFormCheck() {
   otpError = '';
   verifyingOTP = false;
   resendCooldown = 0;
-  lastFourDigits = '1234'; // Replace with actual last digits
+  // lastFourDigits = '1234'; // Replace with actual last digits
 
   // constructor(private fb: FormBuilder) {
 
@@ -2237,6 +2236,9 @@ async submitFormCheck() {
   closeWebhook() {
     this.loadChecks();
     this.getResultsByUser();
+    this.loadChecks();
+    this.getColleges();
+    this.getAllRegions();
     this.showWebHook = false;
   }
 
