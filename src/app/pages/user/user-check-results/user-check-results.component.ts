@@ -345,11 +345,15 @@ export class UserCheckResultsComponent implements OnInit {
 
   // userChecks: EligibilityCheck[] = [];
   newCheckForm: FormGroup;
+  // getButtonText(check: any): string {
+  //   if (check.checkLimit >= 2) {
+  //     return 'Pay & Continue'; // Disabled but shows same text
+  //   }
+  //   return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue ';
+  // }
+
   getButtonText(check: any): string {
-    if (check.checkLimit >= 2) {
-      return 'Pay & Continue'; // Disabled but shows same text
-    }
-    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue ';
+    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue';
   }
 
   // Existing properties
@@ -460,7 +464,7 @@ export class UserCheckResultsComponent implements OnInit {
     this.initForm();
     this.manualForm();
     this.loadChecks();
-    // this.getResultsByUser();
+    this.getResultsByUser();
     this.getColleges();
     this.getAllRegions();
 
@@ -809,63 +813,63 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
-async submitFormCheck() {
-  if (this.examForm.valid) {
-    try {
-      // First prompt for index number re-entry
-      const firstResult = await Swal.fire({
-        title: 'Re-enter Index Number',
-        input: 'text',
-        inputLabel: 'Please re-enter your index number for verification',
-        inputPlaceholder: 'Enter your index number',
-        showCancelButton: true,
-        confirmButtonText: 'Verify',
-        cancelButtonText: 'Cancel',
-        inputValidator: (value) => {
-          if (!value) {
-            return 'Please enter your index number';
+  async submitFormCheck() {
+    if (this.examForm.valid) {
+      try {
+        // First prompt for index number re-entry
+        const firstResult = await Swal.fire({
+          title: 'Re-enter Index Number',
+          input: 'text',
+          inputLabel: 'Please re-enter your index number for verification',
+          inputPlaceholder: 'Enter your index number',
+          showCancelButton: true,
+          confirmButtonText: 'Verify',
+          cancelButtonText: 'Cancel',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Please enter your index number';
+            }
+            return null;
           }
-          return null;
-        }
-      });
+        });
 
-      if (firstResult.isConfirmed) {
-        const reenteredIndex = firstResult.value;
-        const originalIndex = this.examForm.value.indexNumber;
-        
-        if (reenteredIndex === originalIndex) {
-          // Index numbers match, proceed with confirmation
-          const secondResult = await Swal.fire({
-            title: 'CONFIRM INDEX NUMBER',
-            html: `<h3 style="margin: 0; font-weight: bold;">${originalIndex}</h3>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, submit',
-            cancelButtonText: 'No, cancel',
-            reverseButtons: true,
-          });
+        if (firstResult.isConfirmed) {
+          const reenteredIndex = firstResult.value;
+          const originalIndex = this.examForm.value.indexNumber;
 
-          if (secondResult.isConfirmed) {
-            this.isIndexConfirmed = true;
-            this.fetchResultAutoAssign();
+          if (reenteredIndex === originalIndex) {
+            // Index numbers match, proceed with confirmation
+            const secondResult = await Swal.fire({
+              title: 'CONFIRM INDEX NUMBER',
+              html: `<h3 style="margin: 0; font-weight: bold;">${originalIndex}</h3>`,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, submit',
+              cancelButtonText: 'No, cancel',
+              reverseButtons: true,
+            });
+
+            if (secondResult.isConfirmed) {
+              this.isIndexConfirmed = true;
+              this.fetchResultAutoAssign();
+            }
+          } else {
+            // Index numbers don't match
+            await Swal.fire({
+              title: 'Error',
+              text: 'Index number does not match. Please try again.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
           }
-        } else {
-          // Index numbers don't match
-          await Swal.fire({
-            title: 'Error',
-            text: 'Index number does not match. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
         }
+      } catch (error) {
+        console.error('Error in form submission:', error);
       }
-    } catch (error) {
-      console.error('Error in form submission:', error);
+    } else {
+      this.examForm.markAllAsTouched();
     }
-  } else {
-    this.examForm.markAllAsTouched();
   }
-}
 
   // submitFormCheck() {
   //   if (this.examForm.valid && this.isIndexConfirmed) {
@@ -1670,27 +1674,6 @@ async submitFormCheck() {
   // Submit payment
   externalRef: string = ''; // Add this at the top of your component
 
-  // submitPayment(): void {
-  //   if (this.paymentForm.valid) {
-  //     this.processingPayment = true;    
-  //     this.manualService.initializePayment(this.paymentForm.value).subscribe((data:any)=>{
-  //       // Save externalRef for later use
-  //     this.externalRef = data.externalref;
-  //     console.log("This is the external ref ", this.externalRef);
-  //       this.closePaymentModal();
-  //       this.openOtpModal()
-  //       console.log(data);
-  //     })
-  //     this.openPaymentModal();
-
-  //     // Simulate payment processing
-  //     setTimeout(() => {
-  //       this.processingPayment = false;
-  //       // Handle payment success/failure here
-  //       console.log('Payment submitted:', this.paymentForm.value);
-  //     }, 2000);
-  //   }
-  // }
   recordId: any;
 
   submitPayment(): void {
@@ -1739,6 +1722,7 @@ async submitFormCheck() {
           clearInterval(this.intervalId); // Stop polling on success
           this.loadChecks();
           this.getResultsByUser();
+          this.cancelCurrentCheck();
           // this.handlePaymentSuccess();
         } else if (paymentStatus.txStatus === -1) {
           console.log("This is the payment Status ", paymentStatus);
@@ -2234,12 +2218,13 @@ async submitFormCheck() {
 
 
   closeWebhook() {
-    this.loadChecks();
-    this.getResultsByUser();
-    this.loadChecks();
-    this.getColleges();
-    this.getAllRegions();
     this.showWebHook = false;
+    this.cancelCurrentCheck();
+    document.body.style.overflow = '';
+    this.blurService.setBlur(false);
+
+
+
   }
 
 

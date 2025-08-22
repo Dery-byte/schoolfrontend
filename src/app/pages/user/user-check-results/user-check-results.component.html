@@ -190,14 +190,17 @@
                     {{check.checkStatus | titlecase}}
                   </span>
                 </td>
+
+
+
+                
                 <td class="">
                   <div class="flex-column align-items-center gap-1">
-                    <!-- Dynamic Button -->
-                    <button class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
-              'btn-outline-primary': check.paymentStatus === 'PAID' && check.checkLimit < 2,
-              'btn-primary': check.paymentStatus !== 'PAID',
-              'disabled-style': check.checkLimit >= 2
-            }" (click)="resumeCheck(check.id)" style="min-width: 120px;" [disabled]="check.checkLimit >= 2">
+                    <!-- Dynamic Button - Only show when checkLimit < 2 -->
+                    <button *ngIf="check.checkLimit < 2" class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
+      'btn-outline-primary': check.paymentStatus === 'PAID',
+      'btn-primary': check.paymentStatus !== 'PAID'
+    }" (click)="resumeCheck(check.id)" style="min-width: 120px;">
                       {{getButtonText(check)}}
                       <i class="fas fa-arrow-right ms-2"></i>
                     </button>
@@ -215,6 +218,13 @@
                     </div>
                   </div>
                 </td>
+
+
+
+
+
+
+
               </tr>
             </tbody>
           </table>
@@ -1614,7 +1624,8 @@
           <div class="form-container">
             <!-- OTP Instructions -->
             <div class="otp-instructions">
-              <p style="color:#0b0f50; font-weight: bolder; background-color: #ebebeb;">We've sent a 6-digit verification code to your phone number ending with
+              <p style="color:#0b0f50; font-weight: bolder; background-color: #ebebeb;">We've sent a 6-digit
+                verification code to your phone number ending with
                 <!-- <strong>{{lastFourDigits}}</strong> -->
               </p>
             </div>
@@ -1642,13 +1653,18 @@
             </div>
 
             <!-- Resend OTP Option -->
-            <div class="otp-resend">
+
+
+
+
+            
+            <!-- <div class="otp-resend">
               <p>Didn't receive the code?
                 <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
                   Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
                 </button>
               </p>
-            </div>
+            </div> -->
           </div>
 
           <!-- Submit Button -->
@@ -1823,7 +1839,8 @@
               <path *ngIf="!namesMatch()" d="M5 5L15 15M15 5L5 15" stroke="#DC2626" stroke-width="2"
                 stroke-linecap="round" />
             </svg>
-            <span style="font-weight: bolder;">{{ namesMatch() ? 'Names Match' : 'We couldn’t verify that this results  belong to you. Please check your details, DELETE RESULTS and try again.' }}</span>
+            <span style="font-weight: bolder;">{{ namesMatch() ? 'Names Match' : 'We couldn’t verify that this results
+              belong to you. Please check your details, DELETE RESULTS and try again.' }}</span>
           </div>
 
 
