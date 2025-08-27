@@ -1,7 +1,7 @@
 <!-- {{recordId}} -->
 
 
-
+<!-- {{userChecks|json}} -->
 
 
 <!-- Main Container with premium styling -->
@@ -182,9 +182,9 @@
                 </td>
                 <td>
                   <span class="badge rounded-pill py-1 px-3" [ngClass]="{
-                    'bg-success-light text-success': check.checkStatus === 'completed',
-                    'bg-primary-light text-primary': check.checkStatus === 'in_progress',
-                    'bg-secondary-light text-secondary': check.checkStatus === 'not_started'
+                    'bg-success-light text-success': check.checkStatus === 'CHECKED',
+                    'bg-primary-light text-primary': check.checkStatus === 'IN_PROGRESS',
+                    'bg-secondary-light text-secondary': check.checkStatus === 'NOT_CHECKED'
                   }">
                     <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
                     {{check.checkStatus | titlecase}}
@@ -193,11 +193,12 @@
 
 
 
-                
+
                 <td class="">
                   <div class="flex-column align-items-center gap-1">
                     <!-- Dynamic Button - Only show when checkLimit < 2 -->
-                    <button *ngIf="check.checkLimit < 2" class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
+                    <button *ngIf="check.checkLimit < 2 && check.checkStatus !== 'CHECKED'"
+                      class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
       'btn-outline-primary': check.paymentStatus === 'PAID',
       'btn-primary': check.paymentStatus !== 'PAID'
     }" (click)="resumeCheck(check.id)" style="min-width: 120px;">
@@ -207,16 +208,29 @@
 
                     <!-- Status Indicators -->
                     <div *ngIf="check.paymentStatus === 'PAID'" class="d-flex gap-2">
-                      <span *ngIf="check.checkLimit >= 0" class="badge bg-info text-white py-1 px-1 rounded-pill">
+                      <!-- Requests counter (only when NOT CHECKED) -->
+                      <span *ngIf="check.checkLimit >= 0 && check.checkStatus !== 'CHECKED'"
+                        class="badge bg-info text-white py-1 px-1 rounded-pill">
                         <i class="fas fa-check-circle me-1"></i>
                         Requests: {{check.checkLimit}}/2
                       </span>
-                      <span *ngIf="check.checkLimit >= 2" class="badge bg-danger text-white py-1 px-2 rounded-pill">
-                        <i class="fas fa-ban me-1"></i>
-                        Limit Reached
-                      </span>
+
+                      <!-- Status indicator -->
+                      <ng-container *ngIf="check.checkStatus === 'CHECKED'; else limitReached">
+                        <span class="badge bg-success text-white py-1 px-2 rounded-pill">
+                          <i class="fas fa-check me-1"></i>
+                          Eligibility Checked
+                        </span>
+                      </ng-container>
+
+                      <ng-template #limitReached>
+                        <span *ngIf="check.checkLimit >= 2" class="badge bg-danger text-white py-1 px-2 rounded-pill">
+                          <i class="fas fa-ban me-1"></i>
+                          Limit Reached
+                        </span>
+                      </ng-template>
                     </div>
-                  </div>
+</div>
                 </td>
 
 
@@ -1657,7 +1671,7 @@
 
 
 
-            
+
             <!-- <div class="otp-resend">
               <p>Didn't receive the code?
                 <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">

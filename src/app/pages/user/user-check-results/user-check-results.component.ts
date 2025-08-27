@@ -81,7 +81,7 @@ interface EligibilityCheck {
   candidateName: string;
   examDetails: any;
   paymentStatus: 'PENDING' | 'PAID';
-  checkStatus: 'not_started' | 'in_progress' | 'completed';
+  checkStatus: 'NOT_CHECKED' | 'IN_PROGRESS' | 'CHECKED';
   createdAt: Date;
   lastUpdated: Date;
   result?: any;
@@ -353,7 +353,7 @@ export class UserCheckResultsComponent implements OnInit {
   // }
 
   getButtonText(check: any): string {
-    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue';
+    return check.paymentStatus === 'PAID'? 'Continue' : 'Pay & Continue';
   }
 
   // Existing properties
@@ -474,7 +474,7 @@ export class UserCheckResultsComponent implements OnInit {
   simulatePayment() {
     if (this.currentCheck) {
       this.currentCheck.paymentStatus = 'PAID';
-      this.currentCheck.checkStatus = 'in_progress';
+      this.currentCheck.checkStatus = 'IN_PROGRESS';
       this.currentCheck.lastUpdated = new Date();
       //this.saveChecks();
       this.paymentSuccess = true;
@@ -736,7 +736,7 @@ export class UserCheckResultsComponent implements OnInit {
 
   completeCurrentCheck() {
     if (this.currentCheck) {
-      this.currentCheck.checkStatus = 'completed';
+      this.currentCheck.checkStatus = 'CHECKED';
       this.currentCheck.lastUpdated = new Date();
       //this.saveChecks();
       this.currentCheck = null;
@@ -1302,7 +1302,7 @@ export class UserCheckResultsComponent implements OnInit {
 
     if (this.currentCheck) {
       this.currentCheck.result = res;
-      this.currentCheck.checkStatus = 'completed';
+      this.currentCheck.checkStatus = 'CHECKED';
       // this.saveChecks();
     }
   }
@@ -1399,7 +1399,7 @@ export class UserCheckResultsComponent implements OnInit {
       // Mark check as completed if payment was made
       if (this.currentCheck) {
         this.currentCheck.result = this.manualEntryForm.value;
-        this.currentCheck.checkStatus = 'completed';
+        this.currentCheck.checkStatus = 'CHECKED';
         // this.saveChecks();
       }
     } else {
@@ -1575,7 +1575,7 @@ export class UserCheckResultsComponent implements OnInit {
       candidateName: this.newCheckForm.value.candidateName,
       examDetails: this.newCheckForm.value,
       paymentStatus: 'PENDING',
-      checkStatus: 'not_started',
+      checkStatus: 'NOT_CHECKED',
       createdAt: new Date(),
       lastUpdated: new Date()
     };

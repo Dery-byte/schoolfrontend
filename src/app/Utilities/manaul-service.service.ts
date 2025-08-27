@@ -39,7 +39,7 @@ export class ManaulServiceService {
 
     // Actual request body
     const body = {
-      checkStatus: "not_started",
+      checkStatus: "NOT_CHECKED",
       // createdAt: new Date().toISOString(),
       // lastUpdated: new Date().toISOString()
     };
