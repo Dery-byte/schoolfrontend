@@ -16,58 +16,54 @@ import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eli
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { CollegesComponent } from './pages/admin/colleges/colleges.component';
+import { LoginSuccessComponent } from './pages/login-success/login-success.component';
 
 
 
 const routes: Routes = [
-
-
-  {path:'activate-account', component:ActivateAccountComponent,canActivate: [activationGuard]},
-
-   // 🔐 LOGIN ROUTE (default route)
+  { path: 'activate-account', component: ActivateAccountComponent, canActivate: [activationGuard] },
+  // 🔐 LOGIN ROUTE (default route)
   //  { path: '', component: LoginComponent, pathMatch: 'full' },
-
-      { path: '', component: RegisterComponent, pathMatch: 'full' },
-
-   {path:'reset-password', component:ResetPasswordComponent},
-
+  { path: '', component: RegisterComponent, pathMatch: 'full' },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'login-success', component: LoginSuccessComponent },
   //  {path:'activate-account', component:ActivateAccountComponent},
 
 
-    // ADMIN ROUNTING
-    {
-      path: 'admin',
-      component: AdminLayoutComponent,  // 🟢 Admin layout wrapper
-      children: [
-        { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redirect `/admin` to `/admin/dashboard`
-        { path: 'dashboard', component: AdminHomeComponent }, // Default admin route
-        {path:'addUni', component:AddUniversityComponent},
-        { path: 'addPrograms', component: AddCoursesComponent },
-        { path: 'universities', component: AllUniversitiesComponent },
-        {path:'programs', component:AllProgramsComponent},
-        {path:'colleges', component:CollegesComponent}
-
-        // {path:'allFarms', component:AllFarmsComponent}
-        // {path:'allFarms', component:AllFarmsComponent}
-
-      ],
-    },
-
-    {
-      path: 'user',
-    component: UserLayoutComponent, 
+  // ADMIN ROUNTING
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,  // 🟢 Admin layout wrapper
     children: [
-        { path: '', redirectTo: 'home', pathMatch: 'full' },
-        {path: 'home', component: UserHomeComponent}, // Home wraps everything },
-        {path: 'checkResults',component: UserCheckResultsComponent}, // pathMatch: 'full'},
-        {path: 'checkEligilibilty',component: UserEligibilityComponent},
-        // // {path: 'activate-account',component: ActivateAccountComponent,canActivate: [activationGuard]},
-        // // {path: 'shop', component: ExclusiveItemsComponent, },
-        // // { path: 'contact', component: ContactComponent, },
-        // // {path: 'about', component: AboutComponent,},
-        // // {path: 'cart',component: ShoppingChartComponent, canActivate: [cartguardGuard]},
-        // // {path: 'blog', component: BlogComponent,},
-        // // { path: '**', redirectTo: '' }, // Redirect unknown routes to home
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redirect `/admin` to `/admin/dashboard`
+      { path: 'dashboard', component: AdminHomeComponent }, // Default admin route
+      { path: 'addUni', component: AddUniversityComponent },
+      { path: 'addPrograms', component: AddCoursesComponent },
+      { path: 'universities', component: AllUniversitiesComponent },
+      { path: 'programs', component: AllProgramsComponent },
+      { path: 'colleges', component: CollegesComponent }
+
+      // {path:'allFarms', component:AllFarmsComponent}
+      // {path:'allFarms', component:AllFarmsComponent}
+
+    ],
+  },
+
+  {
+    path: 'user',
+    component: UserLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: UserHomeComponent }, // Home wraps everything },
+      { path: 'checkResults', component: UserCheckResultsComponent }, // pathMatch: 'full'},
+      { path: 'checkEligilibilty', component: UserEligibilityComponent },
+      // // {path: 'activate-account',component: ActivateAccountComponent,canActivate: [activationGuard]},
+      // // {path: 'shop', component: ExclusiveItemsComponent, },
+      // // { path: 'contact', component: ContactComponent, },
+      // // {path: 'about', component: AboutComponent,},
+      // // {path: 'cart',component: ShoppingChartComponent, canActivate: [cartguardGuard]},
+      // // {path: 'blog', component: BlogComponent,},
+      // // { path: '**', redirectTo: '' }, // Redirect unknown routes to home
     ]
   },
 

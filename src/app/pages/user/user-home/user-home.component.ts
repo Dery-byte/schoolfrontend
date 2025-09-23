@@ -83,4 +83,88 @@ export class UserHomeComponent {
     }
   
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     message = '';
+  messageType = '';
+  debugInfo = '';
+
+  // Create and download a test file to verify download functionality
+  createAndDownloadTestFile() {
+    const testContent = 'This is a test file to verify download functionality works.';
+    const blob = new Blob([testContent], { type: 'text/plain' });
+    
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'test-file.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+    
+    this.message = 'Test file created and downloaded successfully!';
+    this.messageType = 'success';
+  }
+
+  // Test the actual PDF download
+  async downloadExistingPDF() {
+    const pdfPath = 'assets/sample/sample_elgibility.pdf';
+    
+    try {
+      this.debugInfo = 'Starting PDF download test...\n';
+      
+      const response = await fetch(pdfPath);
+      this.debugInfo += `Response status: ${response.status}\n`;
+//      this.debugInfo += `Response headers: ${JSON.stringify(Array.from(response.headers.entries()), null, 2)}\n`;
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const blob = await response.blob();
+      this.debugInfo += `Blob size: ${blob.size} bytes\n`;
+      this.debugInfo += `Blob type: ${blob.type}\n`;
+      
+      if (blob.size === 0) {
+        this.message = 'PDF file is empty (0 bytes)';
+        this.messageType = 'error';
+        return;
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'sample_elgibility.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      this.message = `PDF downloaded successfully! Size: ${blob.size} bytes`;
+      this.messageType = 'success';
+      
+    } catch (error: any) {
+      this.message = `Download failed: ${error.message}`;
+      this.messageType = 'error';
+      this.debugInfo += `Error: ${error.message}\n`;
+    }
+  }
+
+  openPdfInNewTab(){
+    
+  }
 }

@@ -11,16 +11,11 @@
       </h1>
       <p class="welcome-subtitle">Your personalized university matching hub</p>
     </div>
-    
+
     <div class="profile-progress-card">
       <div class="progress-illustration">
-        <lottie-player 
-          [src]="'assets/animations/profile-complete.json'" 
-          background="transparent" 
-          speed="1" 
-          style="width: 36px; height: 36px;" 
-          loop 
-          autoplay>
+        <lottie-player [src]="'assets/animations/profile-complete.json'" background="transparent" speed="1"
+          style="width: 36px; height: 36px;" loop autoplay>
         </lottie-player>
       </div>
       <div class="progress-details">
@@ -41,7 +36,7 @@
       <div class="header-text">
         <h2 class="card-title">Find Your Perfect University Match</h2>
         <p class="card-subtitle">
-          Our AI-powered platform analyzes thousands of institutions to find the best matches 
+          Our AI-powered platform analyzes thousands of institutions to find the best matches
           for your academic profile and aspirations.
         </p>
       </div>
@@ -58,13 +53,8 @@
       <div class="step-card" *ngFor="let step of steps; let i = index">
         <div class="step-number">{{ i + 1 }}</div>
         <div class="step-icon">
-          <lottie-player 
-            [src]="step.animation" 
-            background="transparent" 
-            speed="1" 
-            style="width: 32px; height: 32px;" 
-            loop 
-            autoplay>
+          <lottie-player [src]="step.animation" background="transparent" speed="1" style="width: 32px; height: 32px;"
+            loop autoplay>
           </lottie-player>
         </div>
         <h3 class="step-title">{{ step.title }}</h3>
@@ -94,10 +84,95 @@
         <button class="primary-button" routerLink="/user/checkResults">
           Start <i class="fas fa-arrow-right"></i>
         </button>
-        <button class="secondary-button">
+        <!-- <button class="secondary-button">
           <i class="fas fa-play-circle"></i> View sample Report
-        </button>
+        </button> -->
+
+        <!-- <div class="stats-section">
+          <div class="stat-card">
+            <p class="stat-label">94</p>
+            <p class="stat-value">Derry</p>
+          </div>
+        </div> -->
+
+
+
       </div>
     </div>
   </div>
 </main>
+
+
+
+
+
+
+
+
+
+
+<hr>
+
+<div class="report-preview">
+      <div class="preview-header">
+        <h2>Sample Report Preview</h2>
+        <p>See how your personalized report will look</p>
+      </div>
+      
+      <div class="preview-content">
+        <!-- Preview image of the PDF -->
+        <div class="pdf-preview-image">
+          <img 
+            src="assets/sample/sample-report-preview.PNG" 
+            alt="Sample Report Preview"
+            (click)="openPdfInNewTab()"
+            class="preview-img">
+          <div class="preview-overlay">
+            <button (click)="openPdfInNewTab()" class="view-btn">
+              👁️ View Full PDF
+            </button>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button (click)="downloadExistingPDF()" class="download-btn primary">
+            📥 Download Sample PDF
+          </button>
+          <button (click)="openPdfInNewTab()" class="view-btn secondary">
+            🔗 Open in New Tab
+          </button>
+        </div>
+        
+        <div class="info-box">
+          <p>📋 This sample shows the layout and design of your actual report</p>
+          <p>🎯 Your report will contain your specific data and analysis</p>
+        </div>
+      </div>
+    </div>
+
+
+<hr>
+
+<!-- 
+
+ <div style="padding: 20px;">
+      <h3>Download Test</h3>
+      
+      <div style="margin: 20px 0;">
+        <button (click)="createAndDownloadTestFile()" style="margin-right: 10px;">
+          📝 Download Test Text File
+        </button>
+        <button (click)="downloadExistingPDF()">
+          📄 Download PDF
+        </button>
+      </div>
+      
+      <div *ngIf="message" [style.color]="messageType === 'error' ? 'red' : 'green'">
+        {{ message }}
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <h4>Debug Info:</h4>
+        <pre>{{ debugInfo }}</pre>
+      </div>
+    </div> -->

@@ -22,7 +22,7 @@ import { AdminSidebarComponent } from './pages/admin/admin-sidebar/admin-sidebar
 import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 import { CodeInputModule } from 'angular-code-input';
 import { AddUniversityComponent } from './pages/admin/add-university/add-university.component';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCoursesComponent } from './pages/admin/add-courses/add-courses.component';
 import { AllUniversitiesComponent } from './pages/admin/all-universities/all-universities.component';
 import { AllProgramsComponent } from './pages/admin/all-programs/all-programs.component';
@@ -36,6 +36,10 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { SafeHtmlPipe } from './shared/pipes/safe-html.pipe';
 import { CollegesComponent } from './pages/admin/colleges/colleges.component';
 import { NgChartsModule } from 'ng2-charts';
+import { LoginSuccessComponent } from './pages/login-success/login-success.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './pages/utilities/AuthInterceptor';
+import { TypingDirective } from './pages/utilities/typing.directive';
 
 
 
@@ -64,8 +68,12 @@ import { NgChartsModule } from 'ng2-charts';
     ConfirmationModalComponent,
     ResetPasswordComponent,
     SafeHtmlPipe,
-    CollegesComponent
+    CollegesComponent,
+    LoginSuccessComponent,
+    TypingDirective,
   ],
+
+  exports:[TypingDirective],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -76,11 +84,12 @@ import { NgChartsModule } from 'ng2-charts';
     MatSnackBarModule,
     BrowserAnimationsModule,
     NgbNavModule,
-    NgChartsModule
-    
+    NgChartsModule,
+
   ],
-  providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA], // Add this line
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Add this line
+
 
   bootstrap: [AppComponent]
 })

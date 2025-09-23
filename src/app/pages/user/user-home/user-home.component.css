@@ -656,3 +656,138 @@ button, a {
     border: 1px solid var(--gray-400) !important;
   }
 }
+
+
+
+
+
+
+/* PREVIEW PDF */
+
+ .report-preview {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .preview-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .preview-header h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .preview-header p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .pdf-preview-image {
+      position: relative;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .pdf-preview-image:hover {
+      transform: translateY(-2px);
+    }
+
+    .preview-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .preview-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .pdf-preview-image:hover .preview-overlay {
+      opacity: 1;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .download-btn, .view-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .primary {
+      background: #28a745;
+      color: white;
+    }
+
+    .primary:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+
+    .secondary {
+      background: #007bff;
+      color: white;
+    }
+
+    .secondary:hover {
+      background: #0056b3;
+      transform: translateY(-1px);
+    }
+
+    .preview-overlay .view-btn {
+      background: white;
+      color: #333;
+      padding: 10px 20px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .info-box p {
+      margin: 8px 0;
+      color: #495057;
+    }
+
+    @media (max-width: 768px) {
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .download-btn, .view-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+    }

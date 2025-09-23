@@ -1,6 +1,58 @@
 /* ==================== */
 /* BASE & LAYOUT STYLES */
 /* ==================== */
+
+
+
+.welcome-title {
+  /* font-family: 'Poppins', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 15px; */
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.welcome-subtitle {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.2rem;
+  text-align: center;
+  color: #f1eeee;
+  margin-top: 8px;
+}
+
+.typing-cursor {
+  display: inline-block;
+  font-weight: bold;
+  -webkit-text-fill-color: #43ad28; /* cursor visible */
+  color: #15c223;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .split-container {
   display: flex;
   min-height: 90vh;
@@ -52,7 +104,7 @@
 /* TYPOGRAPHY */
 /* ============= */
 .welcome-title, .auth-header h2 {
-  font-size: 2.5rem;
+  font-size: 2.0rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   line-height: 1.2;
@@ -60,7 +112,7 @@
 
 .welcome-subtitle, .auth-subtitle {
   font-size: 1.25rem;
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
   opacity: 0.9;
 }
 
@@ -734,6 +786,40 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Error Alert Container */
 .custom-alert {
   position: fixed;
@@ -832,6 +918,49 @@
     padding: 12px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
@@ -939,3 +1068,15 @@
 .go-to-login-btn:hover {
     background-color: #45a049;
 }
+
+
+
+.social-btn.disabled {
+  pointer-events: none;     /* prevent click */
+  opacity: 0.5;             /* fade out */
+  cursor: not-allowed !important; /* force 🚫 cursor */
+}
+
+
+
+

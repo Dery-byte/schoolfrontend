@@ -100,7 +100,23 @@ export class LoginComponent {
   async ngOnInit(): Promise<void> {
     // await this.ss.init();
     // await this.ss.login();
+
+    this.oauth2Login();
   }
+
+
+  oauth2Login(){
+    // OAUTH2 LOGIN CONFIGURATION
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+
+  if (token) {
+    this.tokenService.token = token;
+    const decoded = decodeToken(token);
+    this.authService.setUser(decoded!.sub);
+    this.router.navigate(['/user/home']); // or based on role
+  }
+}
 
 
   login() {
