@@ -145,7 +145,7 @@
 
 
 
-
+    <!-- LOADING PREVIOUS RECORDS -->
 
     <div *ngIf="!isLoadingChecks && userChecks.length > 0" class="card border-0 shadow-sm">
       <div class="card-header bg-white border-bottom-0 py-3">
@@ -201,7 +201,7 @@
                       class="btn btn-sm rounded-pill shadow-sm" [ngClass]="{
       'btn-outline-primary': check.paymentStatus === 'PAID',
       'btn-primary': check.paymentStatus !== 'PAID'
-    }" (click)="resumeCheck(check.id)" style="min-width: 120px;">
+      }" (click)="resumeCheck(check.id)" style="min-width: 120px;">
                       {{getButtonText(check)}}
                       <i class="fas fa-arrow-right ms-2"></i>
                     </button>
@@ -230,7 +230,7 @@
                         </span>
                       </ng-template>
                     </div>
-</div>
+                  </div>
                 </td>
 
 
@@ -246,6 +246,9 @@
       </div>
     </div>
 
+
+
+
     <!-- Empty State (shown when no checks exist) -->
     <div *ngIf="!isLoadingChecks && userChecks.length === 0" class="text-center py-5">
       <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
@@ -259,6 +262,11 @@
 
 
   </div>
+
+
+
+
+
 
   <!-- Active Check Workflow -->
   <div *ngIf="currentCheck" class="active-check-container">
@@ -274,7 +282,11 @@
       </div>
       <div class="card-body px-4 py-4">
         <div class="row">
-          <div class="col-lg-8">
+
+
+          <div class="col-lg-12">
+
+
             <div class="alert alert-info border-0 mb-4" style="background-color: rgba(13, 110, 253, 0.1);">
               <div class="d-flex">
                 <div class="flex-shrink-0">
@@ -296,36 +308,84 @@
               </div>
             </div>
           </div>
+          </div>
 
-          <div class="col-lg-4">
-            <div class="payment-summary-card p-4 rounded-3 border-0"
-              style="background: linear-gradient(to bottom, #ffffff, #f8f9fa); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
-              <h5 class="fw-bold mb-4 text-center">Payment Summary</h5>
-              <div class="d-flex justify-content-between mb-2">
-                <span class="text-muted">Service Fee:</span>
-                <strong>GHS 5,000</strong>
-              </div>
-              <div class="d-flex justify-content-between mb-3">
-                <span class="text-muted">Convenience Fee:</span>
-                <strong>GHS 200</strong>
-              </div>
-              <hr class="my-3">
-              <div class="d-flex justify-content-between total-amount fw-bold fs-5">
-                <span>Total Amount:</span>
-                <strong class="text-primary">GHS 5,200</strong>
-              </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="payment-summary-card p-4 rounded-3 border-0"
+                style="background: linear-gradient(to bottom, #ffffff, #f8f9fa); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                <h5 class="fw-bold mb-4 text-center">Basic Payment Summary</h5>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Service Fee:</span>
+                  <strong>GHS 5,000</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="text-muted">Convenience Fee:</span>
+                  <strong>GHS 200</strong>
+                </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between total-amount fw-bold fs-5">
+                  <span>Total Amount:</span>
+                  <strong class="text-primary">GHS 5,200</strong>
+                </div>
 
-              <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm" (click)="openPaymentModal()"
-                style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
-                <i class="fas fa-lock me-2"></i> Proceed to Secure Payment
-              </button>
+                <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm"
+                  (click)="openPaymentModal('BASIC')"
+                  style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
+                  <i class="fas fa-lock me-2"></i> Proceed with basic
+                </button>
 
-              <div class="text-center mt-3 small text-muted">
-                <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
+                <div class="text-center mt-3 small text-muted">
+                  <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
+                </div>
               </div>
             </div>
+
+
+
+            <!-- PREMIUM PAYMENT -->
+
+
+
+            <div class="col-lg-6">
+              <div class="payment-summary-card p-4 rounded-3 border-0"
+                style="background: linear-gradient(to bottom, #ffffff, #f8f9fa); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                <h5 class="fw-bold mb-4 text-center">Premium Payment Summary</h5>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Service Fee:</span>
+                  <strong>GHS 5,000</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span class="text-muted">Convenience Fee:</span>
+                  <strong>GHS 200</strong>
+                </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-between total-amount fw-bold fs-5">
+                  <span>Total Amount:</span>
+                  <strong class="text-primary">GHS 5,200</strong>
+                </div>
+
+                <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm"
+                  (click)="openPaymentModal('PREMIUM')"
+                  style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
+                  <i class="fas fa-lock me-2"></i> Proceed with Premium
+                </button>
+
+                <div class="text-center mt-3 small text-muted">
+                  <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
+                </div>
+              </div>
+            </div>
+
           </div>
-        </div>
+
+
+
+
+
+
+
+
 
         <div class="text-center mt-4">
           <button class="btn btn-outline-secondary rounded-pill px-4 shadow-sm" (click)="cancelCurrentCheck()">
@@ -383,6 +443,9 @@
           </div>
         </div>
 
+
+
+        <!-- BIODATA NOT SET SO ENTER THEM TO PROCEED  -->
         <div class="card" *ngIf="!showH2Message && !isBioDataLoading">
           <div class="loading-state">
             <div class="loading-content">
@@ -541,28 +604,10 @@
 
         <!-- *ngIf="!hasBiodata()" -->
         <!-- <div *ngIf="hasBiodata()"> -->
-        <div *ngIf="showH2Message">
 
-          <!-- <strong class="fs-5">{{ enteredName }}</strong>
+        <!-- <div *ngIf="showH2Message""> -->
 
-          <div *ngIf="enteredName && candinateName" class="mt-2">
-            <span class="badge" [ngClass]="{
-    'bg-success': namesMatch(),
-    'bg-danger': !namesMatch()
-  }">
-              {{ namesMatch() ? '✔ Names Match' : '✖ Names Differ' }}
-            </span>
-
-            <small *ngIf="!namesMatch()" class="text-muted d-block mt-1">
-              (Comparison is case and space insensitive)
-            </small>
-          </div> -->
-
-
-
-
-          <!-- <span>Thank you for submitting, proceed to check you eligibility!</span> -->
-
+        <div *ngIf=" showH2Message && !premium">
           <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
             style="background-color: rgba(13, 110, 253, 0.1);">
             <div class="d-flex align-items-center">
@@ -576,9 +621,7 @@
             <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="goBackToList()">
               <i class="fas fa-arrow-left me-1"></i> Back to all checks
             </button>
-            <!-- <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="currentCheck = null">
-          <i class="fas fa-arrow-left me-1"></i> Back to all checks
-        </button> -->
+
           </div>
           <!-- Enhanced Tab Navigation -->
 
@@ -769,33 +812,6 @@
                   </div>
                 </div>
               </div>
-
-
-
-              <!-- ABOVE IS THE GET RESULTS FROM WAEC -->
-              <!-- <div *ngIf="isLoading" class="card border-0 mt-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
-            <div class="card-body text-center py-5">
-              <div class="mb-4">
-                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
-              <h5 class="mb-3">Retrieving WAEC Results</h5>
-              <p class="text-muted mb-4">Please wait while we fetch the official results from WAEC</p>
-
-              <div class="progress mb-3" style="height: 8px; border-radius: 4px;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                  style="width: 100%; background: linear-gradient(135deg, #4e54c8, #8f94fb);">
-                </div>
-              </div>
-
-              <div class="d-flex justify-content-center">
-                <div class="spinner-grow text-primary mx-1" style="width: 1.5rem; height: 1.5rem;" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            </div>
-          </div> -->
               <!-- {{waecresults|json}} -->
 
               <h1>
@@ -874,21 +890,10 @@
           'bg-orange': result.grade === 'D7',
           'bg-purple': result.grade === 'E8',
           'bg-danger': result.grade === 'F9'
-        }">
+         }">
                               {{ result.grade }}
                             </span>
                           </td>
-
-                          <!-- <td>
-                            <span class="badge rounded-pill py-2 px-3" [ngClass]="{
-                  'bg-success': result.grade === 'A1' || result.grade === 'B2' || result.grade === 'B3',
-                  'bg-primary': result.grade === 'C4' || result.grade === 'C5' || result.grade === 'C6',
-                  'bg-warning': result.grade === 'D7' || result.grade === 'E8',
-                  'bg-danger': result.grade === 'F9'
-                }">
-                              {{result.grade}}
-                            </span>
-                          </td> -->
                           <td class="pe-4">{{result.interpretation}}</td>
                         </tr>
                       </tbody>
@@ -1033,7 +1038,7 @@
           'bg-orange': res.grade === 'D7',
           'bg-purple': res.grade === 'E8',
           'bg-danger': res.grade === 'F9'
-        }">
+         }">
                                 {{ res.grade }}
                               </span>
                             </td>
@@ -1086,7 +1091,7 @@
           'bg-orange': res.grade === 'D7',
           'bg-purple': res.grade === 'E8',
           'bg-danger': res.grade === 'F9'
-        }">
+         }">
                                 {{ res.grade }}
                               </span>
                             </td>
@@ -1430,6 +1435,1141 @@
             </div>
           </div>
         </div> <!-- CONDITION TO HIDE THE CHECK RESULTS DIV ENDS HERE -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- PREMIUM SUBSCRIPTION BEGINS -->
+        <!-- <div *ngIf="showH2Message" *ngIf="premium"> -->
+        <div *ngIf="showH2Message && premium">
+          <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
+            style="background-color: rgba(13, 110, 253, 0.1);">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-user-graduate me-3 fs-4 text-primary"></i>
+              <div>
+                <h6 class="mb-0">Currently processing check for:</h6>
+                <strong class="fs-5">{{enteredName}} PREMIUM SUBSCRIPTION!!</strong>
+                <!-- <strong class="fs-5"> This is the waec candinate Name:{{candinateName}} </strong> -->
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="goBackToList()">
+              <i class="fas fa-arrow-left me-1"></i> Back to all checks
+            </button>
+
+          </div>
+          <!-- Enhanced Tab Navigation -->
+
+
+
+
+
+          <!-- HTML Template -->
+          <div class="mb-4">
+            <div class="modern-tab-container">
+              <ul ngbNav #nav="ngbNav" class="modern-nav">
+                <li ngbNavItem class="modern-nav-item">
+                  <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
+                    <div class="modern-tab-content" (click)="activeTab = 'auto'">
+                      <!-- Background highlight for active state -->
+                      <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
+
+                      <!-- Icon with gradient background -->
+                      <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
+                        <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
+                      </div>
+
+                      <!-- Text -->
+                      <span class="tab-text" [class.active]="activeTab === 'auto'">
+                        Get Results<br>Automatically
+                      </span>
+
+                      <!-- Active indicator dot -->
+                      <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
+                    </div>
+                  </a>
+                </li>
+
+                <li ngbNavItem class="modern-nav-item">
+                  <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'manual'">
+                    <div class="modern-tab-content" (click)="activeTab = 'manual'">
+                      <!-- Background highlight for active state -->
+                      <div class="tab-background" [class.active]="activeTab === 'manual'"></div>
+
+                      <!-- Icon with gradient background -->
+                      <div class="icon-container manual-tab" [class.active]="activeTab === 'manual'">
+                        <i class="fas fa-keyboard icon" [class.active]="activeTab === 'manual'"></i>
+                      </div>
+
+                      <!-- Text -->
+                      <span class="tab-text" [class.active]="activeTab === 'manual'">
+                        Enter Results<br>Manually
+                      </span>
+
+                      <!-- Active indicator dot -->
+                      <div class="indicator-dot manual-dot" [class.active]="activeTab === 'manual'"></div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+
+
+
+
+
+
+          <!-- Tab Content -->
+          <div [ngSwitch]="activeTab">
+            <div *ngSwitchCase="'auto'" class="card border-0 mb-4" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+              <!-- BELLOW IS THE GET RESULTS FROM WAEC -->
+
+              <div class="results-retrieval-container ">
+                <div class="retrieval-card">
+                  <div class="retrieval-header">
+                    <i class="retrieval-icon"></i>
+                    <h3>Retrieve Official Results</h3>
+                  </div>
+
+                  <form class="retrieval-form" [formGroup]="examForm" (ngSubmit)="submitFormCheck()">
+                    <div class="form-grid">
+                      <!-- Exam Year Select -->
+                      <div class="form-field">
+                        <div class="select-container">
+                          <select id="examYear" formControlName="examYear" required>
+                            <option value="" disabled selected>Select Year</option>
+                            <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+                          </select>
+                          <label for="examYear">Exam Year</label>
+                          <div class="error-message"
+                            *ngIf="examForm.get('examYear')?.touched && examForm.get('examYear')?.hasError('required')">
+                            Please select an exam year
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Exam Type Select -->
+                      <div class="form-field">
+                        <div class="select-container">
+                          <select id="examType" formControlName="examType" required>
+                            <option value="" disabled selected>Select Exam Type</option>
+                            <option *ngFor="let g of groups" [ngValue]="g.id">{{ g.name }}</option>
+                          </select>
+                          <label for="examType">Exam Type</label>
+                          <div class="error-message"
+                            *ngIf="examForm.get('examType')?.touched && examForm.get('examType')?.hasError('required')">
+                            Please select an exam type
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Index Number with Confirm Button -->
+                      <div class="form-field with-action">
+                        <div class="input-container">
+                          <input type="text" id="indexNumber" placeholder=" " formControlName="indexNumber" required>
+                          <label for="indexNumber">Index Number</label>
+                          <div class="error-message"
+                            *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">
+                            Please enter an index number
+                          </div>
+                        </div>
+                        <!-- <button type="button" class="confirm-btn" (click)="openConfirmModal()"
+                          [disabled]="examForm.get('indexNumber')?.invalid">
+                          Confirm
+                        </button> -->
+                      </div>
+                    </div>
+
+                    <div *ngIf="!isLoading" class="form-actions">
+                      <ng-container *ngIf="!isLimitReached; else limitReached">
+                        <button type="submit" class="submit-btn" [disabled]="!examForm.valid">
+                          <i class="search-icon"></i> Retrieve Results
+                        </button>
+                      </ng-container>
+                    </div>
+                    <div class="form-actions">
+                      <ng-template #limitReached>
+                        <span class="badge bg-danger text-white py-1 px-2 rounded-pill">
+                          <i class="fas fa-ban me-1"></i> Request Limit Reached
+                        </span>
+                      </ng-template>
+                    </div>
+                  </form>
+                </div>
+
+                <div *ngIf="isLoading" class="loading-state">
+                  <div class="loading-spinner">
+                    <!-- Document/Certificate Icon -->
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                      class="certificate-icon">
+                      <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z"
+                        stroke="currentColor" stroke-width="2" fill="none" />
+                      <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" fill="none" />
+                      <path d="M16 13H8" stroke="currentColor" stroke-width="2" />
+                      <path d="M16 17H8" stroke="currentColor" stroke-width="2" />
+                      <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                  </div>
+
+                  <div class="loading-content">
+                    <!-- Main heading with graduation cap icon -->
+                    <h4>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="inline-icon">
+                        <path d="M12 3L1 9L12 15L21 12.09V17H23V9L12 3Z" fill="currentColor" />
+                        <path d="M5 13.18V17.18C5 19.4 8.58 21 12 21S19 19.4 19 17.18V13.18L12 17L5 13.18Z"
+                          fill="currentColor" />
+                      </svg>
+                      Retrieving WAEC Results
+                    </h4>
+
+                    <!-- Description with clock icon -->
+                    <p>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="inline-icon small">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                        <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
+                      </svg>
+                      Please give us a few moments while we fetch your official results from WAEC
+                    </p>
+                  </div>
+
+                  <div class="progress-track">
+                    <div class="progress-bar"></div>
+                  </div>
+
+                  <div class="spinner-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- {{waecresults|json}} -->
+
+              <h1>
+                <hr>
+              </h1>
+
+              <!-- Results Display Section -->
+              <div *ngIf="waecresults && !secondResultFetched && !showNameComparisonModal" class="card border-0 mt-4"
+                style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+
+                <button (click)="confirmRemoveResult()" class="btn btn-outline-danger btn-sm"
+                  style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
+                  <i class="fas fa-trash-alt me-1"></i> Remove Result
+                </button>
+                <div class="card-header bg-white border-bottom-0 py-3">
+                  <h5 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i> WAEC Results for
+                    {{waecresults.cname}}
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <!-- Candidate Summary -->
+                  <div class="row mb-4">
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-id-card me-3 text-muted fs-4"></i>
+                        <div>
+                          <h6 class="mb-0 text-muted small">Index Number</h6>
+                          <p class="mb-0 fw-bold">{{waecresults.cindex}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-calendar-alt me-3 text-muted fs-4"></i>
+                        <div>
+                          <h6 class="mb-0 text-muted small">Date of Birth</h6>
+                          <p class="mb-0 fw-bold">{{waecresults.dob}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-graduation-cap me-3 text-muted fs-4"></i>
+                        <div>
+                          <h6 class="mb-0 text-muted small">Exam Year</h6>
+                          <p class="mb-0 fw-bold">{{waecresults.examyear}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Results Table -->
+                  <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                      <thead class="table-light">
+                        <tr>
+                          <!-- <th class="ps-4">Subject Code</th> -->
+                          <th>Subject</th>
+                          <th>Grade</th>
+                          <th class="pe-4">Interpretation</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let result of waecresults.resultDetails">
+                          <!-- <td class="ps-4">{{result.subjectcode}}</td> -->
+                          <td class="fw-bold">{{result.subject}}</td>
+
+
+                          <td>
+                            <span class="badge rounded-pill py-2 px-3" style="color:#ffffff" [ngClass]="{
+          'bg-success': result.grade === 'A1',
+          'bg-info': result.grade === 'B2',
+          'bg-primary': result.grade === 'B3',
+          'bg-secondary': result.grade === 'C4',
+          'bg-dark': result.grade === 'C5',
+          'bg-warning': result.grade === 'C6',
+          'bg-orange': result.grade === 'D7',
+          'bg-purple': result.grade === 'E8',
+          'bg-danger': result.grade === 'F9'
+         }">
+                              {{ result.grade }}
+                            </span>
+                          </td>
+                          <td class="pe-4">{{result.interpretation}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Summary and Actions -->
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <span class="badge bg-light text-dark rounded-pill">
+                        <i class="fas fa-book me-2"></i> {{waecresults.resultDetails.length}} Subjects
+                      </span>
+                    </div>
+                    <div>
+                      <button class="btn btn-outline-secondary rounded-pill shadow-sm btn-download"
+                        (click)="downloadResultsPDF()">
+                        <i class="fas fa-download me-2"></i> Download Results
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- COLLEGE SELECTION SECTION -->
+                  <div class="section">
+                    <h2>Field of Study - Choose at most 3</h2>
+
+                    <!-- College Selection Controls -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="add-attendee-container">
+                          <div class="add-attendee-btn" (click)="toggleDropdown()"
+                            [class.disabled]="reachedMaxSelection">
+                            + Select College(s)
+                          </div>
+                          <div class="dropdown" *ngIf="showDropdown">
+                            <input type="text" class="search-input" placeholder="Search colleges..."
+                              [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+                            <div class="dropdown-list">
+                              <div *ngFor="let college of availableColleges" class="dropdown-item"
+                                (click)="addAttendee(college)">
+                                {{ college.name }}
+                              </div>
+                              <div *ngIf="availableColleges.length === 0" class="no-results">
+                                No colleges found
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="selection-info" [class.error]="reachedMaxSelection">
+                          {{ selectedCount }}/3 colleges selected
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selected colleges list -->
+                    <div class="attendee-list-container mb-3">
+                      <div class="attendee-list">
+                        <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                          {{ college.name }}
+                          <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Check Eligibility Button (full width) -->
+                    <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeOneResults()"
+                      [disabled]="isCheckingEligibility || selectedCount === 0">
+                      <span *ngIf="!isCheckingEligibility">
+                        <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                      </span>
+                      <span *ngIf="isCheckingEligibility">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Checking...
+                      </span>
+                    </button>
+                  </div>
+
+
+
+
+
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div class="row mt-4" *ngIf="waecresults && waecresults2">
+
+                <!-- First WAEC Result -->
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light text-center fw-bold">
+                      FIRST SITTING RESULT
+                    </div>
+                    <div class="card-body px-4">
+                      <div class="mt-4 border-top pt-3 text-muted small">
+                        <p><strong>Name:</strong> {{ waecresults.cname }}</p>
+                        <p><strong>Index Number:</strong> {{ waecresults.cindex }}</p>
+                        <p><strong>Date of Birth:</strong> {{ waecresults.dob }}</p>
+                        <p><strong>Exam Year:</strong> {{ waecresults.examyear }}</p>
+                      </div>
+
+                      <table class="table table-bordered table-striped text-center">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>Interpretation</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let res of waecresults.resultDetails">
+                            <td>{{ res.subject }}</td>
+                            <td>
+                              <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+          'bg-success': res.grade === 'A1',
+          'bg-info': res.grade === 'B2',
+          'bg-primary': res.grade === 'B3',
+          'bg-secondary': res.grade === 'C4',
+          'bg-dark': res.grade === 'C5',
+          'bg-warning': res.grade === 'C6',
+          'bg-orange': res.grade === 'D7',
+          'bg-purple': res.grade === 'E8',
+          'bg-danger': res.grade === 'F9'
+         }">
+                                {{ res.grade }}
+                              </span>
+                            </td>
+
+                            <td>{{ res.interpretation?.trim() }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Second WAEC Result -->
+                <div class="col-md-6">
+                  <button (click)="confirmRemoveResult()" class="btn btn-outline-danger btn-sm"
+                    style="position: absolute; top: 1rem; right: 1rem; z-index: 10;">
+                    <i class="fas fa-trash-alt me-1"></i> Remove Results
+                  </button>
+                  <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light text-center fw-bold">
+                      SECOND SITTING RESULT
+                    </div>
+                    <div class="card-body px-4">
+                      <div class="mt-4 border-top pt-3 text-muted small">
+                        <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
+                        <p><strong>Index Number:</strong> {{ waecresults2.cindex }}</p>
+                        <p><strong>Date of Birth:</strong> {{ waecresults2.dob }}</p>
+                        <p><strong>Exam Year:</strong> {{ waecresults2.examyear }}</p>
+                      </div>
+
+                      <table class="table table-bordered table-striped text-center">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                            <th>Interpretation</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let res of waecresults2.resultDetails">
+                            <td>{{ res.subject }}</td>
+                            <td>
+                              <span class="badge rounded-pill py-2 px-3" [ngClass]="{
+          'bg-success': res.grade === 'A1',
+          'bg-info': res.grade === 'B2',
+          'bg-primary': res.grade === 'B3',
+          'bg-secondary': res.grade === 'C4',
+          'bg-dark': res.grade === 'C5',
+          'bg-warning': res.grade === 'C6',
+          'bg-orange': res.grade === 'D7',
+          'bg-purple': res.grade === 'E8',
+          'bg-danger': res.grade === 'F9'
+         }">
+                                {{ res.grade }}
+                              </span>
+                            </td>
+
+                            <td>{{ res.interpretation?.trim() }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- College Selection Section -->
+                <div class="col-12 mt-4">
+                  <div class="section">
+                    <h2>Colleges - Choose at most 3</h2>
+
+                    <!-- College Selection Controls -->
+                    <div class="row mb-3 position-relative">
+                      <div class="col-12">
+                        <button class="btn btn-secondary w-100" (click)="toggleDropdown()"
+                          [class.disabled]="reachedMaxSelection">
+                          + Select College(s)
+                        </button>
+
+                        <!-- Dropdown aligned under button -->
+                        <div class="dropdown-menu w-100 p-2 mt-1 show" *ngIf="showDropdown"
+                          style="max-height: 250px; overflow-y: auto;">
+                          <input type="text" class="form-control mb-2" placeholder="Search colleges..."
+                            [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+
+                          <div *ngFor="let college of availableColleges" class="dropdown-item"
+                            (click)="addAttendee(college)">
+                            {{ college.name }}
+                          </div>
+
+                          <div *ngIf="availableColleges.length === 0" class="dropdown-item text-muted">
+                            No colleges found
+                          </div>
+                        </div>
+                        <div class="selection-info" [class.error]="reachedMaxSelection">
+                          {{ selectedCount }}/3 colleges selected
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selected Colleges List -->
+                    <div class="attendee-list-container mb-3">
+                      <div class="attendee-list">
+                        <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                          {{ college.name }}
+                          <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Check Eligibility Button -->
+                    <div class="row">
+                      <div class="col-12">
+                        <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeTwoResults()"
+                          [disabled]="isCheckingEligibility || selectedCount === 0">
+                          <span *ngIf="!isCheckingEligibility">
+                            <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                          </span>
+                          <span *ngIf="isCheckingEligibility">
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Checking...
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <!-- ELEGIBILITY DISPLAY ENDS -->
+              <!-- {{elligibilityResults|json}} -->
+
+
+              <!-- CONFIRM INDEX NUMBER MODAL -->
+
+              <!-- Confirm Modal -->
+              <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirmModalLabel">Confirm Index Number</h5>
+                      <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                      <input type="text" [(ngModel)]="confirmInput" class="form-control"
+                        placeholder="Re-enter Index Number">
+                      <div *ngIf="showMismatchError" class="text-danger mt-2">
+                        Index numbers do not match.
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                      <button type="button" class="btn btn-success" (click)="verifyConfirmation()">Confirm</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+            </div>
+            <!-- ADD RESULTS MANUALLY FORM -->
+            <div *ngSwitchCase="'manual'" class="card border-0 mb-4"
+              style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+              <!-- MANUAL ENTRY STARTS HERE -->
+
+              <div class="card rounded-lg shadow-sm">
+                <div class="card-header bg-white border-bottom-0 py-3">
+                  <h5 class="mb-0">
+                    <i class="fas fa-keyboard me-2 text-primary"></i> Manual Results Entry
+                  </h5>
+                </div>
+
+                <div class="card-body">
+                  <form [formGroup]="entryForm">
+                    <!-- Primary Info Section -->
+                    <div class="card mb-4 bg-light-subtle border-0">
+                      <div class="card-body">
+                        <h6 class="mb-3 text-muted">
+                          <i class="fas fa-info-circle me-2"></i> Candidate Information
+                        </h6>
+
+                        <div class="row g-3">
+                          <!-- Index Number (full width on mobile) -->
+                          <div class="col-12 col-md-4">
+                            <div class="form-floating">
+                              <input type="text" formControlName="indexNumber" class="form-control"
+                                id="manualIndexNumber" placeholder="Index Number" />
+                              <label for="manualIndexNumber">Index Number</label>
+                            </div>
+                          </div>
+
+                          <!-- Exam Board and Year (50% width on mobile) -->
+                          <div class="col-6 col-md-4">
+                            <div class="form-floating">
+                              <select class="form-select" id="examBoard" formControlName="examBoard"
+                                (change)="onBoardChange($event)">
+                                <option value="" disabled selected>Choose Exam Board</option>
+                                <option *ngFor="let board of examBoards" [value]="board">{{ board }}</option>
+                              </select>
+                              <label for="examBoard">Exam Board</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-4">
+                            <div class="form-floating">
+                              <select class="form-select" id="manualExamYear" formControlName="examYear">
+                                <option value="" disabled selected>Choose Year</option>
+                                <option *ngFor="let year of examYears" [value]="year">{{ year }}</option>
+                              </select>
+                              <label for="manualExamYear">Exam Year</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Subject Entry Section -->
+                    <div class="card mb-4 bg-light-subtle border-0">
+                      <div class="card-body">
+                        <h6 class="mb-3 text-muted">
+                          <i class="fas fa-book me-2"></i> Subject Details
+                        </h6>
+
+                        <div class="row g-3">
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <select class="form-select" id="manualExamType" formControlName="examType">
+                                <option value="" disabled selected>Choose Exam Type</option>
+                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
+                              </select>
+                              <label for="manualExamType">Exam Type</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <input type="text" formControlName="subject" class="form-control" id="subject"
+                                placeholder="Select Subject" />
+                              <label for="subject">Subject</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <select class="form-select" id="grade" formControlName="grade">
+                                <option value="" disabled selected>Select Grade</option>
+                                <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+                              </select>
+                              <label for="grade">Grade</label>
+                            </div>
+                          </div>
+
+                          <div class="col-6 col-md-3">
+                            <div class="form-floating">
+                              <select class="form-select" id="sitting" formControlName="sitting">
+                                <option value="" disabled selected>Select Sitting</option>
+                                <option value="May/June">May/June</option>
+                                <option value="Nov/Dec">Nov/Dec</option>
+                              </select>
+                              <label for="sitting">Sitting</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="text-center mt-3">
+                          <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm"
+                            (click)="addEntry()">
+                            <i class="fas fa-plus me-2"></i> Add Subject
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Entry Table -->
+                    <div *ngIf="entries.length > 0" class="card border-0">
+                      <div class="card-body px-0 pb-0">
+                        <div class="table-responsive">
+                          <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                              <tr>
+                                <th class="ps-4">Index No.</th>
+                                <th>Exam Board</th>
+                                <th>Year</th>
+                                <th>Exam Type</th>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                                <th>Sitting</th>
+                                <th class="pe-4 text-end">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of entries; let i = index">
+                                <td class="ps-4">{{ item.indexNumber }}</td>
+                                <td>{{ item.examBoard }}</td>
+                                <td>{{ item.examYear }}</td>
+                                <td>{{ item.examType }}</td>
+                                <td class="fw-bold">{{ item.subject }}</td>
+                                <td>
+                                  <span class="badge rounded-pill py-1 px-3 bg-primary">
+                                    {{ item.grade }}
+                                  </span>
+                                </td>
+                                <td>{{ item.sitting }}</td>
+                                <td class="pe-4 text-end">
+                                  <button class="btn btn-sm btn-outline-danger rounded-pill shadow-sm"
+                                    (click)="removeEntry(i)">
+                                    <i class="fas fa-trash-alt me-1"></i> Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <!-- COLLEGE SELECTION SECTION -->
+                        <div class="section">
+                          <h2>Colleges - Choose at most 3</h2>
+
+                          <!-- College Selection Controls -->
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                              <div class="add-attendee-container">
+                                <div class="add-attendee-btn" (click)="toggleDropdown()"
+                                  [class.disabled]="reachedMaxSelection">
+                                  + Select College(s)
+                                </div>
+                                <div class="dropdown" *ngIf="showDropdown">
+                                  <input type="text" class="search-input" placeholder="Search colleges..."
+                                    [(ngModel)]="searchTerm" (click)="$event.stopPropagation()">
+                                  <div class="dropdown-list">
+                                    <div *ngFor="let college of availableColleges" class="dropdown-item"
+                                      (click)="addAttendee(college)">
+                                      {{ college.name }}
+                                    </div>
+                                    <div *ngIf="availableColleges.length === 0" class="no-results">
+                                      No colleges found
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="selection-info" [class.error]="reachedMaxSelection">
+                                {{ selectedCount }}/3 colleges selected
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Selected colleges list -->
+                          <div class="attendee-list-container mb-3">
+                            <div class="attendee-list">
+                              <div *ngFor="let college of optionalColleges" class="attendee-pill">
+                                {{ college.name }}
+                                <span class="remove-btn" (click)="removeAttendee($event, college)">✗</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Check Eligibility Button (full width) -->
+                          <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2"
+                            (click)="checkEligibilityManualEntry()"
+                            [disabled]="isCheckingEligibility || selectedCount === 0">
+                            <span *ngIf="!isCheckingEligibility">
+                              <i class="fas fa-chart-bar me-2"></i>Check Eligibility
+                            </span>
+                            <span *ngIf="isCheckingEligibility">
+                              <span class="spinner-border spinner-border-sm me-2" role="status"
+                                aria-hidden="true"></span>
+                              Checking...
+                            </span>
+                          </button>
+                        </div>
+                        <!-- <div class="text-end mt-3 pe-4">
+                          <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()">
+                            <i class="fas fa-check-circle me-2"></i> Submit for Interpretation
+                          </button>
+                        </div> -->
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+
+              <!-- MANUAL ENTRY ENDS HERE -->
+
+            </div>
+          </div>
+        </div> <!-- CONDITION TO HIDE THE CHECK RESULTS DIV ENDS HERE -->
+
+        <!-- PREMIU SUBSCRIPTION ENDS -->
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
     </div>
   </div>

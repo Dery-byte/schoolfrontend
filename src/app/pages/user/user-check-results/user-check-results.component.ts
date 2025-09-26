@@ -457,10 +457,11 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
 
+paymentAmount: number = 0;
 
 
   ngOnInit(): void {
-    this.initializeForm(1.00); // Sets fixed amount to GHS 50.00
+    this.initializeForm(this.paymentAmount); // Sets fixed amount to GHS 50.00
     this.initForm();
     this.manualForm();
     this.loadChecks();
@@ -617,6 +618,7 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   showH2Message = false;       // Toggles h2 visibility
+  premium = true;
 
 
   private createBiodata() {
@@ -1704,7 +1706,7 @@ export class UserCheckResultsComponent implements OnInit {
         }
       });
 
-      this.openPaymentModal();
+      this.openPaymentModal(this.selectedPlan);
     }
   }
 
@@ -1791,10 +1793,17 @@ export class UserCheckResultsComponent implements OnInit {
   }
   isAmountFixed = true; // Add this property
 
-  openPaymentModal() {
+  selectedPlan: string = '';
+
+
+  openPaymentModal(plan: string) {
+      this.selectedPlan = plan;
     this.showPaymentModal = true;
     document.body.style.overflow = 'hidden';
     this.blurService.setBlur(true);
+    console.log("The plane chosing is : ",plan)
+    const fixedAmount = plan === 'PREMIUM' ? 100 : 50; // pick amount based on plan
+  this.initializeForm(fixedAmount);
 
   }
 
