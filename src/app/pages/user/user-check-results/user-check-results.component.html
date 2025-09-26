@@ -308,76 +308,83 @@
               </div>
             </div>
           </div>
-          </div>
+        </div>
 
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="payment-summary-card p-4 rounded-3 border-0"
-                style="background: linear-gradient(to bottom, #ffffff, #f8f9fa); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
-                <h5 class="fw-bold mb-4 text-center">Basic Payment Summary</h5>
-                <div class="d-flex justify-content-between mb-2">
-                  <span class="text-muted">Service Fee:</span>
-                  <strong>GHS 5,000</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <span class="text-muted">Convenience Fee:</span>
-                  <strong>GHS 200</strong>
-                </div>
-                <hr class="my-3">
-                <div class="d-flex justify-content-between total-amount fw-bold fs-5">
-                  <span>Total Amount:</span>
-                  <strong class="text-primary">GHS 5,200</strong>
-                </div>
+        <div class="row">
 
-                <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm"
-                  (click)="openPaymentModal('BASIC')"
-                  style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
-                  <i class="fas fa-lock me-2"></i> Proceed with basic
-                </button>
 
-                <div class="text-center mt-3 small text-muted">
-                  <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
-                </div>
+
+
+          <div class="col-lg-6">
+            <div class="payment-summary-card p-4 rounded-3 border-0"
+              style="background: linear-gradient(to bottom, #3f373b, #262925); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); color: white; border-radius: 45px;">
+
+              <div class="text-center ">
+                <i class="fas fa-gem fa-2x text-primary mb-2"></i>
+                <h4 class="fw-bold text-white">Basic Basic Payment Summary</h4>
+                <!-- <p class="small text-muted">Simple, affordable & secure checks</p> -->
+              </div>
+
+              <!-- <h5 class="fw-bold mb-4 text-center">Basic Payment Summary</h5> -->
+              <div class="d-flex justify-content-between ">
+                <span class="text-muted">Service Fee:</span>
+                <strong>GHS 50</strong>
+              </div>
+              <!-- <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Convenience Fee:</span>
+                <strong>GHS 200</strong>
+              </div> -->
+              <hr class="my-3">
+              <div class="d-flex justify-content-between total-amount fw-bold fs-5">
+                <span>Total Amount:</span>
+                <strong class="text-primary">GHS 50</strong>
+              </div>
+
+              <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm" (click)="openPaymentModal('BASIC')"
+                style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
+                <i class="fas fa-lock me-2"></i> Proceed with basic
+              </button>
+
+              <div class="text-center mt-3 small text-muted">
+                <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
               </div>
             </div>
+          </div>
 
 
 
-            <!-- PREMIUM PAYMENT -->
+          <!-- PREMIUM PAYMENT -->
 
+          <div class="col-lg-6">
+            <div class="payment-summary-card p-4 rounded-3 border-0"
+              style="background: linear-gradient(to bottom,  #4f525c, #43504b); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); color: white; border-radius: 45px;">
+              <div class="text-center ">
+                <i class="fas fa-crown fa-2x text-warning"></i>
+                <h4 class="fw-bold">Premium Payment Summary</h4>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted" style="color: white;">Service Fee:</span>
+                <strong>GHS 70</strong>
+              </div>
+              <hr class="my-3">
+              <div class="d-flex justify-content-between total-amount fw-bold fs-5">
+                <span>Total Amount:</span>
+                <strong class="text-primary" style="color: white;">GHS 70</strong>
+              </div>
 
+              <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm"
+                (click)="openPaymentModal('PREMIUM')"
+                style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
+                <i class="fas fa-lock me-2"></i> Proceed with Premium
+              </button>
 
-            <div class="col-lg-6">
-              <div class="payment-summary-card p-4 rounded-3 border-0"
-                style="background: linear-gradient(to bottom, #ffffff, #f8f9fa); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
-                <h5 class="fw-bold mb-4 text-center">Premium Payment Summary</h5>
-                <div class="d-flex justify-content-between mb-2">
-                  <span class="text-muted">Service Fee:</span>
-                  <strong>GHS 5,000</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <span class="text-muted">Convenience Fee:</span>
-                  <strong>GHS 200</strong>
-                </div>
-                <hr class="my-3">
-                <div class="d-flex justify-content-between total-amount fw-bold fs-5">
-                  <span>Total Amount:</span>
-                  <strong class="text-primary">GHS 5,200</strong>
-                </div>
-
-                <button class="btn btn-primary w-100 mt-4 py-3 rounded-pill shadow-sm"
-                  (click)="openPaymentModal('PREMIUM')"
-                  style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
-                  <i class="fas fa-lock me-2"></i> Proceed with Premium
-                </button>
-
-                <div class="text-center mt-3 small text-muted">
-                  <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
-                </div>
+              <div class="text-center mt-3 small text-muted">
+                <i class="fas fa-shield-alt me-2"></i> All payments are secure and encrypted
               </div>
             </div>
-
           </div>
+
+        </div>
 
 
 
@@ -607,7 +614,7 @@
 
         <!-- <div *ngIf="showH2Message""> -->
 
-        <div *ngIf=" showH2Message && !premium">
+        <div *ngIf=" showH2Message && currentCheck.subscriptionType ==='BASIC'">
           <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
             style="background-color: rgba(13, 110, 253, 0.1);">
             <div class="d-flex align-items-center">
@@ -615,6 +622,7 @@
               <div>
                 <h6 class="mb-0">Currently processing check for:</h6>
                 <strong class="fs-5">{{enteredName}} </strong>
+                BASIC SERVICES
                 <!-- <strong class="fs-5"> This is the waec candinate Name:{{candinateName}} </strong> -->
               </div>
             </div>
@@ -1724,10 +1732,9 @@
 
 
 
-
         <!-- PREMIUM SUBSCRIPTION BEGINS -->
         <!-- <div *ngIf="showH2Message" *ngIf="premium"> -->
-        <div *ngIf="showH2Message && premium">
+        <div *ngIf="showH2Message && currentCheck.subscriptionType ==='PREMIUM'">
           <div class="alert alert-primary border-0 mb-4 d-flex justify-content-between align-items-center py-3"
             style="background-color: rgba(13, 110, 253, 0.1);">
             <div class="d-flex align-items-center">
@@ -1735,6 +1742,8 @@
               <div>
                 <h6 class="mb-0">Currently processing check for:</h6>
                 <strong class="fs-5">{{enteredName}} PREMIUM SUBSCRIPTION!!</strong>
+                <!-- {{currentCheck|json}} -->
+
                 <!-- <strong class="fs-5"> This is the waec candinate Name:{{candinateName}} </strong> -->
               </div>
             </div>
@@ -2702,7 +2711,7 @@
         </form>
 
 
-        
+
       </div>
     </div>
   </div>

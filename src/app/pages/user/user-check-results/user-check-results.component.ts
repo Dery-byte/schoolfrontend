@@ -86,8 +86,7 @@ interface EligibilityCheck {
   lastUpdated: Date;
   result?: any;
   checkLimit?: number;
-
-
+  subscriptionType?: string;
 }
 
 
