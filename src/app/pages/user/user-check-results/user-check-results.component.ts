@@ -353,7 +353,7 @@ export class UserCheckResultsComponent implements OnInit {
   // }
 
   getButtonText(check: any): string {
-    return check.paymentStatus === 'PAID'? 'Continue' : 'Pay & Continue';
+    return check.paymentStatus === 'PAID' ? 'Continue' : 'Pay & Continue';
   }
 
   // Existing properties
@@ -457,11 +457,11 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
 
-paymentAmount: number = 0;
+  paymentAmount: number = 0;
 
 
   ngOnInit(): void {
-    this.initializeForm(this.paymentAmount); // Sets fixed amount to GHS 50.00
+    this.initializeForm(); // Sets fixed amount to GHS 50.00
     this.initForm();
     this.manualForm();
     this.loadChecks();
@@ -1681,11 +1681,15 @@ paymentAmount: number = 0;
   submitPayment(): void {
     if (this.paymentForm.valid) {
       this.processingPayment = true;
-
       // Get the recordId from wherever it's stored in your component
       const recordId = this.recordId; // Or this.paymentForm.get('recordId')?.value;
       console.log("This is the record ID: ", recordId);
-      this.manualService.initializePayment(this.paymentForm.value, recordId).subscribe({
+
+      const paymentPayload = {
+        ...this.paymentForm.value,
+        subscriptionType: this.selectedPlan
+      };
+      this.manualService.initializePayment(paymentPayload, recordId).subscribe({
         next: (data: any) => {
           // Save externalRef for later use
           this.externalRef = data.externalref;
@@ -1695,6 +1699,7 @@ paymentAmount: number = 0;
           if (recordId) {
             this.recordId = recordId;
           }
+          console.log(paymentPayload);
           this.closePaymentModal();
           this.openOtpModal();
           this.processingPayment = false;
@@ -1795,15 +1800,19 @@ paymentAmount: number = 0;
 
   selectedPlan: string = '';
 
-
-  openPaymentModal(plan: string) {
-      this.selectedPlan = plan;
+  openPaymentModal(subscriptionType: string) {
+    this.selectedPlan = subscriptionType;
     this.showPaymentModal = true;
     document.body.style.overflow = 'hidden';
     this.blurService.setBlur(true);
-    console.log("The plane chosing is : ",plan)
-    const fixedAmount = plan === 'PREMIUM' ? 100 : 50; // pick amount based on plan
-  this.initializeForm(fixedAmount);
+    console.log("The plane chosing is : ", subscriptionType)
+    const fixedAmount = subscriptionType === 'PREMIUM' ? 1 : 1; // pick amount based on plan
+    // ✅ Update only the relevant fields instead of resetting whole form
+    this.paymentForm.patchValue({
+      amount: fixedAmount.toFixed(2),
+      subscriptionType: this.selectedPlan
+    });
+    // this.initializeForm(fixedAmount);
 
   }
 
@@ -1986,7 +1995,9 @@ paymentAmount: number = 0;
     amount: "",
     channel: "",
     payer: "",
-    otpcode: ""
+    otpcode: "",
+    subscriptionType: ""   // <-- add plan
+
   }
 
   verifyOTP() {
@@ -2005,8 +2016,12 @@ paymentAmount: number = 0;
     this.payee.channel = this.paymentForm.value.channel;
     this.payee.payer = this.paymentForm.value.payer;
     this.payee.otpcode = otpValue;
+    this.payee.subscriptionType = this.selectedPlan; // ✅ include selected plan
+
 
     console.log("This is the OTP entered", this.payee);
+
+    console.log("This is the channel : ", this.payee.channel)
     this.manualService.verifyOTP(this.payee).subscribe({
       next: (response) => {
         // Successful OTP verification
