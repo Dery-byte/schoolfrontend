@@ -40,6 +40,8 @@ export class UserHeaderComponent {
     this.userName = null;
     localStorage.removeItem('token');
     this.authService.logout();
+        localStorage.removeItem('fullName');
+                localStorage.removeItem('auth_token');
 
     this.router.navigate(['/']).then(() => {
       window.location.reload(); // optional — only if you need a full reload
