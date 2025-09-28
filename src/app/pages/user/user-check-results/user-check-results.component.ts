@@ -357,6 +357,8 @@ export class UserCheckResultsComponent implements OnInit {
 
   // Existing properties
   examBoards = ['WAEC', 'CTVET'];
+  // availableExamTypes: {key: string, display: string}[] = [];
+
   availableExamTypes: string[] = [];
   entryForm: FormGroup;
   entries: any[] = [];
@@ -380,12 +382,34 @@ export class UserCheckResultsComponent implements OnInit {
   subjectDatabase: SubjectDatabase = {
     WAEC: {
       WASSCE_SCHOOL: [
-        'ENGLISH LANG', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE',
-        'SOCIAL STUDIES', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS'
+        'MATHEMATICS (CORE)', 'ELECTIVE MATHEMATICS', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS',
+        'ENGLISH LANGUAGE', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE', 'SOCIAL STUDIES',
+        'CIVIC EDUCATION', 'GENERAL AGRICULTURE', 'ANIMAL HUSBANDRY',
+        'CROP HUSBANDRY AND HORTICULTURE', 'FISHERIES',
+        'COMPUTER SCIENCE', 'FURTHER MATHEMATICS', 'PHYSICAL EDUCATION',
+        'DATA PROCESSING', 'ECONOMICS', 'GEOGRAPHY', 'GOVERNMENT', 'HISTORY',
+        'LITERATURE-IN-ENGLISH', 'CHRISTIAN RELIGIOUS STUDIES', 'ISLAMIC STUDIES',
+        'FRENCH', 'ARABIC', 'HAUSA', 'IGBO', 'YORUBA', 'EDO', 'EFIK', 'IBIBIO',
+        'FINANCIAL ACCOUNTING', 'COMMERCE', 'COST ACCOUNTING', 'BUSINESS MANAGEMENT',
+        'TECHNICAL DRAWING', 'GENERAL KNOWLEDGE IN ART', 'APPLIED ELECTRICITY',
+        'ELECTRONICS', 'AUTO MECHANICS', 'BUILDING CONSTRUCTION', 'METALWORK', 'WOODWORK',
+        'MANAGEMENT IN LIVING', 'FOODS AND NUTRITION', 'CLOTHING AND TEXTILES', 'GRAPHIC DESIGN',
+        'PICTURE MAKING', 'SCULPTURE', 'CERAMICS', 'TEXTILES', 'MUSIC'
       ],
       WASSCE_PRIVATE: [
-        'ENGLISH LANGUAGE', 'MATHEMATICS (CORE)', 'ELECTIVE MATHEMATICS',
-        'BIOLOGY', 'CHEMISTRY', 'PHYSICS'
+        'MATHEMATICS (CORE)', 'ELECTIVE MATHEMATICS', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS',
+        'ENGLISH LANGUAGE', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE', 'SOCIAL STUDIES',
+        'CIVIC EDUCATION', 'GENERAL AGRICULTURE', 'ANIMAL HUSBANDRY',
+        'CROP HUSBANDRY AND HORTICULTURE', 'FISHERIES',
+        'COMPUTER SCIENCE', 'FURTHER MATHEMATICS', 'PHYSICAL EDUCATION',
+        'DATA PROCESSING', 'ECONOMICS', 'GEOGRAPHY', 'GOVERNMENT', 'HISTORY',
+        'LITERATURE-IN-ENGLISH', 'CHRISTIAN RELIGIOUS STUDIES', 'ISLAMIC STUDIES',
+        'FRENCH', 'ARABIC', 'HAUSA', 'IGBO', 'YORUBA', 'EDO', 'EFIK', 'IBIBIO',
+        'FINANCIAL ACCOUNTING', 'COMMERCE', 'COST ACCOUNTING', 'BUSINESS MANAGEMENT',
+        'TECHNICAL DRAWING', 'GENERAL KNOWLEDGE IN ART', 'APPLIED ELECTRICITY',
+        'ELECTRONICS', 'AUTO MECHANICS', 'BUILDING CONSTRUCTION', 'METALWORK', 'WOODWORK',
+        'MANAGEMENT IN LIVING', 'FOODS AND NUTRITION', 'CLOTHING AND TEXTILES', 'GRAPHIC DESIGN',
+        'PICTURE MAKING', 'SCULPTURE', 'CERAMICS', 'TEXTILES', 'MUSIC'
       ]
     },
     CTVET: {
@@ -781,25 +805,176 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
+  // onBoardChange(event: any): void {
+  //   const selectedBoard = event.target.value;
+  //   if (selectedBoard === 'WAEC') {
+  //     this.availableExamTypes = ['WASSCE Private', 'WASSCE School'];
+  //   } else if (selectedBoard === 'CTVET') {
+  //     this.availableExamTypes = ['NAPTEX', 'SSCE'];
+  //   } else {
+  //     this.availableExamTypes = [];
+  //   }
+  //   this.entryForm.patchValue({ examType: '' });
+  // }
   onBoardChange(event: any): void {
     const selectedBoard = event.target.value;
+    console.log('Selected Board:', selectedBoard);
+
     if (selectedBoard === 'WAEC') {
-      this.availableExamTypes = ['WASSCE Private', 'WASSCE School'];
+      this.availableExamTypes = ['WASSCE School', 'WASSCE Private'];
     } else if (selectedBoard === 'CTVET') {
-      this.availableExamTypes = ['NAPTEX', 'SSCE'];
+      this.availableExamTypes = ['NAPTEX', 'TEU'];
     } else {
       this.availableExamTypes = [];
     }
+
+    console.log('Available Exam Types:', this.availableExamTypes);
+
+    // Reset dependent fields
     this.entryForm.patchValue({ examType: '' });
+    this.currentSubjects = [];
+    this.currentGrades = [];
   }
 
-  addEntry(): void {
-    const entry = this.entryForm.value;
-    if (entry.indexNumber && entry.examBoard && entry.examYear && entry.subject && entry.grade && entry.examType && entry.sitting) {
-      this.entries.push({ ...entry });
-      this.entryForm.patchValue({ subject: '', grade: '', examType: '', sitting: '' });
-    }
+  logCurrentState(): void {
+    console.log('Current Board:', this.entryForm.value.examBoard);
+    console.log('Current Exam Type:', this.entryForm.value.examType);
+    console.log('Available Exam Types:', this.availableExamTypes);
+    console.log('Current Subjects:', this.currentSubjects);
+    console.log('Current Grades:', this.currentGrades);
+    console.log('Subject Database WAEC:', this.subjectDatabase.WAEC);
+    console.log('Subject Database CTVET:', this.subjectDatabase.CTVET);
   }
+
+  // Add a method to handle exam type selection
+
+  // onExamTypeChangeEntryForm(event: any): void {
+  //   const selectedExamType = event.target.value;
+  //   const selectedBoard = this.entryForm.value.examBoard;
+  //    console.log('Selected Exam Type:', selectedExamType);
+  //   console.log('Selected Board:', selectedBoard);
+
+  //   if (selectedBoard === 'WAEC') {
+  //     // Find the matching key for WAEC exam types
+  //     const examTypeObj = this.availableExamTypes.find(type => type.display === selectedExamType);
+  //         console.log('Found Exam Type Object:', examTypeObj);
+
+  //     if (examTypeObj) {
+  //       this.currentSubjects = this.subjectDatabase.WAEC[examTypeObj.key as WASSCEType];
+  //       this.currentGrades = this.gradeOptions[examTypeObj.key as WASSCEType];
+  //       console.log(this.currentSubjects);
+  //     }
+  //   } else if (selectedBoard === 'CTVET') {
+  //     // For CTVET, the display name matches the key
+  //     if (selectedExamType === 'NAPTEX') {
+  //       this.currentSubjects = this.subjectDatabase.CTVET.NAPTEX;
+  //       this.currentGrades = this.gradeOptions.NAPTEX;
+  //     } else if (selectedExamType === 'TEU') {
+  //       this.currentSubjects = this.subjectDatabase.CTVET.TEU;
+  //       this.currentGrades = this.gradeOptions.TEU;
+  //     }
+  //   }
+  //     console.log('Updated Current Subjects:', this.currentSubjects);
+  //   console.log('Updated Current Grades:', this.currentGrades);
+
+  //   // Reset subject and grade when exam type changes
+  //   this.entryForm.patchValue({ subject: '', grade: '' });
+  // }
+  onExamTypeChangeEntryForm(event: any): void {
+    const selectedExamType = event.target.value;
+    const selectedBoard = this.entryForm.value.examBoard;
+
+    console.log('Selected Exam Type:', selectedExamType);
+    console.log('Selected Board:', selectedBoard);
+
+    // Reset current arrays
+    this.currentSubjects = [];
+    this.currentGrades = [];
+
+    if (selectedBoard === 'WAEC') {
+      if (selectedExamType === 'WASSCE School') {
+        this.currentSubjects = this.subjectDatabase.WAEC.WASSCE_SCHOOL;
+        this.currentGrades = this.gradeOptions.WASSCE_SCHOOL;
+      } else if (selectedExamType === 'WASSCE Private') {
+        this.currentSubjects = this.subjectDatabase.WAEC.WASSCE_PRIVATE;
+        this.currentGrades = this.gradeOptions.WASSCE_PRIVATE;
+      }
+    } else if (selectedBoard === 'CTVET') {
+      if (selectedExamType === 'NAPTEX') {
+        this.currentSubjects = this.subjectDatabase.CTVET.NAPTEX;
+        this.currentGrades = this.gradeOptions.NAPTEX;
+      } else if (selectedExamType === 'TEU') {
+        this.currentSubjects = this.subjectDatabase.CTVET.TEU;
+        this.currentGrades = this.gradeOptions.TEU;
+      }
+    }
+
+    console.log('Updated Current Subjects:', this.currentSubjects);
+    console.log('Updated Current Grades:', this.currentGrades);
+
+    // Reset subject and grade selections
+    this.entryForm.patchValue({ subject: '', grade: '' });
+  }
+  // addEntry(): void {
+  //   const entry = this.entryForm.value;
+  //   if (entry.indexNumber && entry.examBoard && entry.examYear && entry.subject && entry.grade && entry.examType && entry.sitting) {
+  //     this.entries.push({ ...entry });
+  //     this.entryForm.patchValue({ subject: '', grade: '', examType: '', sitting: '' });
+  //   }
+  // }
+
+ addEntry(): void {
+  const entry = this.entryForm.value;
+  console.log("This is the entry information:", entry);
+  
+  // Detailed debugging
+  console.log("Field values:", {
+    indexNumber: entry.indexNumber,
+    examBoard: entry.examBoard,
+    examYear: entry.examYear,
+    subject: entry.subject,
+    grade: entry.grade,
+    examType: entry.examType,
+    sitting: entry.sitting
+  });
+  
+  console.log("Trimmed values:", {
+    indexNumber: entry.indexNumber?.toString().trim(),
+    examBoard: entry.examBoard?.toString().trim(),
+    examYear: entry.examYear?.toString().trim(),
+    subject: entry.subject?.toString().trim(),
+    grade: entry.grade?.toString().trim(),
+    examType: entry.examType?.toString().trim(),
+    sitting: entry.sitting?.toString().trim()
+  });
+
+  // Validate all required fields
+  if (entry.indexNumber && entry.indexNumber.toString().trim() !== '' &&
+      entry.examBoard && entry.examBoard.toString().trim() !== '' &&
+      entry.examYear && entry.examYear.toString().trim() !== '' &&
+      entry.subject && entry.subject.toString().trim() !== '' &&
+      entry.grade && entry.grade.toString().trim() !== '' &&
+      entry.examType && entry.examType.toString().trim() !== '' &&
+      entry.sitting && entry.sitting.toString().trim() !== '') {
+
+    this.entries.push({ ...entry });
+    console.log("Entry added successfully!");
+
+    // Reset only subject-related fields
+    this.entryForm.patchValue({
+      subject: '',
+      grade: '',
+      sitting: ''
+    });
+
+  } else {
+    console.log("Validation failed");
+    this.snackBar.open('Please fill all required fields', 'Close', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+  }
+}
 
   removeEntry(index: number): void {
     this.entries.splice(index, 1);

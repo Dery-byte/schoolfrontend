@@ -1308,9 +1308,9 @@
                         <div class="row g-3">
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
-                              <select class="form-select" id="manualExamType" formControlName="examType">
+                              <select class="form-select" id="manualExamType" formControlName="examType" (change)="onExamTypeChangeEntryForm($event); logCurrentState()">
                                 <option value="" disabled selected>Choose Exam Type</option>
-                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
+                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type  }}</option>
                               </select>
                               <label for="manualExamType">Exam Type</label>
                             </div>
@@ -1318,8 +1318,10 @@
 
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
-                              <input type="text" formControlName="subject" class="form-control" id="subject"
-                                placeholder="Select Subject" />
+                              <select class="form-select" id="subject" formControlName="subject">
+                                <option value="" disabled selected>Select Subject</option>
+                                <option *ngFor="let subject of currentSubjects" [value]="subject">{{ subject }}</option>
+                              </select>
                               <label for="subject">Subject</label>
                             </div>
                           </div>
@@ -2445,15 +2447,15 @@
                     <div class="card mb-4 bg-light-subtle border-0">
                       <div class="card-body">
                         <h6 class="mb-3 text-muted">
-                          <i class="fas fa-book me-2"></i> Subject Details
+                          <i class="fas fa-book me-2"></i> Subject Details (Premium)
                         </h6>
 
                         <div class="row g-3">
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
-                              <select class="form-select" id="manualExamType" formControlName="examType">
+                              <select class="form-select" id="manualExamType" formControlName="examType" (change)="onExamTypeChangeEntryForm($event); logCurrentState()">
                                 <option value="" disabled selected>Choose Exam Type</option>
-                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
+                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type  }}</option>
                               </select>
                               <label for="manualExamType">Exam Type</label>
                             </div>
@@ -2461,11 +2463,20 @@
 
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
+                              <select class="form-select" id="subject" formControlName="subject">
+                                <option value="" disabled selected>Select Subject</option>
+                                <option *ngFor="let subject of currentSubjects" [value]="subject">{{ subject }}</option>
+                              </select>
+                              <label for="subject">Subject</label>
+                            </div>
+                          </div>
+                          <!-- <div class="col-6 col-md-3">
+                            <div class="form-floating">
                               <input type="text" formControlName="subject" class="form-control" id="subject"
                                 placeholder="Select Subject" />
                               <label for="subject">Subject</label>
                             </div>
-                          </div>
+                          </div> -->
 
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
