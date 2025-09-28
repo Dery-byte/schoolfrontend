@@ -497,6 +497,16 @@
             <div *ngIf="submitSuccess" class="alert alert-success">
               Biodata {{ biodata.id ? 'updated' : 'submitted' }} successfully!
             </div>
+
+<!-- 
+            <div *ngIf="errorMsg.length > 0" class="alert alert-danger mt-2">
+              <ul>
+                <li *ngFor="let msg of errorMsg">{{ msg }}</li>
+              </ul>
+            </div> -->
+
+
+
             <form (ngSubmit)="submitBiodata()" #biodataForm="ngForm">
               <div class="form-row">
                 <div class="form-group col-md-4">
@@ -1308,9 +1318,10 @@
                         <div class="row g-3">
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
-                              <select class="form-select" id="manualExamType" formControlName="examType" (change)="onExamTypeChangeEntryForm($event); logCurrentState()">
+                              <select class="form-select" id="manualExamType" formControlName="examType"
+                                (change)="onExamTypeChangeEntryForm($event); logCurrentState()">
                                 <option value="" disabled selected>Choose Exam Type</option>
-                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type  }}</option>
+                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
                               </select>
                               <label for="manualExamType">Exam Type</label>
                             </div>
@@ -2453,9 +2464,10 @@
                         <div class="row g-3">
                           <div class="col-6 col-md-3">
                             <div class="form-floating">
-                              <select class="form-select" id="manualExamType" formControlName="examType" (change)="onExamTypeChangeEntryForm($event); logCurrentState()">
+                              <select class="form-select" id="manualExamType" formControlName="examType"
+                                (change)="onExamTypeChangeEntryForm($event); logCurrentState()">
                                 <option value="" disabled selected>Choose Exam Type</option>
-                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type  }}</option>
+                                <option *ngFor="let type of availableExamTypes" [value]="type">{{ type }}</option>
                               </select>
                               <label for="manualExamType">Exam Type</label>
                             </div>
