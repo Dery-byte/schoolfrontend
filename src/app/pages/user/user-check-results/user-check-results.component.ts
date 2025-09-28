@@ -668,24 +668,28 @@ export class UserCheckResultsComponent implements OnInit {
 
 
       error: (err) => {
-  this.isLoading = false;
-  this.errorMsg = [];
+        this.isLoading = false;
+        console.log('Full error object:', err);  // 🔍 check this in browser console
 
-  if (err.status === 409) {
-    // Duplicate email (from backend DB constraint or custom exception)
-    this.errorMsg.push("Email already exists");
-    console.log(err);
-    } else if (err.error?.message) {
-    // Backend returned JSON with a message
-    this.errorMsg.push(err.error.message);
-  } else {
-    // Fallback
-    this.errorMsg.push("An unexpected error occurred.");
-  }
+        this.errorMsg = [];
+        // try to read message
+        if (err.error?.message) {
+          this.errorMsg.push(err.error.message);
+        } else if (typeof err.error === 'string') {
+          try {
+            const parsed = JSON.parse(err.error);
+            if (parsed.message) {
+              this.errorMsg.push(parsed.message);
+            }
+          } catch (e) {
+            this.errorMsg.push('An unexpected error occurred.');
+          }
+        } else {
+          this.errorMsg.push('An unexpected error occurred.');
+        }
 
-  this.setMessageDisplayTime();
-}
-
+        this.setMessageDisplayTime();
+      }
 
 
     });
