@@ -393,7 +393,8 @@ private addProgramsWithInsights(
       head: [['Program Name', 'Match Score', 'Cutoff Points']],
       body: [[
         program.name || 'Unknown Program',
-        `${program.percentage ?? 0}%`,
+        `${(program.percentage ?? 0).toFixed(1)}%`,
+        // `${program.percentage ?? 0}%`,
         this.formatCutoffPoints(program.cutoffPoints)
       ]],
       styles: { 

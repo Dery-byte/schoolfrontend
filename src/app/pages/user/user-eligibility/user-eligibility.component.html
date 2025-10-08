@@ -1,7 +1,6 @@
+<!-- {{ records| json}} -->
 
-  <!-- {{ records| json}} -->
-
-  <!-- <div *ngFor="let record of records">
+<!-- <div *ngFor="let record of records">
   <div *ngIf="record.examCheckRecord">
     Candidate Name: {{ record.examCheckRecord.candidateName }}
   </div>
@@ -83,7 +82,9 @@
             <div *ngFor="let program of university.eligiblePrograms" class="program-card eligible">
               <div class="program-header">
                 <strong>{{ program.name }}</strong>
-                <span class="percentage">{{ program.percentage }}% match</span>
+                <span class="percentage">{{ program.percentage | number:'1.0-1' }}% match</span>
+
+                <!-- <span class="percentage">{{ program.percentage }}% match</span> -->
               </div>
               <div class="cutoff-points">
                 <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
@@ -91,14 +92,15 @@
                   <span class="grade">{{ program.cutoffPoints[subject] }}</span>
                 </div>
               </div>
-              
+
               <!-- AI Recommendation Section -->
               <div *ngIf="program.aiRecommendation" class="ai-recommendation">
                 <div class="recommendation-section">
                   <h6>Job Opportunities</h6>
-                  <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
+                  <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml">
+                  </div>
                 </div>
-                
+
                 <div class="recommendation-section">
                   <h6>Career Path</h6>
                   <div class="career-path-content" [innerHTML]="program.aiRecommendation.careerPath | safeHtml"></div>
@@ -106,7 +108,8 @@
 
                 <div class="recommendation-section">
                   <h6>Future Prospects</h6>
-                  <div class="future-prospects-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
+                  <div class="future-prospects-content"
+                    [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
                 </div>
               </div>
             </div>
@@ -115,19 +118,19 @@
           <!-- Alternative Programs Section - Grouped by Categories -->
           <div *ngIf="university!.alternativePrograms!.length > 0" class="programs-section">
             <h5>Alternative Programs</h5>
-            
+
             <!-- Loop through selected categories -->
             <div *ngFor="let category of result.selectedCategories" class="category-section">
               <!-- Only show category if it has programs -->
               <div *ngIf="hasProgramsInCategory(university.alternativePrograms, category)">
                 <h6 class="category-title">{{ category }}</h6>
-                
+
                 <!-- Programs in this category -->
-                <div *ngFor="let program of getProgramsByCategory(university.alternativePrograms, category)" 
-                     class="program-card alternative">
+                <div *ngFor="let program of getProgramsByCategory(university.alternativePrograms, category)"
+                  class="program-card alternative">
                   <div class="program-header">
                     <strong>{{ program.name }}</strong>
-                    <span class="percentage">{{ program.percentage }}% match</span>
+                    <span class="percentage">{{ program.percentage | number:'1.0-1' }}% match</span>
                   </div>
                   <div class="cutoff-points">
                     <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
@@ -140,22 +143,25 @@
                       {{ explanation }}
                     </div>
                   </div>
-                  
+
                   <!-- AI Recommendation for Alternative Programs -->
                   <div *ngIf="program.aiRecommendation" class="ai-recommendation">
                     <div class="recommendation-section">
                       <h6>Job Opportunities</h6>
-                      <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
+                      <div class="opportunities-content"
+                        [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml"></div>
                     </div>
-                    
+
                     <div class="recommendation-section">
                       <h6>Career Path</h6>
-                      <div class="career-path-content" [innerHTML]="program.aiRecommendation.careerPath | safeHtml"></div>
+                      <div class="career-path-content" [innerHTML]="program.aiRecommendation.careerPath | safeHtml">
+                      </div>
                     </div>
 
                     <div class="recommendation-section">
                       <h6>Future Prospects</h6>
-                      <div class="future-prospects-content" [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
+                      <div class="future-prospects-content"
+                        [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
                     </div>
                   </div>
                 </div>
@@ -179,7 +185,7 @@
       <div *ngIf="selectedResult">
         <h4>Analysis ID: {{ selectedResult.id }}</h4>
         <p>Created: {{ selectedResult.createdAt | date:'full' }}</p>
-        
+
         <div *ngIf="selectedResult.examCheckRecord" class="exam-record">
           <h5>Exam Check Record</h5>
           <p>Status: {{ selectedResult.examCheckRecord.checkStatus || 'Not available' }}</p>
