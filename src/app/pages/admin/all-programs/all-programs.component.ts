@@ -70,7 +70,9 @@ export class AllProgramsComponent {
       programName: ['', [Validators.required, Validators.minLength(3)]],
       // universityId: ['', Validators.required],
       categoryIds: ['', Validators.required],
-      cutoffPoints: this.fb.array([])
+      cutoffPoints: this.fb.array([]),
+       coreSubjects: this.fb.array([]),
+  alternativeSubjects: this.fb.array([])
     });
   }
 
@@ -82,6 +84,17 @@ export class AllProgramsComponent {
   get cutoffPoints(): FormArray {
     return this.updateProgramForm.get('cutoffPoints') as FormArray;
   }
+
+
+  get coreSubjects(): FormArray {
+  return this.updateProgramForm.get('coreSubjects') as FormArray;
+}
+
+get alternativeSubjects(): FormArray {
+  return this.updateProgramForm.get('alternativeSubjects') as FormArray;
+}
+
+
 
   clearCutoffPoints(): void {
     while (this.cutoffPoints.length !== 0) {
@@ -117,6 +130,8 @@ export class AllProgramsComponent {
     this.manualService.getProgramById(programId).subscribe({
       next: (program) => {
         this.currentProgram = program;
+
+        console.log("This is the current program ", this.currentProgram);
         
         // Initialize the form
         this.updateProgramForm.patchValue({
@@ -125,17 +140,19 @@ export class AllProgramsComponent {
           categoryIds: this.currentProgram.categories[0]?.id || ''
         });
 
-        // Clear and populate cutoffPoints FormArray
-        this.clearCutoffPoints();
-        this.populateCutoffPoints();
-
-        // Initialize selected categories
         this.editSelectedCategories = {};
         if (this.currentProgram.categories) {
           this.currentProgram.categories.forEach((category: any) => {
             this.editSelectedCategories[category.id] = true;
           });
         }
+
+
+      this.clearFormArray(this.coreSubjects);
+      this.populateCoreSubjects();
+
+      this.clearFormArray(this.alternativeSubjects);
+      this.populateAlternativeSubjects();
 
         this.showUpdateProgramModal = true;
         this.isLoading = false;
@@ -155,61 +172,6 @@ export class AllProgramsComponent {
     this.showUpdateProgramModal = false;
   }
 
-
-
-
-  updateProgram(): void {
-    this.programFormSubmitted = true;
-    if (this.updateProgramForm.invalid) {
-      this.snackBar.open('Please fill all required fields', 'Close', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-      return;
-    }
-    const formValue = this.updateProgramForm.value;
-    // Transform cutoff points array to object
-    const cutoffPointsObj = formValue.cutoffPoints.reduce((acc: any, curr: any) => {
-      if (curr.subject && curr.grade) {
-        acc[curr.subject] = curr.grade;
-      }
-      return acc;
-    }, {});
-
-    const payload = {
-      programId: this.currentProgram.id,
-      name: formValue.programName,
-      // universityId: formValue.universityId,
-      categoryIds: [{ id: formValue.categoryIds }],
-      cutoffPoints: cutoffPointsObj
-    };
-    console.log(payload)
-
-    this.isUpdating = true;
-    this.manualService.updateProgram(payload).subscribe({
-      next: () => {
-        this.isUpdating = false;
-        this.showUpdateSuccess = true;
-        this.snackBar.open('Program updated successfully!', 'Close', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
-        setTimeout(() => {
-          this.closeUpdateModal();
-          this.allPrograms(); // Refresh data
-        }, 1500);
-      },
-      error: (err) => {
-        this.isUpdating = false;
-        this.updateError = err.error?.message || 'Failed to update program';
-        this.snackBar.open(`Update failed: ${this.updateError}`, 'Close', {
-          duration: 5000,
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
-  }
-
   hasSelectedCategories(): boolean {
     return Object.values(this.editSelectedCategories).some(selected => selected);
   }
@@ -219,7 +181,6 @@ export class AllProgramsComponent {
     this.unive.getAllUniversities().subscribe((data: any) => {
       this.universities = data;
           this.isLoadingUniversities =false;
-
     });
   }
 
@@ -269,9 +230,94 @@ export class AllProgramsComponent {
     return showAllPrograms ? university.programs : university.programs.slice(0, this.maxVisiblePrograms);
   }
 
-  getSubjects(program: any): string[] {
-    return Object.keys(program.cutoffPoints || {});
+
+
+  getSubjects(subjectMap: { [key: string]: string }): string[] {
+  return subjectMap ? Object.keys(subjectMap) : [];
+}
+
+
+  clearFormArray(formArray: FormArray): void {
+  while (formArray.length !== 0) {
+    formArray.removeAt(0);
   }
+}
+
+
+removeCoreSubject(index: number): void {
+  this.coreSubjects.removeAt(index);
+}
+
+clearCoreSubjects(): void {
+  while (this.coreSubjects.length !== 0) {
+    this.coreSubjects.removeAt(0);
+  }
+}
+
+clearAlternativeSubjects(): void {
+  while (this.alternativeSubjects.length !== 0) {
+    this.alternativeSubjects.removeAt(0);
+  }
+}
+
+
+populateCoreSubjects(): void {
+  const coreSubjectsArray = this.updateProgramForm.get('coreSubjects') as FormArray;
+  coreSubjectsArray.clear();
+
+  if (this.currentProgram.coreSubjects && typeof this.currentProgram.coreSubjects === 'object') {
+    Object.entries(this.currentProgram.coreSubjects).forEach(([subject, grade]) => {
+      coreSubjectsArray.push(
+        this.fb.group({
+          subject: [subject, Validators.required],
+          grade: [grade, Validators.required]
+        })
+      );
+    });
+  }
+}
+
+
+// Method to add a new core subject row
+addCoreSubject(): void {
+  this.coreSubjects.push(this.fb.group({
+    subject: ['', Validators.required],
+    grade: ['', Validators.required]
+  }));
+}
+
+// Method to add a new alternative subject row
+addAlternativeSubject(): void {
+  this.alternativeSubjects.push(this.fb.group({
+    subject: ['', Validators.required],
+    grade: ['', Validators.required]
+  }));
+}
+
+populateAlternativeSubjects(): void {
+  const altSubjectsArray = this.updateProgramForm.get('alternativeSubjects') as FormArray;
+  altSubjectsArray.clear();
+
+  if (this.currentProgram.alternativeSubjects && typeof this.currentProgram.alternativeSubjects === 'object') {
+    Object.entries(this.currentProgram.alternativeSubjects).forEach(([subject, grade]) => {
+      altSubjectsArray.push(
+        this.fb.group({
+          subject: [subject, Validators.required],
+          grade: [grade, Validators.required]
+        })
+      );
+    });
+  }
+}
+
+private objectToArray(subjectObj: any): any[] {
+  if (!subjectObj) return [];
+  return Object.keys(subjectObj).map(key => ({
+    subject: key,
+    grade: subjectObj[key]
+  }));
+}
+
 
   onDeleteProgram(program: any): void {
     Swal.fire({
@@ -303,4 +349,138 @@ export class AllProgramsComponent {
       }
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   // Update the updateProgram method to include core and alternative subjects
+
+
+
+updateProgram(): void {
+  this.programFormSubmitted = true;
+  if (this.updateProgramForm.invalid) {
+    this.snackBar.open('Please fill all required fields', 'Close', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+    return;
+  }
+  
+  const formValue = this.updateProgramForm.value;
+  
+  // Transform cutoff points array to object
+  const cutoffPointsObj = formValue.cutoffPoints.reduce((acc: any, curr: any) => {
+    if (curr.subject && curr.grade) {
+      acc[curr.subject] = curr.grade;
+    }
+    return acc;
+  }, {});
+
+  // Transform core subjects array to object
+  const coreSubjectsObj = formValue.coreSubjects.reduce((acc: any, curr: any) => {
+    if (curr.subject && curr.grade) {
+      acc[curr.subject] = curr.grade;
+    }
+    return acc;
+  }, {});
+
+  // Transform alternative subjects array to object
+  const alternativeSubjectsObj = formValue.alternativeSubjects.reduce((acc: any, curr: any) => {
+    if (curr.subject && curr.grade) {
+      acc[curr.subject] = curr.grade;
+    }
+    return acc;
+  }, {});
+
+  const payload = {
+    programId: this.currentProgram.id,
+    name: formValue.programName,
+    categoryIds: [{ id: formValue.categoryIds }],
+    cutoffPoints: cutoffPointsObj,
+    coreSubjects: coreSubjectsObj,
+    alternativeSubjects: alternativeSubjectsObj
+  };
+  
+  console.log('Update Payload:', payload);
+
+  this.isUpdating = true;
+  this.manualService.updateProgram(payload).subscribe({
+    next: () => {
+      this.isUpdating = false;
+      this.showUpdateSuccess = true;
+      this.snackBar.open('Program updated successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+      setTimeout(() => {
+        this.closeUpdateModal();
+        this.allPrograms(); // Refresh data
+      }, 1500);
+    },
+    error: (err) => {
+      this.isUpdating = false;
+      this.updateError = err.error?.message || 'Failed to update program';
+      this.snackBar.open(`Update failed: ${this.updateError}`, 'Close', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+    }
+  });
+}
 }
