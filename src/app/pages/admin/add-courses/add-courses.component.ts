@@ -110,7 +110,9 @@ export class AddCoursesComponent implements OnInit {
       programName: ['', [Validators.required, Validators.minLength(3)]],
       uniType: ['', Validators.required],
       categoryIds: ['', Validators.required],
-      cutoffPoints: this.fb.array([])
+      // cutoffPoints: this.fb.array([]),
+      coreSubjects: this.fb.array([]),
+      alternativeSubjects: this.fb.array([]),
     });
 
     // Initialize Manual Entry Form
@@ -130,6 +132,38 @@ export class AddCoursesComponent implements OnInit {
     this.getAllCategories();
   }
 
+
+  // Add/remove handlers
+  addCoreSubject() {
+    this.coreSubjects.push(this.fb.group({ subject: [''], grade: [''] }));
+  }
+  removeCoreSubject(i: number) {
+    this.coreSubjects.removeAt(i);
+  }
+
+  addAlternativeSubject() {
+    this.alternativeSubjects.push(this.fb.group({ subject: [''], grade: [''] }));
+  }
+  removeAlternativeSubject(i: number) {
+    this.alternativeSubjects.removeAt(i);
+  }
+
+  addCutoffPoint() {
+    this.cutoffPoints.push(this.fb.group({ subject: [''], grade: [''] }));
+  }
+  removeCutoffPoint(i: number) {
+    this.cutoffPoints.removeAt(i);
+  }
+
+  get coreSubjects() {
+    return this.programForm.get('coreSubjects') as FormArray;
+  }
+  get alternativeSubjects() {
+    return this.programForm.get('alternativeSubjects') as FormArray;
+  }
+  // get cutoffPoints() {
+  //   return this.programForm.get('cutoffPoints') as FormArray;
+  // }
   // University Methods
   allUniversities() {
     this.unive.getAllUniversities().subscribe((data: any) => {
@@ -165,68 +199,114 @@ export class AddCoursesComponent implements OnInit {
     this.cutoffPoints.removeAt(index);
   }
 
+
+
+
+  // submitForm() {
+  //   if (this.programForm.invalid) {
+  //     this.programForm.markAllAsTouched();
+  //     return;
+  //   }
+
+  
+  //   const formData = this.programForm.value;
+
+  //   const payload = {
+  //     universityId: Number(formData.universityId),
+  //     programs: [
+  //       {
+  //         name: formData.programName,
+  //         cutoffPoints: formData.cutoffPoints.reduce((obj: any, curr: any) => {
+  //           if (curr.subject && curr.grade) {
+  //             obj[curr.subject] = curr.grade;
+  //           }
+  //           return obj;
+  //         }, {}),
+  //         categoryIds: [
+  //           { id: Number(formData.categoryIds) }  // Changed to match Insomnia structure
+  //         ]
+  //       }
+  //     ]
+  //   };
+
+
+  //   console.log(payload);
+  //   this.prog.addProgramToUniversity({ body: payload }).subscribe({
+  //     next: (res) => {
+  //       this.snackBar.open(`${formData.programName} has been added!`, 'Close', {
+  //         duration: 3000,
+  //         panelClass: ['snackbar-success']
+  //       });
+  //       this.programForm.reset();
+  //     },
+  //     error: (err) => {
+  //       this.snackBar.open('Failed to add program. Please try again.', 'Close', {
+  //         duration: 3000,
+  //         panelClass: ['snackbar-error']
+  //       });
+  //     }
+  //   });
+  // }
+
+
+
+
+
+
   submitForm() {
-    if (this.programForm.invalid) {
-      this.programForm.markAllAsTouched();
-      return;
-    }
-
-    // const formData = this.programForm.value;
-
-    // const payload = {
-    //   universityId: Number(formData.universityId),
-    //   programs: [
-    //     {
-    //       name: formData.programName,
-    //       cutoffPoints: formData.cutoffPoints.reduce((obj: any, curr: any) => {
-    //         if (curr.subject && curr.grade) {
-    //           obj[curr.subject] = curr.grade;
-    //         }
-    //         return obj;
-    //       }, {})
-    //     }
-    //   ],
-    //     categoryIds:[Number(formData.categoryIds)],
-
-    // };
-    const formData = this.programForm.value;
-
-const payload = {
-  universityId: Number(formData.universityId),
-  programs: [
-    {
-      name: formData.programName,
-      cutoffPoints: formData.cutoffPoints.reduce((obj: any, curr: any) => {
-        if (curr.subject && curr.grade) {
-          obj[curr.subject] = curr.grade;
-        }
-        return obj;
-      }, {}),
-      categoryIds: [
-        { id: Number(formData.categoryIds) }  // Changed to match Insomnia structure
-      ]
-    }
-  ]
-};
-
-
-console.log(payload);
-    this.prog.addProgramToUniversity({ body: payload }).subscribe({
-      next: (res) => {
-        this.snackBar.open(`${formData.programName} has been added!`, 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-success']
-        });
-        this.programForm.reset();
-      },
-      error: (err) => {
-        this.snackBar.open('Failed to add program. Please try again.', 'Close', {
-          duration: 3000,
-          panelClass: ['snackbar-error']
-        });
-      }
-    });
+  if (this.programForm.invalid) {
+    this.programForm.markAllAsTouched();
+    return;
   }
+
+  const formData = this.programForm.value;
+
+  // --- Helper function to convert subject-grade pairs into an object ---
+  const toSubjectGradeMap = (arr: any[]) =>
+    arr.reduce((obj: any, curr: any) => {
+      if (curr.subject && curr.grade) {
+        obj[curr.subject] = curr.grade;
+      }
+      return obj;
+    }, {});
+
+  // --- Construct payload ---
+  const payload = {
+    universityId: Number(formData.universityId),
+    programs: [
+      {
+        name: formData.programName,
+        // cutoffPoints: toSubjectGradeMap(formData.cutoffPoints),
+        coreSubjects: toSubjectGradeMap(formData.coreSubjects),
+        alternativeSubjects: toSubjectGradeMap(formData.alternativeSubjects),
+        categoryIds: [
+          { id: Number(formData.categoryIds) } // matches backend DTO structure
+        ]
+      }
+    ]
+  };
+
+  console.log('Payload being sent:', payload);
+
+  // --- Send payload to backend ---
+  this.prog.addProgramToUniversity({ body: payload }).subscribe({
+    next: (res) => {
+      this.snackBar.open(`${formData.programName} has been added!`, 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
+      this.programForm.reset();
+    },
+    error: (err) => {
+      console.error('Add Program Error:', err);
+      this.snackBar.open('Failed to add program. Please try again.', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error']
+      });
+    }
+  });
+}
+
 
   objectKeys = Object.keys;
 

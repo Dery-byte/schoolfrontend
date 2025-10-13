@@ -1,44 +1,51 @@
-<!-- {{colleges|json}} -->
-
-
-
 <form [formGroup]="programForm" (ngSubmit)="submitForm()" class="container-fluid">
   <div class="card">
     <div class="card-header">
       <div class="card-title">Add University Program</div>
     </div>
+
     <div class="card-body">
-      <!-- First Row -->
       <div class="row">
         <div class="form-group col-12 col-md-6">
           <label for="programName">Program Name</label>
-          <input type="text" class="form-control" id="programName" formControlName="programName"
-            placeholder="Enter Program Name" />
-          <div *ngIf="programForm.get('programName')?.touched && programForm.get('programName')?.invalid">
-            <small *ngIf="programForm.get('programName')?.errors?.['required']" class="text-danger">
-              Program name is required.
-            </small>
-            <small *ngIf="programForm.get('programName')?.errors?.['minlength']" class="text-danger">
-              Minimum 3 characters.
-            </small>
-          </div>
+          <input
+            type="text"
+            class="form-control"
+            id="programName"
+            formControlName="programName"
+            placeholder="Enter Program Name"
+          />
+          <small
+            *ngIf="programForm.get('programName')?.touched && programForm.get('programName')?.invalid"
+            class="text-danger"
+          >
+            Program name is required (min. 3 characters)
+          </small>
         </div>
 
         <div class="form-group col-12 col-md-6">
           <label for="uniType">Select University Type</label>
-          <select class="form-select" (change)="filterUniversities()" id="uniType" formControlName="uniType">
+          <select
+            class="form-select"
+            id="uniType"
+            formControlName="uniType"
+            (change)="filterUniversities()"
+          >
             <option value="">-- All --</option>
             <option value="PUBLIC">PUBLIC</option>
             <option value="PRIVATE">PRIVATE</option>
           </select>
-          <div *ngIf="programForm.get('uniType')?.touched && programForm.get('uniType')?.invalid">
-            <small class="text-danger">Please select a university type.</small>
-          </div>
+          <small
+            *ngIf="programForm.get('uniType')?.touched && programForm.get('uniType')?.invalid"
+            class="text-danger"
+          >
+            Please select a university type.
+          </small>
         </div>
       </div>
 
-      <!-- Second Row -->
-      <div class="row">
+      <!-- ========== University & Category Row ========== -->
+      <div class="row mt-3">
         <div class="form-group col-12 col-md-6">
           <label for="universityId">University</label>
           <select class="form-select" id="universityId" formControlName="universityId">
@@ -47,55 +54,100 @@
           </select>
         </div>
 
-        <!-- <div class="form-group col-12 col-md-6">
-          <label for="category">Category</label>
-          <select class="form-select" id="category" (change)="onCategoryChange($event)">
-            <option value="">-- Select Category --</option>
-            <option *ngFor="let cat of objectKeys(categories)" [value]="cat">{{ cat }}</option>
-          </select>
-        </div> -->
-
-
-
         <div class="form-group col-12 col-md-6">
           <label for="category">Category</label>
-          <select class="form-select" id="category" formControlName="categoryIds" (change)="onCategoryChange($event)">
+          <select
+            class="form-select"
+            id="category"
+            formControlName="categoryIds"
+            (change)="onCategoryChange($event)"
+          >
             <option value="">-- Select Category --</option>
             <option *ngFor="let cat of colleges" [value]="cat.id">{{ cat.name }}</option>
           </select>
-          <div *ngIf="programForm.get('categoryIds')?.touched && programForm.get('categoryIds')?.invalid">
-            <small class="text-danger">Category is Required.</small>
-            </div>
+          <small
+            *ngIf="programForm.get('categoryIds')?.touched && programForm.get('categoryIds')?.invalid"
+            class="text-danger"
+          >
+            Category is required.
+          </small>
         </div>
       </div>
 
-      <!-- Cutoff Points Section -->
-      <div formArrayName="cutoffPoints" class="mt-3">
-        <div *ngFor="let group of cutoffPoints.controls; let i = index" [formGroupName]="i" class="row mb-2 g-2">
-          <div class=" col-sm-5">
+      <!-- ========== Core Subjects ========== -->
+      <div formArrayName="coreSubjects" class="mt-4">
+        <h5>Core Subjects</h5>
+        <div
+          *ngFor="let coreControl of coreSubjects.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-2 mb-2"
+        >
+          <div class="col-md-5">
             <select class="form-select" formControlName="subject">
-              <option value="">-- Select Subject --</option>
+              <option value="">-- Select Core Subject --</option>
               <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
             </select>
           </div>
-
-          <div class="col-12 col-sm-5">
+          <div class="col-md-5">
             <select class="form-select" formControlName="grade">
               <option value="">-- Select Grade --</option>
               <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
             </select>
           </div>
-
-          <div class="col-12 col-sm-2 d-flex align-items-center justify-content-center">
-            <button type="button" class="btn btn-danger w-100" (click)="removeSubject(i)">Remove</button>
+          <div class="col-md-2">
+            <button
+              type="button"
+              class="btn btn-danger w-100"
+              (click)="removeCoreSubject(i)"
+            >
+              <i class="fa fa-times"></i>
+            </button>
           </div>
         </div>
+        <button type="button" class="btn btn-secondary mt-2" (click)="addCoreSubject()">
+          + Add Core Subject
+        </button>
       </div>
 
-      <!-- Add/Submit Buttons -->
-      <div class="row mt-3">
+      <!-- ========== Alternative Subjects ========== -->
+      <div formArrayName="alternativeSubjects" class="mt-4">
+        <h5>Alternative Subjects</h5>
+        <div
+          *ngFor="let altControl of alternativeSubjects.controls; let i = index"
+          [formGroupName]="i"
+          class="row g-2 mb-2"
+        >
+          <div class="col-md-5">
+            <select class="form-select" formControlName="subject">
+              <option value="">-- Select Alternative Subject --</option>
+              <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+          <div class="col-md-5">
+            <select class="form-select" formControlName="grade">
+              <option value="">-- Select Grade --</option>
+              <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button
+              type="button"
+              class="btn btn-danger w-100"
+              (click)="removeAlternativeSubject(i)"
+            >
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary mt-2" (click)="addAlternativeSubject()">
+          + Add Alternative Subject
+        </button>
+      </div>
+
+      <!-- ========== Submit Buttons ========== -->
+      <div class="row mt-4">
         <div class="col-6">
-          <button type="button" class="btn btn-secondary w-100" (click)="addSubject()">+ Add Subject</button>
+          <button type="reset" class="btn btn-outline-secondary w-100">Reset</button>
         </div>
         <div class="col-6">
           <button type="submit" class="btn btn-primary w-100">Submit Program</button>
@@ -104,31 +156,3 @@
     </div>
   </div>
 </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<hr>
