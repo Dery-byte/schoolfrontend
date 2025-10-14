@@ -1,4 +1,4 @@
-<!-- {{universities | json}} -->
+{{universities | json}}
 
 <div class="col-md-12">
   <div class="card">
@@ -127,55 +127,107 @@
 
 
 
-<!-- Core & Alternative Subjects Section -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <!-- Core & Alternative Subjects Section -->
+                  <!-- Core & Alternative Subjects Section -->
 <div class="mt-3">
 
   <!-- Buttons Row -->
   <div class="d-flex align-items-center gap-2 flex-wrap">
     <button class="btn btn-outline-primary btn-sm d-flex align-items-center"
             type="button"
-            (click)="toggleCoreSubjects()">
-      <i class="fas" [ngClass]="{ 'fa-chevron-down': !showCoreSubjects, 'fa-chevron-up': showCoreSubjects }"></i>
+            (click)="toggleCoreSubjects(program)">
+      <i class="fas" [ngClass]="{ 'fa-chevron-down': !program.showCoreSubjects, 'fa-chevron-up': program.showCoreSubjects }"></i>
       <span class="ms-2">Core Subjects</span>
     </button>
 
     <button class="btn btn-outline-secondary btn-sm d-flex align-items-center"
             type="button"
-            (click)="toggleAlternativeSubjects()">
-      <i class="fas" [ngClass]="{ 'fa-chevron-down': !showAlternativeSubjects, 'fa-chevron-up': showAlternativeSubjects }"></i>
+            (click)="toggleAlternativeSubjects(program)">
+      <i class="fas" [ngClass]="{ 'fa-chevron-down': !program.showAlternativeSubjects, 'fa-chevron-up': program.showAlternativeSubjects }"></i>
       <span class="ms-2">Alternative Subjects</span>
     </button>
   </div>
 
+
+
+
   <!-- Toggle Content Section -->
-  <div class="mt-2">
+  <!-- Toggle Content Section -->
+<div class="mt-2">
 
-    <!-- Core Subjects -->
-    <div *ngIf="showCoreSubjects" class="subject-list mt-2 ms-3 fade-in">
-      <strong>Core Subjects:</strong>
-      <ul class="list-group list-group-flush">
-        <li *ngFor="let subject of getSubjects(program.coreSubjects)"
-            class="list-group-item py-1 d-flex justify-content-between align-items-center">
-          {{ subject }}
-          <span class="badge bg-primary rounded-pill">{{ program.coreSubjects[subject] }}</span>
-        </li>
-      </ul>
+  <!-- Core Subjects -->
+  <div *ngIf="program.showCoreSubjects" class="subject-list mt-3 fade-in">
+    <strong class="d-block mb-2">Core Subjects:</strong>
+    <div class="inline-subjects flex-wrap">
+      <div *ngFor="let subject of getSubjects(program.coreSubjects)"
+           class="inline-item d-flex align-items-center me-3 mb-2">
+        <span class="subject-name me-2">{{ subject }}</span>
+        <span class="badge bg-primary rounded-pill">{{ program.coreSubjects[subject] }}</span>
+      </div>
     </div>
-
-    <!-- Alternative Subjects -->
-    <div *ngIf="showAlternativeSubjects" class="subject-list mt-2 ms-3 fade-in">
-      <strong>Alternative Subjects:</strong>
-      <ul class="list-group list-group-flush">
-        <li *ngFor="let subject of getSubjects(program.alternativeSubjects)"
-            class="list-group-item py-1 d-flex justify-content-between align-items-center">
-          {{ subject }}
-          <span class="badge bg-secondary rounded-pill">{{ program.alternativeSubjects[subject] }}</span>
-        </li>
-      </ul>
-    </div>
-
   </div>
+
+  <!-- Alternative Subjects -->
+  <div *ngIf="program.showAlternativeSubjects" class="subject-list mt-3 fade-in">
+    <strong class="d-block mb-2">Alternative Subjects:</strong>
+    <div class="inline-subjects flex-wrap">
+      <div *ngFor="let subject of getSubjects(program.alternativeSubjects)"
+           class="inline-item d-flex align-items-center me-3 mb-2">
+        <span class="subject-name me-2">{{ subject }}</span>
+        <span class="badge bg-secondary rounded-pill">{{ program.alternativeSubjects[subject] }}</span>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

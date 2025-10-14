@@ -98,12 +98,31 @@ get alternativeSubjects(): FormArray {
 showCoreSubjects = false;
 showAlternativeSubjects = false;
 
-toggleCoreSubjects() {
-  this.showCoreSubjects = !this.showCoreSubjects;
+// toggleCoreSubjects() {
+//   this.showCoreSubjects = !this.showCoreSubjects;
+// }
+
+// toggleAlternativeSubjects() {
+//   this.showAlternativeSubjects = !this.showAlternativeSubjects;
+// }
+
+
+toggleCoreSubjects(program: any) {
+  program.showCoreSubjects = !program.showCoreSubjects;
+  
+  // Close alternative subjects when core is opened
+  // if (program.showCoreSubjects) {
+  //   program.showAlternativeSubjects = false;
+  // }
 }
 
-toggleAlternativeSubjects() {
-  this.showAlternativeSubjects = !this.showAlternativeSubjects;
+toggleAlternativeSubjects(program: any) {
+  program.showAlternativeSubjects = !program.showAlternativeSubjects;
+  
+  // Close core subjects when alternative is opened
+  // if (program.showAlternativeSubjects) {
+  //   program.showCoreSubjects = false;
+  // }
 }
 
 
@@ -494,4 +513,19 @@ updateProgram(): void {
     }
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
