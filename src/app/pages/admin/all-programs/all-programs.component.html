@@ -20,163 +20,186 @@
     </div>
 
     <div class="card-body">
-<!-- Modern Loading Spinner -->
-<div *ngIf="isLoadingUniversities" class="loading-overlay">
-  <div class="loading-content">
-    <!-- Modern spinner with SVG animation -->
-    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-      <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-    </svg>
-    
-    <!-- Loading text with fade animation -->
-    <div class="loading-text">
-      <span class="loading-text-words">L</span>
-      <span class="loading-text-words">O</span>
-      <span class="loading-text-words">A</span>
-      <span class="loading-text-words">D</span>
-      <span class="loading-text-words">I</span>
-      <span class="loading-text-words">N</span>
-      <span class="loading-text-words">G</span>
+      <!-- Modern Loading Spinner -->
+      <div *ngIf="isLoadingUniversities" class="loading-overlay">
+        <div class="loading-content">
+          <!-- Modern spinner with SVG animation -->
+          <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+          </svg>
+
+          <!-- Loading text with fade animation -->
+          <div class="loading-text">
+            <span class="loading-text-words">L</span>
+            <span class="loading-text-words">O</span>
+            <span class="loading-text-words">A</span>
+            <span class="loading-text-words">D</span>
+            <span class="loading-text-words">I</span>
+            <span class="loading-text-words">N</span>
+            <span class="loading-text-words">G</span>
+          </div>
+
+          <!-- Optional progress indicator -->
+          <div class="progress-indicator">Fetching universities and Programs...</div>
+        </div>
+      </div>
+
+
+      <div *ngIf="!isLoadingUniversities">
+        <div *ngIf="filteredUniversities.length > 0; else noUniversity">
+          <div *ngFor="let university of filteredUniversities" class="mb-4 border rounded p-3 shadow-sm">
+            <h5>
+              {{ university.name }}
+              <span class="badge bg-secondary">{{ university.type }}</span>
+            </h5>
+            <p class="mb-2">
+              <strong>Location:</strong> {{ university.location }}
+            </p>
+
+            <h6 class="text-muted">Programs Offered</h6>
+
+            <ng-container *ngIf="
+                university.programs && university.programs.length > 0;
+                else noPrograms
+              ">
+              <ul class="list-group">
+                <li *ngFor="
+                    let program of getVisiblePrograms(university);
+                    let i = index
+                  " class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                      <strong>{{ i + 1 }}. {{ program.name }}</strong>
+                    </div>
+                    <div class="form-button-action">
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      <button type="button" class="btn btn-link btn-sm btn-primary" title="Edit Program"
+                        (click)="openUpdateModal(program.id)">
+                        <i class="fa fa-edit"></i>
+                      </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      <button type="button" class="btn btn-link btn-sm btn-danger" title="Delete Program"
+                        (click)="onDeleteProgram(program)">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+
+
+
+
+
+
+
+
+
+<!-- Core & Alternative Subjects Section -->
+<div class="mt-3">
+
+  <!-- Buttons Row -->
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <button class="btn btn-outline-primary btn-sm d-flex align-items-center"
+            type="button"
+            (click)="toggleCoreSubjects()">
+      <i class="fas" [ngClass]="{ 'fa-chevron-down': !showCoreSubjects, 'fa-chevron-up': showCoreSubjects }"></i>
+      <span class="ms-2">Core Subjects</span>
+    </button>
+
+    <button class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+            type="button"
+            (click)="toggleAlternativeSubjects()">
+      <i class="fas" [ngClass]="{ 'fa-chevron-down': !showAlternativeSubjects, 'fa-chevron-up': showAlternativeSubjects }"></i>
+      <span class="ms-2">Alternative Subjects</span>
+    </button>
+  </div>
+
+  <!-- Toggle Content Section -->
+  <div class="mt-2">
+
+    <!-- Core Subjects -->
+    <div *ngIf="showCoreSubjects" class="subject-list mt-2 ms-3 fade-in">
+      <strong>Core Subjects:</strong>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let subject of getSubjects(program.coreSubjects)"
+            class="list-group-item py-1 d-flex justify-content-between align-items-center">
+          {{ subject }}
+          <span class="badge bg-primary rounded-pill">{{ program.coreSubjects[subject] }}</span>
+        </li>
+      </ul>
     </div>
-    
-    <!-- Optional progress indicator -->
-    <div class="progress-indicator">Fetching universities and Programs...</div>
+
+    <!-- Alternative Subjects -->
+    <div *ngIf="showAlternativeSubjects" class="subject-list mt-2 ms-3 fade-in">
+      <strong>Alternative Subjects:</strong>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let subject of getSubjects(program.alternativeSubjects)"
+            class="list-group-item py-1 d-flex justify-content-between align-items-center">
+          {{ subject }}
+          <span class="badge bg-secondary rounded-pill">{{ program.alternativeSubjects[subject] }}</span>
+        </li>
+      </ul>
+    </div>
+
   </div>
 </div>
 
 
-<div *ngIf="!isLoadingUniversities" >
-      <div *ngIf="filteredUniversities.length > 0; else noUniversity">
-        <div *ngFor="let university of filteredUniversities" class="mb-4 border rounded p-3 shadow-sm">
-          <h5>
-            {{ university.name }}
-            <span class="badge bg-secondary">{{ university.type }}</span>
-          </h5>
-          <p class="mb-2">
-            <strong>Location:</strong> {{ university.location }}
-          </p>
 
-          <h6 class="text-muted">Programs Offered</h6>
+                </li>
+              </ul>
+            </ng-container>
 
-          <ng-container *ngIf="
-                university.programs && university.programs.length > 0;
-                else noPrograms
-              ">
-            <ul class="list-group">
-              <li *ngFor="
-                    let program of getVisiblePrograms(university);
-                    let i = index
-                  " class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                  <div>
-                    <strong>{{ i + 1 }}. {{ program.name }}</strong>
-                  </div>
-                  <div class="form-button-action">
+            <ng-template #noPrograms>
+              <div class="alert alert-info mt-2">
+                No programs offered by this university.
+              </div>
+            </ng-template>
 
-
-
-
-
-
-
-
-
-
-
-                
-
-                    <button type="button" class="btn btn-link btn-sm btn-primary" title="Edit Program"
-                      (click)="openUpdateModal(program.id)">
-                      <i class="fa fa-edit"></i>
-                    </button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <button type="button" class="btn btn-link btn-sm btn-danger" title="Delete Program"
-                      (click)="onDeleteProgram(program)">
-                      <i class="fa fa-times"></i>
-                    </button>
-                  </div>
-                </div>
-
-
-                <!-- <div class="mt-2 ms-3">
-                  <strong>Cutoff Points:</strong>
-                  <ul class="mb-0">
-                    <li *ngFor="let subject of getSubjects(program)">
-                      {{ subject }}:
-                      <strong>{{ program.cutoffPoints[subject] }}</strong>
-                    </li>
-                  </ul>
-                </div> -->
-
-                <!-- Core Subjects Section -->
-<div class="mt-2 ms-3">
-  <strong>Core Subjects:</strong>
-  <ul class="mb-0">
-    <li *ngFor="let subject of getSubjects(program.coreSubjects)">
-      {{ subject }}:
-      <strong>{{ program.coreSubjects[subject] }}</strong>
-    </li>
-  </ul>
-</div>
-
-<!-- Alternative Subjects Section -->
-<div class="mt-2 ms-3">
-  <strong>Alternative Subjects:</strong>
-  <ul class="mb-0">
-    <li *ngFor="let subject of getSubjects(program.alternativeSubjects)">
-      {{ subject }}:
-      <strong>{{ program.alternativeSubjects[subject] }}</strong>
-    </li>
-  </ul>
-</div>
-
-
-
-
-
-              </li>
-            </ul>
-          </ng-container>
-
-          <ng-template #noPrograms>
-            <div class="alert alert-info mt-2">
-              No programs offered by this university.
+            <div *ngIf="university.programs.length > maxVisiblePrograms">
+              <button class="btn btn-sm btn-outline-secondary mt-2" (click)="toggleShowAll(university)">
+                {{
+                showAll[university.id]
+                ? 'Show Less'
+                : 'Show All (' + university.programs.length + ')'
+                }}
+              </button>
             </div>
-          </ng-template>
-
-          <div *ngIf="university.programs.length > maxVisiblePrograms">
-            <button class="btn btn-sm btn-outline-secondary mt-2" (click)="toggleShowAll(university)">
-              {{
-              showAll[university.id]
-              ? 'Show Less'
-              : 'Show All (' + university.programs.length + ')'
-              }}
-            </button>
           </div>
         </div>
-      </div>
       </div>
 
       <ng-template #noUniversity>
@@ -534,7 +557,7 @@
 
 
 
-          
+
           <!-- <div formArrayName="cutoffPoints" class="mt-3">
             <h5>Cutoff Points</h5>
             <div *ngFor="let cutoffControl of cutoffPoints.controls; let i = index" [formGroupName]="i"
@@ -565,100 +588,94 @@
 
  -->
 
- <!-- Core Subjects -->
-  
-<!-- Core Subjects Section -->
-<div formArrayName="coreSubjects" class="mt-3">
-  <div class="d-flex justify-content-between align-items-center mb-2">
-    <h5 class="mb-0">Core Subjects</h5>
-    <button type="button" class="btn btn-sm btn-primary" (click)="addCoreSubject()">
-      <i class="fa fa-plus"></i> Add Core Subject
-    </button>
-  </div>
-  
-  <div *ngFor="let coreControl of coreSubjects.controls; let i = index" 
-       [formGroupName]="i" 
-       class="row g-2 mb-2">
-    <div class="col-md-5">
-      <select class="form-select" formControlName="subject">
-        <option value="">-- Select Core Subject --</option>
-        <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
-      </select>
-      <div *ngIf="programFormSubmitted && coreControl.get('subject')?.invalid" class="text-danger small mt-1">
-        Subject is required
-      </div>
-    </div>
-    <div class="col-md-5">
-      <select class="form-select" formControlName="grade">
-        <option value="">-- Select Grade --</option>
-        <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
-      </select>
-      <div *ngIf="programFormSubmitted && coreControl.get('grade')?.invalid" class="text-danger small mt-1">
-        Grade is required
-      </div>
-    </div>
-    <div class="col-md-2">
-      <button type="button" 
-              class="btn btn-danger w-100" 
-              (click)="coreSubjects.removeAt(i)">
-        <i class="fa fa-times"></i>
-      </button>
-    </div>
-  </div>
-  
-  <div *ngIf="coreSubjects.length === 0" class="alert alert-info">
-    No core subjects added yet. Click "Add Core Subject" to add one.
-  </div>
-</div>
+          <!-- Core Subjects -->
 
-<!-- Alternative Subjects Section -->
-<div formArrayName="alternativeSubjects" class="mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-2">
-    <h5 class="mb-0">Alternative Subjects</h5>
-    <button type="button" class="btn btn-sm btn-primary" (click)="addAlternativeSubject()">
-      <i class="fa fa-plus"></i> Add Subject
-    </button>
-  </div>
-  
-  <div *ngFor="let altControl of alternativeSubjects.controls; let i = index" 
-       [formGroupName]="i" 
-       class="row g-2 mb-2">
-    <div class="col-md-5">
-      <select class="form-select" formControlName="subject">
-        <option value="">-- Select Alternative Subject --</option>
-        <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
-      </select>
-      <div *ngIf="programFormSubmitted && altControl.get('subject')?.invalid" class="text-danger small mt-1">
-        Subject is required
-      </div>
-    </div>
-    <div class="col-md-5">
-      <select class="form-select" formControlName="grade">
-        <option value="">-- Select Grade --</option>
-        <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
-      </select>
-      <div *ngIf="programFormSubmitted && altControl.get('grade')?.invalid" class="text-danger small mt-1">
-        Grade is required
-      </div>
-    </div>
-    <div class="col-md-2">
-      <button type="button" 
-              class="btn btn-danger w-100" 
-              (click)="alternativeSubjects.removeAt(i)">
-        <i class="fa fa-times"></i>
-      </button>
-    </div>
-  </div>
-  
-  <div *ngIf="alternativeSubjects.length === 0" class="alert alert-info">
-    No alternative subjects added yet. Click "Add Alternative Subject" to add one.
-  </div>
-</div>
+          <!-- Core Subjects Section -->
+          <div formArrayName="coreSubjects" class="mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Core Subjects</h5>
+              <button type="button" class="btn btn-sm btn-primary" (click)="addCoreSubject()">
+                <i class="fa fa-plus"></i> Add Core Subject
+              </button>
+            </div>
+
+            <div *ngFor="let coreControl of coreSubjects.controls; let i = index" [formGroupName]="i"
+              class="row g-2 mb-2">
+              <div class="col-md-5">
+                <select class="form-select" formControlName="subject">
+                  <option value="">-- Select Core Subject --</option>
+                  <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
+                </select>
+                <div *ngIf="programFormSubmitted && coreControl.get('subject')?.invalid" class="text-danger small mt-1">
+                  Subject is required
+                </div>
+              </div>
+              <div class="col-md-5">
+                <select class="form-select" formControlName="grade">
+                  <option value="">-- Select Grade --</option>
+                  <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
+                </select>
+                <div *ngIf="programFormSubmitted && coreControl.get('grade')?.invalid" class="text-danger small mt-1">
+                  Grade is required
+                </div>
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-danger w-100" (click)="coreSubjects.removeAt(i)">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="coreSubjects.length === 0" class="alert alert-info">
+              No core subjects added yet. Click "Add Core Subject" to add one.
+            </div>
+          </div>
+
+          <!-- Alternative Subjects Section -->
+          <div formArrayName="alternativeSubjects" class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Alternative Subjects</h5>
+              <button type="button" class="btn btn-sm btn-primary" (click)="addAlternativeSubject()">
+                <i class="fa fa-plus"></i> Add Subject
+              </button>
+            </div>
+
+            <div *ngFor="let altControl of alternativeSubjects.controls; let i = index" [formGroupName]="i"
+              class="row g-2 mb-2">
+              <div class="col-md-5">
+                <select class="form-select" formControlName="subject">
+                  <option value="">-- Select Alternative Subject --</option>
+                  <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
+                </select>
+                <div *ngIf="programFormSubmitted && altControl.get('subject')?.invalid" class="text-danger small mt-1">
+                  Subject is required
+                </div>
+              </div>
+              <div class="col-md-5">
+                <select class="form-select" formControlName="grade">
+                  <option value="">-- Select Grade --</option>
+                  <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
+                </select>
+                <div *ngIf="programFormSubmitted && altControl.get('grade')?.invalid" class="text-danger small mt-1">
+                  Grade is required
+                </div>
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-danger w-100" (click)="alternativeSubjects.removeAt(i)">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="alternativeSubjects.length === 0" class="alert alert-info">
+              No alternative subjects added yet. Click "Add Alternative Subject" to add one.
+            </div>
+          </div>
 
 
 
 
-          
+
           <div class="row mt-3 g-2">
             <div class="col-md-6">
               <button type="button" class="btn btn-secondary w-100" (click)="addSubject()">+ Add Subject</button>

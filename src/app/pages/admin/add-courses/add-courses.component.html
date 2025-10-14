@@ -1,156 +1,142 @@
-<form [formGroup]="programForm" (ngSubmit)="submitForm()" class="container-fluid">
-  <div class="card">
-    <div class="card-header">
+<form [formGroup]="programForm" (ngSubmit)="submitForm()" class="container-fluid modern-form">
+  <div class="card modern-card">
+    <div class="card-header modern-card-header">
       <div class="card-title">Add University Program</div>
     </div>
 
-    <div class="card-body">
+    <div class="card-body modern-card-body">
       <div class="row">
         <div class="form-group col-12 col-md-6">
-          <label for="programName">Program Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="programName"
-            formControlName="programName"
-            placeholder="Enter Program Name"
-          />
-          <small
-            *ngIf="programForm.get('programName')?.touched && programForm.get('programName')?.invalid"
-            class="text-danger"
-          >
+          <label for="programName" class="form-label">Program Name</label>
+          <input type="text" class="form-control modern-input" id="programName" formControlName="programName"
+            placeholder="Enter Program Name" />
+          <small *ngIf="programForm.get('programName')?.touched && programForm.get('programName')?.invalid"
+            class="text-danger error-message">
             Program name is required (min. 3 characters)
           </small>
         </div>
 
         <div class="form-group col-12 col-md-6">
-          <label for="uniType">Select University Type</label>
-          <select
-            class="form-select"
-            id="uniType"
-            formControlName="uniType"
-            (change)="filterUniversities()"
-          >
+          <label for="uniType" class="form-label">Select University Type</label>
+          <select class="form-select modern-select" id="uniType" formControlName="uniType"
+            (change)="filterUniversities()">
             <option value="">-- All --</option>
             <option value="PUBLIC">PUBLIC</option>
             <option value="PRIVATE">PRIVATE</option>
           </select>
-          <small
-            *ngIf="programForm.get('uniType')?.touched && programForm.get('uniType')?.invalid"
-            class="text-danger"
-          >
+          <small *ngIf="programForm.get('uniType')?.touched && programForm.get('uniType')?.invalid"
+            class="text-danger error-message">
             Please select a university type.
           </small>
         </div>
       </div>
 
       <!-- ========== University & Category Row ========== -->
-      <div class="row mt-3">
+      <div class="row mt-4">
         <div class="form-group col-12 col-md-6">
-          <label for="universityId">University</label>
-          <select class="form-select" id="universityId" formControlName="universityId">
+          <label for="universityId" class="form-label">University</label>
+          <select class="form-select modern-select" id="universityId" formControlName="universityId">
             <option value="">-- Select University --</option>
             <option *ngFor="let uni of filteredUniversities" [value]="uni.id">{{ uni.name }}</option>
           </select>
         </div>
 
         <div class="form-group col-12 col-md-6">
-          <label for="category">Category</label>
-          <select
-            class="form-select"
-            id="category"
-            formControlName="categoryIds"
-            (change)="onCategoryChange($event)"
-          >
+          <label for="category" class="form-label">Category</label>
+          <select class="form-select modern-select" id="category" formControlName="categoryIds"
+            (change)="onCategoryChange($event)">
             <option value="">-- Select Category --</option>
             <option *ngFor="let cat of colleges" [value]="cat.id">{{ cat.name }}</option>
           </select>
-          <small
-            *ngIf="programForm.get('categoryIds')?.touched && programForm.get('categoryIds')?.invalid"
-            class="text-danger"
-          >
+          <small *ngIf="programForm.get('categoryIds')?.touched && programForm.get('categoryIds')?.invalid"
+            class="text-danger error-message">
             Category is required.
           </small>
         </div>
       </div>
 
       <!-- ========== Core Subjects ========== -->
-      <div formArrayName="coreSubjects" class="mt-4">
-        <h5>Core Subjects</h5>
-        <div
-          *ngFor="let coreControl of coreSubjects.controls; let i = index"
-          [formGroupName]="i"
-          class="row g-2 mb-2"
-        >
+      <div formArrayName="coreSubjects" class="mt-4 subject-section">
+        <h5 class="section-title">
+          <i class="fas fa-book section-icon"></i>
+          Core Subjects
+        </h5>
+        <div *ngFor="let coreControl of coreSubjects.controls; let i = index" [formGroupName]="i"
+          class="row g-3 mb-3 subject-row">
           <div class="col-md-5">
-            <select class="form-select" formControlName="subject">
+            <select class="form-select modern-select" formControlName="subject">
               <option value="">-- Select Core Subject --</option>
               <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
             </select>
+                <small *ngIf="coreControl.get('subject')?.touched && coreControl.get('subject')?.invalid" class="text-danger">
+      Subject is required.
+    </small>
           </div>
           <div class="col-md-5">
-            <select class="form-select" formControlName="grade">
+            <select class="form-select modern-select" formControlName="grade">
               <option value="">-- Select Grade --</option>
               <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
             </select>
+              <small *ngIf="coreControl.get('grade')?.touched && coreControl.get('grade')?.invalid" class="text-danger">
+      Grade is required.
+    </small>
           </div>
           <div class="col-md-2">
-            <button
-              type="button"
-              class="btn btn-danger w-100"
-              (click)="removeCoreSubject(i)"
-            >
-              <i class="fa fa-times"></i>
+            <button type="button" class="btn btn-danger modern-btn-danger w-100" (click)="removeCoreSubject(i)">
+              <i class="fas fa-times"></i>
             </button>
           </div>
         </div>
-        <button type="button" class="btn btn-secondary mt-2" (click)="addCoreSubject()">
-          + Add Core Subject
+        <button type="button" class="btn btn-outline-primary modern-btn-outline w-100 mt-3" (click)="addCoreSubject()">
+          <i class="fas fa-plus me-2"></i>Add Core Subject
         </button>
       </div>
 
       <!-- ========== Alternative Subjects ========== -->
-      <div formArrayName="alternativeSubjects" class="mt-4">
-        <h5>Alternative Subjects</h5>
-        <div
-          *ngFor="let altControl of alternativeSubjects.controls; let i = index"
-          [formGroupName]="i"
-          class="row g-2 mb-2"
-        >
+      <div formArrayName="alternativeSubjects" class="mt-4 subject-section">
+        <h5 class="section-title">
+          <i class="fas fa-exchange-alt section-icon"></i>
+          Alternative Subjects
+        </h5>
+        <div *ngFor="let altControl of alternativeSubjects.controls; let i = index" [formGroupName]="i"
+          class="row g-3 mb-3 subject-row">
           <div class="col-md-5">
-            <select class="form-select" formControlName="subject">
+            <select class="form-select modern-select" formControlName="subject">
               <option value="">-- Select Alternative Subject --</option>
               <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
             </select>
+             <small *ngIf="altControl.get('subject')?.touched && altControl.get('subject')?.invalid" class="text-danger">
+      Subject is required.
+    </small>
           </div>
           <div class="col-md-5">
-            <select class="form-select" formControlName="grade">
+            <select class="form-select modern-select" formControlName="grade">
               <option value="">-- Select Grade --</option>
               <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
             </select>
+              <small *ngIf="altControl.get('grade')?.touched && altControl.get('grade')?.invalid" class="text-danger">
+      Grade is required.
+    </small>
           </div>
           <div class="col-md-2">
-            <button
-              type="button"
-              class="btn btn-danger w-100"
-              (click)="removeAlternativeSubject(i)"
-            >
-              <i class="fa fa-times"></i>
+            <button type="button" class="btn btn-danger modern-btn-danger w-100" (click)="removeAlternativeSubject(i)">
+              <i class="fas fa-times"></i>
             </button>
           </div>
         </div>
-        <button type="button" class="btn btn-secondary mt-2" (click)="addAlternativeSubject()">
-          + Add Alternative Subject
+        <button type="button" class="btn btn-outline-primary modern-btn-outline w-100 mt-3"
+          (click)="addAlternativeSubject()">
+          <i class="fas fa-plus me-2"></i>Add Alternative Subject
         </button>
       </div>
 
       <!-- ========== Submit Buttons ========== -->
-      <div class="row mt-4">
-        <div class="col-6">
-          <button type="reset" class="btn btn-outline-secondary w-100">Reset</button>
+      <div class="row mt-5 action-buttons">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+          <button type="reset" class="btn btn-outline-secondary modern-btn-outline w-100">Reset</button>
         </div>
-        <div class="col-6">
-          <button type="submit" class="btn btn-primary w-100">Submit Program</button>
+        <div class="col-12 col-md-6">
+          <button type="submit" class="btn btn-primary modern-btn-primary w-100">Submit Program</button>
         </div>
       </div>
     </div>

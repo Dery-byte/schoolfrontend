@@ -130,23 +130,55 @@ export class AddCoursesComponent implements OnInit {
   ngOnInit(): void {
     this.allUniversities();
     this.getAllCategories();
+    this.initiatOneSelectForm();
   }
+
+
+
+  initiatOneSelectForm(){
+      this.programForm = this.fb.group({
+    universityId: ['', Validators.required],
+    programName: ['', Validators.required],
+    categoryIds: ['', Validators.required],
+    cutoffPoints: this.fb.array([]),
+    coreSubjects: this.fb.array([this.createSubjectFormGroup()]),  // ✅ show one by default
+    alternativeSubjects: this.fb.array([this.createSubjectFormGroup()])  // ✅ show one by default
+  });
+  }
+
+createSubjectFormGroup(): FormGroup {
+  return this.fb.group({
+    subject: ['', Validators.required],
+    grade: ['', Validators.required]
+  });
+}
+
 
 
   // Add/remove handlers
   addCoreSubject() {
     this.coreSubjects.push(this.fb.group({ subject: [''], grade: [''] }));
   }
-  removeCoreSubject(i: number) {
-    this.coreSubjects.removeAt(i);
+removeCoreSubject(index: number): void {
+  if (this.coreSubjects.length > 1) {
+    this.coreSubjects.removeAt(index);
+  } else {
+    alert('You must have at least one core subject.');
   }
+}
 
   addAlternativeSubject() {
     this.alternativeSubjects.push(this.fb.group({ subject: [''], grade: [''] }));
   }
-  removeAlternativeSubject(i: number) {
-    this.alternativeSubjects.removeAt(i);
+
+removeAlternativeSubject(index: number): void {
+  const controls = this.alternativeSubjects;
+  if (controls.length > 1) {
+    controls.removeAt(index);
+  } else {
+    alert('You must have at least one alternative subject.');
   }
+}
 
   addCutoffPoint() {
     this.cutoffPoints.push(this.fb.group({ subject: [''], grade: [''] }));

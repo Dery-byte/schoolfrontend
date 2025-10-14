@@ -95,6 +95,17 @@ get alternativeSubjects(): FormArray {
 }
 
 
+showCoreSubjects = false;
+showAlternativeSubjects = false;
+
+toggleCoreSubjects() {
+  this.showCoreSubjects = !this.showCoreSubjects;
+}
+
+toggleAlternativeSubjects() {
+  this.showAlternativeSubjects = !this.showAlternativeSubjects;
+}
+
 
   clearCutoffPoints(): void {
     while (this.cutoffPoints.length !== 0) {

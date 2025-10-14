@@ -1,0 +1,231 @@
+/* Modern Form Styles */
+.modern-form {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.modern-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+}
+
+.modern-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modern-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  border-bottom: none;
+}
+
+.modern-card-header .card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.modern-card-body {
+  padding: 2.5rem;
+}
+
+/* Form Elements */
+.form-label {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.modern-input,
+.modern-select {
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.modern-input:focus,
+.modern-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+.modern-input::placeholder {
+  color: #a0aec0;
+}
+
+/* Subject Sections */
+.subject-section {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.section-title {
+  color: #2d3748;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+}
+
+.section-icon {
+  color: #667eea;
+  margin-right: 0.75rem;
+  font-size: 1rem;
+}
+
+.subject-row {
+  align-items: center;
+  transition: background-color 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.subject-row:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* Buttons */
+.modern-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.modern-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.modern-btn-outline {
+  border: 2px solid #667eea;
+  border-radius: 10px;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  color: #667eea;
+  background: transparent;
+}
+
+.modern-btn-outline:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.modern-btn-danger {
+  background: #e53e3e;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modern-btn-danger:hover {
+  background: #c53030;
+  transform: scale(1.05);
+}
+
+/* Error Messages */
+.error-message {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.action-buttons {
+  margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modern-card-body {
+    padding: 1.5rem;
+  }
+  
+  .subject-section {
+    padding: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1rem;
+  }
+  
+  .subject-row {
+    margin-bottom: 1rem;
+  }
+  
+  .subject-row .col-md-2 {
+    margin-top: 0.5rem;
+  }
+  
+  .action-buttons .col-md-6 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Animation for new subject rows */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.subject-row {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Loading state for selects */
+.modern-select:disabled {
+  background-color: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+/* Success state for valid fields */
+.modern-input.ng-valid.ng-touched,
+.modern-select.ng-valid.ng-touched {
+  border-color: #48bb78;
+}
+
+.modern-input.ng-invalid.ng-touched,
+.modern-select.ng-invalid.ng-touched {
+  border-color: #e53e3e;
+}
