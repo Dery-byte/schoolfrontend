@@ -140,7 +140,7 @@ export class AddCoursesComponent implements OnInit {
     universityId: ['', Validators.required],
     programName: ['', Validators.required],
     categoryIds: ['', Validators.required],
-    cutoffPoints: this.fb.array([]),
+    // cutoffPoints: this.fb.array([]),
     coreSubjects: this.fb.array([this.createSubjectFormGroup()]),  // ✅ show one by default
     alternativeSubjects: this.fb.array([this.createSubjectFormGroup()])  // ✅ show one by default
   });
@@ -281,6 +281,7 @@ removeAlternativeSubject(index: number): void {
   // }
 
 
+isSubmitting = false;
 
 
 
@@ -290,6 +291,9 @@ removeAlternativeSubject(index: number): void {
     this.programForm.markAllAsTouched();
     return;
   }
+
+    this.isSubmitting = true; // 🔹 start spinner
+
 
   const formData = this.programForm.value;
 
@@ -327,7 +331,10 @@ removeAlternativeSubject(index: number): void {
         duration: 3000,
         panelClass: ['snackbar-success']
       });
-      this.programForm.reset();
+      // this.programForm.reset();
+      this.initiatOneSelectForm();
+            this.isSubmitting = false; // 🔹 stop spinner
+
     },
     error: (err) => {
       console.error('Add Program Error:', err);
@@ -335,6 +342,8 @@ removeAlternativeSubject(index: number): void {
         duration: 3000,
         panelClass: ['snackbar-error']
       });
+            this.isSubmitting = false; // 🔹 stop spinner
+
     }
   });
 }

@@ -68,18 +68,19 @@
               <option value="">-- Select Core Subject --</option>
               <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
             </select>
-                <small *ngIf="coreControl.get('subject')?.touched && coreControl.get('subject')?.invalid" class="text-danger">
-      Subject is required.
-    </small>
+            <small *ngIf="coreControl.get('subject')?.touched && coreControl.get('subject')?.invalid"
+              class="text-danger">
+              Subject is required.
+            </small>
           </div>
           <div class="col-md-5">
             <select class="form-select modern-select" formControlName="grade">
               <option value="">-- Select Grade --</option>
               <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
             </select>
-              <small *ngIf="coreControl.get('grade')?.touched && coreControl.get('grade')?.invalid" class="text-danger">
-      Grade is required.
-    </small>
+            <small *ngIf="coreControl.get('grade')?.touched && coreControl.get('grade')?.invalid" class="text-danger">
+              Grade is required.
+            </small>
           </div>
           <div class="col-md-2">
             <button type="button" class="btn btn-danger modern-btn-danger w-100" (click)="removeCoreSubject(i)">
@@ -105,18 +106,18 @@
               <option value="">-- Select Alternative Subject --</option>
               <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
             </select>
-             <small *ngIf="altControl.get('subject')?.touched && altControl.get('subject')?.invalid" class="text-danger">
-      Subject is required.
-    </small>
+            <small *ngIf="altControl.get('subject')?.touched && altControl.get('subject')?.invalid" class="text-danger">
+              Subject is required.
+            </small>
           </div>
           <div class="col-md-5">
             <select class="form-select modern-select" formControlName="grade">
               <option value="">-- Select Grade --</option>
               <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
             </select>
-              <small *ngIf="altControl.get('grade')?.touched && altControl.get('grade')?.invalid" class="text-danger">
-      Grade is required.
-    </small>
+            <small *ngIf="altControl.get('grade')?.touched && altControl.get('grade')?.invalid" class="text-danger">
+              Grade is required.
+            </small>
           </div>
           <div class="col-md-2">
             <button type="button" class="btn btn-danger modern-btn-danger w-100" (click)="removeAlternativeSubject(i)">
@@ -133,11 +134,25 @@
       <!-- ========== Submit Buttons ========== -->
       <div class="row mt-5 action-buttons">
         <div class="col-12 col-md-6 mb-2 mb-md-0">
-          <button type="reset" class="btn btn-outline-secondary modern-btn-outline w-100">Reset</button>
+          <button type="reset"  class="btn btn-outline-secondary modern-btn-outline w-100">Reset</button>
         </div>
-        <div class="col-12 col-md-6">
-          <button type="submit" class="btn btn-primary modern-btn-primary w-100">Submit Program</button>
+
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+
+          <button type="submit"
+            class="btn btn-primary modern-btn-primary w-100 d-flex justify-content-center align-items-center"
+            [disabled]="isSubmitting">
+
+            <ng-container *ngIf="!isSubmitting">
+              <i class="fas fa-paper-plane me-2"></i> Submit Program
+            </ng-container>
+
+            <ng-container *ngIf="isSubmitting">
+              <i class="fas fa-spinner fa-spin me-2"></i> Submitting...
+            </ng-container>
+          </button>
         </div>
+
       </div>
     </div>
   </div>
