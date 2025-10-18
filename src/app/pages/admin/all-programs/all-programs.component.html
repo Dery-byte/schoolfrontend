@@ -120,98 +120,106 @@
                   </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                   <!-- Core & Alternative Subjects Section -->
                   <!-- Core & Alternative Subjects Section -->
-<div class="mt-3">
-
-  <!-- Buttons Row -->
-  <div class="d-flex align-items-center gap-2 flex-wrap">
-    <button class="btn btn-outline-primary btn-sm d-flex align-items-center"
-            type="button"
-            (click)="toggleCoreSubjects(program)">
-      <i class="fas" [ngClass]="{ 'fa-chevron-down': !program.showCoreSubjects, 'fa-chevron-up': program.showCoreSubjects }"></i>
-      <span class="ms-2">Core Subjects</span>
-    </button>
-
-    <button class="btn btn-outline-secondary btn-sm d-flex align-items-center"
-            type="button"
-            (click)="toggleAlternativeSubjects(program)">
-      <i class="fas" [ngClass]="{ 'fa-chevron-down': !program.showAlternativeSubjects, 'fa-chevron-up': program.showAlternativeSubjects }"></i>
-      <span class="ms-2">Alternative Subjects</span>
-    </button>
-  </div>
+                  <div class="mt-3">
+                    <!-- Buttons Row -->
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <button class="btn btn-outline-primary btn-sm d-flex align-items-center" type="button"
+                        (click)="toggleCoreSubjects(program)">
+                        <i class="fas"
+                          [ngClass]="{ 'fa-chevron-down': !program.showCoreSubjects, 'fa-chevron-up': program.showCoreSubjects }"></i>
+                        <span class="ms-2">Core Subjects</span>
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" type="button"
+                        (click)="toggleAlternativeSubjects(program)">
+                        <i class="fas"
+                          [ngClass]="{ 'fa-chevron-down': !program.showAlternativeSubjects, 'fa-chevron-up': program.showAlternativeSubjects }"></i>
+                        <span class="ms-2">Alternative Subjects</span>
+                      </button>
 
 
-
-
-  <!-- Toggle Content Section -->
-  <!-- Toggle Content Section -->
-<div class="mt-2">
-
-  <!-- Core Subjects -->
-  <div *ngIf="program.showCoreSubjects" class="subject-list mt-3 fade-in">
-    <strong class="d-block mb-2">Core Subjects:</strong>
-    <div class="inline-subjects flex-wrap">
-      <div *ngFor="let subject of getSubjects(program.coreSubjects)"
-           class="inline-item d-flex align-items-center me-3 mb-2">
-        <span class="subject-name me-2">{{ subject }}</span>
-        <span class="badge bg-primary rounded-pill">{{ program.coreSubjects[subject] }}</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Alternative Subjects -->
-  <div *ngIf="program.showAlternativeSubjects" class="subject-list mt-3 fade-in">
-    <strong class="d-block mb-2">Alternative Subjects:</strong>
-    <div class="inline-subjects flex-wrap">
-      <div *ngFor="let subject of getSubjects(program.alternativeSubjects)"
-           class="inline-item d-flex align-items-center me-3 mb-2">
-        <span class="subject-name me-2">{{ subject }}</span>
-        <span class="badge bg-secondary rounded-pill">{{ program.alternativeSubjects[subject] }}</span>
-      </div>
-    </div>
-  </div>
-
-</div>
+                      <!-- ✅ New Toggle Button for Alternative Subject Groups -->
+                      <button class="btn btn-outline-success btn-sm d-flex align-items-center" type="button"
+                        (click)="toggleAlternativeGroups(program)">
+                        <i class="fas"
+                          [ngClass]="{ 'fa-chevron-down': !program.showAlternativeGroups, 'fa-chevron-up': program.showAlternativeGroups }"></i>
+                        <span class="ms-2">Alternative Subject Groups</span>
+                      </button>
+                    </div>
 
 
 
 
+                    <!-- Toggle Content Section -->
+                    <!-- Toggle Content Section -->
+                    <div class="mt-2">
+                      <!-- Core Subjects -->
+                      <div *ngIf="program.showCoreSubjects" class="subject-list mt-3 fade-in">
+                        <strong class="d-block mb-2">Core Subjects:</strong>
+                        <div class="inline-subjects flex-wrap">
+                          <div *ngFor="let subject of getSubjects(program.coreSubjects)"
+                            class="inline-item d-flex align-items-center me-3 mb-2">
+                            <span class="subject-name me-2">{{ subject }}</span>
+                            <span class="badge bg-primary rounded-pill">{{ program.coreSubjects[subject] }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Alternative Subjects -->
+                      <div *ngIf="program.showAlternativeSubjects" class="subject-list mt-3 fade-in">
+                        <strong class="d-block mb-2">Alternative Subjects:</strong>
+                        <div class="inline-subjects flex-wrap">
+                          <div *ngFor="let subject of getSubjects(program.alternativeSubjects)"
+                            class="inline-item d-flex align-items-center me-3 mb-2">
+                            <span class="subject-name me-2">{{ subject }}</span>
+                            <span class="badge bg-secondary rounded-pill">{{ program.alternativeSubjects[subject]
+                              }}</span>
+                          </div>
+                        </div>
+                      </div>
 
 
-</div>
+                      <!-- ✅ Alternative Subject Groups Section -->
+                      <div *ngIf="program.showAlternativeGroups" class="subject-list mt-3 fade-in">
+                        <strong class="d-block mb-2">Alternative Subject Groups:</strong>
+
+                        <div *ngFor="let group of program.alternativeGroups; let i = index"
+                          class="mb-3 p-2 border rounded">
+                          <div class="d-flex align-items-center justify-content-between mb-1">
+                            <div>
+                              <span class="fw-bold">Group {{ i + 1 }}</span>
+                              <small class="text-muted ms-2">
+                                ({{ group.anyOf ? 'Any of' : 'All of' }} the following subjects)
+                              </small>
+                            </div>
+                            <span class="badge bg-info text-dark">
+                              Required Grade: {{ group.requiredGrade }}
+                            </span>
+                          </div>
+
+                          <div class="inline-subjects flex-wrap">
+                            <div *ngFor="let subject of group.subjects"
+                              class="inline-item d-flex align-items-center me-3 mb-2">
+                              <span class="subject-name me-2">{{ subject }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+
+
+                    </div>
+
+
+
+
+
+
+                  </div>
 
 
 
@@ -408,57 +416,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Edit Program Modal -->
-<!--  
 <div class="modal-overlay" *ngIf="showUpdateProgramModal">
   <div class="reset-form-container program-form-container">
     <div class="reset-form-header">
@@ -501,147 +458,7 @@
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
-          <div formArrayName="cutoffPoints" class="mt-3">
-            <h5>Cutoff Points</h5>
-            <div *ngFor="let cutoffControl of cutoffPoints.controls; let i = index" [formGroupName]="i"
-              class="row g-2 mb-2">
-              <div class="col-md-5">
-                <select class="form-select" formControlName="subject">
-                  <option value="">-- Select Subject --</option>
-                  <option *ngFor="let s of combinedSubjects" [ngValue]="s">
-                    {{ s }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-5">
-                <select class="form-select" formControlName="grade">
-                  <option value="">-- Select Grade --</option>
-                  <option *ngFor="let g of grades" [ngValue]="g">
-                    {{ g }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <button type="button" class="btn btn-danger w-100" (click)="removeSubject(i)"> <i
-                    class="fa fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-
-
-
-
-          
-          <div class="row mt-3 g-2">
-            <div class="col-md-6">
-              <button type="button" class="btn btn-secondary w-100" (click)="addSubject()">+ Add Subject</button>
-            </div>
-            <div class="col-md-6">
-              <button type="submit" class="btn btn-primary w-100" [disabled]="isUpdating">
-                {{ isUpdating ? 'Updating...' : 'Update Program' }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</div> -->
-
-
-
-
-
-<div class="modal-overlay" *ngIf="showUpdateProgramModal">
-  <div class="reset-form-container program-form-container">
-    <div class="reset-form-header">
-      <h2>Update Program</h2>
-      <button class="modal-close" (click)="closeUpdateModal()" aria-label="Close">
-        &times;
-      </button>
-    </div>
-
-    <form [formGroup]="updateProgramForm" (ngSubmit)="updateProgram()" class="container-fluid">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="form-group col-12 col-md-6">
-              <label for="programName">Program Name</label>
-              <input type="text" class="form-control" id="programName" formControlName="programName"
-                placeholder="Enter Program Name" />
-              <div
-                *ngIf="updateProgramForm.get('programName')?.touched && updateProgramForm.get('programName')?.invalid">
-                <small *ngIf="updateProgramForm.get('programName')?.errors?.['required']" class="text-danger">
-                  Program name is required.
-                </small>
-                <small *ngIf="updateProgramForm.get('programName')?.errors?.['minlength']" class="text-danger">
-                  Minimum 3 characters.
-                </small>
-              </div>
-            </div>
-
-            <div class="form-group col-12 col-md-6">
-              <label for="category">Category</label>
-              <select class="form-select" id="category" formControlName="categoryIds">
-                <option value="">-- Select Category --</option>
-                <option *ngFor="let cat of colleges" [value]="cat.id">
-                  {{ cat.name }}
-                </option>
-              </select>
-              <div
-                *ngIf="updateProgramForm.get('categoryIds')?.touched && updateProgramForm.get('categoryIds')?.invalid">
-                <small class="text-danger">Category is Required.</small>
-              </div>
-            </div>
-          </div>
-
-
-
-
-
-
-
-          <!-- <div formArrayName="cutoffPoints" class="mt-3">
-            <h5>Cutoff Points</h5>
-            <div *ngFor="let cutoffControl of cutoffPoints.controls; let i = index" [formGroupName]="i"
-              class="row g-2 mb-2">
-              <div class="col-md-5">
-                <select class="form-select" formControlName="subject">
-                  <option value="">-- Select Subject --</option>
-                  <option *ngFor="let s of combinedSubjects" [ngValue]="s">
-                    {{ s }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-5">
-                <select class="form-select" formControlName="grade">
-                  <option value="">-- Select Grade --</option>
-                  <option *ngFor="let g of grades" [ngValue]="g">
-                    {{ g }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <button type="button" class="btn btn-danger w-100" (click)="removeSubject(i)"> <i
-                    class="fa fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
- -->
-
           <!-- Core Subjects -->
-
           <!-- Core Subjects Section -->
           <div formArrayName="coreSubjects" class="mt-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -729,10 +546,12 @@
 
 
           <div class="row mt-3 g-2">
-            <div class="col-md-6">
+
+            <!-- <div class="col-md-6">
               <button type="button" class="btn btn-secondary w-100" (click)="addSubject()">+ Add Subject</button>
-            </div>
-            <div class="col-md-6">
+            </div> -->
+
+            <div class="col-md-12">
               <button type="submit" class="btn btn-primary w-100" [disabled]="isUpdating">
                 {{ isUpdating ? 'Updating...' : 'Update Program' }}
               </button>

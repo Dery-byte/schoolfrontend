@@ -290,6 +290,11 @@ clearAlternativeSubjects(): void {
   }
 }
 
+toggleAlternativeGroups(program: any): void {
+  program.showAlternativeGroups = !program.showAlternativeGroups;
+}
+
+
 
 populateCoreSubjects(): void {
   const coreSubjectsArray = this.updateProgramForm.get('coreSubjects') as FormArray;

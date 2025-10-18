@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, FormControl,AbstractControl } from '@angular/forms';
+
+
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UniversityControllerService, ProgramControllerService } from 'src/app/services/services';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+
 
 // Type Definitions
 // type ExamBoard = 'WAEC' | 'CTVET' | 'NAPTEX' | 'TEU';
@@ -131,20 +134,46 @@ export class AddCoursesComponent implements OnInit {
     this.allUniversities();
     this.getAllCategories();
     this.initiatOneSelectForm();
+      
   }
 
 
 
-  initiatOneSelectForm(){
-      this.programForm = this.fb.group({
-    universityId: ['', Validators.required],
-    programName: ['', Validators.required],
-    categoryIds: ['', Validators.required],
-    // cutoffPoints: this.fb.array([]),
-    coreSubjects: this.fb.array([this.createSubjectFormGroup()]),  // ✅ show one by default
-    alternativeSubjects: this.fb.array([this.createSubjectFormGroup()])  // ✅ show one by default
-  });
+//  initiatOneSelectForm() {
+//     this.programForm = this.fb.group({
+//       universityId: ['', Validators.required],
+//       uniType: ['', Validators.required],
+//       programName: ['', [Validators.required, Validators.minLength(3)]],
+//       categoryIds: ['', Validators.required],
+//       coreSubjects: this.fb.array([this.createSubjectFormGroup()]),
+//       alternativeSubjects: this.fb.array([this.createAlternativeGroup()]),
+//       alternativeGroups: this.fb.array([])
+//     });
+//   }
+
+
+
+    createAlternativeGroup(): FormGroup {
+    return this.fb.group({
+      requiredGrade: ['', Validators.required],
+      anyOf: [false],
+      subjects: this.fb.array([
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required) // 👈 ensures 2 subjects by default
+      ])
+    });
   }
+
+// createAlternativeGroup(): FormGroup {
+//   return this.fb.group({
+//     requiredGrade: ['', Validators.required],
+//     anyOf: [false],
+//     subjects: this.fb.array([this.fb.control('', Validators.required)]) // 👈 each subject is a string
+//   });
+// }
+
+
+
 
 createSubjectFormGroup(): FormGroup {
   return this.fb.group({
@@ -284,69 +313,84 @@ removeAlternativeSubject(index: number): void {
 isSubmitting = false;
 
 
+  // submitForm() {
+  //   if (this.programForm.invalid) {
+  //     this.programForm.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   const formattedData = this.programForm.value;
+  //   console.log('Program Data:', formattedData);
+  // }
 
 
-  submitForm() {
-  if (this.programForm.invalid) {
-    this.programForm.markAllAsTouched();
-    return;
-  }
-
-    this.isSubmitting = true; // 🔹 start spinner
+  // submitForm() {
 
 
-  const formData = this.programForm.value;
+    
+  //   const formattedData = this.programForm.value;
+  //   console.log('Program Data:', formattedData);
+  //   console.log()
+  // if (this.programForm.invalid) {
+  //   this.programForm.markAllAsTouched();
+  //   return;
+  // }
 
-  // --- Helper function to convert subject-grade pairs into an object ---
-  const toSubjectGradeMap = (arr: any[]) =>
-    arr.reduce((obj: any, curr: any) => {
-      if (curr.subject && curr.grade) {
-        obj[curr.subject] = curr.grade;
-      }
-      return obj;
-    }, {});
+  //   this.isSubmitting = true; // 🔹 start spinner
 
-  // --- Construct payload ---
-  const payload = {
-    universityId: Number(formData.universityId),
-    programs: [
-      {
-        name: formData.programName,
-        // cutoffPoints: toSubjectGradeMap(formData.cutoffPoints),
-        coreSubjects: toSubjectGradeMap(formData.coreSubjects),
-        alternativeSubjects: toSubjectGradeMap(formData.alternativeSubjects),
-        categoryIds: [
-          { id: Number(formData.categoryIds) } // matches backend DTO structure
-        ]
-      }
-    ]
-  };
 
-  console.log('Payload being sent:', payload);
+  // const formData = this.programForm.value;
 
-  // --- Send payload to backend ---
-  this.prog.addProgramToUniversity({ body: payload }).subscribe({
-    next: (res) => {
-      this.snackBar.open(`${formData.programName} has been added!`, 'Close', {
-        duration: 3000,
-        panelClass: ['snackbar-success']
-      });
-      // this.programForm.reset();
-      this.initiatOneSelectForm();
-            this.isSubmitting = false; // 🔹 stop spinner
+  // // --- Helper function to convert subject-grade pairs into an object ---
+  // const toSubjectGradeMap = (arr: any[]) =>
+  //   arr.reduce((obj: any, curr: any) => {
+  //     if (curr.subject && curr.grade) {
+  //       obj[curr.subject] = curr.grade;
+  //     }
+  //     return obj;
+  //   }, {});
 
-    },
-    error: (err) => {
-      console.error('Add Program Error:', err);
-      this.snackBar.open('Failed to add program. Please try again.', 'Close', {
-        duration: 3000,
-        panelClass: ['snackbar-error']
-      });
-            this.isSubmitting = false; // 🔹 stop spinner
+  // // --- Construct payload ---
+  // const payload = {
+  //   universityId: Number(formData.universityId),
+  //   programs: [
+  //     {
+  //       name: formData.programName,
+  //       // cutoffPoints: toSubjectGradeMap(formData.cutoffPoints),
+  //       coreSubjects: toSubjectGradeMap(formData.coreSubjects),
+  //       alternativeSubjects: toSubjectGradeMap(formData.alternativeSubjects),
+  //       categoryIds: [
+  //         { id: Number(formData.categoryIds) } // matches backend DTO structure
+  //       ]
+  //     }
+  //   ]
+  // };
 
-    }
-  });
-}
+  // console.log('Payload being sent:', payload);
+
+  // // --- Send payload to backend ---
+  // this.prog.addProgramToUniversity({ body: payload }).subscribe({
+  //   next: (res) => {
+  //     this.snackBar.open(`${formData.programName} has been added!`, 'Close', {
+  //       duration: 3000,
+  //       panelClass: ['snackbar-success']
+  //     });
+  //     // this.programForm.reset();
+  //     this.initiatOneSelectForm();
+  //           this.isSubmitting = false; // 🔹 stop spinner
+
+  //   },
+  //   error: (err) => {
+  //     console.error('Add Program Error:', err);
+  //     this.snackBar.open('Failed to add program. Please try again.', 'Close', {
+  //       duration: 3000,
+  //       panelClass: ['snackbar-error']
+  //     });
+  //           this.isSubmitting = false; // 🔹 stop spinner
+
+  //   }
+  // });
+// }
 
 
   objectKeys = Object.keys;
@@ -497,6 +541,317 @@ isSubmitting = false;
   //   }
   //   return true;
   // }
+
+
+
+  // GROUPS STUFF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ========== ALTERNATIVE GROUPS METHODS (Fixed) ==========
+
+/**
+ * Get the alternativeGroups FormArray
+ */
+get alternativeGroups(): FormArray {
+  return this.programForm.get('alternativeGroups') as FormArray;
+}
+
+/**
+ * Create a new alternative group with initial subject
+ */
+addAlternativeGroup(): void {
+  const group = this.fb.group({
+    requiredGrade: ['', Validators.required],
+    anyOf: [false],
+    subjects: this.fb.array([this.createSubject()]) // Start with one subject
+  });
+  this.alternativeGroups.push(group);
+}
+
+/**
+ * Remove an alternative group
+ */
+removeAlternativeGroup(index: number): void {
+  if (confirm('Are you sure you want to remove this group?')) {
+    this.alternativeGroups.removeAt(index);
+  }
+}
+
+/**
+ * Create a single subject FormGroup (not FormControl)
+ * This matches the template structure: formControlName="name"
+ */
+createSubject(): FormGroup {
+  return this.fb.group({
+    name: ['', Validators.required]
+  });
+}
+
+/**
+ * Get subjects FormArray from a group
+ */
+getSubjects(group: AbstractControl): FormArray {
+  return group.get('subjects') as FormArray;
+}
+
+/**
+ * Add a subject to a specific group
+ */
+addSubjectToGroup(groupIndex: number): void {
+  const subjectsArray = this.getSubjects(this.alternativeGroups.at(groupIndex));
+  subjectsArray.push(this.createSubject());
+}
+
+/**
+ * Remove a subject from a specific group
+ */
+removeSubjectFromGroup(groupIndex: number, subjectIndex: number): void {
+  const subjectsArray = this.getSubjects(this.alternativeGroups.at(groupIndex));
+  
+  // Prevent removing the last subject
+  if (subjectsArray.length <= 1) {
+    this.snackBar.open('Each group must have at least one subject', 'Close', {
+      duration: 2000,
+      panelClass: ['snackbar-warning']
+    });
+    return;
+  }
+  
+  subjectsArray.removeAt(subjectIndex);
+}
+
+/**
+ * Format form data for backend submission
+ */
+formatFormData(formValue: any) {
+  return {
+    universityId: Number(formValue.universityId),
+    programs: [
+      {
+        name: formValue.programName,
+        coreSubjects: this.toSubjectGradeMap(formValue.coreSubjects),
+        // alternativeSubjects: this.toSubjectGradeMap(formValue.alternativeSubjects),
+        alternativeGroups: formValue.alternativeGroups.map((group: any) => ({
+          requiredGrade: group.requiredGrade,
+          anyOf: group.anyOf,
+          subjects: group.subjects
+            .map((s: any) => s.name) // Extract just the name
+            .filter((name: string) => name && name.trim() !== '') // Remove empty
+        })),
+        categoryIds: [{ id: Number(formValue.categoryIds) }]
+      }
+    ]
+  };
+}
+
+/**
+ * Helper: Convert subject-grade pairs to object map
+ */
+private toSubjectGradeMap(arr: any[]): { [key: string]: string } {
+  return arr.reduce((obj: any, curr: any) => {
+    if (curr.subject && curr.grade) {
+      obj[curr.subject] = curr.grade;
+    }
+    return obj;
+  }, {});
+}
+
+/**
+ * Updated submit form method
+ */
+submitForm(): void {
+
+  // Validate form
+  if (this.programForm.invalid) {
+    this.programForm.markAllAsTouched();
+    this.snackBar.open('Please fill in all required fields', 'Close', {
+      duration: 3000,
+      panelClass: ['snackbar-error']
+    });
+    return;
+  }
+
+  // Validate alternative groups have at least one subject
+  const groups = this.alternativeGroups.value;
+  for (let i = 0; i < groups.length; i++) {
+    const validSubjects = groups[i].subjects.filter((s: any) => s.name && s.name.trim() !== '');
+    if (validSubjects.length === 0) {
+      this.snackBar.open(`Group ${i + 1} must have at least one valid subject`, 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error']
+      });
+      return;
+    }
+  }
+
+  this.isSubmitting = true;
+  
+  const payload = this.formatFormData(this.programForm.value);
+  console.log('Payload being sent:', JSON.stringify(payload, null, 2));
+  console.log("Same Payload", payload);
+
+  this.prog.addProgramToUniversity({ body: payload }).subscribe({
+    next: (res) => {
+      this.snackBar.open(`${this.programForm.value.programName} has been added successfully!`, 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
+      this.initiatOneSelectForm(); // Reset form
+      this.isSubmitting = false;
+    },
+    error: (err) => {
+      console.error('Add Program Error:', err);
+      this.snackBar.open('Failed to add program. Please try again.', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error']
+      });
+      this.isSubmitting = false;
+    }
+  });
+}
+
+/**
+ * Update your initiatOneSelectForm to include alternativeGroups
+ */
+initiatOneSelectForm(): void {
+  this.programForm = this.fb.group({
+    universityId: ['', Validators.required],
+    uniType: ['', Validators.required],
+    programName: ['', [Validators.required, Validators.minLength(3)]],
+    categoryIds: ['', Validators.required],
+    coreSubjects: this.fb.array([this.createSubjectFormGroup()]),
+    // alternativeSubjects: this.fb.array([this.createSubjectFormGroup()]),
+    alternativeGroups: this.fb.array([]) // Initialize as empty array
+  });
+}
+
+// // -------- Alternative Groups --------
+//   get alternativeGroups(): FormArray {
+//     return this.programForm.get('alternativeGroups') as FormArray;
+//   }
+
+
+
+//     // ========== FORMAT OUTPUT TO MATCH BACKEND ==========
+//   formatFormData(formValue: any) {
+//     return {
+//       universityId: Number(formValue.universityId),
+//       programs: formValue.programs.map((program: any) => ({
+//         name: program.name,
+//         coreSubjects: program.coreSubjects,
+//         alternativeSubjects: {},
+//         alternativeGroups: program.alternativeGroups.map((g: any) => ({
+//           subjects: g.subjects.filter((s: string) => s), // remove empty
+//           requiredGrade: g.requiredGrade,
+//           anyOf: g.anyOf,
+//         })),
+//         categoryIds: program.categoryIds,
+//       })),
+//     };
+//   }
+
+//   addAlternativeGroup() {
+//     const group = this.fb.group({
+//       requiredGrade: ['', Validators.required],
+//       anyOf: [false],
+//       subjects: this.fb.array([this.createSubject()])
+//     });
+//     this.alternativeGroups.push(group);
+//   }
+
+//   createSubject(): FormGroup {
+//     return this.fb.group({
+//       name: ['', Validators.required]
+//     });
+//   }
+//   removeAlternativeGroup(index: number) {
+//     this.alternativeGroups.removeAt(index);
+//   }
+
+//   getSubjects(group: AbstractControl): FormArray {
+//     return group.get('subjects') as FormArray;
+//   }
+
+//   addSubjectToGroup(groupIndex: number) {
+//     this.getSubjects(this.alternativeGroups.at(groupIndex)).push(new FormControl('', Validators.required));
+//   }
+
+//   removeSubjectFromGroup(groupIndex: number, subjectIndex: number) {
+//     this.getSubjects(this.alternativeGroups.at(groupIndex)).removeAt(subjectIndex);
+//   }
+
+//   // -------- Core & Alternative Subjects --------
+
+
+
+//   // -------- Form Submission --------
+
 
 
 }
