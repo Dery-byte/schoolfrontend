@@ -1,4 +1,4 @@
-<!-- {{ records| json}} -->
+{{ records| json}}
 
 <!-- <div *ngFor="let record of records">
   <div *ngIf="record.examCheckRecord">
@@ -125,24 +125,128 @@
               <div *ngIf="hasProgramsInCategory(university.alternativePrograms, category)">
                 <h6 class="category-title">{{ category }}</h6>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <!-- Programs in this category -->
                 <div *ngFor="let program of getProgramsByCategory(university.alternativePrograms, category)"
                   class="program-card alternative">
                   <div class="program-header">
-                    <strong>{{ program.name }}</strong>
+                    <strong>{{ program.name }} - Eligibility Status</strong>
                     <span class="percentage">{{ program.percentage | number:'1.0-1' }}% match</span>
                   </div>
-                  <div class="cutoff-points">
-                    <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
-                      <span class="subject-name">{{ subject }}:</span>
-                      <span class="grade">{{ program.cutoffPoints[subject] }}</span>
-                    </div>
-                  </div>
-                  <div *ngIf="program.explanations?.length" class="explanations">
-                    <div *ngFor="let explanation of program.explanations" class="explanation">
-                      {{ explanation }}
-                    </div>
-                  </div>
+                    
+
+
+                    <!-- Collapsible explanations -->
+                   <div class="eligibility-table-container">
+  <table class="eligibility-table">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Subject / Requirement</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let line of getPrioritizedExplanations(program.explanations, program.id)"
+      >
+        <td><span [innerHTML]="getStatusIcon(line)"></span></td>
+        <td>{{ extractSubject(line) }}</td>
+        <td>{{ extractRemarks(line) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Toggle button -->
+  <button class="toggle-btn" (click)="toggleShowAll(program.id)">
+    {{ showAll[program.id] ? 'Show Less' : 'Show All Details' }}
+  </button>
+</div>
+
+                
+
 
                   <!-- AI Recommendation for Alternative Programs -->
                   <div *ngIf="program.aiRecommendation" class="ai-recommendation">
@@ -165,6 +269,43 @@
                     </div>
                   </div>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
             </div>
           </div>

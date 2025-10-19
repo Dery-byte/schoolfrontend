@@ -753,8 +753,8 @@ submitForm(): void {
   this.isSubmitting = true;
   
   const payload = this.formatFormData(this.programForm.value);
-  console.log('Payload being sent:', JSON.stringify(payload, null, 2));
-  console.log("Same Payload", payload);
+  // console.log('Payload being sent:', JSON.stringify(payload, null, 2));
+  // console.log("Same Payload", payload);
 
   this.prog.addProgramToUniversity({ body: payload }).subscribe({
     next: (res) => {

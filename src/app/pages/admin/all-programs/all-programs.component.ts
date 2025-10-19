@@ -3,7 +3,7 @@ import { UniversityControllerService } from 'src/app/services/services';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators,AbstractControl  } from '@angular/forms';
 
 interface University {
   id: number;
@@ -66,15 +66,18 @@ export class AllProgramsComponent {
     private snackBar: MatSnackBar,
     private fb: FormBuilder
   ) {
-    this.updateProgramForm = this.fb.group({
-      programName: ['', [Validators.required, Validators.minLength(3)]],
-      // universityId: ['', Validators.required],
-      categoryIds: ['', Validators.required],
-      cutoffPoints: this.fb.array([]),
-       coreSubjects: this.fb.array([]),
-  alternativeSubjects: this.fb.array([])
-    });
+ this.updateProgramForm = this.fb.group({
+    programName: ['', [Validators.required, Validators.minLength(3)]],
+    categoryIds: ['', Validators.required],
+    cutoffPoints: this.fb.array([]),
+    coreSubjects: this.fb.array([]),
+    alternativeGroups: this.fb.array([]) // ✅ Add this line
+  });
   }
+
+
+
+
 
   ngOnInit() {
     this.allPrograms();
@@ -97,14 +100,6 @@ get alternativeSubjects(): FormArray {
 
 showCoreSubjects = false;
 showAlternativeSubjects = false;
-
-// toggleCoreSubjects() {
-//   this.showCoreSubjects = !this.showCoreSubjects;
-// }
-
-// toggleAlternativeSubjects() {
-//   this.showAlternativeSubjects = !this.showAlternativeSubjects;
-// }
 
 
 toggleCoreSubjects(program: any) {
@@ -154,49 +149,85 @@ toggleAlternativeSubjects(program: any) {
     this.cutoffPoints.removeAt(index);
   }
 
+
   openUpdateModal(programId: number): void {
-    this.selectedProgramId = programId;
-    this.isLoading = true;
-    this.manualService.getProgramById(programId).subscribe({
-      next: (program) => {
-        this.currentProgram = program;
+  this.selectedProgramId = programId;
+  this.isLoading = true;
+  this.manualService.getProgramById(programId).subscribe({
+    next: (program) => {
+      this.currentProgram = program;
 
-        console.log("This is the current program ", this.currentProgram);
-        
-        // Initialize the form
-        this.updateProgramForm.patchValue({
-          programName: this.currentProgram.name,
-          // universityId: '', // Set this if available
-          categoryIds: this.currentProgram.categories[0]?.id || ''
+      // console.log("This is the current program ", this.currentProgram);
+      
+      // Initialize the form
+      this.updateProgramForm.patchValue({
+        programName: this.currentProgram.name,
+        categoryIds: this.currentProgram.categories[0]?.id || ''
+      });
+
+      this.editSelectedCategories = {};
+      if (this.currentProgram.categories) {
+        this.currentProgram.categories.forEach((category: any) => {
+          this.editSelectedCategories[category.id] = true;
         });
+      }
 
-        this.editSelectedCategories = {};
-        if (this.currentProgram.categories) {
-          this.currentProgram.categories.forEach((category: any) => {
-            this.editSelectedCategories[category.id] = true;
-          });
-        }
-
-
+      // Populate core subjects
       this.clearFormArray(this.coreSubjects);
       this.populateCoreSubjects();
 
-      this.clearFormArray(this.alternativeSubjects);
-      this.populateAlternativeSubjects();
+      // ✅ CHANGE: Populate alternative groups instead of alternative subjects
+      this.clearFormArray(this.alternativeGroups);
+      this.populateAlternativeGroups();
 
-        this.showUpdateProgramModal = true;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load program:', err);
-        this.snackBar.open('Failed to load program details', 'Close', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
+      this.showUpdateProgramModal = true;
+      this.isLoading = false;
+    },
+    error: (err) => {
+      // console.error('Failed to load program:', err);
+      this.snackBar.open('Failed to load program details', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      this.isLoading = false;
+    }
+  });
+}
+
+
+
+populateAlternativeGroups(): void {
+  const groupsArray = this.alternativeGroups;
+  groupsArray.clear();
+
+  if (this.currentProgram.alternativeGroups && Array.isArray(this.currentProgram.alternativeGroups)) {
+    this.currentProgram.alternativeGroups.forEach((group: any) => {
+      const groupForm = this.fb.group({
+        requiredGrade: [group.requiredGrade || '', Validators.required],
+        anyOf: [group.anyOf || false],
+        subjects: this.fb.array([])
+      });
+
+      const subjectsArray = groupForm.get('subjects') as FormArray;
+      
+      // Populate subjects in the group
+      if (group.subjects && Array.isArray(group.subjects)) {
+        group.subjects.forEach((subjectName: string) => {
+          subjectsArray.push(this.fb.group({
+            name: [subjectName, Validators.required]
+          }));
         });
-        this.isLoading = false;
       }
+      groupsArray.push(groupForm);
     });
   }
+}
+
+
+
+
+
+
 
   closeUpdateModal(): void {
     this.showUpdateProgramModal = false;
@@ -220,7 +251,7 @@ toggleAlternativeSubjects(program: any) {
         this.colleges = res;
       },
       error: (err) => {
-        console.error('Failed to load categories:', err);
+        // console.error('Failed to load categories:', err);
       }
     });
   }
@@ -262,9 +293,7 @@ toggleAlternativeSubjects(program: any) {
 
 
 
-  getSubjects(subjectMap: { [key: string]: string }): string[] {
-  return subjectMap ? Object.keys(subjectMap) : [];
-}
+
 
 
   clearFormArray(formArray: FormArray): void {
@@ -387,66 +416,7 @@ private objectToArray(subjectObj: any): any[] {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //   // Update the updateProgram method to include core and alternative subjects
-
-
-
 updateProgram(): void {
   this.programFormSubmitted = true;
   if (this.updateProgramForm.invalid) {
@@ -455,6 +425,19 @@ updateProgram(): void {
       panelClass: ['error-snackbar']
     });
     return;
+  }
+
+  // Validate alternative groups have at least one subject
+  const groups = this.alternativeGroups.value;
+  for (let i = 0; i < groups.length; i++) {
+    const validSubjects = groups[i].subjects.filter((s: any) => s.name && s.name.trim() !== '');
+    if (validSubjects.length === 0) {
+      this.snackBar.open(`Group ${i + 1} must have at least one valid subject`, 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
   }
   
   const formValue = this.updateProgramForm.value;
@@ -475,13 +458,14 @@ updateProgram(): void {
     return acc;
   }, {});
 
-  // Transform alternative subjects array to object
-  const alternativeSubjectsObj = formValue.alternativeSubjects.reduce((acc: any, curr: any) => {
-    if (curr.subject && curr.grade) {
-      acc[curr.subject] = curr.grade;
-    }
-    return acc;
-  }, {});
+  // ✅ NEW: Transform alternative groups
+  const alternativeGroupsArray = formValue.alternativeGroups.map((group: any) => ({
+    requiredGrade: group.requiredGrade,
+    anyOf: group.anyOf,
+    subjects: group.subjects
+      .map((s: any) => s.name)
+      .filter((name: string) => name && name.trim() !== '')
+  }));
 
   const payload = {
     programId: this.currentProgram.id,
@@ -489,10 +473,10 @@ updateProgram(): void {
     categoryIds: [{ id: formValue.categoryIds }],
     cutoffPoints: cutoffPointsObj,
     coreSubjects: coreSubjectsObj,
-    alternativeSubjects: alternativeSubjectsObj
+    alternativeGroups: alternativeGroupsArray // ✅ Changed from alternativeSubjects
   };
   
-  console.log('Update Payload:', payload);
+  // console.log('Update Payload:', payload);
 
   this.isUpdating = true;
   this.manualService.updateProgram(payload).subscribe({
@@ -505,7 +489,7 @@ updateProgram(): void {
       });
       setTimeout(() => {
         this.closeUpdateModal();
-        this.allPrograms(); // Refresh data
+        this.allPrograms();
       }, 1500);
     },
     error: (err) => {
@@ -519,18 +503,83 @@ updateProgram(): void {
   });
 }
 
+// ========== ALTERNATIVE GROUPS METHODS ==========
+
+/**
+ * Get the alternativeGroups FormArray
+ */
+
+// For Alternative Groups (returns FormArray)
+getSubjects(group: AbstractControl): FormArray {
+  return group.get('subjects') as FormArray;
+}
+
+// For other purposes (returns string array)
+getSubjectKeys(subjectMap: { [key: string]: string }): string[] {
+  return subjectMap ? Object.keys(subjectMap) : [];
+}
+
+get alternativeGroups(): FormArray {
+  return this.updateProgramForm.get('alternativeGroups') as FormArray;
+}
+
+/**
+ * Create a new alternative group with initial subject
+ */
+addAlternativeGroup(): void {
+  const group = this.fb.group({
+    requiredGrade: ['', Validators.required],
+    anyOf: [false],
+    subjects: this.fb.array([this.createSubjectForGroup()]) // Start with one subject
+  });
+  this.alternativeGroups.push(group);
+}
+
+/**
+ * Remove an alternative group
+ */
+removeAlternativeGroup(index: number): void {
+  if (confirm('Are you sure you want to remove this group?')) {
+    this.alternativeGroups.removeAt(index);
+  }
+}
+
+/**
+ * Create a single subject FormGroup for alternative groups
+ * This matches the template structure: formControlName="name"
+ */
+createSubjectForGroup(): FormGroup {
+  return this.fb.group({
+    name: ['', Validators.required]
+  });
+}
+
+/**
+ * Get subjects FormArray from a group
+ */
 
 
+/**
+ * Add a subject to a specific group
+ */
+addSubjectToGroup(groupIndex: number): void {
+  const subjectsArray = this.getSubjects(this.alternativeGroups.at(groupIndex));
+  subjectsArray.push(this.createSubjectForGroup());
+}
 
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * Remove a subject from a specific group
+ */
+removeSubjectFromGroup(groupIndex: number, subjectIndex: number): void {
+  const subjectsArray = this.getSubjects(this.alternativeGroups.at(groupIndex));
+  // Prevent removing the last subject
+  if (subjectsArray.length <= 1) {
+    this.snackBar.open('Each group must have at least one subject', 'Close', {
+      duration: 2000,
+      panelClass: ['snackbar-warning']
+    });
+    return;
+  }
+  subjectsArray.removeAt(subjectIndex);
+}
 }

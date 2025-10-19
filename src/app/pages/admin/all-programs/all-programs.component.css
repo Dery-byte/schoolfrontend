@@ -307,10 +307,44 @@
 
 
 
+/* Responsive adjustments */
+@media (max-width: 575.98px) {
+  .card-header {
+    padding: 0.75rem !important;
+  }
+  
+  .card-body {
+    padding: 0.75rem !important;
+  }
+  
+  .section-title {
+    font-size: 1.1rem !important;
+  }
+  
+  .form-select,
+  .btn {
+    font-size: 0.875rem !important;
+  }
+}
 
-
-
-
+/* Hover effects for desktop only */
+@media (min-width: 768px) {
+  .card.shadow-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.4) !important;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102,126,234,0.4) !important;
+  }
+}
 
 
 

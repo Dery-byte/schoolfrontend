@@ -1,4 +1,4 @@
-{{universities | json}}
+<!-- {{universities | json}} -->
 
 <div class="col-md-12">
   <div class="card">
@@ -14,11 +14,9 @@
 
       <!-- University Search -->
       <input type="text" class="form-control w-auto" placeholder="Search University" [(ngModel)]="universitySearch" />
-
       <!-- Program Search -->
       <input type="text" class="form-control w-auto" placeholder="Search Program" [(ngModel)]="programSearch" />
     </div>
-
     <div class="card-body">
       <!-- Modern Loading Spinner -->
       <div *ngIf="isLoadingUniversities" class="loading-overlay">
@@ -27,7 +25,6 @@
           <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
             <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
           </svg>
-
           <!-- Loading text with fade animation -->
           <div class="loading-text">
             <span class="loading-text-words">L</span>
@@ -38,13 +35,10 @@
             <span class="loading-text-words">N</span>
             <span class="loading-text-words">G</span>
           </div>
-
           <!-- Optional progress indicator -->
           <div class="progress-indicator">Fetching universities and Programs...</div>
         </div>
       </div>
-
-
       <div *ngIf="!isLoadingUniversities">
         <div *ngIf="filteredUniversities.length > 0; else noUniversity">
           <div *ngFor="let university of filteredUniversities" class="mb-4 border rounded p-3 shadow-sm">
@@ -55,9 +49,7 @@
             <p class="mb-2">
               <strong>Location:</strong> {{ university.location }}
             </p>
-
             <h6 class="text-muted">Programs Offered</h6>
-
             <ng-container *ngIf="
                 university.programs && university.programs.length > 0;
                 else noPrograms
@@ -72,43 +64,10 @@
                       <strong>{{ i + 1 }}. {{ program.name }}</strong>
                     </div>
                     <div class="form-button-action">
-
-
-
-
-
-
-
-
-
-
-
-
-
                       <button type="button" class="btn btn-link btn-sm btn-primary" title="Edit Program"
                         (click)="openUpdateModal(program.id)">
                         <i class="fa fa-edit"></i>
                       </button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -131,20 +90,13 @@
                           [ngClass]="{ 'fa-chevron-down': !program.showCoreSubjects, 'fa-chevron-up': program.showCoreSubjects }"></i>
                         <span class="ms-2">Core Subjects</span>
                       </button>
-                      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" type="button"
-                        (click)="toggleAlternativeSubjects(program)">
-                        <i class="fas"
-                          [ngClass]="{ 'fa-chevron-down': !program.showAlternativeSubjects, 'fa-chevron-up': program.showAlternativeSubjects }"></i>
-                        <span class="ms-2">Alternative Subjects</span>
-                      </button>
-
 
                       <!-- ✅ New Toggle Button for Alternative Subject Groups -->
-                      <button class="btn btn-outline-success btn-sm d-flex align-items-center" type="button"
+                      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" type="button"
                         (click)="toggleAlternativeGroups(program)">
                         <i class="fas"
                           [ngClass]="{ 'fa-chevron-down': !program.showAlternativeGroups, 'fa-chevron-up': program.showAlternativeGroups }"></i>
-                        <span class="ms-2">Alternative Subject Groups</span>
+                        <span class="ms-2"> Subject Groups</span>
                       </button>
                     </div>
 
@@ -158,27 +110,13 @@
                       <div *ngIf="program.showCoreSubjects" class="subject-list mt-3 fade-in">
                         <strong class="d-block mb-2">Core Subjects:</strong>
                         <div class="inline-subjects flex-wrap">
-                          <div *ngFor="let subject of getSubjects(program.coreSubjects)"
+                          <div *ngFor="let subject of getSubjectKeys(program.coreSubjects)"
                             class="inline-item d-flex align-items-center me-3 mb-2">
                             <span class="subject-name me-2">{{ subject }}</span>
                             <span class="badge bg-primary rounded-pill">{{ program.coreSubjects[subject] }}</span>
                           </div>
                         </div>
                       </div>
-
-                      <!-- Alternative Subjects -->
-                      <div *ngIf="program.showAlternativeSubjects" class="subject-list mt-3 fade-in">
-                        <strong class="d-block mb-2">Alternative Subjects:</strong>
-                        <div class="inline-subjects flex-wrap">
-                          <div *ngFor="let subject of getSubjects(program.alternativeSubjects)"
-                            class="inline-item d-flex align-items-center me-3 mb-2">
-                            <span class="subject-name me-2">{{ subject }}</span>
-                            <span class="badge bg-secondary rounded-pill">{{ program.alternativeSubjects[subject]
-                              }}</span>
-                          </div>
-                        </div>
-                      </div>
-
 
                       <!-- ✅ Alternative Subject Groups Section -->
                       <div *ngIf="program.showAlternativeGroups" class="subject-list mt-3 fade-in">
@@ -206,39 +144,8 @@
                           </div>
                         </div>
                       </div>
-
-
-
-
-
-
                     </div>
-
-
-
-
-
-
                   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 </li>
               </ul>
             </ng-container>
@@ -261,159 +168,14 @@
           </div>
         </div>
       </div>
-
       <ng-template #noUniversity>
         <div class="alert alert-warning text-center">
           No universities available for the selected filters.
         </div>
       </ng-template>
     </div>
-
-
-
-
-
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <div class="modal-overlay" *ngIf="showUpdateProgramModal">
@@ -458,7 +220,7 @@
               </div>
             </div>
           </div>
-          <!-- Core Subjects -->
+
           <!-- Core Subjects Section -->
           <div formArrayName="coreSubjects" class="mt-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -500,57 +262,201 @@
             </div>
           </div>
 
-          <!-- Alternative Subjects Section -->
-          <div formArrayName="alternativeSubjects" class="mt-4">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="mb-0">Alternative Subjects</h5>
-              <button type="button" class="btn btn-sm btn-primary" (click)="addAlternativeSubject()">
-                <i class="fa fa-plus"></i> Add Subject
-              </button>
-            </div>
 
-            <div *ngFor="let altControl of alternativeSubjects.controls; let i = index" [formGroupName]="i"
-              class="row g-2 mb-2">
-              <div class="col-md-5">
-                <select class="form-select" formControlName="subject">
-                  <option value="">-- Select Alternative Subject --</option>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- Alternative Subject Groups Section -->
+     <div formArrayName="alternativeGroups" class="mt-4 subject-section">
+  <!-- Section Header -->
+  <div class="mb-3 mb-md-4">
+    <h5 class="section-title mb-2 d-flex align-items-center">
+      <i class="fas fa-layer-group section-icon me-2"></i>
+      <span>Alternative Subject Groups</span>
+    </h5>
+    <small class="text-muted d-block" style="line-height: 1.5; font-size: 0.875rem;">
+      Create groups where students can choose subjects based on conditions
+    </small>
+  </div>
+
+  <!-- Groups Container -->
+  <div *ngFor="let groupControl of alternativeGroups.controls; let i = index" [formGroupName]="i"
+    class="card shadow-sm border-0 mb-3 mb-md-4"
+    style="border-radius: 12px; overflow: hidden;">
+    
+    <!-- Group Header -->
+    <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 p-3"
+      style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      
+      <div class="text-white d-flex align-items-center w-100 w-sm-auto">
+        <div class="bg-white bg-opacity-25 rounded p-2 me-2 me-sm-3" style="backdrop-filter: blur(10px);">
+          <i class="fas fa-folder-open" style="font-size: 1rem;"></i>
+        </div>
+        <div class="flex-grow-1">
+          <strong class="d-block mb-1" style="font-size: 0.95rem;">Group {{ i + 1 }}</strong>
+          <span class="badge bg-white text-primary" style="font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 12px;">
+            {{ getSubjects(groupControl).length }} {{ getSubjects(groupControl).length === 1 ? 'Subject' : 'Subjects' }}
+          </span>
+        </div>
+      </div>
+      
+      <button type="button" class="btn btn-sm text-white border-0 align-self-end align-self-sm-center" 
+        (click)="removeAlternativeGroup(i)"
+        title="Remove this group"
+        style="background: rgba(255,255,255,0.2); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem;">
+        <i class="fas fa-trash me-1"></i><span class="d-none d-sm-inline">Remove</span>
+      </button>
+    </div>
+
+    <div class="card-body p-3 p-md-4" style="background: #fafbfc;">
+      <!-- Group Configuration -->
+      <div class="row g-3 mb-3 mb-md-4">
+        
+        <!-- Required Grade -->
+        <div class="col-12 col-md-6">
+          <label class="form-label fw-semibold d-flex align-items-center mb-2" style="color: #2d3748; font-size: 0.875rem;">
+            <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-2" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-star text-warning" style="font-size: 0.75rem;"></i>
+            </div>
+            <span>Required Grade</span>
+          </label>
+          <select class="form-select border-2" formControlName="requiredGrade"
+            style="border-color: #e2e8f0; border-radius: 8px; padding: 0.65rem 0.9rem; font-size: 0.875rem;">
+            <option value="">-- Select Minimum Grade --</option>
+            <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
+          </select>
+          <small class="text-muted mt-1 d-block" style="font-size: 0.75rem;">
+            <i class="fas fa-info-circle me-1"></i>Minimum grade to access this group
+          </small>
+        </div>
+
+        <!-- Selection Condition -->
+        <div class="col-12 col-md-6">
+          <label class="form-label fw-semibold d-flex align-items-center mb-2" style="color: #2d3748; font-size: 0.875rem;">
+            <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-sliders-h text-info" style="font-size: 0.75rem;"></i>
+            </div>
+            <span>Selection Condition</span>
+          </label>
+          <div class="card border-0 p-3" style="background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); border-radius: 8px;">
+            <div class="form-check form-switch d-flex align-items-start">
+              <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" formControlName="anyOf"
+                [id]="'anyOf' + i"
+                style="width: 2.5em; height: 1.25em; cursor: pointer;" />
+              <label class="form-check-label ms-2 ms-sm-3 mb-0" [for]="'anyOf' + i" style="cursor: pointer; flex: 1;">
+                <strong style="color: #4c51bf; font-size: 0.85rem; display: block;" 
+                  *ngIf="groupControl.get('anyOf')?.value; else allRequired">
+                  <i class="fas fa-check-circle me-1"></i>
+                  <span>Any ONE subject required</span>
+                </strong>
+                <ng-template #allRequired>
+                  <strong style="color: #4c51bf; font-size: 0.85rem; display: block;">
+                    <i class="fas fa-check-double me-1"></i>
+                    <span>ALL subjects required</span>
+                  </strong>
+                </ng-template>
+              </label>
+            </div>
+            <small class="text-muted mt-2 d-block" style="font-size: 0.7rem; padding-left: 0.5rem;">
+              Toggle to change requirement
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subjects Section -->
+      <div formArrayName="subjects" class="border-2 border-dashed rounded-3 p-3"
+        style="border-color: #e9e9e9 !important; background: linear-gradient(to bottom, #ebebeb 0%, #ffffff 100%);">
+        <!-- Section Header -->
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
+          <h6 class="mb-0 d-flex align-items-center" style="color: #4c51bf; font-weight: 600; font-size: 0.9rem;">
+            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-book-open" style="font-size: 0.8rem; color: #667eea;"></i>
+            </div>
+            <span>Subjects in Group {{ i + 1 }}</span>
+          </h6>
+        </div>
+
+        <!-- No subjects state -->
+        <div *ngIf="getSubjects(groupControl).length === 0" class="text-center py-4"
+          style="background: rgb(210, 208, 211); border-radius: 8px; border: 2px dashed #e2e8f0;">
+          <div class="mb-2" style="font-size: 2rem; color: #cbd5e0;">
+            <i class="fas fa-inbox"></i>
+          </div>
+          <p class="mb-0 text-muted" style="font-size: 0.85rem;">No subjects added yet. Click "Add Subject" to begin.</p>
+        </div>
+
+        <!-- Subject List -->
+        <div *ngFor="let subjCtrl of getSubjects(groupControl).controls; let j = index" [formGroupName]="j"
+          class="card border-0 mb-2"
+          style="box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-radius: 8px;">
+          <div class="card-body p-2 p-sm-3">
+            <div class="d-flex gap-2 align-items-center">
+              <!-- Number Badge -->
+              <div class="flex-shrink-0">
+                <div class="text-white rounded-circle d-flex align-items-center justify-content-center"
+                  style="width: 32px; height: 32px; font-weight: 600; font-size: 0.85rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 2px 6px rgba(102,126,234,0.3);">
+                  {{ j + 1 }}
+                </div>
+              </div>
+              <!-- Subject Select -->
+              <div class="flex-grow-1" style="min-width: 0;">
+                <select class="form-select border-2 w-100" formControlName="name"
+                  style="border-color: #e2e8f0; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.85rem;">
+                  <option value="">-- Select Subject --</option>
                   <option *ngFor="let s of combinedSubjects" [value]="s">{{ s }}</option>
                 </select>
-                <div *ngIf="programFormSubmitted && altControl.get('subject')?.invalid" class="text-danger small mt-1">
-                  Subject is required
-                </div>
               </div>
-              <div class="col-md-5">
-                <select class="form-select" formControlName="grade">
-                  <option value="">-- Select Grade --</option>
-                  <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
-                </select>
-                <div *ngIf="programFormSubmitted && altControl.get('grade')?.invalid" class="text-danger small mt-1">
-                  Grade is required
-                </div>
-              </div>
-              <div class="col-md-2">
-                <button type="button" class="btn btn-danger w-100" (click)="alternativeSubjects.removeAt(i)">
-                  <i class="fa fa-times"></i>
+              
+              <!-- Remove Button -->
+              <div class="flex-shrink-0">
+                <button type="button" class="btn btn-outline-danger btn-sm"
+                  (click)="removeSubjectFromGroup(i, j)" 
+                  title="Remove subject"
+                  style="width: 32px; height: 32px; border-radius: 6px; padding: 0; font-size: 0.85rem;">
+                  <i class="fas fa-times"></i>
                 </button>
               </div>
             </div>
-
-            <div *ngIf="alternativeSubjects.length === 0" class="alert alert-info">
-              No alternative subjects added yet. Click "Add Alternative Subject" to add one.
-            </div>
           </div>
+        </div>
 
+        <!-- Add Another Subject Button -->
+        <button *ngIf="getSubjects(groupControl).length > 0" 
+          type="button"
+          class="btn btn-outline-primary w-100 mt-2"
+          (click)="addSubjectToGroup(i)"
+          style="border-width: 2px; border-radius: 8px; padding: 0.6rem; font-weight: 500; border-style: dashed; font-size: 0.85rem;">
+          <i class="fas fa-plus me-2"></i>Add Another Subject
+        </button>
+      </div>
+    </div>
+  </div>
 
-
-
-
+  <!-- Add New Group Button -->
+  <button type="button" 
+    class="btn btn-lg btn-success w-100 shadow-sm" 
+    (click)="addAlternativeGroup()"
+    style="border-radius: 10px; padding: 0.85rem 1rem; font-weight: 600; font-size: 0.95rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none;">
+    <i class="fas fa-plus-circle me-2"></i>
+    <span class="d-none d-sm-inline">Add New </span>Alternative Group
+  </button>
+</div>
           <div class="row mt-3 g-2">
-
-            <!-- <div class="col-md-6">
-              <button type="button" class="btn btn-secondary w-100" (click)="addSubject()">+ Add Subject</button>
-            </div> -->
-
             <div class="col-md-12">
               <button type="submit" class="btn btn-primary w-100" [disabled]="isUpdating">
                 {{ isUpdating ? 'Updating...' : 'Update Program' }}
