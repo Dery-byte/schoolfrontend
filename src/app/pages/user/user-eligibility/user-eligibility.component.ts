@@ -768,13 +768,13 @@ downloadAsPdf(result: EligibilityResult): void {
     doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'normal');
     doc.text(`• Type: ${university.type}`, 25, y + 7);
-    doc.text(`• Location: ${university.location}`, 90, y + 7);
+    doc.text(`• Location: ${university.location}`, 80, y + 7);
     
     // Programs summary
     const programSummary = `Programs: ${eligibleCount} Eligible, ${alternativeCount} Alternative`;
     doc.setTextColor(0, 123, 191);
     doc.setFont('helvetica', 'bold');
-    doc.text(programSummary, 155, y + 7);
+    doc.text(programSummary, 130, y + 7);
     
     y += 15;
 
@@ -815,14 +815,15 @@ private addProgramsWithInsights(
   let y = startY;
 
   // Enhanced Section Header
-  doc.setFillColor(color[0], color[1], color[2]);
-  doc.roundedRect(20, y, 170, 10, 3, 3, 'F');
+
   
-  doc.setFontSize(12);
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`${sectionTitle} (${programs.length})`, 25, y + 7);
-  y += 15;
+  // doc.setFillColor(color[0], color[1], color[2]);
+  // doc.roundedRect(20, y, 170, 10, 3, 3, 'F');
+  // doc.setFontSize(12);
+  // doc.setTextColor(255, 255, 255);
+  // doc.setFont('helvetica', 'bold');
+  // doc.text(`${sectionTitle} (${programs.length})`, 25, y + 7);
+  // y += 15;
 
   for (let i = 0; i < programs.length; i++) {
     const program = programs[i];
@@ -830,11 +831,11 @@ private addProgramsWithInsights(
     // Enhanced Program Table
     autoTable(doc, {
       startY: y,
-      head: [['Program Name', 'Match Score', 'Cutoff Points']],
+      head: [['Program Name', 'Match Score']],
       body: [[
         program.name || 'Unknown Program',
         `${(program.percentage ?? 0).toFixed(1)}%`,
-        this.formatCutoffPoints(program.cutoffPoints)
+        // this.formatCutoffPoints(program.cutoffPoints)
       ]],
       styles: { 
         fontSize: 11, 
@@ -852,9 +853,9 @@ private addProgramsWithInsights(
         textColor: [50, 50, 50]
       },
       columnStyles: {
-        0: { fontStyle: 'bold', textColor: [15, 32, 82], cellWidth: 90 },
-        1: { textColor: color, fontStyle: 'bold', halign: 'center', cellWidth: 40 },
-        2: { textColor: [80, 80, 80], halign: 'center', cellWidth: 40 }
+        0: { fontStyle: 'bold', textColor: [15, 32, 82], cellWidth: 110 },
+        1: { textColor: color, fontStyle: 'bold', halign: 'center', cellWidth: 60 },
+        // 2: { textColor: [80, 80, 80], halign: 'center', cellWidth: 40 }
       },
       margin: { left: 20, right: 20 },
       tableWidth: 'auto'
@@ -912,67 +913,6 @@ private addProgramsWithInsights(
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 private addRequirementExplanations(doc: jsPDF, explanations: string[], startY: number): number {
   let y = startY;
 
@@ -986,16 +926,21 @@ private addRequirementExplanations(doc: jsPDF, explanations: string[], startY: n
   doc.text('Requirements Analysis', 30, y + 7);
   y += 12;
 
+  // ✅ Filter out the specific explanation
+  const filteredExplanations = explanations.filter(
+    (explanation) => !explanation.includes('⚠️ Alternative')
+  );
+
   // Prepare data for the table
   const okayRows: string[] = [];
   const missedRows: string[] = [];
   const belowReqRows: string[] = [];
 
-  explanations.forEach((explanation) => {
+  filteredExplanations.forEach((explanation) => {
     const cleanText = explanation.replace(/[✅⚠️❌]/g, '').trim();
     if (explanation.includes('✅')) okayRows.push(cleanText);
-    else if (explanation.includes('⚠️')) missedRows.push(cleanText);
-    else if (explanation.includes('❌')) belowReqRows.push(cleanText);
+    else if (explanation.includes('⚠️')) belowReqRows.push(cleanText);
+    else if (explanation.includes('❌')) missedRows.push(cleanText);
   });
 
   const maxRows = Math.max(okayRows.length, missedRows.length, belowReqRows.length);
@@ -1010,7 +955,7 @@ private addRequirementExplanations(doc: jsPDF, explanations: string[], startY: n
   }
 
   // Generate the table
- autoTable(doc, {
+  autoTable(doc, {
     head: [['OKAY', 'MISSED', 'BELOW REQUIREMENT']],
     body: tableData,
     startY: y,
@@ -1041,7 +986,7 @@ private addRequirementExplanations(doc: jsPDF, explanations: string[], startY: n
   });
 
   // Return new Y position after the table
-return (doc as any).lastAutoTable.finalY + 8;
+  return (doc as any).lastAutoTable.finalY + 8;
 }
 
 
