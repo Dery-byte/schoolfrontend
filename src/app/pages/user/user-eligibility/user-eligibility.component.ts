@@ -831,7 +831,7 @@ private addProgramsWithInsights(
     // Enhanced Program Table
     autoTable(doc, {
       startY: y,
-      head: [['Program Name', 'Match Score']],
+      head: [['Program Name', 'Likelihood of Admission']],
       body: [[
         program.name || 'Unknown Program',
         `${(program.percentage ?? 0).toFixed(1)}%`,
@@ -1367,6 +1367,7 @@ getStatusIcon(line: unknown): string {
   if (line.startsWith('✅')) return '✅';
   if (line.startsWith('⚠️')) return '⚠️';
   if (line.startsWith('❌')) return '❌';
+  if (line.startsWith('🎯')) return '🎯 ';
   return '';
 }
 
@@ -1399,7 +1400,9 @@ getPrioritizedExplanations(explanations: string[], programId: string): string[] 
   const sorted = [
     ...explanations.filter(line => line.startsWith('✅')),
     ...explanations.filter(line => line.startsWith('⚠️')),
-    ...explanations.filter(line => line.startsWith('❌'))
+    ...explanations.filter(line => line.startsWith('❌')),
+    ...explanations.filter(line => line.startsWith('🎯'))
+
   ];
 
   // Filter out any line that includes "Alternative"

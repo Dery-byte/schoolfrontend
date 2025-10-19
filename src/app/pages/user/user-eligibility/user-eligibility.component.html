@@ -82,8 +82,14 @@
             <div *ngFor="let program of university.eligiblePrograms" class="program-card eligible">
               <div class="program-header">
                 <strong>{{ program.name }}</strong>
-                <span class="percentage">{{ program.percentage | number:'1.0-1' }}% match</span>
-
+                <!-- <span class="percentage">Admission Probability {{ program.percentage | number:'1.0-1' }}%</span> -->
+                <div class="confidence-meter">
+                  <div class="meter-label">Likelihood of Admission</div>
+                  <div class="meter-bar">
+                    <div class="meter-fill" [style.width.%]="program.percentage"></div>
+                  </div>
+                  <div class="meter-value">{{ program.percentage | number:'1.0-1' }}%</div>
+                </div>
                 <!-- <span class="percentage">{{ program.percentage }}% match</span> -->
               </div>
               <div class="cutoff-points">
@@ -212,40 +218,45 @@
                   class="program-card alternative">
                   <div class="program-header">
                     <strong>{{ program.name }} - Eligibility Status</strong>
-                    <span class="percentage">{{ program.percentage | number:'1.0-1' }}% match</span>
+                    <div class="confidence-meter">
+                      <div class="meter-label">Likelihood of Admission</div>
+                      <div class="meter-bar">
+                        <div class="meter-fill" [style.width.%]="program.percentage"></div>
+                      </div>
+                      <div class="meter-value">{{ program.percentage | number:'1.0-1' }}%</div>
+                    </div>
+                    <!-- <span class="percentage">Admission Probability {{ program.percentage | number:'1.0-1' }}%</span> -->
                   </div>
-                    
 
 
-                    <!-- Collapsible explanations -->
-                   <div class="eligibility-table-container">
-  <table class="eligibility-table">
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>Subject / Requirement</th>
-        <th>Remarks</th>
-      </tr>
-    </thead>
 
-    <tbody>
-      <tr
-        *ngFor="let line of getPrioritizedExplanations(program.explanations, program.id)"
-      >
-        <td><span [innerHTML]="getStatusIcon(line)"></span></td>
-        <td>{{ extractSubject(line) }}</td>
-        <td>{{ extractRemarks(line) }}</td>
-      </tr>
-    </tbody>
-  </table>
+                  <!-- Collapsible explanations -->
+                  <div class="eligibility-table-container">
+                    <table class="eligibility-table">
+                      <thead>
+                        <tr>
+                          <th>Status</th>
+                          <th>Subject / Requirement</th>
+                          <th>Remarks</th>
+                        </tr>
+                      </thead>
 
-  <!-- Toggle button -->
-  <button class="toggle-btn" (click)="toggleShowAll(program.id)">
-    {{ showAll[program.id] ? 'Show Less' : 'Show All Details' }}
-  </button>
-</div>
+                      <tbody>
+                        <tr *ngFor="let line of getPrioritizedExplanations(program.explanations, program.id)">
+                          <td><span [innerHTML]="getStatusIcon(line)"></span></td>
+                          <td>{{ extractSubject(line) }}</td>
+                          <td>{{ extractRemarks(line) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                
+                    <!-- Toggle button -->
+                    <button class="toggle-btn" (click)="toggleShowAll(program.id)">
+                      {{ showAll[program.id] ? 'Show Less' : 'Show All Details' }}
+                    </button>
+                  </div>
+
+
 
 
                   <!-- AI Recommendation for Alternative Programs -->

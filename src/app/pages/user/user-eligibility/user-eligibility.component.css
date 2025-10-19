@@ -1015,3 +1015,38 @@ button:focus, .btn-icon:focus, .close-btn:focus {
     width: 100%;
   }
 }
+
+
+
+
+
+.confidence-meter {
+    font-family: sans-serif;
+}
+
+.meter-label {
+    font-size: 0.9em;
+    margin-bottom: 0.25rem;
+    color: #333;
+}
+
+.meter-bar {
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.meter-fill {
+    height: 100%;
+    background-color: #4caf50; /* A green color for positive probability */
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.meter-value {
+    font-size: 0.9em;
+    text-align: right;
+    color: #666;
+    margin-top: 0.25rem;
+}

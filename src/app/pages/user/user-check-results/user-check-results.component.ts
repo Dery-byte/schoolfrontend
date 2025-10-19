@@ -382,8 +382,8 @@ export class UserCheckResultsComponent implements OnInit {
   subjectDatabase: SubjectDatabase = {
     WAEC: {
       WASSCE_SCHOOL: [
-        'MATHEMATICS (CORE)', 'ELECTIVE MATHEMATICS', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS',
-        'ENGLISH LANGUAGE', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE', 'SOCIAL STUDIES',
+        'MATHEMATICS (CORE)', 'MATHEMATICS (ELECTIVE)', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS',
+        'ENGLISH LANG', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE', 'SOCIAL STUDIES',
         'CIVIC EDUCATION', 'GENERAL AGRICULTURE', 'ANIMAL HUSBANDRY',
         'CROP HUSBANDRY AND HORTICULTURE', 'FISHERIES',
         'COMPUTER SCIENCE', 'FURTHER MATHEMATICS', 'PHYSICAL EDUCATION',
@@ -397,8 +397,8 @@ export class UserCheckResultsComponent implements OnInit {
         'PICTURE MAKING', 'SCULPTURE', 'CERAMICS', 'TEXTILES', 'MUSIC'
       ],
       WASSCE_PRIVATE: [
-        'MATHEMATICS (CORE)', 'ELECTIVE MATHEMATICS', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS',
-        'ENGLISH LANGUAGE', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE', 'SOCIAL STUDIES',
+        'MATHEMATICS (CORE)', 'MATHEMATICS (ELECTIVE)', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS',
+        'ENGLISH LANG', 'MATHEMATICS (CORE)', 'INTEGRATED SCIENCE', 'SOCIAL STUDIES',
         'CIVIC EDUCATION', 'GENERAL AGRICULTURE', 'ANIMAL HUSBANDRY',
         'CROP HUSBANDRY AND HORTICULTURE', 'FISHERIES',
         'COMPUTER SCIENCE', 'FURTHER MATHEMATICS', 'PHYSICAL EDUCATION',
@@ -1065,10 +1065,11 @@ export class UserCheckResultsComponent implements OnInit {
   //   private router: Router
   // ) {}
 
+  checkingEligibility = false;
+
   analyzeOneResults() {
     const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
     const selectedIds = selectedAttendees.map(a => a.id);
-
     console.log(selectedIds);
 
     console.log('Selected College IDs:', selectedIds);
@@ -1079,6 +1080,7 @@ export class UserCheckResultsComponent implements OnInit {
     }
 
     this.isCheckingEligibility = true;
+    this.checkingEligibility=true
 
     const analysisData = {
       resultDetails: this.waecresults.resultDetails.map((result: any) => ({
@@ -1095,6 +1097,8 @@ export class UserCheckResultsComponent implements OnInit {
       next: (data: any) => {
         this.elligibilityResults = data;
         this.isCheckingEligibility = false;
+            this.checkingEligibility=false;
+
         this.snackBar.open('Eligibility check successful!', 'Close', {
           duration: 3000,
           verticalPosition: 'bottom',
@@ -1107,6 +1111,8 @@ export class UserCheckResultsComponent implements OnInit {
       },
       error: (err) => {
         this.isCheckingEligibility = false;
+                    this.checkingEligibility=false;
+
         console.error('Eligibility check failed:', err);
         this.snackBar.open('Failed to check eligibility.', 'Close', {
           duration: 3000,
@@ -1119,12 +1125,16 @@ export class UserCheckResultsComponent implements OnInit {
 
 
 
+
+
   checkEligibilityManualEntry(): void {
     const selectedAttendees = this.allColleges.filter(a => a.selected || a.isRequired);
     const selectedIds = selectedAttendees.map(a => a.id);
-
     console.log(selectedIds);
     console.log(this.recordId);
+        this.isCheckingEligibility = true;
+
+    
 
     const response = {
       resultDetails: this.entries.map((entry: any) => ({

@@ -1249,12 +1249,11 @@
   position: relative;
 }
 
-.form-select {
+/* .form-select {
   display: block;
   width: auto;
   padding: 18px 50px 5px;
   font-size: 1rem;
-  /* font-weight: 400; */
   line-height: 1.5;
   color: #212529;
   background-color: #fff;
@@ -1263,7 +1262,7 @@
   border-radius: 20px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   appearance: none;
-}
+} */
 
 .form-select:focus {
   border-color: #86b7fe;
