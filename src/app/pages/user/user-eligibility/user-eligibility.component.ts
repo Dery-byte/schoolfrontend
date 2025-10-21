@@ -6,6 +6,23 @@ import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Types
+type SectionKey = 'core' | 'alternative' | 'recommendations';
+
+interface ParsedLine {
+  status: 'pass' | 'fail' | 'excellent' | 'neutral';
+  subject: string;
+  requirement?: string;
+  yourGrade?: string;
+  remarks: string;
+  originalLine: string;
+}
+
+interface RecommendationSections {
+  core: ParsedLine[];
+  alternative: ParsedLine[];
+  recommendations: string[];
+}
 
 
 @Component({
@@ -1356,64 +1373,418 @@ private formatCutoffPoints(cutoffPoints: any): string {
 
 
 // COLAPSABLE
-showAll: { [programId: string]: boolean } = {};
-
-toggleShowAll(programId: string) {
-  this.showAll[programId] = !this.showAll[programId];
-}
-
-getStatusIcon(line: unknown): string {
-  if (typeof line !== 'string') return '';
-  if (line.startsWith('✅')) return '✅';
-  if (line.startsWith('⚠️')) return '⚠️';
-  if (line.startsWith('❌')) return '❌';
-  if (line.startsWith('🎯')) return '🎯 ';
-  return '';
-}
-
-extractSubject(line: unknown): string {
-  if (typeof line !== 'string') return '';
-  const match = line.match(/: (.*?)( candidate|\(|$)/);
-  return match ? match[1].trim() : line;
-}
+ 
 
 
 
-extractRemarks(line: unknown): string {
-  if (typeof line !== 'string') return '';
-  if (line.includes('candidate=')) {
-    const match = line.match(/candidate=([A-Z0-9]+).*?required=([A-Z0-9]+)/);
-    if (match) {
-      return `Your grade: ${match[1]}, Required: ${match[2]}`;
+
+
+// showAll: Record<string, Record<SectionKey, boolean>> = {};
+// toggleShowAll(programId: string, section: SectionKey): void {
+//   if (!this.showAll[programId]) {
+//     this.showAll[programId] = { core: false, alternative: false, recommendations: false };
+//   }
+//   this.showAll[programId][section] = !this.showAll[programId][section];
+// }
+
+
+// getSections(text: string): Record<SectionKey, string[]> {
+//   if (!text) return { core: [], alternative: [], recommendations: [] };
+//   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+//   const sections: Record<SectionKey, string[]> = { core: [], alternative: [], recommendations: [] };
+//   let currentSection: SectionKey | null = null;
+//   for (const line of lines) {
+//     if (line.startsWith('📚')) {
+//       currentSection = 'core';
+//       continue;
+//     }
+//     if (line.startsWith('🔄')) {
+//       currentSection = 'alternative';
+//       continue;
+//     }
+//     if (line.startsWith('💡')) {
+//       currentSection = 'recommendations';
+//       continue;
+//     }
+
+//     // Push lines to their appropriate section
+//     if (currentSection) {
+//       sections[currentSection].push(line);
+//     }
+//   }
+
+//   return sections;
+// }
+
+// /**
+//  * Return visible lines for a given section with “Show All / Less” handling.
+//  */
+// getVisibleLines(
+//   sections: Record<SectionKey, string[]>,
+//   section: SectionKey,
+//   programId: string
+// ): string[] {
+//   const lines = sections[section] || [];
+//   const expanded = this.showAll[programId]?.[section] ?? false;
+//   return expanded ? lines : lines.slice(0, 3);
+// }
+
+// getStatusIcon(line: string): string {
+//   const icons = ['✅', '⚠️', '❌', '🎯', '⭐', '📋'];
+//   return icons.find(icon => line.startsWith(icon)) || '';
+// }
+
+// extractSubject(line: string): string {
+//   const subjectMatch = line.match(/^[✅⚠️❌🎯⭐📋]+\s*(.*?):/);
+//   if (subjectMatch) return subjectMatch[1].trim();
+//   if (line.includes('group:')) {
+//     const match = line.match(/\[(.*?)\]/);
+//     return match ? `Group: ${match[1]}` : 'Unmatched group';
+//   }
+//   return line;
+// }
+
+// extractRemarks(line: string): string {
+//   const match = line.match(/\b([A-Z0-9]+)\b.*?\(Required:\s*([A-Z0-9]+)\)/);
+//   if (match) {
+//     const [, candidate, required] = match;
+//     return `Your grade: ${candidate}, Required: ${required}`;
+//   }
+//   if (/Missing/i.test(line)) return 'Requirement not met';
+//   if (/Excellent|Pass/i.test(line)) return 'Requirement satisfied';
+//   if (/Does not meet requirement/i.test(line)) return 'Below requirement';
+//   if (/No matching subjects found/i.test(line)) return 'No subjects in required group';
+//   return '';
+// }
+
+// /**
+//  * Splits the API response into core, alternative, and recommendations sections.
+//  */
+// splitRecommendationSections(recommendationText: string): {
+//   core: string[];
+//   alternative: string[];
+//   recommendations: string[];
+// } {
+//   if (!recommendationText) return { core: [], alternative: [], recommendations: [] };
+
+//   const lines = recommendationText.split('\n').map(l => l.trim()).filter(Boolean);
+
+//   const coreIndex = lines.findIndex(l => l.startsWith('📚'));
+//   const altIndex = lines.findIndex(l => l.startsWith('🔄'));
+//   const recIndex = lines.findIndex(l => l.startsWith('💡'));
+
+//   const core = coreIndex !== -1 && altIndex !== -1
+//     ? lines.slice(coreIndex + 1, altIndex)
+//     : [];
+//   const alternative = altIndex !== -1 && recIndex !== -1
+//     ? lines.slice(altIndex + 1, recIndex)
+//     : [];
+//   const recommendations = recIndex !== -1
+//     ? lines.slice(recIndex + 1)
+//     : [];
+
+//   return { core, alternative, recommendations };
+// }
+
+// Track show all state per program and section
+  showAll: Record<string, Record<SectionKey, boolean>> = {};
+
+  /**
+   * Toggle show all/less for a specific section
+   */
+  toggleShowAll(programId: string, section: SectionKey): void {
+    if (!this.showAll[programId]) {
+      this.showAll[programId] = { core: false, alternative: false, recommendations: false };
     }
-  } else if (line.includes('Missing')) {
-    return 'Requirement not met';
-  } else if (line.includes('ok')) {
-    return 'Requirement satisfied';
-  } else if (line.includes('Alternative')) {
-    return line.split(': ')[1] || line;
-  }
-  return '';
-}
-
-getPrioritizedExplanations(explanations: string[], programId: string): string[] {
-  const sorted = [
-    ...explanations.filter(line => line.startsWith('✅')),
-    ...explanations.filter(line => line.startsWith('⚠️')),
-    ...explanations.filter(line => line.startsWith('❌')),
-    ...explanations.filter(line => line.startsWith('🎯'))
-
-  ];
-
-  // Filter out any line that includes "Alternative"
-  const filtered = sorted.filter(line => !line.includes('Alternative'));
-
-  if (!this.showAll[programId]) {
-    return filtered.slice(0, 2); // show first 3 prioritized
+    this.showAll[programId][section] = !this.showAll[programId][section];
   }
 
-  return filtered;
-}
+  /**
+   * Check if show all is enabled for a section
+   */
+  isShowingAll(programId: string, section: SectionKey): boolean {
+    return this.showAll[programId]?.[section] ?? false;
+  }
 
+  /**
+   * Main parsing function - converts recommendation text to structured data
+   */
+  parseRecommendation(text: string): RecommendationSections {
+    if (!text) return { core: [], alternative: [], recommendations: [] };
 
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const sections: RecommendationSections = {
+      core: [],
+      alternative: [],
+      recommendations: []
+    };
+
+    let currentSection: SectionKey | null = null;
+
+    for (const line of lines) {
+      // Detect section headers
+      if (line.includes('📚 CORE SUBJECTS')) {
+        currentSection = 'core';
+        continue;
+      }
+      if (line.includes('🔄 ALTERNATIVE REQUIREMENTS')) {
+        currentSection = 'alternative';
+        continue;
+      }
+      if (line.includes('💡 RECOMMENDATIONS')) {
+        currentSection = 'recommendations';
+        continue;
+      }
+
+      // Skip header lines
+      if (line.startsWith('⚠️') || line.startsWith('📚') || 
+          line.startsWith('🔄') || line.startsWith('💡')) {
+        continue;
+      }
+
+      // Parse and add to appropriate section
+      if (currentSection === 'core' || currentSection === 'alternative') {
+        const parsed = this.parseLine(line);
+        if (parsed) {
+          sections[currentSection].push(parsed);
+        }
+      } else if (currentSection === 'recommendations') {
+        const cleanLine = line.replace(/^[📋⭐]\s*/, '').trim();
+        if (cleanLine) {
+          sections.recommendations.push(cleanLine);
+        }
+      }
+    }
+
+    return sections;
+  }
+
+  /**
+   * Get visible items for a section with show all/less handling
+   */
+  getVisibleItems(
+    sections: RecommendationSections,
+    section: 'core' | 'alternative',
+    programId: string,
+    limit: number = 3
+  ): ParsedLine[] {
+    const items = sections[section] || [];
+    const expanded = this.isShowingAll(programId, section);
+    return expanded ? items : items.slice(0, limit);
+  }
+
+  /**
+   * Get visible recommendations with show all/less handling
+   */
+  getVisibleRecommendations(
+    sections: RecommendationSections,
+    programId: string,
+    limit: number = 3
+  ): string[] {
+    const items = sections.recommendations || [];
+    const expanded = this.isShowingAll(programId, 'recommendations');
+    return expanded ? items : items.slice(0, limit);
+  }
+
+  /**
+   * Check if section has more items than the limit
+   */
+  hasMoreItems(
+    sections: RecommendationSections,
+    section: SectionKey,
+    limit: number = 3
+  ): boolean {
+    if (section === 'recommendations') {
+      return sections.recommendations.length > limit;
+    }
+    return sections[section].length > limit;
+  }
+
+  /**
+   * Parse individual line into structured data
+   */
+  private parseLine(line: string): ParsedLine | null {
+    // Remove emoji prefix
+    const cleanLine = line.replace(/^[✅❌]\s*/, '').trim();
+    
+    if (!cleanLine) return null;
+
+    // Determine status from emoji and content
+    const status = this.getLineStatus(line);
+
+    // Pattern 1: Subject with grades - "MATHEMATICS(CORE): B2 (Required: C5) - Excellent!"
+    const gradePattern = /^([^:]+):\s*([A-D]\d+)\s*\(Required:\s*([A-D]\d+)\)\s*-\s*(.+)$/;
+    const gradeMatch = cleanLine.match(gradePattern);
+    
+    if (gradeMatch) {
+      return {
+        status,
+        subject: gradeMatch[1].trim(),
+        yourGrade: gradeMatch[2].trim(),
+        requirement: gradeMatch[3].trim(),
+        remarks: gradeMatch[4].trim(),
+        originalLine: line
+      };
+    }
+
+    // Pattern 2: Missing subject - "ENGLISH LANGUAGE: Missing (Required: C5)"
+    const missingPattern = /^([^:]+):\s*Missing\s*\(Required:\s*([A-D]\d+)\)$/;
+    const missingMatch = cleanLine.match(missingPattern);
+    
+    if (missingMatch) {
+      return {
+        status,
+        subject: missingMatch[1].trim(),
+        requirement: missingMatch[2].trim(),
+        remarks: 'Missing',
+        originalLine: line
+      };
+    }
+
+    // Pattern 3: Group requirements - "No matching subjects found in group: [...]"
+    const groupPattern = /No matching subjects found in group:\s*\[([^\]]+)\]/;
+    const groupMatch = cleanLine.match(groupPattern);
+    
+    if (groupMatch) {
+      return {
+        status,
+        subject: 'Group Requirement',
+        remarks: `No match in: ${groupMatch[1].trim()}`,
+        originalLine: line
+      };
+    }
+
+    // Pattern 4: Alternative anyOf
+    if (cleanLine.includes('Alternative') && cleanLine.includes('anyOf')) {
+      return {
+        status,
+        subject: 'Alternative Requirement',
+        remarks: cleanLine,
+        originalLine: line
+      };
+    }
+
+    // Default: treat entire line as subject with general remark
+    return {
+      status,
+      subject: cleanLine,
+      remarks: '',
+      originalLine: line
+    };
+  }
+
+  /**
+   * Determine status from line content
+   */
+  private getLineStatus(line: string): 'pass' | 'fail' | 'excellent' | 'neutral' {
+    if (line.startsWith('✅')) {
+      if (line.includes('Excellent!')) return 'excellent';
+      return 'pass';
+    }
+    if (line.startsWith('❌')) return 'fail';
+    return 'neutral';
+  }
+
+  /**
+   * Get status icon HTML for display
+   */
+  getStatusIcon(parsedLine: ParsedLine): string {
+    switch (parsedLine.status) {
+      case 'pass':
+        return '✅';
+      case 'excellent':
+        return '✅';
+      case 'fail':
+        return '❌';
+      default:
+        return 'ℹ️';
+    }
+  }
+
+  /**
+   * Get status icon from raw line (backward compatibility)
+   */
+  getStatusIconFromLine(line: string): string {
+    const icons = ['✅', '⚠️', '❌', '🎯', '⭐', '📋'];
+    return icons.find(icon => line.startsWith(icon)) || '';
+  }
+
+  /**
+   * Extract subject from raw line (backward compatibility)
+   */
+  extractSubject(line: string): string {
+    const subjectMatch = line.match(/^[✅⚠️❌🎯⭐📋]+\s*(.*?):/);
+    if (subjectMatch) return subjectMatch[1].trim();
+    if (line.includes('group:')) {
+      const match = line.match(/\[(.*?)\]/);
+      return match ? `Group: ${match[1]}` : 'Unmatched group';
+    }
+    return line;
+  }
+
+  /**
+   * Extract remarks from raw line (backward compatibility)
+   */
+  extractRemarks(line: string): string {
+    const match = line.match(/\b([A-Z0-9]+)\b.*?\(Required:\s*([A-Z0-9]+)\)/);
+    if (match) {
+      const [, candidate, required] = match;
+      return `Your grade: ${candidate}, Required: ${required}`;
+    }
+    if (/Missing/i.test(line)) return 'Requirement not met';
+    if (/Excellent|Pass/i.test(line)) return 'Requirement satisfied';
+    if (/Does not meet requirement/i.test(line)) return 'Below requirement';
+    if (/No matching subjects found/i.test(line)) return 'No subjects in required group';
+    return '';
+  }
+
+  /**
+   * Get icon for recommendation items
+   */
+  getRecommendationIcon(recommendation: string): string {
+    if (recommendation.toLowerCase().includes('missing')) {
+      return '📋';
+    }
+    if (recommendation.toLowerCase().includes('strong') || 
+        recommendation.toLowerCase().includes('performance')) {
+      return '⭐';
+    }
+    return '💡';
+  }
+
+  /**
+   * Get CSS class for status
+   */
+  getStatusClass(status: string): string {
+    return `status-${status}`;
+  }
+
+  /**
+   * Legacy method for compatibility
+   */
+  splitRecommendationSections(recommendationText: string): {
+    core: string[];
+    alternative: string[];
+    recommendations: string[];
+  } {
+    if (!recommendationText) return { core: [], alternative: [], recommendations: [] };
+
+    const lines = recommendationText.split('\n').map(l => l.trim()).filter(Boolean);
+
+    const coreIndex = lines.findIndex(l => l.startsWith('📚'));
+    const altIndex = lines.findIndex(l => l.startsWith('🔄'));
+    const recIndex = lines.findIndex(l => l.startsWith('💡'));
+
+    const core = coreIndex !== -1 && altIndex !== -1
+      ? lines.slice(coreIndex + 1, altIndex)
+      : [];
+    const alternative = altIndex !== -1 && recIndex !== -1
+      ? lines.slice(altIndex + 1, recIndex)
+      : [];
+    const recommendations = recIndex !== -1
+      ? lines.slice(recIndex + 1)
+      : [];
+
+    return { core, alternative, recommendations };
+  }
 }

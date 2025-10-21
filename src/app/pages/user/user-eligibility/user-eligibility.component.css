@@ -949,75 +949,6 @@ button:focus, .btn-icon:focus, .close-btn:focus {
 
 /* COLAPSABLE CSS */
 
-.program-eligibility {
-  /* margin-bottom: 1.5rem; */
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.eligibility-table-container {
-  margin-top: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 1rem;
-  background: #fafafa;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.eligibility-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.eligibility-table th {
-  background: #f0f0f0;
-  text-align: left;
-  padding: 8px;
-  border-bottom: 2px solid #ddd;
-}
-
-.eligibility-table td {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-}
-
-.toggle-btn {
-  margin-top: 0.5rem;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.toggle-btn:hover {
-  background-color: #1d4ed8;
-}
-
-/* --- Responsive Styles --- */
-@media (max-width: 768px) {
-  .eligibility-table th,
-  .eligibility-table td {
-    padding: 0.6rem;
-    font-size: 0.85rem;
-  }
-
-  .program-eligibility h3 {
-    font-size: 1rem;
-    text-align: center;
-  }
-
-  .toggle-btn {
-    width: 100%;
-  }
-}
-
-
-
 
 
 .confidence-meter {
@@ -1050,3 +981,204 @@ button:focus, .btn-icon:focus, .close-btn:focus {
     color: #666;
     margin-top: 0.25rem;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 🌟 Container Styling */
+.eligibility-container {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* 🧩 Section Wrapper */
+.section-wrapper {
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  border-left: 4px solid #3b82f6;
+  padding-left: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* 📊 Table Design */
+.eligibility-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  background-color: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.eligibility-table th {
+  background-color: #f1f5f9;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.eligibility-table td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+/* ✅ Status Color Codes */
+tr.success {
+  background-color: #ecfdf5;
+}
+
+tr.warning {
+  background-color: #fff7ed;
+}
+
+tr.danger {
+  background-color: #fef2f2;
+}
+
+/* 🧾 Grade Info */
+.grade-info {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  color: #64748b;
+  display: flex;
+  gap: 1rem;
+}
+
+.your-grade {
+  color: #0ea5e9;
+}
+
+.required-grade {
+  color: #f59e0b;
+}
+
+/* 🟢 Status & Icons */
+.status-icon {
+  font-size: 1.1rem;
+}
+
+.status-cell {
+  width: 60px;
+  text-align: center;
+}
+
+/* 💬 Remarks */
+.remarks-cell {
+  color: #475569;
+}
+
+/* 🔘 Show All Buttons */
+.show-all-btn {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.show-all-btn:hover {
+  background: #2563eb;
+}
+
+/* 💡 Recommendations */
+.recommendations-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recommendation-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease-in-out;
+}
+
+/* .recommendation-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+} */
+
+.rec-icon {
+  color: #3b82f6;
+  font-size: 1.1rem;
+}
+
+/* .recommendations-btn {
+  margin-top: 1rem;
+} */
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .eligibility-container {
+    padding: 0.25rem;
+  }
+
+  .section-title {
+    font-size: 0.95rem;
+  }
+
+  .eligibility-table th,
+  .eligibility-table td {
+    font-size: 0.75rem;
+    padding: 0.6rem;
+  }
+  .show-all-btn {
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
