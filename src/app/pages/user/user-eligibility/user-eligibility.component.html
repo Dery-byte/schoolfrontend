@@ -196,7 +196,7 @@
                         </table>
                         <button *ngIf="hasMoreItems(sections, 'alternative', 3)" class="show-all-btn"
                           (click)="toggleShowAll(program.id, 'alternative')">
-                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show All (' +
+                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show (' +
                           (sections.alternative.length - 3) + ' more)' }}
                         </button>
                       </div>

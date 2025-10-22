@@ -12,6 +12,17 @@ type SectionKey = 'core' | 'alternative' | 'recommendations';
 type SectionElegibleKey = 'core' | 'eligibility' | 'recommendations';
 
 
+// Replace emoji-based detection with structured markers
+interface SectionMarkers {
+  CORE_HEADER: string;
+  ALTERNATIVE_HEADER: string;
+  RECOMMENDATIONS_HEADER: string;
+  PASS: string;
+  FAIL: string;
+  INFO: string;
+}
+
+
 interface ParsedLine {
   status: 'pass' | 'fail' | 'excellent' | 'neutral';
   subject: string;
@@ -1171,28 +1182,381 @@ private formatCutoffPoints(cutoffPoints: any): string {
 
 
 
-activeCardId: number | null = null;
+// activeCardId: number | null = null;
 
-isCardActive(programId: number): boolean {
-  return this.activeCardId === programId;
-}
-
-// toggleCard(event: Event, programId: number): void {
-//   event.stopPropagation();
-//   this.activeCardId = this.activeCardId === programId ? null : programId;
+// isCardActive(programId: number): boolean {
+//   return this.activeCardId === programId;
 // }
 
 
+// // COLAPSABLE
+//   showAll: Record<string, Record<SectionKey, boolean>> = {};
+
+//     showAllElegiblity: Record<string, Record<SectionElegibleKey, boolean>> = {};
+
+//       toggleShowAllEligible(programId: string, section: SectionElegibleKey): void {
+//     if (!this.showAllElegiblity[programId]) {
+//       this.showAllElegiblity[programId] = { core: false, eligibility: false, recommendations: false };
+//     }
+//     this.showAllElegiblity[programId][section] = !this.showAllElegiblity[programId][section];
+//   }
+
+//   toggleCard(event: Event) {
+//   const card = (event.target as HTMLElement).closest('.eligibility-card');
+//   card?.classList.toggle('active');
+// }
+//   /**
+//    * Toggle show all/less for a specific section
+//    */
+//   toggleShowAll(programId: string, section: SectionKey): void {
+//     if (!this.showAll[programId]) {
+//       this.showAll[programId] = { core: false, alternative: false, recommendations: false };
+//     }
+//     this.showAll[programId][section] = !this.showAll[programId][section];
+//   }
 
 
 
 
-// COLAPSABLE
+//   /**
+//    * Check if show all is enabled for a section
+//    */
+//   isShowingAll(programId: string, section: SectionKey): boolean {
+//     return this.showAll[programId]?.[section] ?? false;
+//   }
+
+//   /**
+//    * Main parsing function - converts recommendation text to structured data
+//    */
+//   parseRecommendation(text: string): RecommendationSections {
+//     if (!text) return { core: [], alternative: [], recommendations: [] };
+
+//     const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+//     const sections: RecommendationSections = {
+//       core: [],
+//       alternative: [],
+//       recommendations: []
+//     };
+
+//     let currentSection: SectionKey | null = null;
+
+//     for (const line of lines) {
+//       // Detect section headers
+//       if (line.includes('📚 CORE SUBJECTS')) {
+//         currentSection = 'core';
+//         continue;
+//       }
+//       if (line.includes('🔄 ALTERNATIVE REQUIREMENTS')) {
+//         currentSection = 'alternative';
+//         continue;
+//       }
+//       if (line.includes('💡 RECOMMENDATIONS')) {
+//         currentSection = 'recommendations';
+//         continue;
+//       }
+
+//       // Skip header lines
+//       if (line.startsWith('⚠️') || line.startsWith('📚') || 
+//           line.startsWith('🔄') || line.startsWith('💡')) {
+//         continue;
+//       }
+
+//       // Parse and add to appropriate section
+//       if (currentSection === 'core' || currentSection === 'alternative') {
+//         const parsed = this.parseLine(line);
+//         if (parsed) {
+//           sections[currentSection].push(parsed);
+//         }
+//       } else if (currentSection === 'recommendations') {
+//         const cleanLine = line.replace(/^[📋⭐]\s*/, '').trim();
+//         if (cleanLine) {
+//           sections.recommendations.push(cleanLine);
+//         }
+//       }
+//     }
+
+//     return sections;
+//   }
+
+//   /**
+//    * Get visible items for a section with show all/less handling
+//    */
+//   getVisibleItems(
+//     sections: RecommendationSections,
+//     section: 'core' | 'alternative',
+//     programId: string,
+//     limit: number = 3
+//   ): ParsedLine[] {
+//     const items = sections[section] || [];
+//     const expanded = this.isShowingAll(programId, section);
+//     return expanded ? items : items.slice(0, limit);
+//   }
+
+//   /**
+//    * Get visible recommendations with show all/less handling
+//    */
+//   getVisibleRecommendations(
+//     sections: RecommendationSections,
+//     programId: string,
+//     limit: number = 3
+//   ): string[] {
+//     const items = sections.recommendations || [];
+//     const expanded = this.isShowingAll(programId, 'recommendations');
+//     return expanded ? items : items.slice(0, limit);
+//   }
+
+//   /**
+//    * Check if section has more items than the limit
+//    */
+//   hasMoreItems(
+//     sections: RecommendationSections,
+//     section: SectionKey,
+//     limit: number = 3
+//   ): boolean {
+//     if (section === 'recommendations') {
+//       return sections.recommendations.length > limit;
+//     }
+//     return sections[section].length > limit;
+//   }
+
+//   /**
+//    * Parse individual line into structured data
+//    */
+//   private parseLine(line: string): ParsedLine | null {
+//     // Remove emoji prefix
+//     const cleanLine = line.replace(/^[✅❌]\s*/, '').trim();
+    
+//     if (!cleanLine) return null;
+
+//     // Determine status from emoji and content
+//     const status = this.getLineStatus(line);
+
+//     // Pattern 1: Subject with grades - "MATHEMATICS(CORE): B2 (Required: C5) - Excellent!"
+//     const gradePattern = /^([^:]+):\s*([A-D]\d+)\s*\(Required:\s*([A-D]\d+)\)\s*-\s*(.+)$/;
+//     const gradeMatch = cleanLine.match(gradePattern);
+    
+//     if (gradeMatch) {
+//       return {
+//         status,
+//         subject: gradeMatch[1].trim(),
+//         yourGrade: gradeMatch[2].trim(),
+//         requirement: gradeMatch[3].trim(),
+//         remarks: gradeMatch[4].trim(),
+//         originalLine: line
+//       };
+//     }
+
+//     // Pattern 2: Missing subject - "ENGLISH LANGUAGE: Missing (Required: C5)"
+//     const missingPattern = /^([^:]+):\s*Missing\s*\(Required:\s*([A-D]\d+)\)$/;
+//     const missingMatch = cleanLine.match(missingPattern);
+    
+//     if (missingMatch) {
+//       return {
+//         status,
+//         subject: missingMatch[1].trim(),
+//         requirement: missingMatch[2].trim(),
+//         remarks: 'Missing',
+//         originalLine: line
+//       };
+//     }
+
+//     // Pattern 3: Group requirements - "No matching subjects found in group: [...]"
+//     const groupPattern = /No matching subjects found in group:\s*\[([^\]]+)\]/;
+//     const groupMatch = cleanLine.match(groupPattern);
+    
+//     if (groupMatch) {
+//       return {
+//         status,
+//         subject: 'Group Requirement',
+//         remarks: `No match in: ${groupMatch[1].trim()}`,
+//         originalLine: line
+//       };
+//     }
+
+//     // Pattern 4: Alternative anyOf
+//     if (cleanLine.includes('Alternative') && cleanLine.includes('anyOf')) {
+//       return {
+//         status,
+//         subject: 'Alternative Requirement',
+//         remarks: cleanLine,
+//         originalLine: line
+//       };
+//     }
+
+//     // Default: treat entire line as subject with general remark
+//     return {
+//       status,
+//       subject: cleanLine,
+//       remarks: '',
+//       originalLine: line
+//     };
+//   }
+
+//   /**
+//    * Determine status from line content
+//    */
+//   private getLineStatus(line: string): 'pass' | 'fail' | 'excellent' | 'neutral' {
+//     if (line.startsWith('✅')) {
+//       if (line.includes('Excellent!')) return 'excellent';
+//       return 'pass';
+//     }
+//     if (line.startsWith('❌')) return 'fail';
+//     return 'neutral';
+//   }
+
+//   /**
+//    * Get status icon HTML for display
+//    */
+//   getStatusIcon(parsedLine: ParsedLine): string {
+//     switch (parsedLine.status) {
+//       case 'pass':
+//         return '✅';
+//       case 'excellent':
+//         return '✅';
+//       case 'fail':
+//         return '❌';
+//       default:
+//         return 'ℹ️';
+//     }
+//   }
+
+//   /**
+//    * Get status icon from raw line (backward compatibility)
+//    */
+//   getStatusIconFromLine(line: string): string {
+//     const icons = ['✅', '⚠️', '❌', '🎯', '⭐', '📋'];
+//     return icons.find(icon => line.startsWith(icon)) || '';
+//   }
+
+//   /**
+//    * Extract subject from raw line (backward compatibility)
+//    */
+//   extractSubject(line: string): string {
+//     const subjectMatch = line.match(/^[✅⚠️❌🎯⭐📋]+\s*(.*?):/);
+//     if (subjectMatch) return subjectMatch[1].trim();
+//     if (line.includes('group:')) {
+//       const match = line.match(/\[(.*?)\]/);
+//       return match ? `Group: ${match[1]}` : 'Unmatched group';
+//     }
+//     return line;
+//   }
+
+//   /**
+//    * Extract remarks from raw line (backward compatibility)
+//    */
+//   extractRemarks(line: string): string {
+//     const match = line.match(/\b([A-Z0-9]+)\b.*?\(Required:\s*([A-Z0-9]+)\)/);
+//     if (match) {
+//       const [, candidate, required] = match;
+//       return `Your grade: ${candidate}, Required: ${required}`;
+//     }
+//     if (/Missing/i.test(line)) return 'Requirement not met';
+//     if (/Excellent|Pass/i.test(line)) return 'Requirement satisfied';
+//     if (/Does not meet requirement/i.test(line)) return 'Below requirement';
+//     if (/No matching subjects found/i.test(line)) return 'No subjects in required group';
+//     return '';
+//   }
+
+//   /**
+//    * Get icon for recommendation items
+//    */
+//   getRecommendationIcon(recommendation: string): string {
+//     if (recommendation.toLowerCase().includes('missing')) {
+//       return '📋';
+//     }
+//     if (recommendation.toLowerCase().includes('strong') || 
+//         recommendation.toLowerCase().includes('performance')) {
+//       return '⭐';
+//     }
+//     return '💡';
+//   }
+
+//   /**
+//    * Get CSS class for status
+//    */
+//   getStatusClass(status: string): string {
+//     return `status-${status}`;
+//   }
+
+//   /**
+//    * Legacy method for compatibility
+//    */
+//   splitRecommendationSections(recommendationText: string): {
+//     core: string[];
+//     alternative: string[];
+//     recommendations: string[];
+//   } {
+//     if (!recommendationText) return { core: [], alternative: [], recommendations: [] };
+
+//     const lines = recommendationText.split('\n').map(l => l.trim()).filter(Boolean);
+
+//     const coreIndex = lines.findIndex(l => l.startsWith('📚'));
+//     const altIndex = lines.findIndex(l => l.startsWith('🔄'));
+//     const recIndex = lines.findIndex(l => l.startsWith('💡'));
+
+//     const core = coreIndex !== -1 && altIndex !== -1
+//       ? lines.slice(coreIndex + 1, altIndex)
+//       : [];
+//     const alternative = altIndex !== -1 && recIndex !== -1
+//       ? lines.slice(altIndex + 1, recIndex)
+//       : [];
+//     const recommendations = recIndex !== -1
+//       ? lines.slice(recIndex + 1)
+//       : [];
+
+//     return { core, alternative, recommendations };
+//   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// NEW FILE TO EXTACT SECTIONS
+
+
+// Section markers configuration
+ SECTION_MARKERS = {
+  CORE_HEADER: '[CORE_SUBJECTS]',
+  ALTERNATIVE_HEADER: '[ALTERNATIVE_REQUIREMENTS]',
+  RECOMMENDATIONS_HEADER: '[RECOMMENDATIONS]',
+  PASS: '[PASS]',
+  FAIL: '[FAIL]',
+  INFO: '[INFO]',
+  EXCELLENT: '[EXCELLENT]'
+}
+
+
+
+activeCardId: number | null = null;
   showAll: Record<string, Record<SectionKey, boolean>> = {};
+  showAllElegiblity: Record<string, Record<SectionElegibleKey, boolean>> = {};
 
-    showAllElegiblity: Record<string, Record<SectionElegibleKey, boolean>> = {};
+  isCardActive(programId: number): boolean {
+    return this.activeCardId === programId;
+  }
 
-      toggleShowAllEligible(programId: string, section: SectionElegibleKey): void {
+  toggleShowAllEligible(programId: string, section: SectionElegibleKey): void {
     if (!this.showAllElegiblity[programId]) {
       this.showAllElegiblity[programId] = { core: false, eligibility: false, recommendations: false };
     }
@@ -1200,12 +1564,10 @@ isCardActive(programId: number): boolean {
   }
 
   toggleCard(event: Event) {
-  const card = (event.target as HTMLElement).closest('.eligibility-card');
-  card?.classList.toggle('active');
-}
-  /**
-   * Toggle show all/less for a specific section
-   */
+    const card = (event.target as HTMLElement).closest('.eligibility-card');
+    card?.classList.toggle('active');
+  }
+
   toggleShowAll(programId: string, section: SectionKey): void {
     if (!this.showAll[programId]) {
       this.showAll[programId] = { core: false, alternative: false, recommendations: false };
@@ -1213,18 +1575,13 @@ isCardActive(programId: number): boolean {
     this.showAll[programId][section] = !this.showAll[programId][section];
   }
 
-
-
-
-  /**
-   * Check if show all is enabled for a section
-   */
   isShowingAll(programId: string, section: SectionKey): boolean {
     return this.showAll[programId]?.[section] ?? false;
   }
 
   /**
    * Main parsing function - converts recommendation text to structured data
+   * Handles both emoji-free markers and corrupted emoji responses
    */
   parseRecommendation(text: string): RecommendationSections {
     if (!text) return { core: [], alternative: [], recommendations: [] };
@@ -1239,23 +1596,22 @@ isCardActive(programId: number): boolean {
     let currentSection: SectionKey | null = null;
 
     for (const line of lines) {
-      // Detect section headers
-      if (line.includes('📚 CORE SUBJECTS')) {
+      // Detect section headers (support both text markers and keyword detection)
+      if (this.isCoreSection(line)) {
         currentSection = 'core';
         continue;
       }
-      if (line.includes('🔄 ALTERNATIVE REQUIREMENTS')) {
+      if (this.isAlternativeSection(line)) {
         currentSection = 'alternative';
         continue;
       }
-      if (line.includes('💡 RECOMMENDATIONS')) {
+      if (this.isRecommendationsSection(line)) {
         currentSection = 'recommendations';
         continue;
       }
 
-      // Skip header lines
-      if (line.startsWith('⚠️') || line.startsWith('📚') || 
-          line.startsWith('🔄') || line.startsWith('💡')) {
+      // Skip header lines (markers, corrupted emojis, or section titles)
+      if (this.isHeaderLine(line)) {
         continue;
       }
 
@@ -1266,7 +1622,7 @@ isCardActive(programId: number): boolean {
           sections[currentSection].push(parsed);
         }
       } else if (currentSection === 'recommendations') {
-        const cleanLine = line.replace(/^[📋⭐]\s*/, '').trim();
+        const cleanLine = this.cleanRecommendationLine(line);
         if (cleanLine) {
           sections.recommendations.push(cleanLine);
         }
@@ -1274,6 +1630,67 @@ isCardActive(programId: number): boolean {
     }
 
     return sections;
+  }
+
+  /**
+   * Check if line is a core subjects section header
+   */
+  private isCoreSection(line: string): boolean {
+    return line.includes(this.SECTION_MARKERS.CORE_HEADER) ||
+           line.includes('CORE SUBJECTS ANALYSIS') ||
+           line.includes('CORE SUBJECTS') ||
+           /^[??🎯📚]\s*CORE/i.test(line);
+  }
+
+  /**
+   * Check if line is an alternative requirements section header
+   */
+  private isAlternativeSection(line: string): boolean {
+    return line.includes(this.SECTION_MARKERS.ALTERNATIVE_HEADER) ||
+           line.includes('ALTERNATIVE REQUIREMENTS') ||
+           /^[??🔄]\s*ALTERNATIVE REQUIREMENTS/i.test(line);
+  }
+
+  /**
+   * Check if line is a recommendations section header
+   */
+  private isRecommendationsSection(line: string): boolean {
+    return line.includes(this.SECTION_MARKERS.RECOMMENDATIONS_HEADER) ||
+           line.includes('RECOMMENDATIONS:') ||
+           /^[??💡]\s*RECOMMENDATIONS/i.test(line);
+  }
+
+  /**
+   * Check if line is a header (should be skipped)
+   */
+  private isHeaderLine(line: string): boolean {
+    // Text markers
+    if (line.startsWith('[') && line.includes(']') && !line.includes(':')) {
+      return true;
+    }
+    
+    // Corrupted emojis or actual emojis at start of section headers
+    if (/^[??⚠️📚🔄💡🎯⭐📋]\s*[A-Z\s]+:?\s*$/.test(line)) {
+      return true;
+    }
+    
+    // Status/percentage lines
+    if (/^[??⚠️]\s*(ELIGIBLE|ALTERNATIVE|NOT ELIGIBLE)/i.test(line)) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Clean recommendation line by removing markers and corrupted emojis
+   */
+  private cleanRecommendationLine(line: string): string {
+    return line
+      .replace(/^\?\?\s*/, '') // Remove corrupted emojis
+      .replace(/^\[(?:PASS|FAIL|INFO|EXCELLENT)\]\s*/, '') // Remove status markers
+      .replace(/^[📋⭐💡]\s*/, '') // Remove emoji prefixes
+      .trim();
   }
 
   /**
@@ -1321,12 +1738,17 @@ isCardActive(programId: number): boolean {
    * Parse individual line into structured data
    */
   private parseLine(line: string): ParsedLine | null {
-    // Remove emoji prefix
-    const cleanLine = line.replace(/^[✅❌]\s*/, '').trim();
+    // Remove markers and corrupted emojis
+    const cleanLine = line
+      .replace(/^\?\?\s*/, '')
+      .replace(/^\?\s*/, '')
+      .replace(/^\[(?:PASS|FAIL|INFO|EXCELLENT)\]\s*/, '')
+      .replace(/^[✅❌ℹ️]\s*/, '')
+      .trim();
     
     if (!cleanLine) return null;
 
-    // Determine status from emoji and content
+    // Determine status from markers or content
     const status = this.getLineStatus(line);
 
     // Pattern 1: Subject with grades - "MATHEMATICS(CORE): B2 (Required: C5) - Excellent!"
@@ -1350,7 +1772,7 @@ isCardActive(programId: number): boolean {
     
     if (missingMatch) {
       return {
-        status,
+        status: 'fail',
         subject: missingMatch[1].trim(),
         requirement: missingMatch[2].trim(),
         remarks: 'Missing',
@@ -1364,17 +1786,27 @@ isCardActive(programId: number): boolean {
     
     if (groupMatch) {
       return {
-        status,
+        status: 'fail',
         subject: 'Group Requirement',
         remarks: `No match in: ${groupMatch[1].trim()}`,
         originalLine: line
       };
     }
 
-    // Pattern 4: Alternative anyOf
+    // Pattern 4: Alternative anyOf (success case)
+    if (cleanLine.includes('Alternative') && cleanLine.includes('requirement met')) {
+      return {
+        status: 'pass',
+        subject: 'Alternative Requirement',
+        remarks: cleanLine,
+        originalLine: line
+      };
+    }
+
+    // Pattern 5: Alternative anyOf (failure case)
     if (cleanLine.includes('Alternative') && cleanLine.includes('anyOf')) {
       return {
-        status,
+        status: 'fail',
         subject: 'Alternative Requirement',
         remarks: cleanLine,
         originalLine: line
@@ -1391,15 +1823,61 @@ isCardActive(programId: number): boolean {
   }
 
   /**
-   * Determine status from line content
+   * Determine status from line content (handles markers and content analysis)
    */
   private getLineStatus(line: string): 'pass' | 'fail' | 'excellent' | 'neutral' {
-    if (line.startsWith('✅')) {
-      if (line.includes('Excellent!')) return 'excellent';
+    // Check for text markers first
+    if (line.includes('[EXCELLENT]') || line.includes('[PASS]') && line.includes('Excellent!')) {
+      return 'excellent';
+    }
+    if (line.includes('[PASS]')) {
       return 'pass';
     }
-    if (line.startsWith('❌')) return 'fail';
+    if (line.includes('[FAIL]')) {
+      return 'fail';
+    }
+    
+    // Handle corrupted emojis (assume ?? at start)
+    const cleanLine = line.replace(/^\?\?\s*/, '');
+    
+    // Content-based detection
+    if (cleanLine.includes('Excellent!') || cleanLine.includes('requirement met')) {
+      return 'excellent';
+    }
+    if (cleanLine.includes('Missing') || 
+        cleanLine.includes('Does not meet') || 
+        cleanLine.includes('No matching subjects found')) {
+      return 'fail';
+    }
+    if (cleanLine.match(/[A-D]\d+\s*\(Required:\s*[A-D]\d+\)/)) {
+      // Has grade comparison - determine from comparison
+      const match = cleanLine.match(/([A-D]\d+)\s*\(Required:\s*([A-D]\d+)\)/);
+      if (match) {
+        const [, yourGrade, required] = match;
+        if (this.compareGrades(yourGrade, required) >= 0) {
+          return cleanLine.includes('Excellent!') ? 'excellent' : 'pass';
+        }
+        return 'fail';
+      }
+    }
+    
     return 'neutral';
+  }
+
+  /**
+   * Compare two WASSCE grades (A1 is best, D7/E8/F9 are worst)
+   * Returns: positive if grade1 is better, negative if worse, 0 if equal
+   */
+  private compareGrades(grade1: string, grade2: string): number {
+    const gradeValues: Record<string, number> = {
+      'A1': 1, 'B2': 2, 'B3': 3, 'C4': 4, 'C5': 5, 'C6': 6,
+      'D7': 7, 'E8': 8, 'F9': 9
+    };
+    
+    const val1 = gradeValues[grade1] || 99;
+    const val2 = gradeValues[grade2] || 99;
+    
+    return val2 - val1; // Lower number is better, so reverse
   }
 
   /**
@@ -1407,52 +1885,15 @@ isCardActive(programId: number): boolean {
    */
   getStatusIcon(parsedLine: ParsedLine): string {
     switch (parsedLine.status) {
-      case 'pass':
-        return '✅';
       case 'excellent':
+        return '✅';
+      case 'pass':
         return '✅';
       case 'fail':
         return '❌';
       default:
         return 'ℹ️';
     }
-  }
-
-  /**
-   * Get status icon from raw line (backward compatibility)
-   */
-  getStatusIconFromLine(line: string): string {
-    const icons = ['✅', '⚠️', '❌', '🎯', '⭐', '📋'];
-    return icons.find(icon => line.startsWith(icon)) || '';
-  }
-
-  /**
-   * Extract subject from raw line (backward compatibility)
-   */
-  extractSubject(line: string): string {
-    const subjectMatch = line.match(/^[✅⚠️❌🎯⭐📋]+\s*(.*?):/);
-    if (subjectMatch) return subjectMatch[1].trim();
-    if (line.includes('group:')) {
-      const match = line.match(/\[(.*?)\]/);
-      return match ? `Group: ${match[1]}` : 'Unmatched group';
-    }
-    return line;
-  }
-
-  /**
-   * Extract remarks from raw line (backward compatibility)
-   */
-  extractRemarks(line: string): string {
-    const match = line.match(/\b([A-Z0-9]+)\b.*?\(Required:\s*([A-Z0-9]+)\)/);
-    if (match) {
-      const [, candidate, required] = match;
-      return `Your grade: ${candidate}, Required: ${required}`;
-    }
-    if (/Missing/i.test(line)) return 'Requirement not met';
-    if (/Excellent|Pass/i.test(line)) return 'Requirement satisfied';
-    if (/Does not meet requirement/i.test(line)) return 'Below requirement';
-    if (/No matching subjects found/i.test(line)) return 'No subjects in required group';
-    return '';
   }
 
   /**
@@ -1476,32 +1917,7 @@ isCardActive(programId: number): boolean {
     return `status-${status}`;
   }
 
-  /**
-   * Legacy method for compatibility
-   */
-  splitRecommendationSections(recommendationText: string): {
-    core: string[];
-    alternative: string[];
-    recommendations: string[];
-  } {
-    if (!recommendationText) return { core: [], alternative: [], recommendations: [] };
 
-    const lines = recommendationText.split('\n').map(l => l.trim()).filter(Boolean);
 
-    const coreIndex = lines.findIndex(l => l.startsWith('📚'));
-    const altIndex = lines.findIndex(l => l.startsWith('🔄'));
-    const recIndex = lines.findIndex(l => l.startsWith('💡'));
 
-    const core = coreIndex !== -1 && altIndex !== -1
-      ? lines.slice(coreIndex + 1, altIndex)
-      : [];
-    const alternative = altIndex !== -1 && recIndex !== -1
-      ? lines.slice(altIndex + 1, recIndex)
-      : [];
-    const recommendations = recIndex !== -1
-      ? lines.slice(recIndex + 1)
-      : [];
-
-    return { core, alternative, recommendations };
-  }
 }
