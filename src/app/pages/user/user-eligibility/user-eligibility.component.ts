@@ -9,6 +9,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 // Types
 type SectionKey = 'core' | 'alternative' | 'recommendations';
 
+type SectionElegibleKey = 'core' | 'eligibility' | 'recommendations';
+
+
 interface ParsedLine {
   status: 'pass' | 'fail' | 'excellent' | 'neutral';
   subject: string;
@@ -43,6 +46,7 @@ export class UserEligibilityComponent {
 
     ngOnInit(): void {
       this.recordByUser();
+      
   }
 
 
@@ -1167,6 +1171,16 @@ private formatCutoffPoints(cutoffPoints: any): string {
 
 
 
+activeCardId: number | null = null;
+
+isCardActive(programId: number): boolean {
+  return this.activeCardId === programId;
+}
+
+// toggleCard(event: Event, programId: number): void {
+//   event.stopPropagation();
+//   this.activeCardId = this.activeCardId === programId ? null : programId;
+// }
 
 
 
@@ -1176,6 +1190,19 @@ private formatCutoffPoints(cutoffPoints: any): string {
 // COLAPSABLE
   showAll: Record<string, Record<SectionKey, boolean>> = {};
 
+    showAllElegiblity: Record<string, Record<SectionElegibleKey, boolean>> = {};
+
+      toggleShowAllEligible(programId: string, section: SectionElegibleKey): void {
+    if (!this.showAllElegiblity[programId]) {
+      this.showAllElegiblity[programId] = { core: false, eligibility: false, recommendations: false };
+    }
+    this.showAllElegiblity[programId][section] = !this.showAllElegiblity[programId][section];
+  }
+
+  toggleCard(event: Event) {
+  const card = (event.target as HTMLElement).closest('.eligibility-card');
+  card?.classList.toggle('active');
+}
   /**
    * Toggle show all/less for a specific section
    */
@@ -1185,6 +1212,9 @@ private formatCutoffPoints(cutoffPoints: any): string {
     }
     this.showAll[programId][section] = !this.showAll[programId][section];
   }
+
+
+
 
   /**
    * Check if show all is enabled for a section

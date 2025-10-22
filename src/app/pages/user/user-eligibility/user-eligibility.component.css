@@ -804,6 +804,99 @@ button:focus, .btn-icon:focus, .close-btn:focus {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* PROGRAM CARD STYLES */
 .program-card {
   border-radius: 10px;
@@ -938,6 +1031,17 @@ button:focus, .btn-icon:focus, .close-btn:focus {
 .alternative::after {
   background-color: rgba(250, 173, 20, 0.1);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1182,3 +1286,449 @@ tr.danger {
 
 
 
+
+
+
+/* ELIGIBLE CSS */
+
+
+
+/* 🌿 GLOBAL WRAPPER */
+.eligibility-wrapper {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background-color: #f8faf9;
+  color: #1b4332;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* 🏷️ CATEGORY HEADER */
+.category-banner {
+  margin-bottom: 0.3rem;
+}
+
+.category-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0b6b37;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-left: 4px solid #00b869;
+  padding-left: 10px;
+}
+
+/* ✅ CARD */
+.eligibility-card {
+  background: linear-gradient(180deg, #fafffb 0%, #f1fff6 100%);
+  border: 1px solid #c2ebd1;
+  border-left: 5px solid #28a745;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 3px 10px rgba(40, 167, 69, 0.08);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  overflow: hidden;
+}
+
+.eligibility-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(40, 167, 69, 0.15);
+}
+
+/* 🎓 CARD HEADER */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.program-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #155d38;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.program-name .bullet {
+  color: #28a745;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+/* 📊 ADMISSION METER */
+.admission-likelihood {
+  text-align: right;
+  font-size: 0.85rem;
+  min-width: 160px;
+  flex: 0 0 auto;
+}
+
+.meter-label {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.84rem;
+}
+
+.meter-track {
+  width: 100%;
+  height: 8px;
+  background: #e4f7ea;
+  border-radius: 6px;
+  margin: 5px 0;
+  overflow: hidden;
+}
+
+.meter-progress {
+  background: linear-gradient(90deg, #28a745, #00b869);
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.6s ease;
+}
+
+.meter-value {
+  font-size: 0.8rem;
+  color: #155d38;
+  font-weight: 600;
+}
+
+/* 📘 ANALYSIS SECTION */
+.analysis-section {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.8rem 1.1rem;
+  border: 1px solid #e5f6ec;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+  overflow-x: auto;
+  transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.3s ease;
+}
+
+.analysis-section::-webkit-scrollbar {
+  height: 5px;
+}
+.analysis-section::-webkit-scrollbar-thumb {
+  background-color: #a2d5b5;
+  border-radius: 10px;
+}
+
+/* 📄 TABLE STYLES */
+.analysis-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.87rem;
+  min-width: 350px;
+}
+
+.analysis-table thead {
+  background: #eaf9f0;
+  color: #155d38;
+  font-weight: 600;
+}
+
+.analysis-table th,
+.analysis-table td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e5e5;
+  vertical-align: top;
+  word-break: break-word;
+}
+
+.analysis-table tr:hover {
+  background: #f8fff9;
+}
+
+/* 🎯 STATUS COLORS */
+.status-pass {
+  background-color: #e9fcef;
+}
+.status-fail {
+  background-color: #fff0f0;
+}
+.status-pending {
+  background-color: #fff8e1;
+}
+.status-icon {
+  font-size: 1rem;
+}
+
+.grade-info {
+  margin-top: 2px;
+  font-size: 0.76rem;
+  color: #555;
+}
+.your-grade {
+  color: #007bff;
+  margin-right: 6px;
+}
+.required-grade {
+  color: #00b869;
+}
+
+/* 📱 RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .admission-likelihood {
+    text-align: left;
+    width: 100%;
+  }
+
+  .program-name {
+    font-size: 0.95rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Accordion arrow */
+  .program-name::after {
+    content: "▼";
+    font-size: 0.85rem;
+    color: #28a745;
+    transition: transform 0.3s ease;
+  }
+
+  .eligibility-card.active .program-name::after {
+    transform: rotate(180deg);
+  }
+
+  /* Accordion collapsing effect */
+  .analysis-section {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .eligibility-card.active .analysis-section {
+    max-height: 800px;
+    opacity: 1;
+    padding: 0.8rem 1.1rem;
+  }
+
+  .analysis-table th,
+  .analysis-table td {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .eligibility-wrapper {
+    padding: 0.8rem;
+  }
+
+  .eligibility-card {
+    padding: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .program-name {
+    font-size: 0.9rem;
+  }
+
+  .admission-likelihood {
+    font-size: 0.8rem;
+  }
+
+  .analysis-table th,
+  .analysis-table td {
+    font-size: 0.78rem;
+  }
+}
+
+
+/* 🌍 UNIVERSAL RESPONSIVE REFACTOR */
+
+/* --- Base Scaling --- */
+html {
+  font-size: 100%;
+}
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 95%;
+  }
+}
+
+@media (max-width: 992px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 80%;
+  }
+}
+
+/* --- Containers --- */
+.results-container,
+.eligibility-container,
+.eligibility-wrapper {
+  width: 100%;
+  padding: 1rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* --- Cards --- */
+.result-card,
+.program-card,
+.eligibility-card {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .result-card,
+  .program-card,
+  .eligibility-card {
+    padding: 0.75rem;
+  }
+}
+
+/* --- Headings & Typography --- */
+h3, h4, h5, h6 {
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.program-header strong,
+.category-title,
+.section-title {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+/* --- Tables --- */
+.eligibility-table,
+.analysis-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-spacing: 0;
+}
+
+.eligibility-table th,
+.eligibility-table td,
+.analysis-table th,
+.analysis-table td {
+  white-space: nowrap;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .eligibility-table th,
+  .eligibility-table td,
+  .analysis-table th,
+  .analysis-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* --- Flex Layouts --- */
+.card-header,
+.program-header,
+.summary,
+.actions {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.actions,
+.action-buttons {
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-download,
+  .show-all-btn {
+    width: 100%;
+  }
+}
+
+/* --- Modal --- */
+.modal-content {
+  width: 95%;
+  max-width: 500px;
+  max-height: 90vh;
+  margin: 0 auto;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+/* --- Icons & Badges --- */
+.badge, .type-badge, .percentage {
+  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+}
+
+.badges {
+  flex-wrap: wrap;
+  row-gap: 0.4rem;
+}
+
+/* --- Text Blocks --- */
+.recommendation-section div,
+.future-prospects-content,
+.opportunities-content {
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* --- Scrollable Elements --- */
+.analysis-section, .modal-body {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+/* --- Print Optimization --- */
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .modal-overlay, .action-buttons, .btn-download {
+    display: none;
+  }
+
+  .result-card, .eligibility-card {
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+}

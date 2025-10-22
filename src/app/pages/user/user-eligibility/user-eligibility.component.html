@@ -77,50 +77,172 @@
             <span class="type-badge">{{ university.type }}</span>
           </h4>
 
-          <!-- Eligible Programs Section -->
-          <div *ngIf="university.eligiblePrograms!.length > 0" class="programs-section">
-            <h5>Eligible Programs</h5>
-            <div *ngFor="let program of university.eligiblePrograms" class="program-card eligible">
-              <div class="program-header">
-                <strong>{{ program.name }}</strong>
-                <!-- <span class="percentage">Admission Probability {{ program.percentage | number:'1.0-1' }}%</span> -->
-                <div class="confidence-meter">
-                  <div class="meter-label">Likelihood of Admission</div>
-                  <div class="meter-bar">
-                    <div class="meter-fill" [style.width.%]="program.percentage"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- ELIGIBLE PROGRAMS -->
+          <div *ngIf="university!.eligiblePrograms!.length > 0" class="eligibility-wrapper">
+            <div *ngFor="let category of result.selectedCategories" class="eligibility-category">
+              <div *ngIf="hasProgramsInCategory(university.eligiblePrograms, category)">
+
+                <!-- Category Title -->
+                <div class="category-banner">
+                  <span class="category-label">{{ category.toUpperCase() }}</span>
+                </div>
+
+                <!-- Loop Programs -->
+                <div *ngFor="let program of getProgramsByCategory(university.eligiblePrograms, category)"
+                  class="eligibility-card">
+
+                  <div class="card-header">
+                    <div class="program-name" (click)="toggleCard($event)">
+                      <span class="bullet">▸</span>
+                      <strong>{{ program.name }}</strong>
+                    </div>
+                    <div class="admission-likelihood">
+                      <div class="meter-label">Likelihood of Admission</div>
+                      <div class="meter-track">
+                        <div class="meter-progress" [style.width.%]="program.percentage"></div>
+                      </div>
+                      <span class="meter-value">{{ program.percentage | number:'1.0-1' }}%</span>
+                    </div>
                   </div>
-                  <div class="meter-value">{{ program.percentage | number:'1.0-1' }}%</div>
-                </div>
-                <!-- <span class="percentage">{{ program.percentage }}% match</span> -->
-              </div>
-              <div class="cutoff-points">
-                <div *ngFor="let subject of getSubjects(program.cutoffPoints)" class="subject">
-                  <span class="subject-name">{{ subject }}:</span>
-                  <span class="grade">{{ program.cutoffPoints[subject] }}</span>
-                </div>
-              </div>
 
-              <!-- AI Recommendation Section -->
-              <div *ngIf="program.aiRecommendation" class="ai-recommendation">
-                <div class="recommendation-section">
-                  <h6>Job Opportunities</h6>
-                  <div class="opportunities-content" [innerHTML]="program.aiRecommendation.jobOpportunities | safeHtml">
+                  <!-- Core Subject Table -->
+                  <div class="analysis-section" *ngIf="program.aiRecommendation?.recommendationText as text">
+                    <ng-container *ngIf="parseRecommendation(text) as sections">
+                      <div *ngIf="sections.core.length > 0" class="analysis-block">
+                        <h3 class="analysis-title">📘 Core Subjects Analysis</h3>
+                        <table class="analysis-table">
+                          <thead>
+                            <tr>
+                              <th>STATUS</th>
+                              <th>SUBJECT / REQUIREMENT</th>
+                              <th>REMARKS</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of getVisibleItems(sections, 'core', program.id)"
+                              [ngClass]="getStatusClass(item.status)">
+                              <td class="status-cell">
+                                <span class="status-icon">{{ getStatusIcon(item) }}</span>
+                              </td>
+                              <td class="subject-cell">
+                                <strong>{{ item.subject }}</strong>
+                                <div class="grade-info">
+                                  <span *ngIf="item.yourGrade" class="your-grade">Your Grade: {{ item.yourGrade
+                                    }}</span>
+                                  <span *ngIf="item.requirement" class="required-grade">Required: {{ item.requirement
+                                    }}</span>
+                                </div>
+                              </td>
+                              <td class="remarks-cell">{{ item.remarks }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+
+
+
+                             <!-- 🔄 ALTERNATIVE REQUIREMENTS -->
+                      <div class="section-wrapper" *ngIf="sections.alternative.length > 0">
+                        <h3 class="section-title">🔄 Alternative Requirements</h3>
+                        <table class="eligibility-table">
+                          <thead>
+                            <tr>
+                              <th class="status-col">Status</th>
+                              <th class="subject-col">Subject / Requirement</th>
+                              <th class="remarks-col">Remarks</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of getVisibleItems(sections, 'alternative', program.id)"
+                              [ngClass]="getStatusClass(item.status)">
+                              <td class="status-cell">
+                                <span class="status-icon">{{ getStatusIcon(item) }}</span>
+                              </td>
+                              <td class="subject-cell">
+                                <strong>{{ item.subject }}</strong>
+                                <div class="grade-info" *ngIf="item.yourGrade || item.requirement">
+                                  <span *ngIf="item.yourGrade" class="your-grade">Your Grade: {{ item.yourGrade
+                                    }}</span>
+                                  <span *ngIf="item.requirement" class="required-grade">Required: {{ item.requirement
+                                    }}</span>
+                                </div>
+                              </td>
+                              <td class="remarks-cell">{{ item.remarks }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <button *ngIf="hasMoreItems(sections, 'alternative', 3)" class="show-all-btn"
+                          (click)="toggleShowAll(program.id, 'alternative')">
+                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show All (' +
+                          (sections.alternative.length - 3) + ' more)' }}
+                        </button>
+                      </div>
+                    </ng-container>
+
+
+
                   </div>
-                </div>
 
-                <div class="recommendation-section">
-                  <h6>Career Path</h6>
-                  <div class="career-path-content" [innerHTML]="program.aiRecommendation.careerPath | safeHtml"></div>
-                </div>
-
-                <div class="recommendation-section">
-                  <h6>Future Prospects</h6>
-                  <div class="future-prospects-content"
-                    [innerHTML]="program.aiRecommendation.futureProspects | safeHtml"></div>
                 </div>
               </div>
             </div>
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           <!-- Alternative Programs Section - Grouped by Categories -->
           <div *ngIf="university!.alternativePrograms!.length > 0" class="programs-section">
@@ -131,88 +253,6 @@
               <!-- Only show category if it has programs -->
               <div *ngIf="hasProgramsInCategory(university.alternativePrograms, category)">
                 <h6 class="category-title">{{ category }}</h6>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 <!-- Programs in this category -->
                 <div *ngFor="let program of getProgramsByCategory(university.alternativePrograms, category)"
@@ -232,10 +272,12 @@
 
 
                   <!-- Collapsible explanations -->
+
+
+
                   <!-- Component Template with Show All/Less functionality -->
                   <div class="eligibility-container" *ngIf="program.aiRecommendation?.recommendationText as text">
                     <ng-container *ngIf="parseRecommendation(text) as sections">
-
                       <!-- 📚 CORE SUBJECTS ANALYSIS -->
                       <div class="section-wrapper" *ngIf="sections.core.length > 0">
                         <h3 class="section-title">📚 Core Subjects Analysis</h3>
@@ -268,7 +310,8 @@
                         </table>
                         <button *ngIf="hasMoreItems(sections, 'core', 3)" class="show-all-btn"
                           (click)="toggleShowAll(program.id, 'core')">
-                          {{ isShowingAll(program.id, 'core') ? '▲ Show Less' : '▼ Show All (' + (sections.core.length -
+                          {{ isShowingAll(program.id, 'core') ? '▲ Show Less' : '▼ Show All (' + (sections.core.length
+                          -
                           3) + ' more)' }}
                         </button>
                       </div>
@@ -309,23 +352,6 @@
                           (sections.alternative.length - 3) + ' more)' }}
                         </button>
                       </div>
-
-                      <!-- 💡 RECOMMENDATIONS -->
-                      <!-- <div class="recommendations-wrapper" *ngIf="sections.recommendations.length > 0">
-      <h3 class="section-title">💡 Recommendations</h3>
-      <ul class="recommendations-list">
-        <li *ngFor="let rec of getVisibleRecommendations(sections, program.id)" class="recommendation-item">
-          <span class="rec-icon">{{ getRecommendationIcon(rec) }}</span>
-          <span class="rec-text">{{ rec }}</span>
-        </li>
-      </ul>
-      <button *ngIf="hasMoreItems(sections, 'recommendations', 3)"
-              class="show-all-btn recommendations-btn"
-              (click)="toggleShowAll(program.id, 'recommendations')">
-        {{ isShowingAll(program.id, 'recommendations') ? '▲ Show Less' : '▼ Show All (' + (sections.recommendations.length - 3) + ' more)' }}
-      </button>
-    </div> -->
-
                     </ng-container>
                   </div>
                 </div>
