@@ -103,8 +103,17 @@
                 <!-- Loop Programs -->
                 <div *ngFor="let program of getProgramsByCategory(university.eligiblePrograms, category)"
                   class="eligibility-card">
-
-                  <div class="card-header">
+                  <div class="program-header">
+                    <strong>{{ program.name }}</strong>
+                    <div class="confidence-meter">
+                      <div class="meter-label">Likelihood of Admission</div>
+                      <div class="meter-bar">
+                        <div class="meter-fill" [style.width.%]="program.percentage"></div>
+                      </div>
+                      <div class="meter-value">{{ program.percentage | number:'1.0-1' }}%</div>
+                    </div>
+                  </div>
+                  <!-- <div class="card-header">
                     <div class="program-name" (click)="toggleCard($event)">
                       <span class="bullet">▸</span>
                       <strong>{{ program.name }}</strong>
@@ -116,7 +125,7 @@
                       </div>
                       <span class="meter-value">{{ program.percentage | number:'1.0-1' }}%</span>
                     </div>
-                  </div>
+                  </div> -->
 
                   <!-- Core Subject Table -->
                   <div class="analysis-section" *ngIf="program.aiRecommendation?.recommendationText as text">
@@ -141,7 +150,7 @@
                                 <strong>{{ item.subject }}</strong>
                                 <div class="grade-info">
                                   <span *ngIf="item.yourGrade" class="your-grade">Your Grade: {{ item.yourGrade
-                                    }}</span>
+                                    }},</span>
                                   <span *ngIf="item.requirement" class="required-grade">Required: {{ item.requirement
                                     }}</span>
                                 </div>
@@ -155,7 +164,7 @@
 
 
 
-                             <!-- 🔄 ALTERNATIVE REQUIREMENTS -->
+                      <!-- 🔄 ALTERNATIVE REQUIREMENTS -->
                       <div class="section-wrapper" *ngIf="sections.alternative.length > 0">
                         <h3 class="section-title">🔄 Alternative Requirements</h3>
                         <table class="eligibility-table">
@@ -258,7 +267,7 @@
                 <div *ngFor="let program of getProgramsByCategory(university.alternativePrograms, category)"
                   class="program-card alternative">
                   <div class="program-header">
-                    <strong>{{ program.name }} - Eligibility Status</strong>
+                    <strong>{{ program.name }} </strong>
                     <div class="confidence-meter">
                       <div class="meter-label">Likelihood of Admission</div>
                       <div class="meter-bar">
@@ -266,7 +275,6 @@
                       </div>
                       <div class="meter-value">{{ program.percentage | number:'1.0-1' }}%</div>
                     </div>
-                    <!-- <span class="percentage">Admission Probability {{ program.percentage | number:'1.0-1' }}%</span> -->
                   </div>
 
 
