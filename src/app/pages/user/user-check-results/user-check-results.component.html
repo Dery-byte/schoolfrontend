@@ -76,21 +76,35 @@
 
 
 
-
-
-
-
-
-
-
-
-
           <div class="text-center mt-4">
             <button class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm" (click)="createRecords()"
-              style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none;">
-              <i class="fas fa-play-circle me-2"></i> Start New Check
+              [disabled]="isCreatingRecord"
+              style="background: linear-gradient(135deg, #4e54c8, #8f94fb); border: none; position: relative; min-width: 220px;">
+
+              <!-- Spinner (shows when loading) -->
+              <span *ngIf="isCreatingRecord" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                style="width: 1.2rem; height: 1.2rem; border-width: 2px; margin-right: 12px;"></span>
+
+              <!-- Icon (shows when not loading) -->
+              <i *ngIf="!isCreatingRecord" class="fas fa-play-circle me-2"></i>
+
+              <!-- Button text -->
+              <span>{{ isCreatingRecord ? 'Creating Record...' : 'Start New Check' }}</span>
             </button>
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
         </form>
       </div>
     </div>
@@ -1005,25 +1019,18 @@
 
                     <!-- Check Eligibility Button (full width) -->
                     <!-- Check Eligibility Button -->
-                   <button
-  class="btn btn-primary rounded-pill shadow-sm w-100 py-2"
-  (click)="analyzeOneResults()"
-  [disabled]="isCheckingEligibility || selectedCount === 0"
->
-  <ng-container *ngIf="!isCheckingEligibility">
-    <i class="fas fa-chart-bar me-2"></i>
-    Check Eligibility
-  </ng-container>
+                    <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2" (click)="analyzeOneResults()"
+                      [disabled]="isCheckingEligibility || selectedCount === 0">
+                      <ng-container *ngIf="!isCheckingEligibility">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Check Eligibility
+                      </ng-container>
 
-  <ng-container *ngIf="isCheckingEligibility">
-    <span
-      class="spinner-border spinner-border-sm me-2"
-      role="status"
-      aria-hidden="true"
-    ></span>
-    Checking...
-  </ng-container>
-</button>
+                      <ng-container *ngIf="isCheckingEligibility">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Checking...
+                      </ng-container>
+                    </button>
 
 
                   </div>
@@ -2632,7 +2639,7 @@
                             </span>
                           </button>
 
-                          
+
                         </div>
                         <!-- <div class="text-end mt-3 pe-4">
                           <button class="btn btn-success rounded-pill px-4 shadow-sm" (click)="getFormattedResponse()">

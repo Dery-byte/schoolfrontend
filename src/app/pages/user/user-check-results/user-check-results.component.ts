@@ -1080,7 +1080,7 @@ export class UserCheckResultsComponent implements OnInit {
     }
 
     this.isCheckingEligibility = true;
-    this.checkingEligibility=true
+    this.checkingEligibility = true
 
     const analysisData = {
       resultDetails: this.waecresults.resultDetails.map((result: any) => ({
@@ -1097,7 +1097,7 @@ export class UserCheckResultsComponent implements OnInit {
       next: (data: any) => {
         this.elligibilityResults = data;
         this.isCheckingEligibility = false;
-            this.checkingEligibility=false;
+        this.checkingEligibility = false;
 
         this.snackBar.open('Eligibility check successful!', 'Close', {
           duration: 3000,
@@ -1111,7 +1111,7 @@ export class UserCheckResultsComponent implements OnInit {
       },
       error: (err) => {
         this.isCheckingEligibility = false;
-                    this.checkingEligibility=false;
+        this.checkingEligibility = false;
 
         console.error('Eligibility check failed:', err);
         this.snackBar.open('Failed to check eligibility.', 'Close', {
@@ -1132,9 +1132,9 @@ export class UserCheckResultsComponent implements OnInit {
     const selectedIds = selectedAttendees.map(a => a.id);
     console.log(selectedIds);
     console.log(this.recordId);
-        this.isCheckingEligibility = true;
+    this.isCheckingEligibility = true;
 
-    
+
 
     const response = {
       resultDetails: this.entries.map((entry: any) => ({
@@ -1727,7 +1727,10 @@ export class UserCheckResultsComponent implements OnInit {
   // REAL API FOR THE FLOW
 
   // 1st Step
+
+  isCreatingRecord = false;
   createRecords() {
+    this.isCreatingRecord = true;
     this.manualService.startFirstStep().subscribe({
       next: (data: any) => {
         this.currentCheck = data;
@@ -1742,8 +1745,12 @@ export class UserCheckResultsComponent implements OnInit {
         // localStorage.setItem('currentRecordId', this.recordId);
 
         console.log('Record created with ID:', this.recordId);
+        this.isCreatingRecord = false;
+
       },
       error: (err) => {
+        this.isCreatingRecord = false;
+
         console.error(err);
         this.recordId = null; // Reset on error
 
