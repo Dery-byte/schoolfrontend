@@ -213,46 +213,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           <!-- Alternative Programs Section - Grouped by Categories -->
           <div *ngIf="university!.alternativePrograms!.length > 0" class="programs-section">
             <h5>Alternative Programs</h5>
@@ -318,7 +278,7 @@
                         </table>
                         <button *ngIf="hasMoreItems(sections, 'core', 3)" class="show-all-btn"
                           (click)="toggleShowAll(program.id, 'core')">
-                          {{ isShowingAll(program.id, 'core') ? '▲ Show Less' : '▼ Show All (' + (sections.core.length
+                          {{ isShowingAll(program.id, 'core') ? '▲ Show Less' : '▼ Show (' + (sections.core.length
                           -
                           3) + ' more)' }}
                         </button>
@@ -356,50 +316,13 @@
                         </table>
                         <button *ngIf="hasMoreItems(sections, 'alternative', 3)" class="show-all-btn"
                           (click)="toggleShowAll(program.id, 'alternative')">
-                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show All (' +
+                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show (' +
                           (sections.alternative.length - 3) + ' more)' }}
                         </button>
                       </div>
                     </ng-container>
                   </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               </div>
             </div>
           </div>
