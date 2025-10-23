@@ -560,8 +560,6 @@ if (program.aiRecommendation?.recommendationText) {
 
 
 
-
-
 private addRequirementExplanations(doc: jsPDF, recommendationText: string, startY: number): number {
   let y = startY;
   const lines = recommendationText.split('\n').filter((l) => l.trim() !== '');
@@ -610,7 +608,8 @@ private addRequirementExplanations(doc: jsPDF, recommendationText: string, start
 
     // Robust status detection - checks both emoji and keywords
     rows.forEach((line) => {
-      const clean = line.replace(/[✅⚠️❌]/g, '').trim();
+      // Clean both valid emojis and corrupted question marks
+      const clean = line.replace(/[✅⚠️❌?]/g, '').trim();
       const hasOkEmoji = line.includes('✅');
       const hasWarnEmoji = line.includes('⚠️');
       const hasFailEmoji = line.includes('❌');
@@ -700,7 +699,8 @@ private addRequirementExplanations(doc: jsPDF, recommendationText: string, start
     doc.text('NOTE:', 25, y + 4);
     y += 6;
 
-    const formatted = recLines.map((r) => [r.replace(/[💡📋⭐]/g, '').trim()]);
+    // Clean both valid emojis and corrupted question marks from recommendations
+    const formatted = recLines.map((r) => [r.replace(/[💡📋⭐?]/g, '').trim()]);
 
     autoTable(doc, {
       body: formatted,
