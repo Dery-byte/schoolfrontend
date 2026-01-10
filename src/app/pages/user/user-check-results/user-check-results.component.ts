@@ -1947,7 +1947,7 @@ export class UserCheckResultsComponent implements OnInit {
     document.body.style.overflow = 'hidden';
     this.blurService.setBlur(true);
     console.log("The plane chosing is : ", subscriptionType)
-    const fixedAmount = subscriptionType === 'PREMIUM' ? 1 : 1; // pick amount based on plan
+    const fixedAmount = subscriptionType === 'PREMIUM' ? 10 : 5; // pick amount based on plan
     // ✅ Update only the relevant fields instead of resetting whole form
     this.paymentForm.patchValue({
       amount: fixedAmount.toFixed(2),

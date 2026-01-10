@@ -556,198 +556,200 @@
 
 
 
-<!-- NEW Begins -->
+          <!-- NEW Begins -->
 
 
-<!-- pricing-cards.component.html -->
-<div class="pricing-container">
-  <div class="row g-4">
-    <!-- BASIC PLAN -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="pricing-card basic-card">
-        <div class="card-header">
-          <h3 class="plan-name">Basic</h3>
-          <div class="price-section">
-            <span class="currency">GHS</span>
-            <span class="amount">0</span>
-            <span class="period">per month</span>
-          </div>
-          <p class="billing-info">Always Free Access</p>
-        </div>
+          <!-- pricing-cards.component.html -->
+          <div class="pricing-container">
+            <div class="row g-4">
+              <!-- BASIC PLAN -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="pricing-card basic-card">
+                  <div class="card-header">
+                    <h3 class="plan-name">Basic</h3>
+                    <div class="price-section">
+                      <span class="currency">GHS</span>
+                      <span class="amount">5</span>
+                      <span class="period">per check</span>
+                    </div>
+                    <!-- <p class="billing-info">Always Free Access</p> -->
+                  </div>
 
-        <div class="card-body">
-          <h5 class="features-title">Basic Plan Includes:</h5>
-          <ul class="features-list">
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>Writing Assistance</strong>
-                <span class="feature-detail">(5000 words/month)</span>
-              </div>
-            </li>
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>Upto 4 proofread files</strong>
-                <span class="feature-detail">(with credits)</span>
-              </div>
-            </li>
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <span>4 free credits/month</span>
-            </li>
-            <li>
+                  <div class="card-body">
+                    <h5 class="features-title">Basic Plan Includes:</h5>
+                    <ul class="features-list">
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>For only Private Institutions</strong>
+                          <span class="feature-detail">(3 Courses/University)</span>
+                        </div>
+                      </li>
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>Upto 1 Study Area</strong>
+                          <!-- <span class="feature-detail">(At least 1 with High eligible %)</span> -->
+                        </div>
+                      </li>
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Comprehensive report on each Course</span>
+                      </li>
+                      <!-- <li>
               <i class="fas fa-check-circle"></i>
               <span>Standard Data Privacy</span>
-            </li>
-          </ul>
-        </div>
+            </li> -->
+                    </ul>
+                  </div>
 
-        <div class="card-footer">
-          <button 
-            class="btn-proceed basic-btn" 
-            (click)="openPaymentModal('BASIC')">
-            <i class="fas fa-rocket me-2"></i>Get Started
-          </button>
-          <div class="security-badge">
-            <i class="fas fa-shield-alt"></i>
-            Secure payments
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PREMIUM PLAN -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="pricing-card premium-card">
-        <div class="best-value-badge">
-          <i class="fas fa-fire"></i> BEST VALUE
-        </div>
-        
-        <div class="card-header">
-          <div class="plan-icon">
-            <i class="fas fa-gem"></i>
-          </div>
-          <h3 class="plan-name">Premium</h3>
-          <div class="price-section">
-            <span class="currency">GHS</span>
-            <span class="amount">80</span>
-            <span class="period">annually</span>
-          </div>
-          <p class="billing-info">Billed GHS 80 annually</p>
-        </div>
-
-        <div class="card-body">
-          <h5 class="features-title">Everything in Basic and:</h5>
-          <ul class="features-list">
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>Writing Assistance</strong>
-                <span class="feature-detail">(Full Access)</span>
+                  <div class="card-footer">
+                    <button class="btn-proceed basic-btn" (click)="openPaymentModal('BASIC')">
+                      <i class="fas fa-rocket me-2"></i>Get Started
+                    </button>
+                    <div class="security-badge">
+                      <i class="fas fa-shield-alt"></i>
+                      Secure payments
+                    </div>
+                  </div>
+                </div>
               </div>
-            </li>
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>Upto 10 proofread files</strong>
-                <span class="feature-detail">(with credits)</span>
-              </div>
-            </li>
-            <li>
+
+              <!-- PREMIUM PLAN -->
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="pricing-card premium-card">
+                  <div class="best-value-badge">
+                    <i class="fas fa-fire"></i> BEST VALUE
+                  </div>
+
+                  <div class="card-header">
+                    <div class="plan-icon">
+                      <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="plan-name">Premium</h3>
+                    <div class="price-section">
+                      <span class="currency">GHS</span>
+                      <span class="amount">10</span>
+                      <span class="period">per Check</span>
+                    </div>
+                    <!-- <p class="billing-info">Billed GHS 80 annually</p> -->
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="features-title">Everything in Basic and:</h5>
+                    <ul class="features-list">
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>Including Public Universities</strong>
+                          <span class="feature-detail">(Full Access)</span>
+                        </div>
+                      </li>
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>Upto 2 Study areas</strong>
+                          <span class="feature-detail">(Choose 2 study Areas)</span>
+                        </div>
+                      </li>
+                      <!-- <li>
               <i class="fas fa-check-circle"></i>
               <span>10 free credits/month</span>
-            </li>
-            <li>
+            </li> -->
+                      <!-- <li>
               <i class="fas fa-check-circle"></i>
               <div class="feature-content">
                 <strong>Advanced Data Privacy</strong>
                 <span class="feature-detail">(90-day auto-deletion)</span>
               </div>
-            </li>
-          </ul>
-        </div>
+            </li> -->
+                    </ul>
+                  </div>
 
-        <div class="card-footer">
-          <button 
-            class="btn-proceed premium-btn" 
-            (click)="openPaymentModal('PREMIUM')">
-            <i class="fas fa-crown me-2"></i>Go Premium
-          </button>
-          <div class="security-badge">
+                  <div class="card-footer">
+                    <button class="btn-proceed premium-btn" (click)="openPaymentModal('PREMIUM')">
+                      <i class="fas fa-crown me-2"></i>Go Premium
+                    </button>
+                    <!-- <div class="security-badge">
             <i class="fas fa-shield-alt"></i>
             Secure payments
-          </div>
-        </div>
-      </div>
-    </div>
+          </div> -->
+                  </div>
+                </div>
+              </div>
 
-    <!-- PREMIUM PLUS PLAN -->
-    <div class="col-12 col-md-12 col-lg-4">
-      <div class="pricing-card premium-plus-card">
-        <div class="popular-badge">
-          <i class="fas fa-star"></i> MOST POPULAR
-        </div>
-        
-        <div class="card-header">
-          <div class="plan-icon-large">
-            <i class="fas fa-crown"></i>
-          </div>
-          <h3 class="plan-name">Premium Plus</h3>
-          <div class="price-section">
-            <span class="currency">GHS</span>
-            <span class="amount">125</span>
-            <span class="period">annually</span>
-          </div>
-          <p class="billing-info">Billed GHS 125 annually</p>
-        </div>
+              <!-- PREMIUM PLUS PLAN -->
+              <div class="col-12 col-md-12 col-lg-4">
+                <div class="pricing-card premium-plus-card">
+                  <div class="popular-badge">
+                    <i class="fas fa-star"></i> MOST POPULAR
+                  </div>
 
-        <div class="card-body">
-          <h5 class="features-title">Everything in <i class="fas fa-gem small-icon"></i> Premium and:</h5>
-          <ul class="features-list">
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>120 pages Standard Plagiarism Check</strong>
-                <span class="feature-detail">(1 page = 250 words)</span>
-              </div>
-            </li>
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>600 Citation Formatting</strong>
-                <span class="feature-detail">per year</span>
-              </div>
-            </li>
-            <li>
-              <i class="fas fa-check-circle"></i>
-              <div class="feature-content">
-                <strong>3000 AI Writing Requests</strong>
-                <span class="feature-detail">per month</span>
-              </div>
-            </li>
-            <li>
+                  <div class="card-header">
+                    <div class="plan-icon-large">
+                      <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="plan-name">Premium Plus</h3>
+                    <div class="price-section">
+                      <span class="currency">GHS</span>
+                      <span class="amount">15</span>
+                      <span class="period">per check</span>
+                    </div>
+                    <!-- <p class="billing-info">Billed GHS 125 annually</p> -->
+                  </div>
+
+                  <div class="card-body">
+                    <h5 class="features-title">Everything in <i class="fas fa-gem small-icon"></i> Premium and:</h5>
+                    <ul class="features-list">
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>Upto 3 Study areas</strong>
+                          <!-- <span class="feature-detail">(1 page = 250 words)</span> -->
+                        </div>
+                      </li>
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>Career Propects</strong>
+                          <span class="feature-detail">On Each Course</span>
+                        </div>
+                      </li>
+                      <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div class="feature-content">
+                          <strong>Job Opportunities</strong>
+                          <span class="feature-detail">On Each Course</span>
+                        </div>
+                      </li>
+                      <!-- <li>
               <i class="fas fa-check-circle"></i>
               <span>Priority Support</span>
-            </li>
-          </ul>
-        </div>
+            </li> -->
+                    </ul>
+                  </div>
 
-        <div class="card-footer">
-          <button 
+                  <div class="card-footer">
+
+                    <!-- <button 
             class="btn-proceed premium-plus-btn" 
             (click)="openPaymentModal('PREMIUM_PLUS')">
             <i class="fas fa-bolt me-2"></i>Upgrade Now
-          </button>
-          <div class="security-badge">
+          </button> -->
+
+                    <button class="btn-proceed premium-plus-btn">
+                      <i class="fas fa-bolt me-2"></i>Coming Soon
+                    </button>
+
+                    <!-- <div class="security-badge">
             <i class="fas fa-shield-alt"></i>
             Secure payments
+          </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
           <!-- NEW end -->
 
 
@@ -3232,9 +3234,6 @@
             </button>
           </div>
         </form>
-
-
-
       </div>
     </div>
   </div>
@@ -3298,6 +3297,7 @@
 
 
   <!-- OTP VERIFICATION MODAL -->
+
   <div class="modal-backdrop" *ngIf="showOtpModal" @fadeInOut>
     <div class="otp-modal">
       <div class="modal-content-container">
@@ -3315,9 +3315,9 @@
           <div class="form-container">
             <!-- OTP Instructions -->
             <div class="otp-instructions">
-              <p style="color:#0b0f50; font-weight: bolder; background-color: #ebebeb;">We've sent a 6-digit
-                verification code to your phone number ending with
-                <!-- <strong>{{lastFourDigits}}</strong> -->
+              <p>
+                Enter the 6-digit verification code sent to  
+                   <strong>   {{ paymentForm.get('payer')?.value }}</strong>
               </p>
             </div>
             <!-- OTP Input Fields -->
@@ -3328,9 +3328,7 @@
                   formControlName="digit{{i}}" (input)="handleInput($event, i)" (keydown)="handleKeyDown($event, i)"
                   (paste)="handlePaste($event)" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*">
               </ng-container>
-
             </div>
-
             <!-- Error Message -->
             <div *ngIf="otpError" class="error-message">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
