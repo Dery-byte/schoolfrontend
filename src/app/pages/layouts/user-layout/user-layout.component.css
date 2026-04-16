@@ -1,0 +1,58 @@
+:host {
+  display: block;
+}
+
+/* ── Shell ──────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f1f5f9;
+  position: relative;
+}
+
+/* ── Main area ───────────────────────────────────── */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: 240px;
+  transition: margin-left 0.28s ease;
+}
+
+.app-content {
+  flex: 1;
+  padding: 1.75rem 2rem;
+}
+
+/* ── Mobile overlay ──────────────────────────────── */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 900px) {
+  .app-main {
+    margin-left: 0;
+  }
+
+  .app-content {
+    padding: 1rem;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+  }
+
+  .sidebar-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

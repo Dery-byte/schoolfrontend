@@ -216,20 +216,31 @@ body {
   box-shadow: var(--box-shadow-lg);
 }
 
-/* Card Header - Optimized for Mobile */
+/* Card Header */
 .card-header {
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
   background-color: white;
-  transition: var(--transition);
+  transition: background 0.15s;
   width: 100%;
+  border-bottom: 1px solid transparent;
+}
+
+.result-card.expanded .card-header {
+  border-bottom-color: var(--light-gray);
 }
 
 .card-header:hover {
-  background-color: var(--light-gray);
+  background-color: #f9fafb;
+}
+
+/* header-content fills the remaining space */
+.header-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .header-content {
@@ -281,9 +292,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  align-self: stretch;
-  justify-content: flex-end;
-  width: 100%;
+  flex-shrink: 0;
 }
 
 .btn-icon {
@@ -522,9 +531,10 @@ body {
 
 .meter-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4caf50, #45a049);
+  /* Traffic-light gradient: red → amber → green matching the eligibility thresholds */
+  background: linear-gradient(90deg, #dc2626 0%, #d97706 45%, #16a34a 75%, #15803d 100%);
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.5s ease;
 }
 
 .meter-value {
@@ -742,22 +752,21 @@ body {
   background: #f8fff9;
 }
 
-/* Status Colors */
-tr.success {
-  background-color: #ecfdf5;
-}
+/* Status Colors — Stripe-style row backgrounds */
+tr.success  { background-color: #f0fdf4; }
+tr.warning  { background-color: #fffbeb; }
+tr.danger   { background-color: #fef2f2; }
 
-tr.warning {
-  background-color: #fff7ed;
-}
+tr.status-pass      { background-color: #f0fdf4; }
+tr.status-excellent { background-color: #eff6ff; }
+tr.status-fail      { background-color: #fef2f2; }
+tr.status-neutral   { background-color: #fff; }
+tr.status-pending   { background-color: #fffbeb; }
 
-tr.danger {
-  background-color: #fef2f2;
-}
-
-.status-pass { background-color: #e9fcef; }
-.status-fail { background-color: #fff0f0; }
-.status-pending { background-color: #fff8e1; }
+.status-pass      { background-color: #f0fdf4; }
+.status-excellent { background-color: #eff6ff; }
+.status-fail      { background-color: #fef2f2; }
+.status-neutral   { background-color: #fff; }
 
 .status-cell {
   /* width: 35px; */

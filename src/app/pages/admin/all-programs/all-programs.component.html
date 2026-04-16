@@ -232,6 +232,7 @@
 
             <div *ngFor="let coreControl of coreSubjects.controls; let i = index" [formGroupName]="i"
               class="row g-2 mb-2">
+              <!-- {{combinedSubjects}} -->
               <div class="col-md-5">
                 <select class="form-select" formControlName="subject">
                   <option value="">-- Select Core Subject --</option>

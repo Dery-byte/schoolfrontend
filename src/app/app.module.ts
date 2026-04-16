@@ -40,6 +40,7 @@ import { LoginSuccessComponent } from './pages/login-success/login-success.compo
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './pages/utilities/AuthInterceptor';
 import { TypingDirective } from './pages/utilities/typing.directive';
+import { UserGradesEntryComponent } from './pages/user/user-grades-entry/user-grades-entry.component';
 
 
 
@@ -71,6 +72,7 @@ import { TypingDirective } from './pages/utilities/typing.directive';
     CollegesComponent,
     LoginSuccessComponent,
     TypingDirective,
+    UserGradesEntryComponent,
   ],
 
   exports:[TypingDirective],

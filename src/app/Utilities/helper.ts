@@ -3,7 +3,7 @@
 
 
 //ONLINE HOSTING
-let baseUrl = 'https://schoolbackend-vbjh.onrender.com/api/v1';
+let baseUrl = 'https://schoolbackend-j5n9.onrender.com/api/v1';
 // s// let baseUrl='https://cd68-156-38-117-76.ngrok-free.app/api/v1'
 export default baseUrl;
 

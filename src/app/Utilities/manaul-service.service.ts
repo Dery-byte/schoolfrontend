@@ -19,12 +19,29 @@ export class ManaulServiceService {
 
   constructor(private http: HttpClient) { }
 
+
+//    CHECK ELEGIBILITY ALL (PUBLIC/PRIVATE SCHOOLS)
+
   checkEligibility(payload: any) {
     const token = localStorage.getItem('token'); // Retrieve token
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
     return this.http.post(`${baseUrl}/auth/check-eligibility`, payload,
+      { headers }
+
+    )
+  };
+
+
+
+      // CHECK ELEGIBILITY /PRIVATE SCHOOLS
+        checkEligibilityPrivate(payload: any) {
+    const token = localStorage.getItem('token'); // Retrieve token
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.post(`${baseUrl}/auth/check-eligibility-private`, payload,
       { headers }
 
     )
@@ -138,12 +155,21 @@ export class ManaulServiceService {
 
 
   eligibilityRecordsByUser() {
-    const token = localStorage.getItem('token'); // Retrieve token
+    const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json' // Specify JSON content
+      'Content-Type': 'application/json'
     });
     return this.http.get(`${baseUrl}/auth/eligibilityRecords/my-eligibility-records`, { headers });
+  }
+
+  downloadEligibilityReport(recordId: string): Observable<Blob> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(
+      `${baseUrl}/auth/eligibilityRecords/${recordId}/report`,
+      { headers, responseType: 'blob' }
+    );
   }
 
 

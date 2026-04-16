@@ -6,23 +6,18 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
-
 import { sendSms } from '../fn/sms-controller/send-sms';
 import { SendSms$Params } from '../fn/sms-controller/send-sms';
-
 @Injectable({ providedIn: 'root' })
 export class SmsControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
-
   /** Path part for operation `sendSms()` */
   static readonly SendSmsPath = '/auth/sms/send';
-
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `sendSms()` instead.

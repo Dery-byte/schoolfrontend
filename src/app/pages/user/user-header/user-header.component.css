@@ -1,0 +1,213 @@
+/* ── Topbar shell ────────────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 58px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  flex-shrink: 0;
+}
+
+/* ── Left ────────────────────────────────────────── */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+/* Animated hamburger */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4.5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px 7px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+.hamburger:hover { background: #f3f4f6; }
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: #4b5563;
+  border-radius: 2px;
+  transition: background .15s;
+}
+.hamburger:hover span { background: #111827; }
+
+.page-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1f2937;
+  letter-spacing: -0.01em;
+}
+
+/* ── Right ───────────────────────────────────────── */
+.topbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.3rem 0.65rem 0.3rem 0.4rem;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  color: #374151;
+}
+.user-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4361ee, #7c3aed);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: transform .2s ease;
+}
+.chevron.open { transform: rotate(180deg); }
+
+/* ── Dropdown panel ──────────────────────────────── */
+.dropdown-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 220px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  z-index: 200;
+  animation: dropIn .14s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* User info inside dropdown */
+.dropdown-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem 0.6rem;
+}
+
+.dropdown-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4361ee, #7c3aed);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.dropdown-name {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-role {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #9ca3af;
+}
+
+.dropdown-sep {
+  margin: 0.3rem 0;
+  border: none;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Dropdown items */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border-radius: 7px;
+  font-size: 0.84rem;
+  color: #374151;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background .1s;
+  text-decoration: none;
+}
+.dropdown-item:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+.dropdown-item.logout {
+  color: #dc2626;
+}
+.dropdown-item.logout:hover {
+  background: #fef2f2;
+}
+
+/* ── Mobile ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .topbar { padding: 0 0.9rem; }
+  .user-name { display: none; }
+  .page-title { font-size: 0.85rem; }
+}

@@ -595,30 +595,32 @@
 }
 
 .secondary-button {
-  @extend .primary-button;
-  background: var(--white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: var(--text-base);
+  text-align: center;
+  white-space: nowrap;
+  transition: var(--transition-normal);
+  cursor: pointer;
+  background: #fff;
   color: var(--gray-700);
   border: 1px solid var(--gray-300);
   box-shadow: var(--shadow-sm);
-  
-  &::before {
-    background: var(--gray-50);
-  }
-  
-  &:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--gray-400);
-    
-    i {
-      color: var(--primary-500);
-    }
-  }
-  
-  i {
-    color: var(--primary-500);
-    margin-right: var(--space-xs);
-    transition: color 0.3s ease;
-  }
+}
+
+.secondary-button:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--gray-400);
+  transform: translateY(-1px);
+}
+
+.secondary-button i {
+  color: var(--primary-500);
+  margin-right: var(--space-xs);
 }
 
 /* ================ Animation Enhancements ================ */
@@ -662,132 +664,145 @@ button, a {
 
 
 
-/* PREVIEW PDF */
+/* ── Card content padding ───────────────────────── */
+.card-content {
+  padding: var(--space-xl) var(--space-2xl);
+}
 
- .report-preview {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
+/* ── Sample Report Preview Section ─────────────── */
+.preview-section {
+  margin-top: var(--space-2xl);
+}
 
-    .preview-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+.preview-section-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
 
-    .preview-header h2 {
-      color: #333;
-      margin-bottom: 10px;
-    }
+.preview-section-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: var(--space-xs);
+  letter-spacing: -0.02em;
+}
 
-    .preview-header p {
-      color: #666;
-      font-size: 16px;
-    }
+.preview-section-subtitle {
+  font-size: var(--text-base);
+  color: var(--gray-500);
+}
 
-    .pdf-preview-image {
-      position: relative;
-      margin-bottom: 30px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
+.preview-card {
+  background: #fff;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-xl);
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-    .pdf-preview-image:hover {
-      transform: translateY(-2px);
-    }
+.pdf-preview-image {
+  position: relative;
+  margin-bottom: var(--space-lg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
 
-    .preview-img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+.pdf-preview-image:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
 
-    .preview-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
+.preview-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
-    .pdf-preview-image:hover .preview-overlay {
-      opacity: 1;
-    }
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 32, 82, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
 
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      margin-bottom: 30px;
-    }
+.pdf-preview-image:hover .preview-overlay {
+  opacity: 1;
+}
 
-    .download-btn, .view-btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-weight: 500;
-    }
+.overlay-btn {
+  padding: 0.6rem 1.25rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--gray-800);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-fast);
+}
 
-    .primary {
-      background: #28a745;
-      color: white;
-    }
+.overlay-btn:hover {
+  background: #fff;
+}
 
-    .primary:hover {
-      background: #218838;
-      transform: translateY(-1px);
-    }
+.preview-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
 
-    .secondary {
-      background: #007bff;
-      color: white;
-    }
+.preview-info {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
 
-    .secondary:hover {
-      background: #0056b3;
-      transform: translateY(-1px);
-    }
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: var(--text-sm);
+  color: var(--gray-600);
+}
 
-    .preview-overlay .view-btn {
-      background: white;
-      color: #333;
-      padding: 10px 20px;
-    }
+.info-item i {
+  color: var(--primary-500);
+  margin-top: 1px;
+  flex-shrink: 0;
+}
 
-    .info-box {
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
-    }
+@media (max-width: 640px) {
+  .preview-actions {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .info-box p {
-      margin: 8px 0;
-      color: #495057;
-    }
+  .preview-actions button {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
 
-    @media (max-width: 768px) {
-      .action-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .download-btn, .view-btn {
-        width: 100%;
-        max-width: 300px;
-      }
-    }
+  .card-content {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
