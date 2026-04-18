@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { BlurService } from 'src/app/shared/blur/blur.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { TokenService } from 'src/app/services/token/token.service';
@@ -19,7 +19,7 @@ import { GuestService } from 'src/app/Utilities/guest.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewInit, OnDestroy {
 
 
   constructor(
@@ -356,6 +356,92 @@ export class RegisterComponent {
 
 
 
+
+  // ── University Network Animation ───────────────────────────────────────
+  uniNodes = [
+    { x: 12, y: 16, abbr: 'UG',     shortName: 'Univ. of Ghana',  color: '#1d4ed8', glow: 'rgba(29,78,216,0.5)'   },
+    { x: 82, y: 13, abbr: 'KNUST',  shortName: 'KNUST',           color: '#16a34a', glow: 'rgba(22,163,74,0.5)'   },
+    { x: 8,  y: 70, abbr: 'UCC',    shortName: 'Cape Coast',      color: '#dc2626', glow: 'rgba(220,38,38,0.5)'   },
+    { x: 88, y: 67, abbr: 'UPSA',   shortName: 'UPSA',            color: '#7c3aed', glow: 'rgba(124,58,237,0.5)'  },
+    { x: 22, y: 87, abbr: 'GIMPA',  shortName: 'GIMPA',           color: '#d97706', glow: 'rgba(217,119,6,0.5)'   },
+    { x: 76, y: 84, abbr: 'ASHESI', shortName: 'Ashesi Univ.',    color: '#db2777', glow: 'rgba(219,39,119,0.5)'  },
+  ];
+
+  ballX  = 12;
+  ballY  = 16;
+  ballColor = '#1d4ed8';
+  ballGlow  = 'rgba(29,78,216,0.6)';
+  engineGlowing = false;
+  engineMessage = '';
+  engineMessageVisible = false;
+  glowingUniIdx = -1;
+  private lastUniIdx = 0;
+  private animTimeout: any;
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.startAnimation(), 1200);
+  }
+
+  ngOnDestroy(): void {
+    if (this.animTimeout) clearTimeout(this.animTimeout);
+  }
+
+  private startAnimation(): void {
+    this.moveToEngine(this.uniNodes[0]);
+  }
+
+  private moveToNextUni(): void {
+    let next: number;
+    do { next = Math.floor(Math.random() * this.uniNodes.length); }
+    while (next === this.lastUniIdx);
+    this.lastUniIdx = next;
+    const uni = this.uniNodes[next];
+    this.ballX = uni.x;
+    this.ballY = uni.y;
+    this.ballColor = uni.color;
+    this.ballGlow = uni.glow;
+    // Glow the university logo after ball arrives (1.6s travel)
+    this.animTimeout = setTimeout(() => {
+      this.glowingUniIdx = next;
+      // Brief pause at uni with glow, then depart to engine
+      this.animTimeout = setTimeout(() => {
+        this.glowingUniIdx = -1;
+        this.moveToEngine(uni);
+      }, 700);
+    }, 1600);
+  }
+
+  private moveToEngine(uni: any): void {
+    this.ballX = 50;
+    this.ballY = 50;
+    this.animTimeout = setTimeout(() => {
+      this.engineGlowing = true;
+      this.engineMessage = `Checking ${uni.shortName} eligibility…`;
+      this.engineMessageVisible = true;
+      this.animTimeout = setTimeout(() => {
+        this.engineGlowing = false;
+        this.engineMessageVisible = false;
+        this.animTimeout = setTimeout(() => this.moveToNextUni(), 600);
+      }, 3000);
+    }, 1600);
+  }
+  // ───────────────────────────────────────────────────────────────────────
+
+  showAuthModal = false;
+
+  openAuthModal(form: 'login' | 'register'): void {
+    this.activeForm = form;
+    this.showAuthModal = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeAuthModal(): void {
+    this.showAuthModal = false;
+    document.body.style.overflow = '';
+    this.errorMsg = [];
+    this.errorMsgReg = [];
+    this.errorMsgInternal = [];
+  }
 
   showorgottenPasswordModal = false;
   passwordResetForm = new FormGroup({
