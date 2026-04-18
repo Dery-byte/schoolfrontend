@@ -65,6 +65,8 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
 
 
   activeForm: 'login' | 'register' = 'login';
+  regStep: 1 | 2 = 1;
+
   // Password visibility states
   showPassword = false;
   showRegPassword = false;
@@ -72,6 +74,24 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
 
   toggleForm(formType: 'login' | 'register'): void {
     this.activeForm = formType;
+    this.regStep = 1;
+  }
+
+  nextRegStep(): void {
+    this.errorMsgReg = [];
+    if (!this.registerRequest.email) {
+      this.errorMsgReg = ['Please enter your email address.'];
+      this.setMessageDisplayTime(); return;
+    }
+    if (!this.registerRequest.password || this.registerRequest.password.length < 8) {
+      this.errorMsgReg = ['Password must be at least 8 characters.'];
+      this.setMessageDisplayTime(); return;
+    }
+    if (this.registerRequest.password !== this.registerRequest.confirmPassword) {
+      this.errorMsgReg = ['Passwords do not match.'];
+      this.setMessageDisplayTime(); return;
+    }
+    this.regStep = 2;
   }
 
   get switchText(): string {
@@ -358,28 +378,46 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
 
 
   // ── University Network Animation ───────────────────────────────────────
+  // Nodes ordered so slice(0,3) = triangle, slice(0,4) = corners, all 6 = full ring
   uniNodes = [
-    { x: 12, y: 16, abbr: 'UG',     shortName: 'Univ. of Ghana',  color: '#1d4ed8', glow: 'rgba(29,78,216,0.5)'   },
-    { x: 82, y: 13, abbr: 'KNUST',  shortName: 'KNUST',           color: '#16a34a', glow: 'rgba(22,163,74,0.5)'   },
-    { x: 8,  y: 70, abbr: 'UCC',    shortName: 'Cape Coast',      color: '#dc2626', glow: 'rgba(220,38,38,0.5)'   },
-    { x: 88, y: 67, abbr: 'UPSA',   shortName: 'UPSA',            color: '#7c3aed', glow: 'rgba(124,58,237,0.5)'  },
-    { x: 22, y: 87, abbr: 'GIMPA',  shortName: 'GIMPA',           color: '#d97706', glow: 'rgba(217,119,6,0.5)'   },
+    { x: 11, y: 12, abbr: 'UG',     shortName: 'Univ. of Ghana',  color: '#1d4ed8', glow: 'rgba(29,78,216,0.5)'   },
+    { x: 84, y: 10, abbr: 'KNUST',  shortName: 'KNUST',           color: '#16a34a', glow: 'rgba(22,163,74,0.5)'   },
+    { x: 18, y: 82, abbr: 'GIMPA',  shortName: 'GIMPA',           color: '#d97706', glow: 'rgba(217,119,6,0.5)'   },
+    { x: 6,  y: 54, abbr: 'UCC',    shortName: 'Cape Coast',      color: '#dc2626', glow: 'rgba(220,38,38,0.5)'   },
+    { x: 90, y: 56, abbr: 'UPSA',   shortName: 'UPSA',            color: '#7c3aed', glow: 'rgba(124,58,237,0.5)'  },
     { x: 76, y: 84, abbr: 'ASHESI', shortName: 'Ashesi Univ.',    color: '#db2777', glow: 'rgba(219,39,119,0.5)'  },
   ];
 
-  ballX  = 12;
-  ballY  = 16;
+  // Ball state
+  ballX  = 11;
+  ballY  = 12;
   ballColor = '#1d4ed8';
   ballGlow  = 'rgba(29,78,216,0.6)';
+  ballBouncing = false;
+
+  // Engine state
   engineGlowing = false;
   engineMessage = '';
   engineMessageVisible = false;
-  glowingUniIdx = -1;
+
+  // Per-node state
+  glowingUniIdx    = -1;
+  activeUniIdx     = -1;
+  processingUniIdx = -1;
+  returningToEngine = false;
+
   private lastUniIdx = 0;
   private animTimeout: any;
 
+  get visibleNodes(): typeof this.uniNodes {
+    const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    if (w < 480) return this.uniNodes.slice(0, 3);
+    if (w < 768) return this.uniNodes.slice(0, 4);
+    return this.uniNodes;
+  }
+
   ngAfterViewInit(): void {
-    setTimeout(() => this.startAnimation(), 1200);
+    setTimeout(() => this.startAnimation(), 800);
   }
 
   ngOnDestroy(): void {
@@ -387,41 +425,57 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   }
 
   private startAnimation(): void {
-    this.moveToEngine(this.uniNodes[0]);
+    this.moveToEngine(this.visibleNodes[0], 0);
   }
 
   private moveToNextUni(): void {
+    const count = this.visibleNodes.length;
     let next: number;
-    do { next = Math.floor(Math.random() * this.uniNodes.length); }
+    do { next = Math.floor(Math.random() * count); }
     while (next === this.lastUniIdx);
     this.lastUniIdx = next;
-    const uni = this.uniNodes[next];
+    const uni = this.visibleNodes[next];
+
+    // Show this path, move ball to uni
+    this.returningToEngine = false;
+    this.activeUniIdx = next;
     this.ballX = uni.x;
     this.ballY = uni.y;
     this.ballColor = uni.color;
-    this.ballGlow = uni.glow;
-    // Glow the university logo after ball arrives (1.6s travel)
+    this.ballGlow  = uni.glow;
+
+    // After ball arrives at uni (1.6 s): glow + Processing label
     this.animTimeout = setTimeout(() => {
-      this.glowingUniIdx = next;
-      // Brief pause at uni with glow, then depart to engine
+      this.glowingUniIdx   = next;
+      this.processingUniIdx = next;
+      // Brief pause, then depart to engine
       this.animTimeout = setTimeout(() => {
         this.glowingUniIdx = -1;
-        this.moveToEngine(uni);
+        this.moveToEngine(uni, next);
       }, 700);
     }, 1600);
   }
 
-  private moveToEngine(uni: any): void {
+  private moveToEngine(uni: any, uniIdx: number): void {
+    this.returningToEngine = true;
     this.ballX = 50;
     this.ballY = 50;
     this.animTimeout = setTimeout(() => {
+      // Bounce effect
+      this.ballBouncing = true;
+      setTimeout(() => { this.ballBouncing = false; }, 500);
+
+      // Hide the path line, glow engine, show message
+      this.activeUniIdx = -1;
       this.engineGlowing = true;
       this.engineMessage = `Checking ${uni.shortName} eligibility…`;
       this.engineMessageVisible = true;
+
       this.animTimeout = setTimeout(() => {
-        this.engineGlowing = false;
+        this.engineGlowing       = false;
         this.engineMessageVisible = false;
-        this.animTimeout = setTimeout(() => this.moveToNextUni(), 600);
+        this.processingUniIdx    = -1;
+        this.animTimeout = setTimeout(() => this.moveToNextUni(), 500);
       }, 3000);
     }, 1600);
   }

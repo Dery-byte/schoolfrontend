@@ -7,17 +7,27 @@
   <!-- Dot grid background -->
   <div class="page-grid"></div>
 
-  <!-- Dashed SVG lines: each uni → engine center (50, 50) -->
+  <!-- Dashed SVG lines: only active path is visible -->
   <svg class="network-svg" viewBox="0 0 100 100" preserveAspectRatio="none"
        xmlns="http://www.w3.org/2000/svg">
-    <line *ngFor="let node of uniNodes"
-          [attr.x1]="node.x" [attr.y1]="node.y"
-          x2="50" y2="50"
-          class="net-line"/>
+    <defs>
+      <marker id="arrow-tip" markerWidth="5" markerHeight="5"
+              refX="4" refY="2.5" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L0,5 L5,2.5 z" fill="rgba(255,255,255,0.75)"/>
+      </marker>
+    </defs>
+    <line *ngFor="let node of visibleNodes; let i = index"
+          x1="50" y1="50"
+          [attr.x2]="node.x" [attr.y2]="node.y"
+          pathLength="100"
+          class="net-line"
+          [class.line-to-uni]="activeUniIdx === i && !returningToEngine"
+          [class.line-to-engine]="activeUniIdx === i && returningToEngine"
+          marker-end="url(#arrow-tip)"/>
   </svg>
 
-  <!-- University floating cards (scattered around page) -->
-  <div *ngFor="let node of uniNodes; let i = index"
+  <!-- University floating cards (orbit around engine) -->
+  <div *ngFor="let node of visibleNodes; let i = index"
        class="uni-float"
        [class.uni-lit]="glowingUniIdx === i"
        [style.left.%]="node.x"
@@ -26,12 +36,16 @@
     <div class="uni-glass">
       <div class="uni-avatar" [style.background]="node.color">{{ node.abbr }}</div>
       <span class="uni-label">{{ node.shortName }}</span>
-      <span class="uni-online"><span class="dot-online"></span> Online</span>
+      <span class="uni-online" [class.uni-processing]="processingUniIdx === i">
+        <span class="dot-online" [class.dot-proc]="processingUniIdx === i"></span>
+        {{ processingUniIdx === i ? 'Processing' : 'Online' }}
+      </span>
     </div>
   </div>
 
-  <!-- Animated ball -->
+  <!-- Animated ball (z-index 5, below uni cards at z-index 6) -->
   <div class="net-ball"
+       [class.ball-bounce]="ballBouncing"
        [style.left.%]="ballX"
        [style.top.%]="ballY"
        [style.background]="ballColor"
@@ -41,41 +55,44 @@
   <!-- ══════════ CENTRAL ENGINE CARD ══════════ -->
   <div class="engine-card" [class.engine-lit]="engineGlowing">
 
-    <!-- Gear icon -->
-    <div class="engine-icon-wrap" [class.icon-spin]="engineGlowing">
-      <i class="fas fa-cog engine-gear"></i>
+    <!-- Eyebrow -->
+    <div class="engine-eyebrow">
+      <span class="eyebrow-pulse"></span>
+      GHANA · UNIVERSITY ELIGIBILITY
     </div>
 
     <!-- Brand -->
-    <div class="engine-brand">EduCheck</div>
+    <h1 class="engine-brand">EduCheck</h1>
     <p class="engine-tagline">
-      Ghana's University<br>
-      <span class="engine-accent">Eligibility Platform</span>
+      Check eligibility across every major<br>university in Ghana — instantly.
     </p>
 
-    <!-- Arrival message (3 s then fades) -->
+    <!-- Activity message -->
     <div class="engine-msg-zone">
-      <span class="engine-msg" [class.msg-show]="engineMessageVisible">
-        <i class="fas fa-circle-notch fa-spin" style="font-size:0.7rem;margin-right:5px;"></i>
+      <div class="engine-msg" [class.msg-show]="engineMessageVisible">
+        <span class="msg-dot"></span>
         {{ engineMessage }}
-      </span>
+      </div>
     </div>
 
-    <!-- Hero CTAs -->
+    <!-- Divider -->
+    <div class="engine-divider"></div>
+
+    <!-- CTAs -->
     <div class="engine-ctas">
       <button class="cta-start" (click)="openAuthModal('register')">
         Get Started <span class="cta-arrow">→</span>
       </button>
-      <button class="cta-signin" (click)="openAuthModal('login')">Sign In</button>
-      <a routerLink="/guest/check" class="cta-guest">
-        <span class="cta-bolt">⚡</span> Guest Access
-      </a>
+      <div class="cta-secondary-row">
+        <button class="cta-signin" (click)="openAuthModal('login')">Sign In</button>
+        <a routerLink="/guest/check" class="cta-guest">⚡ Guest Access</a>
+      </div>
     </div>
 
-    <!-- Status bar -->
+    <!-- Status -->
     <div class="engine-status">
       <span class="status-dot"></span>
-      <span class="status-txt">6 universities connected</span>
+      <span class="status-txt">{{ visibleNodes.length }} universities online</span>
     </div>
 
   </div>
@@ -122,6 +139,13 @@
       <span>{{ errorMsg[0] || errorMsgReg[0] || errorMsgInternal[0] }}</span>
     </div>
 
+    <!-- Step indicator (register only) -->
+    <div class="reg-steps" *ngIf="activeForm==='register'">
+      <div class="reg-step-dot" [class.active]="regStep===1" [class.done]="regStep>1">1</div>
+      <div class="reg-step-line" [class.filled]="regStep===2"></div>
+      <div class="reg-step-dot" [class.active]="regStep===2">2</div>
+    </div>
+
     <!-- ── SIGN IN ── -->
     <form *ngIf="activeForm==='login'" (ngSubmit)="login()" class="auth-form">
 
@@ -156,60 +180,73 @@
     <!-- ── SIGN UP ── -->
     <form *ngIf="activeForm==='register'" (ngSubmit)="register()" class="auth-form">
 
-      <div class="form-row-2">
+      <!-- Step 1: credentials -->
+      <ng-container *ngIf="regStep===1">
         <div class="form-field">
-          <label class="form-label">First Name</label>
-          <input class="form-input" type="text" [(ngModel)]="registerRequest.firstname"
-                 name="regFirst" placeholder="John" required />
+          <label class="form-label">Email address</label>
+          <input class="form-input" type="email" [(ngModel)]="registerRequest.email"
+                 name="regEmail" placeholder="you@example.com" autocomplete="email" />
         </div>
-        <div class="form-field">
-          <label class="form-label">Last Name</label>
-          <input class="form-input" type="text" [(ngModel)]="registerRequest.lastname"
-                 name="regLast" placeholder="Doe" required />
-        </div>
-      </div>
 
-      <div class="form-field">
-        <label class="form-label">Email address</label>
-        <input class="form-input" type="email" [(ngModel)]="registerRequest.email"
-               name="regEmail" placeholder="you@example.com" required />
-      </div>
-
-      <div class="form-field">
-        <label class="form-label">Phone Number</label>
-        <input class="form-input" type="tel" [(ngModel)]="registerRequest.phoneNumber[0]"
-               name="regPhone" placeholder="024 123 4567" required />
-      </div>
-
-      <div class="form-row-2">
-        <div class="form-field">
-          <label class="form-label">Password</label>
-          <div class="input-wrap">
-            <input class="form-input" [type]="getPasswordType('regPassword')"
-                   [(ngModel)]="registerRequest.password" name="regPwd"
-                   placeholder="Min. 8 chars" required />
-            <button type="button" class="eye-btn" (click)="togglePasswordVisibility('regPassword')" tabindex="-1">
-              <i [class]="'fas ' + (showRegPassword ? 'fa-eye-slash' : 'fa-eye')"></i>
-            </button>
+        <div class="form-row-2">
+          <div class="form-field">
+            <label class="form-label">Password</label>
+            <div class="input-wrap">
+              <input class="form-input" [type]="getPasswordType('regPassword')"
+                     [(ngModel)]="registerRequest.password" name="regPwd"
+                     placeholder="Min. 8 chars" />
+              <button type="button" class="eye-btn" (click)="togglePasswordVisibility('regPassword')" tabindex="-1">
+                <i [class]="'fas ' + (showRegPassword ? 'fa-eye-slash' : 'fa-eye')"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Confirm Password</label>
+            <div class="input-wrap">
+              <input class="form-input" [type]="getPasswordType('confirmPassword')"
+                     [(ngModel)]="registerRequest.confirmPassword" name="regConfirm"
+                     placeholder="Re-enter" />
+              <button type="button" class="eye-btn" (click)="togglePasswordVisibility('confirmPassword')" tabindex="-1">
+                <i [class]="'fas ' + (showConfirmPassword ? 'fa-eye-slash' : 'fa-eye')"></i>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="form-field">
-          <label class="form-label">Confirm Password</label>
-          <div class="input-wrap">
-            <input class="form-input" [type]="getPasswordType('confirmPassword')"
-                   [(ngModel)]="registerRequest.confirmPassword" name="regConfirm"
-                   placeholder="Re-enter" required />
-            <button type="button" class="eye-btn" (click)="togglePasswordVisibility('confirmPassword')" tabindex="-1">
-              <i [class]="'fas ' + (showConfirmPassword ? 'fa-eye-slash' : 'fa-eye')"></i>
-            </button>
+
+        <button type="button" class="btn-primary" (click)="nextRegStep()">
+          Continue <span class="cta-arrow">→</span>
+        </button>
+      </ng-container>
+
+      <!-- Step 2: profile -->
+      <ng-container *ngIf="regStep===2">
+        <div class="form-row-2">
+          <div class="form-field">
+            <label class="form-label">First Name</label>
+            <input class="form-input" type="text" [(ngModel)]="registerRequest.firstname"
+                   name="regFirst" placeholder="John" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" [(ngModel)]="registerRequest.lastname"
+                   name="regLast" placeholder="Doe" />
           </div>
         </div>
-      </div>
 
-      <button type="submit" class="btn-primary" [disabled]="loading">
-        <span *ngIf="!loading">Create Account</span>
-        <span *ngIf="loading" class="btn-spin-row"><span class="spin"></span> Creating account…</span>
-      </button>
+        <div class="form-field">
+          <label class="form-label">Phone Number</label>
+          <input class="form-input" type="tel" [(ngModel)]="registerRequest.phoneNumber[0]"
+                 name="regPhone" placeholder="024 123 4567" />
+        </div>
+
+        <div class="reg-step-actions">
+          <button type="button" class="btn-back" (click)="regStep=1">‹</button>
+          <button type="submit" class="btn-primary" [disabled]="loading">
+            <span *ngIf="!loading">Create Account</span>
+            <span *ngIf="loading" class="btn-spin-row"><span class="spin"></span> Creating…</span>
+          </button>
+        </div>
+      </ng-container>
 
     </form>
 
