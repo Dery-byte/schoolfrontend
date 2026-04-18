@@ -169,6 +169,45 @@
   border-radius: 2px 2px 0 0;
 }
 
+.guest-access-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0f4ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 1.5rem;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.guest-access-label {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.guest-access-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #4a6cf7;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.guest-access-btn:hover {
+  background: #3a5ce5;
+  color: #fff;
+  text-decoration: none;
+}
+
 .auth-form {
   display: none;
   width: 100%;

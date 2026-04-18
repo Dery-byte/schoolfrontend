@@ -17,6 +17,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { RegisterComponent } from './pages/register/register.component';
 import { CollegesComponent } from './pages/admin/colleges/colleges.component';
 import { LoginSuccessComponent } from './pages/login-success/login-success.component';
+import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.component';
+import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
 
 
 
@@ -67,6 +69,14 @@ const routes: Routes = [
     ]
   },
 
+  {
+    path: 'guest',
+    component: GuestLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'check', pathMatch: 'full' },
+      { path: 'check', component: GuestCheckComponent }
+    ]
+  },
 ];
 
 @NgModule({

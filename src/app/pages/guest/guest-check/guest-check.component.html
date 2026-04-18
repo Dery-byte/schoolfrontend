@@ -1,0 +1,883 @@
+<div class="gc-shell">
+
+  <!-- ── Ambient glow orbs ── -->
+  <div class="gc-glow gc-glow-1"></div>
+  <div class="gc-glow gc-glow-2"></div>
+
+  <!-- ── Fixed Auth Sidebar Panel (bottom-left, SocietyAI style) ── -->
+  <div class="gc-auth-panel">
+    <p class="gc-auth-hint">Login to save and revisit your results!</p>
+    <div class="gc-auth-btns">
+      <button class="gc-btn-signup" (click)="openSaveModal()">Sign Up</button>
+      <button class="gc-btn-login" (click)="openSaveModal()">Log In</button>
+    </div>
+  </div>
+
+  <!-- ── Main scroll area ── -->
+  <div class="gc-main">
+
+    <!-- Hero -->
+    <header class="gc-hero">
+      <span class="gc-badge">NO ACCOUNT NEEDED</span>
+      <h1 class="gc-title">Find Your Perfect<br><span class="gc-title-accent">University Programme</span></h1>
+      <p class="gc-subtitle">Pay once · Check eligibility across every university in Ghana · No registration required</p>
+    </header>
+
+    <!-- Step Progress -->
+    <nav class="gc-progress">
+      <div class="gc-step" [class.active]="currentStep==='payment'" [class.done]="isDone('payment')">
+        <div class="gc-step-dot">
+          <span *ngIf="!isDone('payment')">1</span>
+          <svg *ngIf="isDone('payment')" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="gc-step-lbl">Payment</span>
+      </div>
+      <div class="gc-step-line" [class.lit]="isDone('otp')"></div>
+      <div class="gc-step" [class.active]="currentStep==='otp'||currentStep==='pending'" [class.done]="isDone('otp')">
+        <div class="gc-step-dot">
+          <span *ngIf="!isDone('otp')">2</span>
+          <svg *ngIf="isDone('otp')" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="gc-step-lbl">Verify</span>
+      </div>
+      <div class="gc-step-line" [class.lit]="isDone('biodata')"></div>
+      <div class="gc-step" [class.active]="currentStep==='biodata'" [class.done]="isDone('biodata')">
+        <div class="gc-step-dot">
+          <span *ngIf="!isDone('biodata')">3</span>
+          <svg *ngIf="isDone('biodata')" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="gc-step-lbl">Details</span>
+      </div>
+      <div class="gc-step-line" [class.lit]="isDone('grades')"></div>
+      <div class="gc-step" [class.active]="currentStep==='grades'" [class.done]="isDone('grades')">
+        <div class="gc-step-dot">
+          <span *ngIf="!isDone('grades')">4</span>
+          <svg *ngIf="isDone('grades')" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="gc-step-lbl">Grades</span>
+      </div>
+      <div class="gc-step-line" [class.lit]="currentStep==='result'"></div>
+      <div class="gc-step" [class.active]="currentStep==='result'">
+        <div class="gc-step-dot"><span>5</span></div>
+        <span class="gc-step-lbl">Results</span>
+      </div>
+    </nav>
+
+    <!-- Error Banner -->
+    <div class="gc-error-bar" *ngIf="errorMessage">
+      <svg viewBox="0 0 20 20" fill="currentColor" class="gc-err-icon"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+      <span>{{ errorMessage }}</span>
+      <button class="gc-err-close" (click)="errorMessage=''">✕</button>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 1 — PAYMENT                       -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel" *ngIf="currentStep==='payment'">
+      <div class="gc-panel-head">
+        <span class="gc-step-tag">Step 1 of 5</span>
+        <h2 class="gc-panel-title">Choose Your Plan</h2>
+        <p class="gc-panel-sub">Select a plan and pay to get started. No account required.</p>
+      </div>
+
+      <!-- Session Recovery -->
+      <div class="gc-recovery-bar">
+        <span class="gc-recovery-text">Already started? Don't pay again.</span>
+        <button class="gc-btn-ghost" (click)="showRecoveryInput=!showRecoveryInput">
+          {{ showRecoveryInput ? 'Cancel' : 'Resume Session →' }}
+        </button>
+      </div>
+      <div class="gc-recovery-row" *ngIf="showRecoveryInput">
+        <input class="gc-input" type="text" [(ngModel)]="recoverySessionId" [ngModelOptions]="{standalone:true}" placeholder="Paste your Session ID…" />
+        <button class="gc-btn-outline" (click)="recoverSession()" [disabled]="isLoading">{{ isLoading ? 'Checking…' : 'Resume' }}</button>
+      </div>
+
+      <!-- Agent-style Plan Cards -->
+      <div class="gc-agent-grid">
+        <!-- BASIC -->
+        <div class="gc-agent-card" [class.gc-card-selected]="selectedPlan==='BASIC'" (click)="selectedPlan='BASIC'">
+          <div class="gc-agent-top">
+            <div class="gc-agent-avatar gc-av-blue">🎓</div>
+            <div class="gc-agent-status">
+              <span class="gc-status-dot gc-dot-green"></span>
+              <span class="gc-status-price">GHS 5</span>
+            </div>
+          </div>
+          <div class="gc-agent-name">Basic</div>
+          <div class="gc-agent-cat">Starter Plan</div>
+          <ul class="gc-agent-feats">
+            <li><span class="gc-feat-check">✓</span> 5 eligibility checks</li>
+            <li><span class="gc-feat-check">✓</span> Private universities</li>
+            <li><span class="gc-feat-check">✓</span> 1 study area</li>
+          </ul>
+          <div class="gc-selected-pill" *ngIf="selectedPlan==='BASIC'">● Selected</div>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="gc-agent-card gc-agent-featured" [class.gc-card-selected]="selectedPlan==='PREMIUM'" (click)="selectedPlan='PREMIUM'">
+          <div class="gc-agent-top">
+            <div class="gc-agent-avatar gc-av-purple">🚀</div>
+            <div class="gc-agent-status">
+              <span class="gc-status-dot gc-dot-violet"></span>
+              <span class="gc-status-price gc-price-featured">GHS 10</span>
+            </div>
+          </div>
+          <div class="gc-agent-name">Premium</div>
+          <div class="gc-agent-cat">Recommended</div>
+          <ul class="gc-agent-feats">
+            <li><span class="gc-feat-check">✓</span> 10 eligibility checks</li>
+            <li><span class="gc-feat-check">✓</span> Public + Private</li>
+            <li><span class="gc-feat-check">✓</span> 2 study areas</li>
+          </ul>
+          <div class="gc-selected-pill gc-pill-purple" *ngIf="selectedPlan==='PREMIUM'">● Selected</div>
+        </div>
+
+        <!-- PREMIUM+ (disabled) -->
+        <div class="gc-agent-card gc-agent-disabled">
+          <div class="gc-agent-top">
+            <div class="gc-agent-avatar gc-av-gray">⭐</div>
+            <div class="gc-agent-status">
+              <span class="gc-status-dot gc-dot-gray"></span>
+              <span class="gc-status-price gc-price-gray">GHS 15</span>
+            </div>
+          </div>
+          <div class="gc-agent-name">Premium+</div>
+          <div class="gc-agent-cat">Coming Soon</div>
+          <ul class="gc-agent-feats">
+            <li><span class="gc-feat-check">✓</span> Unlimited checks</li>
+            <li><span class="gc-feat-check">✓</span> All universities</li>
+            <li><span class="gc-feat-check">✓</span> 3 study areas</li>
+          </ul>
+          <div class="gc-coming-overlay">Coming Soon</div>
+        </div>
+      </div>
+
+      <!-- Search-bar style amount display (like SocietyAI search bar) -->
+      <div class="gc-amount-bar">
+        <svg viewBox="0 0 20 20" fill="none" class="gc-amount-icon"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span class="gc-amount-label">Total Amount</span>
+        <span class="gc-amount-val">GHS {{ planAmount }}</span>
+      </div>
+
+      <!-- Payment Form -->
+      <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="gc-form">
+        <div class="gc-form-row">
+          <div class="gc-field">
+            <label class="gc-label">Candidate Name</label>
+            <input class="gc-input" type="text" formControlName="candidateName" placeholder="Full name of candidate" />
+            <span class="gc-field-err" *ngIf="paymentForm.get('candidateName')?.invalid && paymentForm.get('candidateName')?.touched">Name is required.</span>
+          </div>
+          <div class="gc-field">
+            <label class="gc-label">Mobile Money Number</label>
+            <input class="gc-input" type="text" formControlName="payer" placeholder="e.g. 0241234567" />
+            <span class="gc-field-err" *ngIf="paymentForm.get('payer')?.invalid && paymentForm.get('payer')?.touched">Enter a valid Ghana mobile number.</span>
+          </div>
+        </div>
+        <div class="gc-field">
+          <label class="gc-label">Mobile Network</label>
+          <select class="gc-select" formControlName="channel">
+            <option value="" disabled selected>Select Network</option>
+            <option value="13">MTN Mobile Money</option>
+            <option value="6">Vodafone Cash</option>
+            <option value="7">AirtelTigo Money</option>
+          </select>
+          <span class="gc-field-err" *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched">Please select a network.</span>
+        </div>
+        <button type="submit" class="gc-btn-primary" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Pay GHS {{ planAmount }} — Start Check →</span>
+          <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Processing…</span>
+        </button>
+      </form>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 2 — OTP                           -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel" *ngIf="currentStep==='otp'">
+      <div class="gc-panel-head">
+        <span class="gc-step-tag">Step 2 of 5</span>
+        <h2 class="gc-panel-title">Verify Payment</h2>
+        <p class="gc-panel-sub">Enter the 6-digit OTP sent to your mobile money number.</p>
+      </div>
+
+      <!-- Session ID box -->
+      <div class="gc-session-box" *ngIf="sessionId">
+        <div class="gc-session-label">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="gc-session-icon"><path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/></svg>
+          Your Session ID — save this to resume later
+        </div>
+        <div class="gc-session-row">
+          <code class="gc-session-code">{{ sessionId }}</code>
+          <button class="gc-btn-copy" (click)="copySessionId()">Copy</button>
+        </div>
+      </div>
+
+      <div class="gc-otp-row">
+        <input
+          *ngFor="let d of otpDigits; let i = index"
+          type="text" maxlength="1"
+          class="gc-otp-box"
+          [value]="d"
+          (input)="onOtpChange($any($event.target).value, i)"
+        />
+      </div>
+
+      <button class="gc-btn-primary" (click)="submitOtp()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Verify OTP</span>
+        <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Verifying…</span>
+      </button>
+      <button class="gc-btn-back" (click)="currentStep='payment'">← Back to Payment</button>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 3 — PENDING                       -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel gc-panel-center" *ngIf="currentStep==='pending'">
+      <div class="gc-router-badge">PAYMENT ROUTER</div>
+      <div class="gc-pending-ring">
+        <div class="gc-ring gc-ring-1"></div>
+        <div class="gc-ring gc-ring-2"></div>
+        <div class="gc-ring gc-ring-3"></div>
+        <div class="gc-pending-icon">💳</div>
+      </div>
+      <h2 class="gc-panel-title">Confirming Payment…</h2>
+      <p class="gc-panel-sub">Approve the prompt on your phone. This page updates automatically.</p>
+      <div class="gc-pulse-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 4 — BIODATA                       -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel" *ngIf="currentStep==='biodata'">
+      <div class="gc-panel-head">
+        <span class="gc-step-tag">Step 3 of 5</span>
+        <h2 class="gc-panel-title">Candidate Details</h2>
+        <p class="gc-panel-sub">Enter the candidate's personal information.</p>
+      </div>
+
+      <form [formGroup]="biodataForm" (ngSubmit)="submitBiodata()" class="gc-form">
+        <div class="gc-form-row gc-row-3">
+          <div class="gc-field">
+            <label class="gc-label">First Name <span class="gc-req">*</span></label>
+            <input class="gc-input" type="text" formControlName="firstName" />
+            <span class="gc-field-err" *ngIf="biodataForm.get('firstName')?.invalid && biodataForm.get('firstName')?.touched">Required</span>
+          </div>
+          <div class="gc-field">
+            <label class="gc-label">Middle Name</label>
+            <input class="gc-input" type="text" formControlName="middleName" />
+          </div>
+          <div class="gc-field">
+            <label class="gc-label">Last Name <span class="gc-req">*</span></label>
+            <input class="gc-input" type="text" formControlName="lastName" />
+            <span class="gc-field-err" *ngIf="biodataForm.get('lastName')?.invalid && biodataForm.get('lastName')?.touched">Required</span>
+          </div>
+        </div>
+        <div class="gc-form-row">
+          <div class="gc-field">
+            <label class="gc-label">Email <span class="gc-req">*</span></label>
+            <input class="gc-input" type="email" formControlName="email" />
+            <span class="gc-field-err" *ngIf="biodataForm.get('email')?.invalid && biodataForm.get('email')?.touched">Valid email required</span>
+          </div>
+          <div class="gc-field">
+            <label class="gc-label">Phone <span class="gc-req">*</span></label>
+            <input class="gc-input" type="text" formControlName="phoneNumber" />
+          </div>
+        </div>
+        <div class="gc-form-row gc-row-3">
+          <div class="gc-field">
+            <label class="gc-label">Date of Birth <span class="gc-req">*</span></label>
+            <input class="gc-input" type="date" formControlName="dob" />
+          </div>
+          <div class="gc-field">
+            <label class="gc-label">Gender</label>
+            <select class="gc-select" formControlName="gender">
+              <option value="">— Select —</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="gc-field">
+            <label class="gc-label">Region <span class="gc-req">*</span></label>
+            <select class="gc-select" formControlName="region">
+              <option value="">— Select —</option>
+              <option *ngFor="let r of allRegions" [value]="r">{{ r }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="gc-field">
+          <label class="gc-label">Address <span class="gc-req">*</span></label>
+          <input class="gc-input" type="text" formControlName="address" />
+        </div>
+        <button type="submit" class="gc-btn-primary" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Next: Enter Grades →</span>
+          <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Saving…</span>
+        </button>
+      </form>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 5 — GRADES                        -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel" *ngIf="currentStep==='grades'">
+      <div class="gc-panel-head">
+        <span class="gc-step-tag">Step 4 of 5</span>
+        <h2 class="gc-panel-title">Exam Results</h2>
+        <p class="gc-panel-sub">Enter your WAEC/WASSCE results to check eligibility.</p>
+      </div>
+
+      <!-- Tab Nav -->
+      <div class="gc-tabs">
+        <button class="gc-tab" [class.gc-tab-active]="activeGradeTab==='auto'" (click)="activeGradeTab='auto'">
+          <span class="gc-tab-icon" [class.gc-tab-icon-active]="activeGradeTab==='auto'">
+            <i class="fas fa-cloud-download-alt"></i>
+          </span>
+          <span class="gc-tab-txt">Get Results<br>Automatically</span>
+          <span class="gc-tab-dot gc-dot-auto" [class.gc-tab-dot-on]="activeGradeTab==='auto'"></span>
+        </button>
+        <button class="gc-tab" [class.gc-tab-active]="activeGradeTab==='manual'" (click)="activeGradeTab='manual'">
+          <span class="gc-tab-icon" [class.gc-tab-icon-active]="activeGradeTab==='manual'">
+            <i class="fas fa-keyboard"></i>
+          </span>
+          <span class="gc-tab-txt">Enter Results<br>Manually</span>
+          <span class="gc-tab-dot gc-dot-manual" [class.gc-tab-dot-on]="activeGradeTab==='manual'"></span>
+        </button>
+      </div>
+
+      <!-- ── AUTO TAB ── -->
+      <div *ngIf="activeGradeTab==='auto'" class="gc-auto-panel">
+        <div class="gc-retrieval-card">
+          <div class="gc-retrieval-head">
+            <div class="gc-retrieval-icon"><i class="fas fa-cloud-download-alt"></i></div>
+            <div>
+              <h3 class="gc-retrieval-title">Retrieve Official Results</h3>
+              <p class="gc-retrieval-sub">Fetch your WAEC results directly using your index number.</p>
+            </div>
+          </div>
+          <form [formGroup]="examForm" (ngSubmit)="submitFormCheck()" class="gc-retrieval-form">
+            <div class="gc-retrieval-grid">
+              <div class="gc-field">
+                <label class="gc-label">Exam Year</label>
+                <select class="gc-select" formControlName="examYear">
+                  <option value="" disabled selected>Select Year</option>
+                  <option *ngFor="let y of examYears" [value]="y">{{ y }}</option>
+                </select>
+                <span class="gc-field-err" *ngIf="examForm.get('examYear')?.touched && examForm.get('examYear')?.hasError('required')">Required</span>
+              </div>
+              <div class="gc-field">
+                <label class="gc-label">Exam Type</label>
+                <select class="gc-select" formControlName="examType">
+                  <option value="" disabled selected>Select Type</option>
+                  <option [ngValue]="1">WASSCE School Candidate</option>
+                  <option [ngValue]="2">WASSCE Private Candidate</option>
+                </select>
+                <span class="gc-field-err" *ngIf="examForm.get('examType')?.touched && examForm.get('examType')?.hasError('required')">Required</span>
+              </div>
+              <div class="gc-field">
+                <label class="gc-label">Index Number</label>
+                <input class="gc-input" type="text" formControlName="indexNumber" placeholder="e.g. 1234567890" />
+                <span class="gc-field-err" *ngIf="examForm.get('indexNumber')?.touched && examForm.get('indexNumber')?.hasError('required')">Required</span>
+              </div>
+            </div>
+            <div class="gc-retrieval-notice">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+              Automatic retrieval requires a stable connection to the WAEC results portal. If unavailable, switch to manual entry.
+            </div>
+            <!-- Eligibility already checked -->
+            <button *ngIf="isEligibilityChecked" type="button" class="gc-btn-checked" disabled>
+              <i class="fas fa-check-circle"></i> Eligibility Checked
+            </button>
+            <!-- WAEC limit reached (2 sittings fetched) -->
+            <button *ngIf="!isEligibilityChecked && isLimitReached" type="button" class="gc-btn-limit" disabled>
+              <i class="fas fa-ban"></i> Limit Reached
+            </button>
+            <!-- Normal submit -->
+            <button *ngIf="!isEligibilityChecked && !isLimitReached" type="submit" class="gc-btn-primary" [disabled]="!examForm.valid || isLoading">
+              <span *ngIf="!isLoading"><i class="fas fa-cloud-download-alt"></i> Retrieve Results</span>
+              <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Fetching…</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Single sitting result -->
+        <div *ngIf="waecresults && !secondResultFetched && !showNameComparisonModal" class="gc-result-card">
+          <div class="gc-result-card-head">
+            <div class="gc-result-card-info">
+              <span class="gc-status-dot gc-dot-green"></span>
+              <h4 class="gc-result-name">{{ waecresults.cname }}</h4>
+              <span class="gc-result-meta">{{ waecresults.cindex }} · {{ waecresults.examyear }}</span>
+            </div>
+            <button class="gc-btn-danger-sm" (click)="confirmRemoveResult()">
+              <i class="fas fa-trash-alt"></i> Remove
+            </button>
+          </div>
+          <div class="gc-result-dob">Date of Birth: {{ waecresults.dob }}</div>
+          <div class="gc-table-wrap">
+            <table class="gc-table">
+              <thead><tr><th>Subject</th><th>Grade</th><th>Interpretation</th></tr></thead>
+              <tbody>
+                <tr *ngFor="let r of waecresults.resultDetails">
+                  <td>{{ r.subject }}</td>
+                  <td><span class="gc-grade-badge" [attr.data-grade]="r.grade">{{ r.grade }}</span></td>
+                  <td class="gc-interp">{{ r.interpretation }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="gc-info-notice">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+            Have a second sitting? Submit the form above again with a different year/index to merge both results.
+          </div>
+          <div class="gc-divider"></div>
+          <div class="gc-check-controls">
+            <div class="gc-field">
+              <label class="gc-label">Check for</label>
+              <select class="gc-select" [(ngModel)]="universityType" [ngModelOptions]="{standalone:true}">
+                <option value="PUBLIC">Public Universities</option>
+                <option value="PRIVATE">Private Universities</option>
+                <option value="">All Universities</option>
+              </select>
+            </div>
+            <div class="gc-cat-section">
+              <label class="gc-label">Programme Categories <span class="gc-req">*</span></label>
+              <div class="gc-cat-chips">
+                <div class="gc-cat-chip" *ngFor="let cat of categories"
+                  [class.gc-cat-on]="isCategorySelected(cat.id)" (click)="toggleCategory(cat.id)">
+                  {{ cat.name }}
+                </div>
+              </div>
+            </div>
+            <button *ngIf="isEligibilityChecked" class="gc-btn-checked" disabled>
+              <i class="fas fa-check-circle"></i> Eligibility Checked
+            </button>
+            <button *ngIf="!isEligibilityChecked" class="gc-btn-primary" (click)="submitGrades()" [disabled]="isLoading || selectedCategoryIds.length===0">
+              <span *ngIf="!isLoading"><i class="fas fa-chart-bar"></i> Check Eligibility</span>
+              <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Checking…</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Two-sitting side-by-side -->
+        <div *ngIf="waecresults && waecresults2" class="gc-two-results">
+          <div class="gc-two-results-grid">
+            <div class="gc-result-card">
+              <div class="gc-result-sitting-badge">FIRST SITTING</div>
+              <div class="gc-result-meta-block">
+                <p><strong>Name:</strong> {{ waecresults.cname }}</p>
+                <p><strong>Index:</strong> {{ waecresults.cindex }}</p>
+                <p><strong>DOB:</strong> {{ waecresults.dob }}</p>
+                <p><strong>Year:</strong> {{ waecresults.examyear }}</p>
+              </div>
+              <div class="gc-table-wrap">
+                <table class="gc-table">
+                  <thead><tr><th>Subject</th><th>Grade</th><th>Interpretation</th></tr></thead>
+                  <tbody>
+                    <tr *ngFor="let r of waecresults.resultDetails">
+                      <td>{{ r.subject }}</td>
+                      <td><span class="gc-grade-badge" [attr.data-grade]="r.grade">{{ r.grade }}</span></td>
+                      <td class="gc-interp">{{ r.interpretation?.trim() }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="gc-result-card" style="position:relative;">
+              <button class="gc-btn-danger-sm" style="position:absolute;top:12px;right:12px;" (click)="confirmRemoveResult()">
+                <i class="fas fa-trash-alt"></i> Remove All
+              </button>
+              <div class="gc-result-sitting-badge gc-sitting-2">SECOND SITTING</div>
+              <div class="gc-result-meta-block">
+                <p><strong>Name:</strong> {{ waecresults2.cname }}</p>
+                <p><strong>Index:</strong> {{ waecresults2.cindex }}</p>
+                <p><strong>DOB:</strong> {{ waecresults2.dob }}</p>
+                <p><strong>Year:</strong> {{ waecresults2.examyear }}</p>
+              </div>
+              <div class="gc-table-wrap">
+                <table class="gc-table">
+                  <thead><tr><th>Subject</th><th>Grade</th><th>Interpretation</th></tr></thead>
+                  <tbody>
+                    <tr *ngFor="let r of waecresults2.resultDetails">
+                      <td>{{ r.subject }}</td>
+                      <td><span class="gc-grade-badge" [attr.data-grade]="r.grade">{{ r.grade }}</span></td>
+                      <td class="gc-interp">{{ r.interpretation?.trim() }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="gc-merge-notice">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Both sittings loaded — best grades from each sitting will be merged automatically.
+          </div>
+          <div class="gc-check-controls">
+            <div class="gc-field">
+              <label class="gc-label">Check for</label>
+              <select class="gc-select" [(ngModel)]="universityType" [ngModelOptions]="{standalone:true}">
+                <option value="PUBLIC">Public Universities</option>
+                <option value="PRIVATE">Private Universities</option>
+                <option value="">All Universities</option>
+              </select>
+            </div>
+            <div class="gc-cat-section">
+              <label class="gc-label">Programme Categories <span class="gc-req">*</span></label>
+              <div class="gc-cat-chips">
+                <div class="gc-cat-chip" *ngFor="let cat of categories"
+                  [class.gc-cat-on]="isCategorySelected(cat.id)" (click)="toggleCategory(cat.id)">
+                  {{ cat.name }}
+                </div>
+              </div>
+            </div>
+            <button class="gc-btn-primary" (click)="submitGrades()" [disabled]="isLoading || selectedCategoryIds.length===0">
+              <span *ngIf="!isLoading"><i class="fas fa-chart-bar"></i> Check Eligibility (Merged)</span>
+              <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Checking…</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MANUAL TAB ── -->
+      <div *ngIf="activeGradeTab==='manual'" class="gc-manual-panel">
+        <div class="gc-manual-card">
+          <div class="gc-manual-head">
+            <i class="fas fa-keyboard"></i> Manual Results Entry
+          </div>
+          <div class="gc-manual-body">
+            <form [formGroup]="entryForm">
+              <!-- Candidate info row -->
+              <div class="gc-manual-section">
+                <div class="gc-manual-section-title">
+                  <i class="fas fa-info-circle"></i> Candidate Information
+                </div>
+                <div class="gc-manual-grid-3">
+                  <div class="gc-field">
+                    <label class="gc-label">Index Number</label>
+                    <input class="gc-input" type="text" formControlName="indexNumber" placeholder="Enter index number" />
+                  </div>
+                  <div class="gc-field">
+                    <label class="gc-label">Exam Board</label>
+                    <select class="gc-select" formControlName="examBoard" (change)="onBoardChange($event)">
+                      <option value="" disabled selected>Choose Board</option>
+                      <option *ngFor="let b of examBoards" [value]="b">{{ b }}</option>
+                    </select>
+                  </div>
+                  <div class="gc-field">
+                    <label class="gc-label">Exam Year</label>
+                    <select class="gc-select" formControlName="examYear">
+                      <option value="" disabled selected>Choose Year</option>
+                      <option *ngFor="let y of examYears" [value]="y">{{ y }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Subject details -->
+              <div class="gc-manual-section">
+                <div class="gc-manual-section-title">
+                  <i class="fas fa-book"></i> Subject Details
+                </div>
+                <div class="gc-manual-grid-4">
+                  <div class="gc-field">
+                    <label class="gc-label">Exam Type</label>
+                    <select class="gc-select" formControlName="examType" (change)="onExamTypeChangeEntryForm($event)">
+                      <option value="" disabled selected>Choose Type</option>
+                      <option *ngFor="let t of availableExamTypes" [value]="t">{{ t }}</option>
+                    </select>
+                  </div>
+                  <div class="gc-field">
+                    <label class="gc-label">Subject</label>
+                    <select class="gc-select" formControlName="subject">
+                      <option value="" disabled selected>Select Subject</option>
+                      <option *ngFor="let s of currentSubjects" [value]="s">{{ s }}</option>
+                    </select>
+                  </div>
+                  <div class="gc-field">
+                    <label class="gc-label">Grade</label>
+                    <select class="gc-select" formControlName="grade">
+                      <option value="" disabled selected>Select Grade</option>
+                      <option *ngFor="let g of currentGrades.length ? currentGrades : grades" [value]="g">{{ g }}</option>
+                    </select>
+                  </div>
+                  <div class="gc-field">
+                    <label class="gc-label">Sitting</label>
+                    <select class="gc-select" formControlName="sitting">
+                      <option value="" disabled selected>Select Sitting</option>
+                      <option value="May/June">May/June</option>
+                      <option value="Nov/Dec">Nov/Dec</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="gc-add-row">
+                  <button type="button" class="gc-btn-add" (click)="addEntry()">
+                    <i class="fas fa-plus"></i> Add Subject
+                  </button>
+                </div>
+              </div>
+
+              <!-- Entries table -->
+              <div *ngIf="entries.length > 0" class="gc-entries-section">
+                <div class="gc-table-wrap">
+                  <table class="gc-table">
+                    <thead>
+                      <tr>
+                        <th>Index No.</th><th>Board</th><th>Year</th><th>Type</th>
+                        <th>Subject</th><th>Grade</th><th>Sitting</th><th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of entries; let i = index">
+                        <td>{{ item.indexNumber }}</td>
+                        <td>{{ item.examBoard }}</td>
+                        <td>{{ item.examYear }}</td>
+                        <td>{{ item.examType }}</td>
+                        <td class="gc-td-bold">{{ item.subject }}</td>
+                        <td><span class="gc-grade-badge" [attr.data-grade]="item.grade">{{ item.grade }}</span></td>
+                        <td>{{ item.sitting }}</td>
+                        <td>
+                          <button class="gc-btn-del" (click)="removeEntry(i)">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="gc-divider"></div>
+                <div class="gc-check-controls">
+                  <div class="gc-field">
+                    <label class="gc-label">Check for</label>
+                    <select class="gc-select" [(ngModel)]="universityType" [ngModelOptions]="{standalone:true}">
+                      <option value="PUBLIC">Public Universities</option>
+                      <option value="PRIVATE">Private Universities</option>
+                      <option value="">All Universities</option>
+                    </select>
+                  </div>
+                  <div class="gc-cat-section">
+                    <label class="gc-label">Programme Categories <span class="gc-req">*</span></label>
+                    <div class="gc-cat-chips">
+                      <div class="gc-cat-chip" *ngFor="let cat of categories"
+                        [class.gc-cat-on]="isCategorySelected(cat.id)" (click)="toggleCategory(cat.id)">
+                        {{ cat.name }}
+                      </div>
+                    </div>
+                  </div>
+                  <button *ngIf="isEligibilityChecked" class="gc-btn-checked" disabled>
+                    <i class="fas fa-check-circle"></i> Eligibility Checked
+                  </button>
+                  <button *ngIf="!isEligibilityChecked" class="gc-btn-primary" (click)="submitGrades()" [disabled]="isLoading || selectedCategoryIds.length===0">
+                    <span *ngIf="!isLoading"><i class="fas fa-chart-bar"></i> Check Eligibility</span>
+                    <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Checking…</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 6 — RESULTS                       -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel gc-result-panel" *ngIf="currentStep==='result' && eligibilityResult">
+      <div class="gc-result-header">
+        <div>
+          <span class="gc-step-tag">Step 5 of 5</span>
+          <h2 class="gc-panel-title">Your Eligibility Results</h2>
+        </div>
+        <button class="gc-btn-outline" (click)="openSaveModal()">💾 Save Results</button>
+      </div>
+
+      <!-- Summary strip -->
+      <div class="gc-summary-strip" *ngIf="eligibilityResult.summary">
+        <div class="gc-summary-stat">
+          <span class="gc-summary-num">{{ eligibilityResult.summary.totalEligiblePrograms || 0 }}</span>
+          <span class="gc-summary-lbl">Eligible Programmes</span>
+        </div>
+        <div class="gc-summary-divider"></div>
+        <div class="gc-summary-stat">
+          <span class="gc-summary-num">{{ eligibilityResult.summary.totalUniversities || 0 }}</span>
+          <span class="gc-summary-lbl">Universities</span>
+        </div>
+        <div class="gc-summary-divider"></div>
+        <div class="gc-summary-stat">
+          <span class="gc-summary-num" style="color:var(--amber)">{{ eligibilityResult.summary.totalAlternativePrograms || 0 }}</span>
+          <span class="gc-summary-lbl">Alternatives</span>
+        </div>
+      </div>
+
+      <!-- No universities at all -->
+      <div class="gc-no-results" *ngIf="getUniversities().length===0">
+        <div class="gc-no-icon">🔍</div>
+        <p>No universities matched the selected categories.</p>
+        <p class="gc-no-hint">Try selecting different categories or reviewing your grade entries.</p>
+      </div>
+
+      <!-- University cards -->
+      <div class="gc-uni-card" *ngFor="let uni of getUniversities()">
+        <div class="gc-uni-header" (click)="toggleUniversity(uni.universityName)">
+          <div class="gc-uni-left">
+            <span class="gc-status-dot"
+              [class.gc-dot-green]="getEligiblePrograms(uni).length > 0"
+              [class.gc-dot-violet]="getEligiblePrograms(uni).length === 0"></span>
+            <div>
+              <span class="gc-uni-name">{{ uni.universityName }}</span>
+              <div class="gc-uni-meta">
+                <span class="gc-uni-type"
+                  [class.gc-type-pub]="uni.universityType==='PUBLIC'"
+                  [class.gc-type-priv]="uni.universityType==='PRIVATE'">{{ uni.universityType }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="gc-uni-right">
+            <span class="gc-uni-count" *ngIf="getEligiblePrograms(uni).length > 0">
+              {{ getEligiblePrograms(uni).length }} eligible
+            </span>
+            <span class="gc-uni-count gc-count-alt" *ngIf="getEligiblePrograms(uni).length === 0 && getAlternativePrograms(uni).length > 0">
+              {{ getAlternativePrograms(uni).length }} alternative{{ getAlternativePrograms(uni).length > 1 ? 's' : '' }}
+            </span>
+            <span class="gc-chevron" [class.gc-chevron-open]="isUniversityExpanded(uni.universityName)">›</span>
+          </div>
+        </div>
+
+        <div class="gc-uni-body" *ngIf="isUniversityExpanded(uni.universityName)">
+
+          <!-- Case 1: Has eligible programmes — show top 2 -->
+          <ng-container *ngIf="getEligiblePrograms(uni).length > 0; else showAlternatives">
+            <div class="gc-prog-section-title">✅ Top Eligible Programmes</div>
+            <div *ngFor="let prog of getTopPrograms(getEligiblePrograms(uni), 2); let first = first"
+                 class="gc-prog-card" [class.gc-prog-top]="first">
+              <div class="gc-prog-row">
+                <strong class="gc-prog-name">
+                  <span *ngIf="first" class="gc-top-badge">Top Match</span>
+                  {{ prog.programName }}
+                </strong>
+                <div class="gc-meter" *ngIf="prog.eligibilityPercentage != null">
+                  <div class="gc-meter-label">Likelihood</div>
+                  <div class="gc-meter-bar">
+                    <div class="gc-meter-fill"
+                      [style.width.%]="prog.eligibilityPercentage"
+                      [class.gc-meter-high]="prog.eligibilityPercentage>=70"
+                      [class.gc-meter-mid]="prog.eligibilityPercentage>=40 && prog.eligibilityPercentage<70"
+                      [class.gc-meter-low]="prog.eligibilityPercentage<40"></div>
+                  </div>
+                  <span class="gc-meter-val">{{ prog.eligibilityPercentage | number:'1.0-0' }}%</span>
+                </div>
+              </div>
+              <div *ngIf="prog.overallDecision" class="gc-prog-decision">{{ prog.overallDecision }}</div>
+            </div>
+            <div *ngIf="getEligiblePrograms(uni).length > 2" class="gc-more-hint">
+              +{{ getEligiblePrograms(uni).length - 2 }} more eligible programme{{ getEligiblePrograms(uni).length - 2 > 1 ? 's' : '' }}
+            </div>
+          </ng-container>
+
+          <!-- Case 2: No eligible — fall back to top 2 alternatives -->
+          <ng-template #showAlternatives>
+            <ng-container *ngIf="getAlternativePrograms(uni).length > 0; else noPrograms">
+              <div class="gc-no-eligible-banner">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                No fully eligible programmes — showing nearest alternatives
+              </div>
+              <div class="gc-prog-section-title gc-alt-title">ℹ️ Best Alternative Programmes</div>
+              <div *ngFor="let prog of getTopPrograms(getAlternativePrograms(uni), 2); let first = first"
+                   class="gc-prog-card gc-prog-alt" [class.gc-prog-top]="first">
+                <div class="gc-prog-row">
+                  <strong class="gc-prog-name">
+                    <span *ngIf="first" class="gc-top-badge gc-badge-alt">Closest Match</span>
+                    {{ prog.programName }}
+                  </strong>
+                  <div class="gc-meter" *ngIf="prog.eligibilityPercentage != null">
+                    <div class="gc-meter-label">Likelihood</div>
+                    <div class="gc-meter-bar">
+                      <div class="gc-meter-fill gc-meter-alt" [style.width.%]="prog.eligibilityPercentage"></div>
+                    </div>
+                    <span class="gc-meter-val">{{ prog.eligibilityPercentage | number:'1.0-0' }}%</span>
+                  </div>
+                </div>
+                <div *ngIf="prog.overallDecision" class="gc-prog-decision gc-decision-alt">{{ prog.overallDecision }}</div>
+              </div>
+              <div *ngIf="getAlternativePrograms(uni).length > 2" class="gc-more-hint">
+                +{{ getAlternativePrograms(uni).length - 2 }} more alternative{{ getAlternativePrograms(uni).length - 2 > 1 ? 's' : '' }}
+              </div>
+            </ng-container>
+            <ng-template #noPrograms>
+              <p class="gc-no-prog-msg">No programmes matched your grades for this university.</p>
+            </ng-template>
+          </ng-template>
+
+        </div>
+      </div>
+
+      <!-- CTA Footer -->
+      <div class="gc-cta-footer">
+        <div class="gc-cta-left">
+          <div class="gc-cta-icon">🎓</div>
+          <div>
+            <h3 class="gc-cta-title">Save Your Report</h3>
+            <p class="gc-cta-sub">Register for free to export PDF, access anytime, and get personalised recommendations.</p>
+          </div>
+        </div>
+        <button class="gc-btn-primary" (click)="openSaveModal()">Create Free Account</button>
+      </div>
+    </div>
+
+  </div><!-- end gc-main -->
+</div><!-- end gc-shell -->
+
+
+<!-- ── Name Comparison Modal ── -->
+<div class="gc-modal-backdrop" *ngIf="showNameComparisonModal">
+  <div class="gc-modal">
+    <div class="gc-modal-header">
+      <span class="gc-modal-title">Results Verification</span>
+      <button class="gc-modal-close" (click)="closeNameComparisonModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="gc-modal-body">
+      <div class="gc-name-row">
+        <div class="gc-name-col">
+          <label>Entered Name</label>
+          <div class="gc-name-val">{{ enteredName || 'Not provided' }}</div>
+        </div>
+        <div class="gc-name-col">
+          <label>WAEC Candidate Name</label>
+          <div class="gc-name-val">{{ candinateName || 'Not available' }}</div>
+        </div>
+      </div>
+      <div class="gc-name-result" [class.gc-name-match]="namesMatch()" [class.gc-name-warn]="!namesMatch()">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path *ngIf="!namesMatch()" d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path *ngIf="namesMatch()" d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>{{ namesMatch() ? 'Names Match ✓' : "We couldn't verify this result belongs to you. Please check your details, remove the result and try again." }}</span>
+      </div>
+    </div>
+    <div class="gc-modal-footer">
+      <button class="gc-btn-primary" (click)="closeNameComparisonModal()">Close Verification</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Remove Confirm Modal ── -->
+<div class="gc-modal-backdrop" *ngIf="showRemoveConfirmModal">
+  <div class="gc-modal gc-modal-sm">
+    <div class="gc-modal-header">
+      <span class="gc-modal-title">Confirm Removal</span>
+    </div>
+    <div class="gc-modal-body">
+      <p class="gc-modal-text">Are you sure you want to remove WAEC result(s) for <strong>{{ waecresults?.cname }}</strong>?</p>
+    </div>
+    <div class="gc-modal-footer gc-modal-footer-row">
+      <button class="gc-btn-outline" (click)="cancelRemove()">Cancel</button>
+      <button class="gc-btn-danger" (click)="confirmRemove()">Yes, Remove</button>
+    </div>
+  </div>
+</div>

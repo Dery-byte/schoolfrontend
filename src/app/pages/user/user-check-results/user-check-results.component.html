@@ -1034,8 +1034,8 @@
         <app-user-grades-entry
           *ngIf="showH2Message"
           [recordId]="recordId"
-          [subscriptionType]="currentCheck?.subscriptionType"
-          [checkLimit]="currentCheck?.checkLimit ?? 0"
+          [subscriptionType]="currentCheck.subscriptionType"
+          [checkLimit]="currentCheck.checkLimit ?? 0"
           [fullName]="fullName"
           (refreshChecks)="getResultsByUser()"
           (backToList)="goBackToList()">

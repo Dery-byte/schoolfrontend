@@ -41,6 +41,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './pages/utilities/AuthInterceptor';
 import { TypingDirective } from './pages/utilities/typing.directive';
 import { UserGradesEntryComponent } from './pages/user/user-grades-entry/user-grades-entry.component';
+import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.component';
+import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
 
 
 
@@ -73,6 +75,8 @@ import { UserGradesEntryComponent } from './pages/user/user-grades-entry/user-gr
     LoginSuccessComponent,
     TypingDirective,
     UserGradesEntryComponent,
+    GuestLayoutComponent,
+    GuestCheckComponent,
   ],
 
   exports:[TypingDirective],

@@ -10,6 +10,7 @@ import { RegistrationRequest } from '../../services/models/registration-request'
 import { delay } from 'rxjs';
 import { BlurService } from 'src/app/shared/blur/blur.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+import { GuestService } from 'src/app/Utilities/guest.service';
 
 
 
@@ -92,7 +93,8 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthService,
     private blurService: BlurService,
-    private manualService: ManaulServiceService
+    private manualService: ManaulServiceService,
+    private guestService: GuestService
 
   ) {
   }
@@ -114,7 +116,8 @@ export class LoginComponent {
     this.tokenService.token = token;
     const decoded = decodeToken(token);
     this.authService.setUser(decoded!.sub);
-    this.router.navigate(['/user/home']); // or based on role
+    this.attachGuestSessionIfPresent();
+    this.router.navigate(['/user/home']);
   }
 }
 
@@ -138,6 +141,7 @@ export class LoginComponent {
     this.authService.setUser(res.fullName || username); // ✅ change here
         }
         if (decodedToken && decodedToken.authorities) {
+          this.attachGuestSessionIfPresent();
           this.navigateBasedOnRole(decodedToken.authorities);
         } else {
           // this.router.navigate(['home']); // Default route if no authorities are found
@@ -155,6 +159,17 @@ export class LoginComponent {
         }
       }
     });
+  }
+
+  private attachGuestSessionIfPresent(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pendingSessionId = urlParams.get('sessionId') || this.guestService.getSessionId();
+    if (pendingSessionId) {
+      this.guestService.attachTempReportToUser(pendingSessionId).subscribe({
+        next: () => this.guestService.clearSession(),
+        error: (err) => console.warn('Guest report attach failed (non-blocking):', err)
+      });
+    }
   }
 
   navigateBasedOnRole(authorities: string[]) {
@@ -252,6 +267,12 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.loading = false;
+          // Preserve guest session across registration flow
+          const urlParams = new URLSearchParams(window.location.search);
+          const pendingSessionId = urlParams.get('sessionId');
+          if (pendingSessionId) {
+            this.guestService.saveSessionId(pendingSessionId);
+          }
           // Set the flag before navigation
           this.authService.setComingFromRegistration(true);
           this.router.navigate(['/activate-account']);

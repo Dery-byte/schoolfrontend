@@ -10,6 +10,7 @@ import { RegistrationRequest } from '../../services/models/registration-request'
 import { delay } from 'rxjs';
 import { AuthenticationRequest } from '../../services/models/authentication-request';
 import { AuthenticationService } from 'src/app/services/services';
+import { GuestService } from 'src/app/Utilities/guest.service';
 
 
 
@@ -28,6 +29,7 @@ export class RegisterComponent {
     private tokenService: TokenService,
     private router: Router,
     private authService: AuthService,
+    private guestService: GuestService,
 
   ) {
   }
@@ -185,6 +187,7 @@ export class RegisterComponent {
           this.authService.setUser(username);
         }
         if (decodedToken && decodedToken.authorities) {
+          this.attachGuestSessionIfPresent();
           this.navigateBasedOnRole(decodedToken.authorities);
         } else {
           // this.router.navigate(['home']); // Default route if no authorities are found
@@ -270,6 +273,12 @@ export class RegisterComponent {
       .subscribe({
         next: () => {
           this.loading = false;
+          // Preserve guest session across registration flow
+          const urlParams = new URLSearchParams(window.location.search);
+          const pendingSessionId = urlParams.get('sessionId');
+          if (pendingSessionId) {
+            this.guestService.saveSessionId(pendingSessionId);
+          }
           // Set the flag before navigation
           this.authService.setComingFromRegistration(true);
           this.router.navigate(['/activate-account']);
@@ -292,6 +301,17 @@ export class RegisterComponent {
 
 
 
+
+  private attachGuestSessionIfPresent(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pendingSessionId = urlParams.get('sessionId') || this.guestService.getSessionId();
+    if (pendingSessionId) {
+      this.guestService.attachTempReportToUser(pendingSessionId).subscribe({
+        next: () => this.guestService.clearSession(),
+        error: (err) => console.warn('Guest report attach failed (non-blocking):', err)
+      });
+    }
+  }
 
   navigateBasedOnRole(authorities: string[]) {
     if (authorities.includes('ADMIN')) {
