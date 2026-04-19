@@ -1,0 +1,131 @@
+<div class="container-fluid py-4">
+
+  <!-- Page header -->
+  <div class="bu-header">
+    <div class="bu-header-icon">
+      <i class="fas fa-file-upload"></i>
+    </div>
+    <div>
+      <h4 class="bu-title">Bulk Program Upload</h4>
+      <p class="bu-subtitle">Upload a validated university JSON file to import all programs at once.</p>
+    </div>
+  </div>
+
+  <!-- Upload card -->
+  <div class="bu-card">
+
+    <!-- File drop zone -->
+    <div class="bu-dropzone" [class.bu-dropzone--loaded]="parsedData" (click)="fileInput.click()">
+      <input #fileInput type="file" accept=".json" style="display:none" (change)="onFileSelected($event)">
+
+      <ng-container *ngIf="!parsedData">
+        <div class="bu-drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <p class="bu-drop-text">Click to select a <strong>.json</strong> file</p>
+        <p class="bu-drop-hint">File must contain <code>universityId</code> and <code>programs</code> fields</p>
+      </ng-container>
+
+      <ng-container *ngIf="parsedData">
+        <div class="bu-drop-icon bu-drop-icon--ok"><i class="fas fa-check-circle"></i></div>
+        <p class="bu-drop-text"><strong>{{ fileName }}</strong></p>
+        <p class="bu-drop-hint">
+          {{ previewPrograms.length }} programs ·
+          <span *ngIf="universityLoading">Loading university…</span>
+          <strong *ngIf="!universityLoading">{{ universityName }}</strong>
+          (ID {{ parsedData.universityId }}) · Click to change file
+        </p>
+      </ng-container>
+    </div>
+
+    <!-- Parse error -->
+    <div class="bu-alert bu-alert--error" *ngIf="parseError">
+      <i class="fas fa-exclamation-circle"></i> {{ parseError }}
+    </div>
+
+    <!-- Preview table -->
+    <div class="bu-preview" *ngIf="previewPrograms.length">
+      <h6 class="bu-preview-title">Preview — {{ previewPrograms.length }} programs</h6>
+      <div class="bu-preview-scroll">
+        <table class="bu-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Program Name</th>
+              <th>Core Subjects</th>
+              <th>Alt. Groups</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of previewPrograms; let i = index">
+              <td class="bu-td-num">{{ i + 1 }}</td>
+              <td>{{ p.name }}</td>
+              <td><span class="bu-badge bu-badge--blue">{{ p.coreCount }}</span></td>
+              <td><span class="bu-badge bu-badge--purple">{{ p.altGroupCount }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="bu-actions" *ngIf="parsedData && !result">
+      <button class="bu-btn bu-btn--ghost" (click)="reset()" [disabled]="isUploading">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+      <button class="bu-btn bu-btn--primary" (click)="upload()" [disabled]="isUploading">
+        <span *ngIf="!isUploading"><i class="fas fa-upload"></i> Upload {{ previewPrograms.length }} Programs</span>
+        <span *ngIf="isUploading" class="bu-spinner-row">
+          <span class="bu-spinner"></span> Uploading…
+        </span>
+      </button>
+    </div>
+
+    <!-- Upload error -->
+    <div class="bu-alert bu-alert--error" *ngIf="uploadError">
+      <i class="fas fa-exclamation-circle"></i> {{ uploadError }}
+    </div>
+
+    <!-- Result card -->
+    <div class="bu-result" *ngIf="result">
+      <div class="bu-result-header">
+        <i class="fas fa-check-circle bu-result-icon"></i>
+        <h5 class="bu-result-title">Upload Complete</h5>
+      </div>
+
+      <div class="bu-result-stats">
+        <div class="bu-stat bu-stat--green">
+          <span class="bu-stat-num">{{ result.imported }}</span>
+          <span class="bu-stat-label">Imported</span>
+        </div>
+        <div class="bu-stat bu-stat--yellow">
+          <span class="bu-stat-num">{{ result.skipped }}</span>
+          <span class="bu-stat-label">Skipped</span>
+        </div>
+        <div class="bu-stat bu-stat--red">
+          <span class="bu-stat-num">{{ result.failed }}</span>
+          <span class="bu-stat-label">Failed</span>
+        </div>
+      </div>
+
+      <!-- Skipped names -->
+      <div class="bu-detail-block" *ngIf="result.skippedNames?.length">
+        <h6 class="bu-detail-title"><i class="fas fa-forward"></i> Skipped (duplicates)</h6>
+        <ul class="bu-detail-list">
+          <li *ngFor="let name of result.skippedNames">{{ name }}</li>
+        </ul>
+      </div>
+
+      <!-- Errors -->
+      <div class="bu-detail-block bu-detail-block--error" *ngIf="result.errors?.length">
+        <h6 class="bu-detail-title"><i class="fas fa-times-circle"></i> Errors</h6>
+        <ul class="bu-detail-list">
+          <li *ngFor="let err of result.errors">{{ err }}</li>
+        </ul>
+      </div>
+
+      <button class="bu-btn bu-btn--ghost bu-mt" (click)="reset()">
+        <i class="fas fa-redo"></i> Upload Another File
+      </button>
+    </div>
+
+  </div>
+</div>

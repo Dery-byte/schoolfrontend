@@ -389,7 +389,8 @@ export class ManaulServiceService {
     return this.http.get(`${baseUrl}/auth/biodata/getAllRegions`);
   }
 
-
-
+  bulkImportPrograms(payload: any): Observable<any> {
+    return this.http.post(`${baseUrl}/auth/programs/bulkImport`, payload);
+  }
 
 }

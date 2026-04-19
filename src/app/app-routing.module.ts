@@ -16,6 +16,7 @@ import { UserEligibilityComponent } from './pages/user/user-eligibility/user-eli
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { CollegesComponent } from './pages/admin/colleges/colleges.component';
+import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.component';
 import { LoginSuccessComponent } from './pages/login-success/login-success.component';
 import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.component';
 import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
@@ -43,7 +44,8 @@ const routes: Routes = [
       { path: 'addPrograms', component: AddCoursesComponent },
       { path: 'universities', component: AllUniversitiesComponent },
       { path: 'programs', component: AllProgramsComponent },
-      { path: 'colleges', component: CollegesComponent }
+      { path: 'colleges', component: CollegesComponent },
+      { path: 'bulkUpload', component: BulkUploadComponent }
 
       // {path:'allFarms', component:AllFarmsComponent}
       // {path:'allFarms', component:AllFarmsComponent}

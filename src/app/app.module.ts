@@ -43,6 +43,7 @@ import { TypingDirective } from './pages/utilities/typing.directive';
 import { UserGradesEntryComponent } from './pages/user/user-grades-entry/user-grades-entry.component';
 import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.component';
 import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
+import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.component';
 
 
 
@@ -77,6 +78,7 @@ import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.compo
     UserGradesEntryComponent,
     GuestLayoutComponent,
     GuestCheckComponent,
+    BulkUploadComponent,
   ],
 
   exports:[TypingDirective],
