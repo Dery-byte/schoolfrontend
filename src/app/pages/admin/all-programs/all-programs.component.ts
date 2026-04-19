@@ -4,6 +4,7 @@ import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, FormArray, Validators,AbstractControl  } from '@angular/forms';
+import { CATEGORIES, COMBINED_SUBJECTS } from './all-programs.data';
 
 interface University {
   id: number;
@@ -45,18 +46,8 @@ export class AllProgramsComponent {
   universities: University[] = [];
   colleges: { id: number, name: string }[] = [];
   grades: string[] = ['A1', 'B2', 'B3', 'C4', 'C5', 'C6', 'D7', 'E8', 'F9'];
-  
-  categories: { [key: string]: string[] } = {
-    Science: ['ENGLISH LANG', 'INTEGRATED SCIENCE', 'BIOLOGY', 'CHEMISTRY', 'PHYSICS', 'MATHEMATICS(CORE)', 'MATHEMATICS(ELECT)'],
-    Arts: ['ENGLISH LANG', 'SOCIAL STUDIES', 'GOVERNMENT', 'MATHEMATICS(CORE)', 'LITERATURE'],
-    Business: ['ENGLISH LANG', 'MATHEMATICS(CORE)', 'ACCOUNTING', 'ECONOMICS', 'BUSINESS MANAGEMENT']
-  };
-
-  combinedSubjects: string[] = [
-    ...this.categories['Science'],
-    ...this.categories['Arts'],
-    ...this.categories['Business']
-  ];
+  categories = CATEGORIES;
+  combinedSubjects = COMBINED_SUBJECTS;
 
   updateProgramForm: FormGroup;
 
