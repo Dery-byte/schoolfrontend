@@ -402,7 +402,7 @@ export class UserCheckResultsComponent implements OnInit {
     this.showPaymentModal = true;
     document.body.style.overflow = 'hidden';
     this.blurService.setBlur(true);
-    const fixedAmount = subscriptionType === 'PREMIUM' ? 10 : 5;
+    const fixedAmount = subscriptionType === 'PREMIUM' ? 1 : 1;
     this.paymentForm.patchValue({ amount: fixedAmount.toFixed(2), subscriptionType: this.selectedPlan });
   }
 
