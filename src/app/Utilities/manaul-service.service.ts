@@ -393,4 +393,8 @@ export class ManaulServiceService {
     return this.http.post(`${baseUrl}/auth/programs/bulkImport`, payload);
   }
 
+  chatWithMudita(message: string, history: { role: string; content: string }[], userTurns: number = 0): Observable<any> {
+    return this.http.post(`${baseUrl}/auth/chat/message`, { message, history, userTurns });
+  }
+
 }

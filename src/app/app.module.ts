@@ -44,6 +44,7 @@ import { UserGradesEntryComponent } from './pages/user/user-grades-entry/user-gr
 import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.component';
 import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
 import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.component';
+import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 
 
 
@@ -79,6 +80,7 @@ import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.compo
     GuestLayoutComponent,
     GuestCheckComponent,
     BulkUploadComponent,
+    ChatbotComponent,
   ],
 
   exports:[TypingDirective],
