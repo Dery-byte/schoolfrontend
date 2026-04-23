@@ -216,11 +216,16 @@
 
       <div class="gc-otp-row">
         <input
-          *ngFor="let d of otpDigits; let i = index"
-          type="text" maxlength="1"
+          *ngFor="let d of otpDigits; let i = index; trackBy: trackByIndex"
+          #otpBox
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
           class="gc-otp-box"
-          [value]="d"
-          (input)="onOtpChange($any($event.target).value, i)"
+          autocomplete="one-time-code"
+          (keydown)="onOtpKeyDown($event, i)"
+          (focus)="onOtpFocus($event)"
+          (paste)="onOtpPaste($event)"
         />
       </div>
 

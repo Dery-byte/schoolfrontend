@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GuestService } from 'src/app/Utilities/guest.service';
@@ -60,6 +60,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
 
   paymentForm!: FormGroup;
   otpDigits: string[] = ['', '', '', '', '', ''];
+  @ViewChildren('otpBox') otpBoxes!: QueryList<ElementRef<HTMLInputElement>>;
   biodataForm!: FormGroup;
   examForm!: FormGroup;
 
@@ -205,9 +206,9 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   }
 
   get planAmount(): number {
-    if (this.selectedPlan === 'PREMIUM') return 10;
+    if (this.selectedPlan === 'PREMIUM') return 1;
     if (this.selectedPlan === 'PREMIUM_PLUS') return 15;
-    return 5;
+    return 1;
   }
 
   // ---- Session Recovery ----
@@ -283,6 +284,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
           this.guestService.saveSessionId(this.sessionId);
           this.guestService.saveGuestMeta(this.externalRef, this.recordId);
           this.setStep('otp');
+          this.listenForSmsOtp();
         } else {
           this.errorMessage = res?.userMessage || 'Payment initiation failed. Please try again.';
         }
@@ -296,8 +298,70 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
 
   // ---- Step 2: OTP ----
 
-  onOtpChange(value: string, index: number): void {
-    this.otpDigits[index] = value;
+  trackByIndex(index: number): number { return index; }
+
+  onOtpFocus(event: FocusEvent): void {
+    // Select all text on focus so typing always replaces, never appends
+    (event.target as HTMLInputElement).select();
+  }
+
+  onOtpKeyDown(event: KeyboardEvent, index: number): void {
+    const input = event.target as HTMLInputElement;
+
+    if (event.key === 'Backspace') {
+      event.preventDefault();
+      this.otpDigits[index] = '';
+      input.value = '';
+      if (index > 0) this.focusBox(index - 1);
+      return;
+    }
+
+    if (event.key === 'ArrowLeft')  { event.preventDefault(); this.focusBox(index - 1); return; }
+    if (event.key === 'ArrowRight') { event.preventDefault(); this.focusBox(index + 1); return; }
+    if (event.key === 'Tab') return;
+
+    // Block anything that is not a single digit
+    if (!/^\d$/.test(event.key)) { event.preventDefault(); return; }
+
+    // Digit: prevent browser default entirely, set value ourselves, then move
+    event.preventDefault();
+    this.otpDigits[index] = event.key;
+    input.value = event.key;
+    if (index < 5) this.focusBox(index + 1);
+  }
+
+  onOtpPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+    const digits = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+    const boxes = this.otpBoxes.toArray();
+    digits.split('').forEach((d, i) => {
+      this.otpDigits[i] = d;
+      if (boxes[i]) boxes[i].nativeElement.value = d;
+    });
+    this.focusBox(Math.min(digits.length - 1, 5));
+  }
+
+  private focusBox(index: number): void {
+    const boxes = this.otpBoxes.toArray();
+    if (boxes[index]) boxes[index].nativeElement.focus();
+  }
+
+  private async listenForSmsOtp(): Promise<void> {
+    if (!('OTPCredential' in window)) return;
+    try {
+      const credential: any = await (navigator.credentials as any).get({ otp: { transport: ['sms'] } });
+      if (credential?.code) {
+        const digits = credential.code.replace(/\D/g, '').slice(0, 6);
+        digits.split('').forEach((d: string, i: number) => { this.otpDigits[i] = d; });
+        setTimeout(() => {
+          const boxes = this.otpBoxes.toArray();
+          boxes.forEach((box, i) => { if (digits[i]) box.nativeElement.value = digits[i]; });
+          this.focusBox(Math.min(digits.length - 1, 5));
+        }, 0);
+      }
+    } catch {
+      // SMS OTP API unavailable or user dismissed — silent fail, manual entry still works
+    }
   }
 
   submitOtp(): void {
