@@ -211,7 +211,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
     return 1;
   }
 
-  // ---- Session Recovery ----
+  // ---- Session Recovery --
 
   recoverSession(): void {
     const trimmed = this.recoverySessionId.trim();
@@ -638,10 +638,23 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
     return Object.values(map);
   }
 
+  get maxCategories(): number {
+    if (this.selectedPlan === 'BASIC') return 1;
+    if (this.selectedPlan === 'PREMIUM') return 2;
+    return 3;
+  }
+
   toggleCategory(categoryId: number): void {
     const idx = this.selectedCategoryIds.indexOf(categoryId);
-    if (idx === -1) this.selectedCategoryIds.push(categoryId);
-    else this.selectedCategoryIds.splice(idx, 1);
+    if (idx === -1) {
+      if (this.selectedCategoryIds.length >= this.maxCategories) {
+        this.selectedCategoryIds = [...this.selectedCategoryIds.slice(1), categoryId];
+      } else {
+        this.selectedCategoryIds.push(categoryId);
+      }
+    } else {
+      this.selectedCategoryIds.splice(idx, 1);
+    }
   }
 
   isCategorySelected(categoryId: number): boolean {

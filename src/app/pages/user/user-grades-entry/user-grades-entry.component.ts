@@ -221,12 +221,18 @@ export class UserGradesEntryComponent implements OnInit {
     return this.allColleges.filter(a => a.selected || a.isRequired).length;
   }
 
+  get maxColleges(): number {
+    if (this.subscriptionType === 'BASIC') return 1;
+    if (this.subscriptionType === 'PREMIUM') return 2;
+    return 3;
+  }
+
   get reachedMaxSelection(): boolean {
-    return this.selectedCount >= 3;
+    return this.selectedCount >= this.maxColleges;
   }
 
   get hasMinimumSelection(): boolean {
-    return this.allColleges.filter(a => a.selected || a.isRequired).length >= 3;
+    return this.allColleges.filter(a => a.selected || a.isRequired).length >= 1;
   }
 
   // ── Form initialisation ────────────────────────────────────────────────────

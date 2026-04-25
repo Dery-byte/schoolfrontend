@@ -451,6 +451,7 @@
             </div>
             <div class="gc-cat-section">
               <label class="gc-label">Programme Categories <span class="gc-req">*</span></label>
+              <p class="gc-cat-hint">Select up to {{ maxCategories }} study area{{ maxCategories > 1 ? 's' : '' }}</p>
               <div class="gc-cat-chips">
                 <div class="gc-cat-chip" *ngFor="let cat of categories"
                   [class.gc-cat-on]="isCategorySelected(cat.id)" (click)="toggleCategory(cat.id)">
@@ -532,6 +533,7 @@
             </div>
             <div class="gc-cat-section">
               <label class="gc-label">Programme Categories <span class="gc-req">*</span></label>
+              <p class="gc-cat-hint">Select up to {{ maxCategories }} study area{{ maxCategories > 1 ? 's' : '' }}</p>
               <div class="gc-cat-chips">
                 <div class="gc-cat-chip" *ngFor="let cat of categories"
                   [class.gc-cat-on]="isCategorySelected(cat.id)" (click)="toggleCategory(cat.id)">
@@ -665,6 +667,7 @@
                   </div>
                   <div class="gc-cat-section">
                     <label class="gc-label">Programme Categories <span class="gc-req">*</span></label>
+                    <p class="gc-cat-hint">Select up to {{ maxCategories }} study area{{ maxCategories > 1 ? 's' : '' }}</p>
                     <div class="gc-cat-chips">
                       <div class="gc-cat-chip" *ngFor="let cat of categories"
                         [class.gc-cat-on]="isCategorySelected(cat.id)" (click)="toggleCategory(cat.id)">

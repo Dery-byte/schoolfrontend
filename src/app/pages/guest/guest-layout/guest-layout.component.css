@@ -1,10 +1,12 @@
+/* ── Shell ─────────────────────────────────────────────────── */
 .guest-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f5f5f7;
+  background: #09090f; /* match gc-shell dark background */
 }
 
+/* ── Header ────────────────────────────────────────────────── */
 .guest-header {
   background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
   color: #fff;
@@ -12,13 +14,15 @@
   height: 60px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(79,70,229,0.25);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* full-width inner — no max-width cap */
 .guest-header-inner {
   width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,20 +41,44 @@
   color: #fff;
   text-decoration: none;
   font-size: 0.9rem;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 4px;
   padding: 4px 12px;
   transition: background 0.2s;
+  white-space: nowrap;
 }
 
 .guest-login-link:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
+/* ── Content — no width cap, no padding, full-stretch ───────── */
 .guest-content {
   flex: 1;
-  padding: 32px 16px;
-  max-width: 960px;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  margin: 0 auto;
+  min-height: 0;
+}
+
+/* router-outlet host fills all available space */
+.guest-content > * {
+  flex: 1;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .guest-header {
+    padding: 0 16px;
+    height: 52px;
+  }
+
+  .guest-brand {
+    font-size: 1rem;
+  }
+
+  .guest-login-link {
+    font-size: 0.8rem;
+    padding: 3px 10px;
+  }
 }

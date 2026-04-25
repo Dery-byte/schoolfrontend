@@ -164,41 +164,27 @@
 
 
 
-                      <!-- 🔄 ALTERNATIVE REQUIREMENTS -->
+                      <!-- 🔄 ELECTIVE REQUIREMENTS -->
                       <div class="section-wrapper" *ngIf="sections.alternative.length > 0">
-                        <h3 class="section-title">🔄 Alternative Requirements</h3>
-                        <table class="eligibility-table">
-                          <thead>
-                            <tr>
-                              <th class="status-col">Status</th>
-                              <th class="subject-col">Subject / Requirement</th>
-                              <th class="remarks-col">Remarks</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let item of getVisibleItems(sections, 'alternative', program.id)"
-                              [ngClass]="getStatusClass(item.status)">
-                              <td class="status-cell">
-                                <span class="status-icon">{{ getStatusIcon(item) }}</span>
-                              </td>
-                              <td class="subject-cell">
-                                <strong>{{ item.subject }}</strong>
-                                <div class="grade-info" *ngIf="item.yourGrade || item.requirement">
-                                  <span *ngIf="item.yourGrade" class="your-grade">Your Grade: {{ item.yourGrade
-                                    }}</span>
-                                  <span *ngIf="item.requirement" class="required-grade">Required: {{ item.requirement
-                                    }}</span>
-                                </div>
-                              </td>
-                              <td class="remarks-cell">{{ item.remarks }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <button *ngIf="hasMoreItems(sections, 'alternative', 3)" class="show-all-btn"
-                          (click)="toggleShowAll(program.id, 'alternative')">
-                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show (' +
-                          (sections.alternative.length - 3) + ' more)' }}
-                        </button>
+                        <h3 class="section-title">🔄 Elective Requirements</h3>
+                        <ng-container *ngIf="groupAltItems(sections.alternative) as groups">
+                          <table class="eligibility-table alt-req-table">
+                            <thead>
+                              <tr>
+                                <th class="alt-col-met">✅ Met Requirements</th>
+                                <th class="alt-col-missing">⚠️ Missing</th>
+                                <th class="alt-col-below">❌ Below Requirement</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let i of altRowIndices(groups)">
+                                <td class="alt-cell alt-cell-met">{{ formatAltCell(groups.met[i]) || '—' }}</td>
+                                <td class="alt-cell alt-cell-missing">{{ formatAltCell(groups.missing[i]) || '—' }}</td>
+                                <td class="alt-cell alt-cell-below">{{ formatAltCell(groups.below[i]) || '—' }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-container>
                       </div>
                     </ng-container>
 
@@ -284,41 +270,27 @@
                         </button>
                       </div>
 
-                      <!-- 🔄 ALTERNATIVE REQUIREMENTS -->
+                      <!-- 🔄 ELECTIVE REQUIREMENTS -->
                       <div class="section-wrapper" *ngIf="sections.alternative.length > 0">
-                        <h3 class="section-title">🔄 Alternative Requirements</h3>
-                        <table class="eligibility-table">
-                          <thead>
-                            <tr>
-                              <th class="status-col">Status</th>
-                              <th class="subject-col">Subject / Requirement</th>
-                              <th class="remarks-col">Remarks</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let item of getVisibleItems(sections, 'alternative', program.id)"
-                              [ngClass]="getStatusClass(item.status)">
-                              <td class="status-cell">
-                                <span class="status-icon">{{ getStatusIcon(item) }}</span>
-                              </td>
-                              <td class="subject-cell">
-                                <strong>{{ item.subject }}</strong>
-                                <div class="grade-info" *ngIf="item.yourGrade || item.requirement">
-                                  <span *ngIf="item.yourGrade" class="your-grade">Your Grade: {{ item.yourGrade
-                                    }}</span>
-                                  <span *ngIf="item.requirement" class="required-grade">Required: {{ item.requirement
-                                    }}</span>
-                                </div>
-                              </td>
-                              <td class="remarks-cell">{{ item.remarks }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <button *ngIf="hasMoreItems(sections, 'alternative', 3)" class="show-all-btn"
-                          (click)="toggleShowAll(program.id, 'alternative')">
-                          {{ isShowingAll(program.id, 'alternative') ? '▲ Show Less' : '▼ Show (' +
-                          (sections.alternative.length - 3) + ' more)' }}
-                        </button>
+                        <h3 class="section-title">🔄 Elective Requirements</h3>
+                        <ng-container *ngIf="groupAltItems(sections.alternative) as groups">
+                          <table class="eligibility-table alt-req-table">
+                            <thead>
+                              <tr>
+                                <th class="alt-col-met">✅ Met Requirements</th>
+                                <th class="alt-col-missing">⚠️ Missing</th>
+                                <th class="alt-col-below">❌ Below Requirement</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let i of altRowIndices(groups)">
+                                <td class="alt-cell alt-cell-met">{{ formatAltCell(groups.met[i]) || '—' }}</td>
+                                <td class="alt-cell alt-cell-missing">{{ formatAltCell(groups.missing[i]) || '—' }}</td>
+                                <td class="alt-cell alt-cell-below">{{ formatAltCell(groups.below[i]) || '—' }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-container>
                       </div>
                     </ng-container>
                   </div>

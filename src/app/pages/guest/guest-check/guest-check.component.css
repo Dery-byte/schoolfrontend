@@ -1098,6 +1098,7 @@
   gap: 14px;
 }
 .gc-cat-section { display: flex; flex-direction: column; gap: 8px; }
+.gc-cat-hint { font-size: 0.78rem; color: var(--violet, #a78bfa); margin: 0; }
 .gc-cat-chips {
   display: flex;
   flex-wrap: wrap;

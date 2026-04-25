@@ -778,6 +778,30 @@ tr.status-pending   { background-color: #fffbeb; }
   font-weight: bold;
 }
 
+/* ── Elective Requirements — 3-column layout ─────────────────────────────── */
+.alt-req-table th {
+  text-align: center;
+  font-size: 0.68rem;
+  padding: 0.45rem 0.5rem;
+  width: 33.33%;
+}
+
+.alt-col-met     { color: #166534; background: #dcfce7; }
+.alt-col-missing { color: #92400e; background: #fef9c3; }
+.alt-col-below   { color: #991b1b; background: #fee2e2; }
+
+.alt-cell {
+  font-size: 0.72rem;
+  text-align: center;
+  vertical-align: top;
+  padding: 0.4rem 0.5rem;
+  line-height: 1.4;
+}
+
+.alt-cell-met     { background: #f0fdf4; color: #166534; }
+.alt-cell-missing { background: #fffbeb; color: #92400e; }
+.alt-cell-below   { background: #fef2f2; color: #991b1b; }
+
 /* 🆕 ENHANCED GRADE INFO FOR MOBILE */
 .grade-info {
   font-size: 0.7rem;

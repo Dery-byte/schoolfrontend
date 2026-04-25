@@ -334,12 +334,14 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   }
 
   navigateBasedOnRole(authorities: string[]) {
-    if (authorities.includes('ADMIN')) {
-      this.router.navigate(['/admin', 'dashboard']);      // Navigate to admin dashboard
-    } else if (authorities.includes('USER')) {
-      this.router.navigate(['user', 'home']); // Navigate to user dashboard
+    const isAdmin = authorities.some(a => a === 'ADMIN' || a === 'ROLE_ADMIN');
+    const isUser  = authorities.some(a => a === 'USER'  || a === 'ROLE_USER');
+    if (isAdmin) {
+      this.router.navigate(['/admin', 'dashboard']);
+    } else if (isUser) {
+      this.router.navigate(['/user', 'home']);
     } else {
-      this.router.navigate(['']); // Default route for other roles
+      this.router.navigate(['']);
     }
   }
 
@@ -407,7 +409,12 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   returningToEngine = false;
 
   private lastUniIdx = 0;
-  private animTimeout: any;
+  private animTimeouts: ReturnType<typeof setTimeout>[] = [];
+
+  private tick(fn: () => void, ms: number): void {
+    const id = setTimeout(fn, ms);
+    this.animTimeouts.push(id);
+  }
 
   get visibleNodes(): typeof this.uniNodes {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
@@ -417,11 +424,12 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.startAnimation(), 800);
+    this.tick(() => this.startAnimation(), 800);
   }
 
   ngOnDestroy(): void {
-    if (this.animTimeout) clearTimeout(this.animTimeout);
+    this.animTimeouts.forEach(id => clearTimeout(id));
+    this.animTimeouts = [];
   }
 
   private startAnimation(): void {
@@ -436,7 +444,6 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     this.lastUniIdx = next;
     const uni = this.visibleNodes[next];
 
-    // Show this path, move ball to uni
     this.returningToEngine = false;
     this.activeUniIdx = next;
     this.ballX = uni.x;
@@ -444,12 +451,10 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     this.ballColor = uni.color;
     this.ballGlow  = uni.glow;
 
-    // After ball arrives at uni (1.6 s): glow + Processing label
-    this.animTimeout = setTimeout(() => {
-      this.glowingUniIdx   = next;
+    this.tick(() => {
+      this.glowingUniIdx    = next;
       this.processingUniIdx = next;
-      // Brief pause, then depart to engine
-      this.animTimeout = setTimeout(() => {
+      this.tick(() => {
         this.glowingUniIdx = -1;
         this.moveToEngine(uni, next);
       }, 700);
@@ -460,22 +465,20 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     this.returningToEngine = true;
     this.ballX = 50;
     this.ballY = 50;
-    this.animTimeout = setTimeout(() => {
-      // Bounce effect
+    this.tick(() => {
       this.ballBouncing = true;
-      setTimeout(() => { this.ballBouncing = false; }, 500);
+      this.tick(() => { this.ballBouncing = false; }, 500);
 
-      // Hide the path line, glow engine, show message
       this.activeUniIdx = -1;
       this.engineGlowing = true;
       this.engineMessage = `Checking ${uni.shortName} eligibility…`;
       this.engineMessageVisible = true;
 
-      this.animTimeout = setTimeout(() => {
-        this.engineGlowing       = false;
+      this.tick(() => {
+        this.engineGlowing        = false;
         this.engineMessageVisible = false;
-        this.processingUniIdx    = -1;
-        this.animTimeout = setTimeout(() => this.moveToNextUni(), 500);
+        this.processingUniIdx     = -1;
+        this.tick(() => this.moveToNextUni(), 500);
       }, 3000);
     }, 1600);
   }

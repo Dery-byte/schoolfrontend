@@ -173,12 +173,14 @@ export class LoginComponent {
   }
 
   navigateBasedOnRole(authorities: string[]) {
-    if (authorities.includes('ADMIN')) {
-      this.router.navigate(['/admin', 'dashboard']);      // Navigate to admin dashboard
-    } else if (authorities.includes('USER')) {
-      this.router.navigate(['user', 'home']); // Navigate to user dashboard
+    const isAdmin = authorities.some(a => a === 'ADMIN' || a === 'ROLE_ADMIN');
+    const isUser  = authorities.some(a => a === 'USER'  || a === 'ROLE_USER');
+    if (isAdmin) {
+      this.router.navigate(['/admin', 'dashboard']);
+    } else if (isUser) {
+      this.router.navigate(['/user', 'home']);
     } else {
-      this.router.navigate(['']); // Default route for other roles
+      this.router.navigate(['']);
     }
   }
 

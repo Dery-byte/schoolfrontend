@@ -68,7 +68,9 @@ export class UserEligibilityComponent {
     this.loadingError = false;
     this.manualService.eligibilityRecordsByUser().subscribe({
       next: (data: any) => {
-        this.records = data;
+        this.records = (data as any[]).sort((a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
         this.isLoading = false;
       },
       error: (err) => {
@@ -345,12 +347,22 @@ export class UserEligibilityComponent {
                remarks: `No match in: ${groupMatch[1].trim()}`, originalLine: line };
     }
 
-    if (cleanLine.includes('Alternative') && cleanLine.includes('requirement met')) {
-      return { status: 'pass', subject: 'Alternative Requirement', remarks: cleanLine, originalLine: line };
+    // Elective / group summary lines — user-friendly text
+    if (cleanLine.includes('Elective requirement satisfied') ||
+        cleanLine.includes('All required elective subjects passed')) {
+      return { status: 'pass', subject: cleanLine, remarks: '', originalLine: line };
     }
-
-    if (cleanLine.includes('Alternative') && cleanLine.includes('anyOf')) {
-      return { status: 'fail', subject: 'Alternative Requirement', remarks: cleanLine, originalLine: line };
+    if (cleanLine.includes('Elective requirement not met') ||
+        cleanLine.includes('Not all required elective subjects passed') ||
+        cleanLine.includes('None of the subjects in this group qualify')) {
+      return { status: 'fail', subject: cleanLine, remarks: '', originalLine: line };
+    }
+    // Legacy fallback for older records still containing allOf/anyOf text
+    if (cleanLine.includes('Alternative') && cleanLine.includes('requirement met')) {
+      return { status: 'pass', subject: 'Elective requirement satisfied', remarks: '', originalLine: line };
+    }
+    if (cleanLine.includes('Alternative') && (cleanLine.includes('not met') || cleanLine.includes('anyOf'))) {
+      return { status: 'fail', subject: 'Elective requirement not met', remarks: '', originalLine: line };
     }
 
     return { status, subject: cleanLine, remarks: '', originalLine: line };
@@ -381,5 +393,31 @@ export class UserEligibilityComponent {
       'A1': 1, 'B2': 2, 'B3': 3, 'C4': 4, 'C5': 5, 'C6': 6, 'D7': 7, 'E8': 8, 'F9': 9
     };
     return (gradeValues[grade2] || 99) - (gradeValues[grade1] || 99);
+  }
+
+  // ── Elective / Alternative Requirements — 3-column layout helpers ──────────
+
+  groupAltItems(items: ParsedLine[]): { met: ParsedLine[], missing: ParsedLine[], below: ParsedLine[] } {
+    return {
+      met:     items.filter(i => i.status === 'pass' || i.status === 'excellent'),
+      missing: items.filter(i => i.status === 'fail' && (!i.yourGrade || i.remarks === 'Missing')),
+      below:   items.filter(i => i.status === 'fail' && !!i.yourGrade && i.remarks !== 'Missing')
+    };
+  }
+
+  altRowIndices(groups: { met: ParsedLine[], missing: ParsedLine[], below: ParsedLine[] }): number[] {
+    const len = Math.max(groups.met.length, groups.missing.length, groups.below.length);
+    return Array.from({ length: len }, (_, i) => i);
+  }
+
+  formatAltCell(item: ParsedLine | undefined): string {
+    if (!item) return '';
+    let text = item.subject;
+    if (item.yourGrade && item.requirement) {
+      text += ` — ${item.yourGrade} (Req. ${item.requirement})`;
+    } else if (item.requirement) {
+      text += ` (Req. ${item.requirement})`;
+    }
+    return text;
   }
 }
