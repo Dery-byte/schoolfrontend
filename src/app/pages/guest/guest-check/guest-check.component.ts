@@ -206,9 +206,9 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   }
 
   get planAmount(): number {
-    if (this.selectedPlan === 'PREMIUM') return 1;
-    if (this.selectedPlan === 'PREMIUM_PLUS') return 15;
-    return 1;
+    if (this.selectedPlan === 'BASIC') return 10;
+    if (this.selectedPlan === 'PREMIUM') return 15;
+    return 25;
   }
 
   // ---- Session Recovery --
@@ -639,9 +639,9 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   }
 
   get maxCategories(): number {
-    if (this.selectedPlan === 'BASIC') return 1;
-    if (this.selectedPlan === 'PREMIUM') return 2;
-    return 3;
+    if (this.selectedPlan === 'BASIC') return 10;
+    if (this.selectedPlan === 'PREMIUM') return 15;
+    return 25;
   }
 
   toggleCategory(categoryId: number): void {

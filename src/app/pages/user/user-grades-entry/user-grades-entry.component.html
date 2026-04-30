@@ -35,22 +35,9 @@
   <div class="mb-4">
     <div class="modern-tab-container">
       <ul ngbNav #nav="ngbNav" class="modern-nav">
-        <li ngbNavItem class="modern-nav-item">
-          <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
-            <div class="modern-tab-content" (click)="activeTab = 'auto'">
-              <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
-              <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
-                <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
-              </div>
-              <span class="tab-text" [class.active]="activeTab === 'auto'">
-                Get Results<br>Automatically
-              </span>
-              <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
-            </div>
-          </a>
-        </li>
 
-        <li ngbNavItem class="modern-nav-item">
+
+  <li ngbNavItem class="modern-nav-item">
           <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'manual'">
             <div class="modern-tab-content" (click)="activeTab = 'manual'">
               <div class="tab-background" [class.active]="activeTab === 'manual'"></div>
@@ -64,6 +51,25 @@
             </div>
           </a>
         </li>
+
+
+
+        <li ngbNavItem class="modern-nav-item">
+          <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
+            <div class="modern-tab-content disabled-tab" title="Coming soon">
+              <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
+              <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
+                <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
+              </div>
+              <span class="tab-text" [class.active]="activeTab === 'auto'">
+                Get Results<br>Automatically
+              </span>
+              <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
+            </div>
+          </a>
+        </li>
+
+      
       </ul>
     </div>
   </div>
@@ -952,21 +958,6 @@
       <div class="modern-tab-container">
         <ul ngbNav #nav2="ngbNav" class="modern-nav">
           <li ngbNavItem class="modern-nav-item">
-            <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
-              <div class="modern-tab-content" (click)="activeTab = 'auto'">
-                <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
-                <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
-                  <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
-                </div>
-                <span class="tab-text" [class.active]="activeTab === 'auto'">
-                  Get Results<br>Automatically
-                </span>
-                <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
-              </div>
-            </a>
-          </li>
-
-          <li ngbNavItem class="modern-nav-item">
             <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'manual'">
               <div class="modern-tab-content" (click)="activeTab = 'manual'">
                 <div class="tab-background" [class.active]="activeTab === 'manual'"></div>
@@ -980,11 +971,28 @@
               </div>
             </a>
           </li>
+
+          <li ngbNavItem class="modern-nav-item">
+            <a ngbNavLink class="modern-nav-link" [class.active]="activeTab === 'auto'">
+              <div class="modern-tab-content disabled-tab" title="Coming soon">
+                <div class="tab-background" [class.active]="activeTab === 'auto'"></div>
+                <div class="icon-container auto-tab" [class.active]="activeTab === 'auto'">
+                  <i class="fas fa-cloud-download-alt icon" [class.active]="activeTab === 'auto'"></i>
+                </div>
+                <span class="tab-text" [class.active]="activeTab === 'auto'">
+                  Get Results<br>Automatically
+                </span>
+                <div class="indicator-dot auto-dot" [class.active]="activeTab === 'auto'"></div>
+              </div>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </div>
 
+
+  
   <div class="prm-content" [ngSwitch]="activeTab">
 
     <!-- AUTO TAB -->

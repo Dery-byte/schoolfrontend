@@ -61,7 +61,7 @@ export class UserGradesEntryComponent implements OnInit {
   isLoading = false;
 
   // ── Tab navigation ─────────────────────────────────────────────────────────
-  activeTab: string = 'auto';
+  activeTab: string = 'manual';
 
   // ── WAEC auto-fetch results ────────────────────────────────────────────────
   waecresults: any;

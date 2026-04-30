@@ -608,6 +608,16 @@ p {
   transition: all 0.3s ease;
 }
 
+.disabled-tab {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+  filter: grayscale(0.5);
+}
+
+.disabled-tab * {
+  pointer-events: none;
+}
+
 .tab-background {
   position: absolute;
   top: 0;
