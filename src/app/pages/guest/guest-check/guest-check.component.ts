@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GuestService } from 'src/app/Utilities/guest.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { WaecControllersService } from 'src/app/services/services';
+import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   SUBJECT_DATABASE, GRADE_OPTIONS,
@@ -71,6 +72,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   selectedCategoryIds: number[] = [];
   selectedPlan: 'BASIC' | 'PREMIUM' | 'PREMIUM_PLUS' = 'BASIC';
   universityType = 'PUBLIC';
+  packageConfigs: PackageConfiguration[] = [];
   private statusPollingInterval: any;
 
   // Session recovery
@@ -122,13 +124,15 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
     private manualService: ManaulServiceService,
     private router: Router,
     private waec: WaecControllersService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private packageService: PackageManagementService
   ) {}
 
   ngOnInit(): void {
     this.buildForms();
     this.loadRegions();
     this.loadCategories();
+    this.loadPackageConfigs();
 
     const savedId = this.guestService.getSessionId();
     const savedStep = sessionStorage.getItem('guestCurrentStep') as GuestStep | null;
@@ -205,7 +209,22 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
     });
   }
 
+  private loadPackageConfigs(): void {
+    this.packageService.getAllConfigurations().subscribe({
+      next: (configs: PackageConfiguration[]) => { this.packageConfigs = configs; },
+      error: () => { console.error('Failed to load package configs'); }
+    });
+  }
+
+  getPackageConfig(type: string): PackageConfiguration | undefined {
+    return this.packageConfigs.find(p => p.subscriptionType === type);
+  }
+
   get planAmount(): number {
+    const config = this.packageConfigs.find(p => p.subscriptionType === this.selectedPlan);
+    if (config) return config.price;
+    
+    // Fallbacks
     if (this.selectedPlan === 'BASIC') return 10;
     if (this.selectedPlan === 'PREMIUM') return 15;
     return 25;
@@ -639,6 +658,9 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   }
 
   get maxCategories(): number {
+    const config = this.packageConfigs.find(p => p.subscriptionType === this.selectedPlan);
+    if (config) return config.maxCategorySelection;
+
     if (this.selectedPlan === 'BASIC') return 10;
     if (this.selectedPlan === 'PREMIUM') return 15;
     return 25;

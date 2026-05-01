@@ -1,4 +1,5 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { BlurService } from 'src/app/shared/blur/blur.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { TokenService } from 'src/app/services/token/token.service';
@@ -30,8 +31,14 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private guestService: GuestService,
-
+    private titleService: Title,
+    private metaService: Meta
   ) {
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Elygrad - Instant University Eligibility Checker Ghana');
+    this.metaService.updateTag({ name: 'description', content: 'Check your eligibility for KNUST, UG, UCC, and other top Ghana universities instantly. Affordable, fast, and accurate WAEC result analysis.' });
   }
 
 

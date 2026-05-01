@@ -20,6 +20,8 @@ import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.compo
 import { LoginSuccessComponent } from './pages/login-success/login-success.component';
 import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.component';
 import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
+import { PackageManagementComponent } from './pages/admin/package-management/package-management.component';
+import { BlogComponent } from './pages/guest/blog/blog.component';
 
 
 
@@ -45,7 +47,8 @@ const routes: Routes = [
       { path: 'universities', component: AllUniversitiesComponent },
       { path: 'programs', component: AllProgramsComponent },
       { path: 'colleges', component: CollegesComponent },
-      { path: 'bulkUpload', component: BulkUploadComponent }
+      { path: 'bulkUpload', component: BulkUploadComponent },
+      { path: 'packages', component: PackageManagementComponent }
 
       // {path:'allFarms', component:AllFarmsComponent}
       // {path:'allFarms', component:AllFarmsComponent}
@@ -76,7 +79,8 @@ const routes: Routes = [
     component: GuestLayoutComponent,
     children: [
       { path: '', redirectTo: 'check', pathMatch: 'full' },
-      { path: 'check', component: GuestCheckComponent }
+      { path: 'check', component: GuestCheckComponent },
+      { path: 'blog', component: BlogComponent }
     ]
   },
 ];

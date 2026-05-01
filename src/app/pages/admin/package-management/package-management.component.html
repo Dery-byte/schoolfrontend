@@ -1,0 +1,98 @@
+<div class="page-inner">
+  <div class="page-header">
+    <h3 class="fw-bold mb-3">Package Management</h3>
+    <ul class="breadcrumbs mb-3">
+      <li class="nav-home">
+        <a href="#">
+          <i class="fa fa-home"></i>
+        </a>
+      </li>
+      <li class="separator">
+        <i class="fa fa-angle-right"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Admin</a>
+      </li>
+      <li class="separator">
+        <i class="fa fa-angle-right"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Packages</a>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="!message.includes('Error')" [class.alert-danger]="message.includes('Error')">
+    {{ message }}
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-round">
+        <div class="card-header">
+          <div class="card-head-row card-tools-still-right">
+            <h4 class="card-title">Configure Subscription Packages</h4>
+            <div class="card-tools">
+              <button class="btn btn-icon btn-link btn-primary btn-xs" (click)="loadPackages()">
+                <span class="fa fa-sync-alt"></span>
+              </button>
+            </div>
+          </div>
+          <p class="card-category">Update pricing, quotas, and visibility for each package.</p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-head-bg-primary">
+              <thead>
+                <tr>
+                  <th style="width: 15%">Package Type</th>
+                  <th style="width: 10%">Price (GHS)</th>
+                  <th style="width: 10%">Private Slots</th>
+                  <th style="width: 10%">Public Slots</th>
+                  <th style="width: 15%">Programs/Private Uni</th>
+                  <th style="width: 10%">Programs/Public Uni</th>
+                  <th style="width: 10%">Max Categories</th>
+                  <th style="width: 15%">Visibility</th>
+                  <th style="width: 10%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pkg of packages">
+                  <td class="fw-bold">{{ pkg.subscriptionType }}</td>
+                  <td>
+                    <input type="number" [(ngModel)]="pkg.price" class="form-control form-control-sm">
+                  </td>
+                  <td>
+                    <input type="number" [(ngModel)]="pkg.privateSchoolSlots" class="form-control form-control-sm">
+                  </td>
+                  <td>
+                    <input type="number" [(ngModel)]="pkg.publicSchoolSlots" class="form-control form-control-sm">
+                  </td>
+                  <td>
+                    <input type="number" [(ngModel)]="pkg.programsPerPrivateUniversity" class="form-control form-control-sm">
+                  </td>
+                  <td>
+                    <input type="number" [(ngModel)]="pkg.programsPerPublicUniversity" class="form-control form-control-sm">
+                  </td>
+                  <td>
+                    <input type="number" [(ngModel)]="pkg.maxCategorySelection" class="form-control form-control-sm">
+                  </td>
+                  <td>
+                    <select [(ngModel)]="pkg.visibility" class="form-select form-select-sm">
+                      <option *ngFor="let opt of visibilityOptions" [value]="opt">{{ opt }}</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" (click)="savePackage(pkg)" [disabled]="loading">
+                      Save
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

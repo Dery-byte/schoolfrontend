@@ -45,6 +45,8 @@ import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.co
 import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
 import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.component';
 import { ChatbotComponent } from './pages/chatbot/chatbot.component';
+import { PackageManagementComponent } from './pages/admin/package-management/package-management.component';
+import { BlogComponent } from './pages/guest/blog/blog.component';
 
 
 
@@ -81,6 +83,8 @@ import { ChatbotComponent } from './pages/chatbot/chatbot.component';
     GuestCheckComponent,
     BulkUploadComponent,
     ChatbotComponent,
+    PackageManagementComponent,
+    BlogComponent
   ],
 
   exports:[TypingDirective],

@@ -552,7 +552,7 @@
                     <h3 class="plan-name">Basic</h3>
                     <div class="price-section">
                       <span class="currency">GHS</span>
-                      <span class="amount">10</span>
+                      <span class="amount">{{ getPackageConfig('BASIC')?.price || 10 }}</span>
                       <span class="period">per check</span>
                     </div>
                     <!-- <p class="billing-info">Always Free Access</p> -->
@@ -565,7 +565,7 @@
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
                           <strong>For only Private Institutions</strong>
-                          <span class="feature-detail">(3 Courses/University)</span>
+                          <span class="feature-detail">({{ getPackageConfig('BASIC')?.programsPerPrivateUniversity || 3 }} Courses/University)</span>
                         </div>
                       </li>
                       <li>
@@ -612,7 +612,7 @@
                     <h3 class="plan-name">Premium</h3>
                     <div class="price-section">
                       <span class="currency">GHS</span>
-                      <span class="amount">15</span>
+                      <span class="amount">{{ getPackageConfig('PREMIUM')?.price || 15 }}</span>
                       <span class="period">per Check</span>
                     </div>
                     <!-- <p class="billing-info">Billed GHS 80 annually</p> -->
@@ -675,7 +675,7 @@
                     <h3 class="plan-name">Premium Plus</h3>
                     <div class="price-section">
                       <span class="currency">GHS</span>
-                      <span class="amount">25</span>
+                      <span class="amount">{{ getPackageConfig('PREMIUM_PLUS')?.price || 25 }}</span>
                       <span class="period">per check</span>
                     </div>
                     <!-- <p class="billing-info">Billed GHS 125 annually</p> -->
@@ -720,8 +720,8 @@
             <i class="fas fa-bolt me-2"></i>Upgrade Now
           </button> -->
 
-                    <button class="btn-proceed premium-plus-btn">
-                      <i class="fas fa-bolt me-2"></i>Coming Soon
+                    <button class="btn-proceed premium-plus-btn" (click)="openPaymentModal('PREMIUM_PLUS')">
+                      <i class="fas fa-bolt me-2"></i>Upgrade Now
                     </button>
 
                     <!-- <div class="security-badge">

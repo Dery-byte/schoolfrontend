@@ -1,0 +1,23 @@
+.card-round {
+    border-radius: 10px;
+}
+
+.table input, .table select {
+    min-width: 80px;
+}
+
+.fw-bold {
+    font-weight: 600 !important;
+}
+
+.alert {
+    margin: 15px;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.table-head-bg-primary thead th {
+    background-color: #1572e8 !important;
+    color: white !important;
+    border: none !important;
+}

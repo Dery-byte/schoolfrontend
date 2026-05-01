@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { BlurService } from 'src/app/shared/blur/blur.service';
 import { Router } from '@angular/router';
+import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 
@@ -110,6 +111,7 @@ export class UserCheckResultsComponent implements OnInit {
   paymentStatusData: any;
   amount: number = 0;
   showWebHook = false;
+  packageConfigs: PackageConfiguration[] = [];
   payee = { amount: '', channel: '', payer: '', otpcode: '', subscriptionType: '' };
 
   showH2Message = false;
@@ -130,7 +132,9 @@ export class UserCheckResultsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private manualService: ManaulServiceService,
     private blurService: BlurService,
-    private router: Router) {
+    private router: Router,
+    private packageService: PackageManagementService
+  ) {
 
     this.newCheckForm = this.fb.group({
       candidateName: ['', Validators.required],
@@ -152,6 +156,7 @@ export class UserCheckResultsComponent implements OnInit {
     this.loadChecks();
     this.getResultsByUser();
     this.getAllRegions();
+    this.loadPackageConfigs();
   }
 
   ngOnDestroy() {
@@ -402,7 +407,17 @@ export class UserCheckResultsComponent implements OnInit {
     this.showPaymentModal = true;
     document.body.style.overflow = 'hidden';
     this.blurService.setBlur(true);
-    const fixedAmount = subscriptionType === 'PREMIUM' ? 15 : 10;
+    
+    const config = this.packageConfigs.find(p => p.subscriptionType === subscriptionType);
+    let fixedAmount = 10; // Default
+    if (config) {
+      fixedAmount = config.price;
+    } else if (subscriptionType === 'PREMIUM') {
+      fixedAmount = 15;
+    } else if (subscriptionType === 'PREMIUM_PLUS') {
+      fixedAmount = 25;
+    }
+    
     this.paymentForm.patchValue({ amount: fixedAmount.toFixed(2), subscriptionType: this.selectedPlan });
   }
 
@@ -591,6 +606,17 @@ export class UserCheckResultsComponent implements OnInit {
         console.error('Failed to load regions:', err);
       }
     });
+  }
+
+  private loadPackageConfigs(): void {
+    this.packageService.getAllConfigurations().subscribe({
+      next: (configs: PackageConfiguration[]) => { this.packageConfigs = configs; },
+      error: () => { console.error('Failed to load package configs'); }
+    });
+  }
+
+  getPackageConfig(type: string): PackageConfiguration | undefined {
+    return this.packageConfigs.find(p => p.subscriptionType === type);
   }
 
   private prepareRegionOptions() {
