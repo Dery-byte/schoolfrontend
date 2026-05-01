@@ -34,7 +34,7 @@ export class AdminLayoutComponent {
 "assets/admin/assets/js/kaiadmin.min.js",
 "assets/admin/assets/js/setting-demo.js",
 "assets/admin/assets/js/demo.js",
-"assets/admin/js/plugin/webfont/webfont.min.js"
+"assets/admin/assets/js/plugin/webfont/webfont.min.js"
 
     ];
   

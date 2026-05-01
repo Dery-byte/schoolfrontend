@@ -13,8 +13,24 @@ code-input input {
 
   }
  
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Global Scroll Fix - Ensures scrolling works on all pages and layouts */
+html, 
+body, 
+.wrapper, 
+.app-shell, 
+.app-main, 
+.main-panel, 
+.content-scroll {
+    height: auto !important;
+    overflow: auto !important;
+    overflow-y: auto !important;
+    min-height: 100%;
+}
+
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
 
 
 
