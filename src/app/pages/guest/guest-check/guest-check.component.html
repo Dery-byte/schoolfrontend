@@ -108,7 +108,7 @@
           <div class="gc-agent-cat">Starter Plan</div>
           <ul class="gc-agent-feats">
             <!-- <li><span class="gc-feat-check">✓</span> 5 eligibility checks</li> -->
-            <li><span class="gc-feat-check">✓</span> Private universities</li>
+            <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('BASIC')?.visibility === 'BOTH' || getPackageConfig('BASIC')?.visibility === 'PUBLIC_ONLY' ? 'Public + Private' : 'Private Universities' }}</li>
             <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('BASIC')?.maxCategorySelection || 1 }} study area{{ (getPackageConfig('BASIC')?.maxCategorySelection || 1) > 1 ? 's' : '' }}</li>
             <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('BASIC')?.programsPerPrivateUniversity || 3 }} Programs/Uni</li>
           </ul>
@@ -128,15 +128,15 @@
           <div class="gc-agent-cat">Recommended</div>
           <ul class="gc-agent-feats">
             <!-- <li><span class="gc-feat-check">✓</span> 10 eligibility checks</li> -->
-            <li><span class="gc-feat-check">✓</span> Public + Private</li>
+            <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('PREMIUM')?.visibility === 'BOTH' || getPackageConfig('PREMIUM')?.visibility === 'PUBLIC_ONLY' ? 'Public + Private' : 'Private Only' }}</li>
             <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('PREMIUM')?.maxCategorySelection || 2 }} study areas</li>
             <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('PREMIUM')?.programsPerPublicUniversity || 'Full' }} Programs/Uni</li>
           </ul>
           <div class="gc-selected-pill gc-pill-purple" *ngIf="selectedPlan==='PREMIUM'">● Selected</div>
         </div>
 
-        <!-- PREMIUM+ -->
-        <div class="gc-agent-card" [class.gc-card-selected]="selectedPlan==='PREMIUM_PLUS'" (click)="selectedPlan='PREMIUM_PLUS'">
+        <!-- PREMIUM+ (COMING SOON) -->
+        <div class="gc-agent-card gc-agent-disabled">
           <div class="gc-agent-top">
             <div class="gc-agent-avatar gc-av-gray">⭐</div>
             <div class="gc-agent-status">
@@ -145,15 +145,15 @@
             </div>
           </div>
           <div class="gc-agent-name">Premium+</div>
-          <div class="gc-agent-cat">Full Access</div>
+          <div class="gc-agent-cat gc-cat-soon">Coming Soon</div>
           <ul class="gc-agent-feats">
             <!-- <li><span class="gc-feat-check">✓</span> Unlimited checks</li> -->
-            <li><span class="gc-feat-check">✓</span> All universities</li>
+            <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('PREMIUM_PLUS')?.visibility === 'BOTH' || getPackageConfig('PREMIUM_PLUS')?.visibility === 'PUBLIC_ONLY' ? 'All Universities' : 'Private Schools' }}</li>
             <li><span class="gc-feat-check">✓</span> {{ getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3 }} study areas</li>
                         <li><span class="gc-feat-check">✓</span> Career Prospects</li>
              <li><span class="gc-feat-check">✓</span> Job Opportunities</li>
           </ul>
-          <div class="gc-selected-pill gc-pill-gold" *ngIf="selectedPlan==='PREMIUM_PLUS'">● Selected</div>
+          <div class="gc-selected-pill gc-pill-gold">● Coming Soon</div>
         </div>
       </div>
 

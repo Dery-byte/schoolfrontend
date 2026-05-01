@@ -564,14 +564,14 @@
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>For only Private Institutions</strong>
+                          <strong>{{ getPackageConfig('BASIC')?.visibility === 'BOTH' || getPackageConfig('BASIC')?.visibility === 'PUBLIC_ONLY' ? 'Public + Private Schools' : 'For Private Institutions Only' }}</strong>
                           <span class="feature-detail">({{ getPackageConfig('BASIC')?.programsPerPrivateUniversity || 3 }} Courses/University)</span>
                         </div>
                       </li>
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Upto 1 Study Area</strong>
+                          <strong>Upto {{ getPackageConfig('BASIC')?.maxCategorySelection || 1 }} Study Area{{ (getPackageConfig('BASIC')?.maxCategorySelection || 1) > 1 ? 's' : '' }}</strong>
                           <!-- <span class="feature-detail">(At least 1 with High eligible %)</span> -->
                         </div>
                       </li>
@@ -624,14 +624,14 @@
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Including Public Universities</strong>
-                          <span class="feature-detail">(Full Access)</span>
+                          <strong>{{ getPackageConfig('PREMIUM')?.visibility === 'BOTH' || getPackageConfig('PREMIUM')?.visibility === 'PUBLIC_ONLY' ? 'Including Public Universities' : 'Private Schools only' }}</strong>
+                          <span class="feature-detail">({{ getPackageConfig('PREMIUM')?.programsPerPublicUniversity || 'Full' }} Programs/Uni)</span>
                         </div>
                       </li>
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Upto 2 Study areas</strong>
+                          <strong>Upto {{ getPackageConfig('PREMIUM')?.maxCategorySelection || 2 }} Study Area{{ (getPackageConfig('PREMIUM')?.maxCategorySelection || 2) > 1 ? 's' : '' }}</strong>
                           <span class="feature-detail">(Choose 2 study Areas)</span>
                         </div>
                       </li>
@@ -664,8 +664,8 @@
               <!-- PREMIUM PLUS PLAN -->
               <div class="col-12 col-md-12 col-lg-4">
                 <div class="pricing-card premium-plus-card">
-                  <div class="popular-badge">
-                    <i class="fas fa-star"></i> MOST POPULAR
+                  <div class="popular-badge badge-soon">
+                    <i class="fas fa-clock"></i> COMING SOON
                   </div>
 
                   <div class="card-header">
@@ -687,7 +687,7 @@
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Upto 3 Study areas</strong>
+                          <strong>Upto {{ getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3 }} Study Area{{ (getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3) > 1 ? 's' : '' }}</strong>
                           <!-- <span class="feature-detail">(1 page = 250 words)</span> -->
                         </div>
                       </li>
@@ -720,8 +720,8 @@
             <i class="fas fa-bolt me-2"></i>Upgrade Now
           </button> -->
 
-                    <button class="btn-proceed premium-plus-btn" (click)="openPaymentModal('PREMIUM_PLUS')">
-                      <i class="fas fa-bolt me-2"></i>Upgrade Now
+                    <button class="btn-proceed premium-plus-btn disabled-btn" disabled>
+                      <i class="fas fa-clock me-2"></i>Coming Soon
                     </button>
 
                     <!-- <div class="security-badge">
