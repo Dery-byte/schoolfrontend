@@ -1,0 +1,168 @@
+<div class="page-inner">
+  <div class="page-header">
+    <h3 class="fw-bold mb-3">Biodata Management</h3>
+    <ul class="breadcrumbs mb-3">
+      <li class="nav-home"><a routerLink="/admin/dashboard"><i class="fas fa-home"></i></a></li>
+      <li class="separator"><i class="fas fa-arrow-right"></i></li>
+      <li class="nav-item"><a href="#">Admin</a></li>
+      <li class="separator"><i class="fas fa-arrow-right"></i></li>
+      <li class="nav-item"><a href="#">Biodata</a></li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="card-title mb-0">All Student Biodata</div>
+          <div>
+            <span class="badge badge-success mr-2">
+              <i class="fas fa-check-circle mr-1"></i>
+              {{ biodataList | reportFilter:true }} Report Generated
+            </span>
+            <span class="badge badge-warning">
+              <i class="fas fa-hourglass-half mr-1"></i>
+              {{ biodataList | reportFilter:false }} Awaiting Check
+            </span>
+          </div>
+        </div>
+        <div class="card-body p-0">
+
+          <!-- Loading -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Loading biodata...</p>
+          </div>
+
+          <!-- Empty -->
+          <div *ngIf="!loading && biodataList.length === 0" class="text-center py-5">
+            <i class="fas fa-id-card fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No biodata records found.</p>
+          </div>
+
+          <div *ngIf="!loading && biodataList.length > 0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Region</th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                    <th class="text-center">Report Status</th>
+                    <th class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let bio of biodataList">
+                    <!-- Main row -->
+                    <tr>
+                      <td><strong>{{ bio.firstName }} {{ bio.lastName }}</strong></td>
+                      <td>{{ bio.email }}</td>
+                      <td>{{ bio.phoneNumber }}</td>
+                      <td>{{ bio.region || '—' }}</td>
+                      <td>{{ bio.gender || '—' }}</td>
+                      <td>{{ bio.dob || '—' }}</td>
+                      <td class="text-center">
+                        <span *ngIf="bio.hasReport" class="badge badge-success">
+                          <i class="fas fa-check-circle mr-1"></i> Report Generated
+                        </span>
+                        <span *ngIf="!bio.hasReport" class="badge badge-warning text-dark">
+                          <i class="fas fa-hourglass-half mr-1"></i> Awaiting Check
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <!-- Download button (only if report exists) -->
+                        <button
+                          *ngIf="bio.hasReport"
+                          class="btn btn-sm btn-outline-primary mr-1"
+                          (click)="downloadReport(bio.eligibilityRecordId)"
+                          [disabled]="downloadingId === bio.eligibilityRecordId"
+                          title="Download PDF Report">
+                          <span *ngIf="downloadingId !== bio.eligibilityRecordId">
+                            <i class="fas fa-file-pdf"></i>
+                          </span>
+                          <span *ngIf="downloadingId === bio.eligibilityRecordId">
+                            <span class="spinner-border spinner-border-sm"></span>
+                          </span>
+                        </button>
+                        <!-- Email button (only if has email) -->
+                        <button
+                          *ngIf="bio.email"
+                          class="btn btn-sm"
+                          [ngClass]="emailPanelOpen[bio.id] ? 'btn-info' : 'btn-outline-info'"
+                          (click)="toggleEmailPanel(bio.id)"
+                          title="Send Email">
+                          <i class="fas fa-envelope"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <!-- Email Compose Panel -->
+                    <tr *ngIf="emailPanelOpen[bio.id]">
+                      <td colspan="8" class="p-0">
+                        <div class="email-compose-panel p-4 border-top border-info bg-light">
+                          <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-paper-plane text-info mr-2"></i>
+                            <strong>Send Email to {{ bio.firstName }} {{ bio.lastName }}</strong>
+                            <span class="ml-2 text-muted">({{ bio.email }})</span>
+                          </div>
+
+                          <div *ngIf="!bio.hasReport" class="alert alert-warning py-2 mb-3">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            This student has <strong>not yet generated</strong> an eligibility report. You can still send them an email to encourage them to check.
+                          </div>
+
+                          <div class="form-group mb-2">
+                            <label class="font-weight-bold">Subject <span class="text-danger">*</span></label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              [(ngModel)]="emailForm[bio.id].subject"
+                              placeholder="e.g. Your Eligibility Report is Ready"
+                              maxlength="200" />
+                          </div>
+
+                          <div class="form-group mb-3">
+                            <label class="font-weight-bold">Message Body <span class="text-danger">*</span></label>
+                            <textarea
+                              class="form-control"
+                              rows="5"
+                              [(ngModel)]="emailForm[bio.id].body"
+                              placeholder="Write your message here..."></textarea>
+                          </div>
+
+                          <div class="d-flex justify-content-end">
+                            <button
+                              class="btn btn-secondary mr-2"
+                              (click)="toggleEmailPanel(bio.id)">
+                              Cancel
+                            </button>
+                            <button
+                              class="btn btn-info text-white"
+                              (click)="sendEmail(bio)"
+                              [disabled]="sendingEmail[bio.id]">
+                              <span *ngIf="!sendingEmail[bio.id]">
+                                <i class="fas fa-paper-plane mr-1"></i> Send Email
+                              </span>
+                              <span *ngIf="sendingEmail[bio.id]">
+                                <span class="spinner-border spinner-border-sm mr-1"></span> Sending...
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

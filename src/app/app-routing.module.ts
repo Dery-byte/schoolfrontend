@@ -22,6 +22,9 @@ import { GuestLayoutComponent } from './pages/guest/guest-layout/guest-layout.co
 import { GuestCheckComponent } from './pages/guest/guest-check/guest-check.component';
 import { PackageManagementComponent } from './pages/admin/package-management/package-management.component';
 import { BlogComponent } from './pages/guest/blog/blog.component';
+import { AdminUsersComponent } from './pages/admin/admin-users/admin-users.component';
+import { AdminUserReportsComponent } from './pages/admin/admin-user-reports/admin-user-reports.component';
+import { AdminBiodataComponent } from './pages/admin/admin-biodata/admin-biodata.component';
 
 
 
@@ -48,7 +51,10 @@ const routes: Routes = [
       { path: 'programs', component: AllProgramsComponent },
       { path: 'colleges', component: CollegesComponent },
       { path: 'bulkUpload', component: BulkUploadComponent },
-      { path: 'packages', component: PackageManagementComponent }
+      { path: 'packages', component: PackageManagementComponent },
+      { path: 'users', component: AdminUsersComponent },
+      { path: 'userReports', component: AdminUserReportsComponent },
+      { path: 'biodata', component: AdminBiodataComponent }
 
       // {path:'allFarms', component:AllFarmsComponent}
       // {path:'allFarms', component:AllFarmsComponent}

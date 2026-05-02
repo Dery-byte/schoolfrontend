@@ -57,3 +57,4 @@ export type { WaecCandidateEntity } from './models/waec-candidate-entity';
 export type { WaecResultDetailEntity } from './models/waec-result-detail-entity';
 export type { WaecResultsRequest } from './models/waec-results-request';
 export type { WeeklyRevenueSummary } from './models/weekly-revenue-summary';
+export type { UserWithReportsDto } from './models/user-with-reports-dto';

@@ -47,6 +47,10 @@ import { BulkUploadComponent } from './pages/admin/bulk-upload/bulk-upload.compo
 import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 import { PackageManagementComponent } from './pages/admin/package-management/package-management.component';
 import { BlogComponent } from './pages/guest/blog/blog.component';
+import { AdminUsersComponent } from './pages/admin/admin-users/admin-users.component';
+import { AdminUserReportsComponent } from './pages/admin/admin-user-reports/admin-user-reports.component';
+import { AdminBiodataComponent } from './pages/admin/admin-biodata/admin-biodata.component';
+import { ReportFilterPipe } from './pages/admin/admin-biodata/report-filter.pipe';
 
 
 
@@ -84,7 +88,11 @@ import { BlogComponent } from './pages/guest/blog/blog.component';
     BulkUploadComponent,
     ChatbotComponent,
     PackageManagementComponent,
-    BlogComponent
+    BlogComponent,
+    AdminUsersComponent,
+    AdminUserReportsComponent,
+    AdminBiodataComponent,
+    ReportFilterPipe
   ],
 
   exports:[TypingDirective],

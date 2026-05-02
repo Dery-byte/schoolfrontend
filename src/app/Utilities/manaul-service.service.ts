@@ -172,6 +172,33 @@ export class ManaulServiceService {
     );
   }
 
+  /** Admin download — no ownership check */
+  adminDownloadReport(recordId: string): Observable<Blob> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(
+      `${baseUrl}/auth/admin/reports/${recordId}/download`,
+      { headers, responseType: 'blob' }
+    );
+  }
+
+  /** Admin send custom email */
+  sendAdminEmail(payload: { toEmail: string; recipientName: string; subject: string; messageBody: string }): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(`${baseUrl}/auth/admin/send-email`, payload, { headers });
+  }
+
+  /** Get all biodata with report status */
+  getAllBiodataWithReportStatus(): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<any[]>(`${baseUrl}/auth/admin/biodata-with-status`, { headers });
+  }
+
 
 
 

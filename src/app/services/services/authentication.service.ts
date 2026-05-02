@@ -30,6 +30,8 @@ import { register } from '../fn/authentication/register';
 import { Register$Params } from '../fn/authentication/register';
 import { resetPassword } from '../fn/authentication/reset-password';
 import { ResetPassword$Params } from '../fn/authentication/reset-password';
+import { User } from '../models/user';
+import { UserWithReportsDto } from '../models/user-with-reports-dto';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService extends BaseService {
@@ -239,6 +241,14 @@ export class AuthenticationService extends BaseService {
     return this.confirm$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
+  }
+
+  getAllUsers(): Observable<Array<User>> {
+    return this.http.get<Array<User>>(`${this.rootUrl}/auth/users`);
+  }
+
+  getAllUsersWithReports(): Observable<Array<UserWithReportsDto>> {
+    return this.http.get<Array<UserWithReportsDto>>(`${this.rootUrl}/auth/users-with-reports`);
   }
 
 }
