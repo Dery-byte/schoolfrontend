@@ -74,6 +74,9 @@
                       GHS {{ user.discountPrice | number:'1.2-2' }}
                     </span>
                     <span *ngIf="user.discountPrice == null" class="text-muted">—</span>
+                    <div *ngIf="user.historicalDiscountAmounts && user.historicalDiscountAmounts.length > 0" class="mt-1 small">
+                      <strong>History:</strong> {{ user.historicalDiscountAmounts.length }} code(s) (GHS {{ getDiscountTotal(user) | number:'1.2-2' }})
+                    </div>
                   </td>
                   <td>
                     <button class="btn btn-sm mr-2" 
@@ -110,50 +113,61 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <p>Assigning a discount code to <strong>{{ selectedUser?.firstname }} {{ selectedUser?.lastname }}</strong>.</p>
-
-        <div class="form-group mt-3">
-          <label for="customDiscountMode">Discount Generation Mode</label>
-          <select id="customDiscountMode" class="form-control" [(ngModel)]="customDiscountMode">
-            <option value="MANUAL">Manual (Assign code immediately)</option>
-            <option value="AUTOMATIC">Automatic (Assign code after threshold)</option>
-          </select>
-          <small class="form-text text-muted">Choose whether to give the code now or wait until the user checks eligibility a certain number of times.</small>
+      <div class="modal-body pb-0">
+        <div class="alert alert-info py-2 mb-2">
+          Assigning a discount code to <strong>{{ selectedUser?.firstname }} {{ selectedUser?.lastname }}</strong>.
         </div>
 
-        <div class="form-group mt-3" *ngIf="customDiscountMode === 'AUTOMATIC'">
-          <label for="customThreshold">Automatic Code Threshold</label>
-          <input type="number" id="customThreshold" class="form-control" [(ngModel)]="customThreshold" min="1" />
-          <small class="form-text text-muted">User gets the discount code automatically after this many eligibility checks.</small>
-        </div>
-
-        <div class="form-group mt-3" *ngIf="customDiscountMode === 'MANUAL'">
-          <label for="customCode">Discount Code <span class="text-muted">(Optional)</span></label>
-          <input type="text" id="customCode" class="form-control" [(ngModel)]="customCode" placeholder="Leave blank to auto-generate" />
-          <small class="form-text text-muted">If left blank, a random code will be generated (e.g. DISC-A1B2C3).</small>
-        </div>
-
-        <div class="form-group mt-3">
-          <label for="customPackage">Applicable Package</label>
-          <select id="customPackage" class="form-control" [(ngModel)]="customPackage">
-            <option value="BASIC">Basic</option>
-            <option value="PREMIUM">Premium</option>
-            <option value="PREMIUM_PLUS">Premium Plus</option>
-          </select>
-          <small class="form-text text-muted">The subscription package this discount code applies to.</small>
-        </div>
-
-        <div class="form-group mt-3">
-          <label for="customPrice">Discounted Price (GHS)</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">GHS</span>
-            </div>
-            <input type="number" id="customPrice" class="form-control" [(ngModel)]="customPrice"
-              min="0" step="0.01" placeholder="e.g. 5.00" />
+        <div class="row">
+          <div class="col-md-6 form-group mb-2">
+            <label for="customDiscountMode" class="font-weight-bold">Mode</label>
+            <select id="customDiscountMode" class="form-control form-control-sm" [(ngModel)]="customDiscountMode">
+              <option value="MANUAL">Manual</option>
+              <option value="AUTOMATIC">Automatic</option>
+            </select>
           </div>
-          <small class="form-text text-muted">The fixed price the user will pay when they apply this code at checkout.</small>
+
+          <div class="col-md-6 form-group mb-2" *ngIf="customDiscountMode === 'AUTOMATIC'">
+            <label for="customThreshold" class="font-weight-bold">Threshold</label>
+            <input type="number" id="customThreshold" class="form-control form-control-sm" [(ngModel)]="customThreshold" min="1" />
+          </div>
+
+          <div class="col-md-6 form-group mb-2" *ngIf="customDiscountMode === 'MANUAL'">
+            <label for="customCode" class="font-weight-bold">Code <small class="text-muted">(Optional)</small></label>
+            <input type="text" id="customCode" class="form-control form-control-sm" [(ngModel)]="customCode" placeholder="Auto-generate" />
+          </div>
+
+          <div class="col-md-6 form-group mb-2">
+            <label for="customPackage" class="font-weight-bold">Package</label>
+            <select id="customPackage" class="form-control form-control-sm" [(ngModel)]="customPackage">
+              <option value="BASIC">Basic</option>
+              <option value="PREMIUM">Premium</option>
+              <option value="PREMIUM_PLUS">Premium Plus</option>
+            </select>
+          </div>
+
+          <div class="col-md-6 form-group mb-2">
+            <label for="customPrice" class="font-weight-bold">Price</label>
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span class="input-group-text">GHS</span>
+              </div>
+              <input type="number" id="customPrice" class="form-control" [(ngModel)]="customPrice" min="0" step="0.01" />
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-2">
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="sendEmail" [(ngModel)]="sendEmail">
+            <label class="custom-control-label" for="sendEmail">Notify via Email</label>
+          </div>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="sendSms" [(ngModel)]="sendSms">
+            <label class="custom-control-label text-primary font-weight-bold" for="sendSms">Notify via SMS</label>
+          </div>
         </div>
       </div>
       <div class="modal-footer">

@@ -22,6 +22,8 @@ export class AdminUsersComponent implements OnInit {
   customPrice: number = 5.00;
   customDiscountMode: string = 'MANUAL';
   customThreshold: number = 3;
+  sendSms: boolean = false;
+  sendEmail: boolean = true;
   isAssigning = false;
 
   constructor(private authService: AuthenticationService, private http: HttpClient, private manualService: ManaulServiceService, private snackBar: MatSnackBar) { }
@@ -61,16 +63,20 @@ export class AdminUsersComponent implements OnInit {
     this.customPrice = 5.00;
     this.customDiscountMode = 'MANUAL';
     this.customThreshold = 3;
+    this.sendSms = false;
+    this.sendEmail = true;
   }
 
   confirmAssignDiscount(): void {
-if (!this.selectedUser || !this.selectedUser.id) return;    this.isAssigning = true;
+    if (!this.selectedUser || !this.selectedUser.id) return;    this.isAssigning = true;
     const payload = { 
       discountCode: this.customCode,
       discountPackage: this.customPackage,
       discountPrice: this.customPrice.toString(),
       discountMode: this.customDiscountMode,
-      discountThreshold: this.customThreshold.toString()
+      discountThreshold: this.customThreshold.toString(),
+      sendSms: this.sendSms.toString(),
+      sendEmail: this.sendEmail.toString()
     };
     this.manualService.assignDiscount(payload,this.selectedUser.id).subscribe({
       next: (res) => {
@@ -81,6 +87,13 @@ if (!this.selectedUser || !this.selectedUser.id) return;    this.isAssigning = t
           this.selectedUser.discountPrice = this.customPrice;
           this.selectedUser.discountGenerationMode = this.customDiscountMode;
           this.selectedUser.discountCheckThreshold = this.customThreshold;
+          
+          if (!this.selectedUser.historicalDiscountAmounts) {
+            this.selectedUser.historicalDiscountAmounts = [];
+          }
+          if (this.customDiscountMode === 'MANUAL') {
+            this.selectedUser.historicalDiscountAmounts.push(this.customPrice);
+          }
         }
         this.isAssigning = false;
         this.closeAssignModal();
@@ -127,5 +140,10 @@ if (!this.selectedUser || !this.selectedUser.id) return;    this.isAssigning = t
         alert('Failed to revoke discount code.');
       }
     });
+  }
+
+  getDiscountTotal(user: User): number {
+    if (!user.historicalDiscountAmounts || user.historicalDiscountAmounts.length === 0) return 0;
+    return user.historicalDiscountAmounts.reduce((a, b) => a + b, 0);
   }
 }

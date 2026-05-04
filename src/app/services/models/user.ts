@@ -27,4 +27,6 @@ export interface User {
   discountPrice?: number;
   discountGenerationMode?: string;
   discountCheckThreshold?: number;
+  checksSinceLastDiscount?: number;
+  historicalDiscountAmounts?: Array<number>;
 }
