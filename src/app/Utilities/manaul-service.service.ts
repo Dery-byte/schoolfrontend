@@ -10,7 +10,16 @@ interface ApiCategory {
   name: string;
 }
 
+// You can put this at the top of your component or in a models file
+interface AssignDiscountResponse {
+  message: string;
+  discountCode: string;
+}
 
+
+interface RevokeDiscountResponse {
+  message: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +55,30 @@ export class ManaulServiceService {
 
     )
   };
+
+
+
+
+
+assignDiscount(payload: any, selectedUser: number): Observable<AssignDiscountResponse> {
+  return this.http.post<AssignDiscountResponse>(
+    `${baseUrl}/auth/admin/users/${selectedUser}/discount`,
+    payload
+  );
+}
+
+
+revokeDiscount(selectedUser: number): Observable<RevokeDiscountResponse> {
+  return this.http.delete<RevokeDiscountResponse>(
+    `${baseUrl}/auth/admin/users/${selectedUser}/discount`
+  );
+}
+
+
+
+
+
+
 
   validateDiscount(discountCode: string, subscriptionType: string) {
     const token = localStorage.getItem('token');

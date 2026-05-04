@@ -64,9 +64,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   confirmAssignDiscount(): void {
-    if (!this.selectedUser) return;
-    this.isAssigning = true;
-    
+if (!this.selectedUser || !this.selectedUser.id) return;    this.isAssigning = true;
     const payload = { 
       discountCode: this.customCode,
       discountPackage: this.customPackage,
@@ -74,8 +72,7 @@ export class AdminUsersComponent implements OnInit {
       discountMode: this.customDiscountMode,
       discountThreshold: this.customThreshold.toString()
     };
-    
-    this.http.post<any>(`http://localhost:8088/api/v1/auth/admin/users/${this.selectedUser.id}/discount`, payload).subscribe({
+    this.manualService.assignDiscount(payload,this.selectedUser.id).subscribe({
       next: (res) => {
         alert(res.message);
         if (this.selectedUser) {
@@ -114,9 +111,9 @@ export class AdminUsersComponent implements OnInit {
   }
 
   revokeDiscountCode(user: User): void {
-    if (!confirm(`Are you sure you want to revoke the discount code for ${user.firstname}?`)) return;
-
-    this.http.delete<any>(`http://localhost:8088/api/v1/auth/admin/users/${user.id}/discount`).subscribe({
+  if (!user.id) return; // ✅ add this guard
+  if (!confirm(`Are you sure you want to revoke the discount code for ${user.firstname}?`)) return;
+    this.manualService.revokeDiscount(user.id).subscribe({
       next: (res) => {
         alert(res.message);
         user.discountCode = undefined;
