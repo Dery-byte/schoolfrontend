@@ -8,4 +8,3 @@ let baseUrl = 'https://schoolbackend-j5n9.onrender.com/api/v1';
 export default baseUrl;
 
 
-

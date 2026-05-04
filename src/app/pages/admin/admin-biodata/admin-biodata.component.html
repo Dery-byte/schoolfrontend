@@ -20,10 +20,21 @@
               <i class="fas fa-check-circle mr-1"></i>
               {{ biodataList | reportFilter:true }} Report Generated
             </span>
-            <span class="badge badge-warning">
+            <span class="badge badge-warning mr-3">
               <i class="fas fa-hourglass-half mr-1"></i>
               {{ biodataList | reportFilter:false }} Awaiting Check
             </span>
+            <div class="btn-group" role="group" aria-label="Export options">
+              <button class="btn btn-sm btn-outline-secondary" (click)="exportToCSV()" title="Export as CSV">
+                <i class="fas fa-file-csv"></i> CSV
+              </button>
+              <button class="btn btn-sm btn-outline-success" (click)="exportToXLSX()" title="Export as Excel">
+                <i class="fas fa-file-excel"></i> XLSX
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="exportToPDF()" title="Export as PDF">
+                <i class="fas fa-file-pdf"></i> PDF
+              </button>
+            </div>
           </div>
         </div>
         <div class="card-body p-0">

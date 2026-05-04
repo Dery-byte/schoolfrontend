@@ -297,13 +297,17 @@
 
         <div class="payment-callout">
           <div class="callout-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
           </div>
           <div class="callout-body">
             <strong>What happens after payment?</strong>
-            <span>Pull WAEC results automatically or enter them manually — both unlock comprehensive analysis and eligibility reports.</span>
+            <span>Pull WAEC results automatically or enter them manually — both unlock comprehensive analysis and
+              eligibility reports.</span>
           </div>
         </div>
 
@@ -555,6 +559,15 @@
                       <span class="amount">{{ getPackageConfig('BASIC')?.price || 10 }}</span>
                       <span class="period">per check</span>
                     </div>
+                    <div
+                      *ngIf="currentUser?.discountCode && (currentUser?.discountPackage === 'BASIC' || currentUser?.discountPackage === 'ALL')"
+                      class="mt-2">
+                      <span class="badge bg-success rounded-pill px-3 py-2"
+                        style="font-size: 0.85rem; box-shadow: 0 2px 8px rgba(40,167,69,0.2);">
+                        <i class="fas fa-ticket-alt me-1"></i> Discount Code:
+                        <strong>{{currentUser.discountCode}}</strong>
+                      </span>
+                    </div>
                     <!-- <p class="billing-info">Always Free Access</p> -->
                   </div>
 
@@ -564,14 +577,18 @@
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>{{ getPackageConfig('BASIC')?.visibility === 'BOTH' || getPackageConfig('BASIC')?.visibility === 'PUBLIC_ONLY' ? 'Public + Private Schools' : 'For Private Institutions Only' }}</strong>
-                          <span class="feature-detail">({{ getPackageConfig('BASIC')?.programsPerPrivateUniversity || 3 }} Courses/University)</span>
+                          <strong>{{ getPackageConfig('BASIC')?.visibility === 'BOTH' ||
+                            getPackageConfig('BASIC')?.visibility === 'PUBLIC_ONLY' ? 'Public + Private Schools' : 'For
+                            Private Institutions Only' }}</strong>
+                          <span class="feature-detail">({{ getPackageConfig('BASIC')?.programsPerPrivateUniversity || 3
+                            }} Courses/University)</span>
                         </div>
                       </li>
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Upto {{ getPackageConfig('BASIC')?.maxCategorySelection || 1 }} Study Area{{ (getPackageConfig('BASIC')?.maxCategorySelection || 1) > 1 ? 's' : '' }}</strong>
+                          <strong>Upto {{ getPackageConfig('BASIC')?.maxCategorySelection || 1 }} Study Area{{
+                            (getPackageConfig('BASIC')?.maxCategorySelection || 1) > 1 ? 's' : '' }}</strong>
                           <!-- <span class="feature-detail">(At least 1 with High eligible %)</span> -->
                         </div>
                       </li>
@@ -615,6 +632,15 @@
                       <span class="amount">{{ getPackageConfig('PREMIUM')?.price || 15 }}</span>
                       <span class="period">per Check</span>
                     </div>
+                    <div
+                      *ngIf="currentUser?.discountCode && (currentUser?.discountPackage === 'PREMIUM' || currentUser?.discountPackage === 'ALL')"
+                      class="mt-2 text-center">
+                      <span class="badge bg-success rounded-pill px-3 py-2"
+                        style="font-size: 0.85rem; box-shadow: 0 2px 8px rgba(40,167,69,0.2);">
+                        <i class="fas fa-ticket-alt me-1"></i> Discount Code:
+                        <strong>{{currentUser.discountCode}}</strong>
+                      </span>
+                    </div>
                     <!-- <p class="billing-info">Billed GHS 80 annually</p> -->
                   </div>
 
@@ -624,14 +650,18 @@
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>{{ getPackageConfig('PREMIUM')?.visibility === 'BOTH' || getPackageConfig('PREMIUM')?.visibility === 'PUBLIC_ONLY' ? 'Including Public Universities' : 'Private Schools only' }}</strong>
-                          <span class="feature-detail">({{ getPackageConfig('PREMIUM')?.programsPerPublicUniversity || 'Full' }} Programs/Uni)</span>
+                          <strong>{{ getPackageConfig('PREMIUM')?.visibility === 'BOTH' ||
+                            getPackageConfig('PREMIUM')?.visibility === 'PUBLIC_ONLY' ? 'Including Public Universities'
+                            : 'Private Schools only' }}</strong>
+                          <span class="feature-detail">({{ getPackageConfig('PREMIUM')?.programsPerPublicUniversity ||
+                            'Full' }} Programs/Uni)</span>
                         </div>
                       </li>
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Upto {{ getPackageConfig('PREMIUM')?.maxCategorySelection || 2 }} Study Area{{ (getPackageConfig('PREMIUM')?.maxCategorySelection || 2) > 1 ? 's' : '' }}</strong>
+                          <strong>Upto {{ getPackageConfig('PREMIUM')?.maxCategorySelection || 2 }} Study Area{{
+                            (getPackageConfig('PREMIUM')?.maxCategorySelection || 2) > 1 ? 's' : '' }}</strong>
                           <span class="feature-detail">(Choose 2 study Areas)</span>
                         </div>
                       </li>
@@ -678,6 +708,14 @@
                       <span class="amount">{{ getPackageConfig('PREMIUM_PLUS')?.price || 25 }}</span>
                       <span class="period">per check</span>
                     </div>
+                    <div *ngIf="currentUser?.discountCode && (currentUser?.discountPackage === 'PREMIUM_PLUS' || currentUser?.discountPackage === 'ALL')"
+                      class="mt-2 text-center">
+                      <span class="badge bg-success rounded-pill px-3 py-2"
+                        style="font-size: 0.85rem; box-shadow: 0 2px 8px rgba(40,167,69,0.2);">
+                        <i class="fas fa-ticket-alt me-1"></i> Discount Code:
+                        <strong>{{currentUser.discountCode}}</strong>
+                      </span>
+                    </div>
                     <!-- <p class="billing-info">Billed GHS 125 annually</p> -->
                   </div>
 
@@ -687,7 +725,8 @@
                       <li>
                         <i class="fas fa-check-circle"></i>
                         <div class="feature-content">
-                          <strong>Upto {{ getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3 }} Study Area{{ (getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3) > 1 ? 's' : '' }}</strong>
+                          <strong>Upto {{ getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3 }} Study Area{{
+                            (getPackageConfig('PREMIUM_PLUS')?.maxCategorySelection || 3) > 1 ? 's' : '' }}</strong>
                           <!-- <span class="feature-detail">(1 page = 250 words)</span> -->
                         </div>
                       </li>
@@ -830,232 +869,223 @@
 
       <!-- {{biodata|json}}
       <h2>Hellow there</h2> -->
-        <!-- ── BIODATA FORM (hidden once user proceeds to grades entry) ──────── -->
-        <div class="biodata-wrapper" *ngIf="!isBioDataLoading && !showH2Message">
+      <!-- ── BIODATA FORM (hidden once user proceeds to grades entry) ──────── -->
+      <div class="biodata-wrapper" *ngIf="!isBioDataLoading && !showH2Message">
 
-          <!-- Header -->
-          <div class="biodata-header">
-            <div class="d-flex align-items-center gap-3">
-              <div class="biodata-step-icon">
-                <i class="fas fa-id-card"></i>
-              </div>
-              <div class="flex-grow-1">
-                <span class="biodata-step-pill">Step 3 of 3</span>
-                <h3 class="biodata-title">Personal Biodata</h3>
-                <p class="biodata-subtitle">Your personal details for the eligibility check</p>
-              </div>
-              <div *ngIf="hasBiodata()" class="ms-auto">
-                <span class="biodata-saved-badge">
-                  <i class="fas fa-check-circle me-1"></i>Saved
-                </span>
-              </div>
+        <!-- Header -->
+        <div class="biodata-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="biodata-step-icon">
+              <i class="fas fa-id-card"></i>
             </div>
-          </div>
-
-          <!-- Warning banner -->
-          <div class="biodata-warning">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>Name fields must <strong>exactly match</strong> your WAEC registration name —
-              any mismatch will block your eligibility check.</span>
-          </div>
-
-          <!-- Alerts -->
-          <div class="biodata-alerts" *ngIf="submitSuccess || errorMsg.length">
-            <div *ngIf="submitSuccess" class="alert alert-success d-flex align-items-center gap-2 py-2 mb-2">
-              <i class="fas fa-check-circle flex-shrink-0"></i>
-              <span>Biodata {{ biodata.id ? 'updated' : 'submitted' }} successfully!</span>
+            <div class="flex-grow-1">
+              <span class="biodata-step-pill">Step 3 of 3</span>
+              <h3 class="biodata-title">Personal Biodata</h3>
+              <p class="biodata-subtitle">Your personal details for the eligibility check</p>
             </div>
-            <div *ngIf="errorMsg.length" class="alert alert-danger d-flex align-items-start gap-2 py-2 mb-0">
-              <i class="fas fa-exclamation-circle flex-shrink-0 mt-1"></i>
-              <ul class="mb-0 ps-0 list-unstyled">
-                <li *ngFor="let msg of errorMsg">{{ msg }}</li>
-              </ul>
+            <div *ngIf="hasBiodata()" class="ms-auto">
+              <span class="biodata-saved-badge">
+                <i class="fas fa-check-circle me-1"></i>Saved
+              </span>
             </div>
-          </div>
-
-          <!-- Form body -->
-          <div class="biodata-body">
-            <form (ngSubmit)="submitBiodata()" #biodataForm="ngForm">
-
-              <!-- ── Identity ─────────────────────────────────── -->
-              <div class="bd-section">
-                <div class="bd-section-head">
-                  <span class="bd-section-dot" style="background:#4361ee;"></span>
-                  Identity
-                </div>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="firstName">First Name <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-user"></i></span>
-                        <input type="text" class="bd-input" id="firstName" placeholder="Enter first name"
-                          [(ngModel)]="biodata.firstName" name="firstName" required>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="middleName">Middle Name</label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-user"></i></span>
-                        <input type="text" class="bd-input" id="middleName" placeholder="Enter middle name"
-                          [(ngModel)]="biodata.middleName" name="middleName">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="lastName">Last Name <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-user"></i></span>
-                        <input type="text" class="bd-input" id="lastName" placeholder="Enter last name"
-                          [(ngModel)]="biodata.lastName" name="lastName" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ── Contact ──────────────────────────────────── -->
-              <div class="bd-section">
-                <div class="bd-section-head">
-                  <span class="bd-section-dot" style="background:#0ea5e9;"></span>
-                  Contact Details
-                </div>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="email">Email Address <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-envelope"></i></span>
-                        <input type="email" class="bd-input" id="email" placeholder="you@example.com"
-                          [(ngModel)]="biodata.email" name="email" required>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="phoneNumber">Phone Number <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-phone"></i></span>
-                        <input type="tel" class="bd-input" id="phoneNumber" placeholder="0XX XXX XXXX"
-                          [(ngModel)]="biodata.phoneNumber" name="phoneNumber" required>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="address">Address <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-map-marker-alt"></i></span>
-                        <input type="text" class="bd-input" id="address" placeholder="Street / Town"
-                          [(ngModel)]="biodata.address" name="address" required>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ── Demographics ─────────────────────────────── -->
-              <div class="bd-section mb-0">
-                <div class="bd-section-head">
-                  <span class="bd-section-dot" style="background:#8b5cf6;"></span>
-                  Demographics
-                </div>
-                <div class="row g-3">
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="dob">Date of Birth <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap">
-                        <span class="bd-icon"><i class="fas fa-calendar-alt"></i></span>
-                        <input type="date" class="bd-input" id="dob"
-                          [(ngModel)]="biodata.dob" name="dob" required>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="gender">Gender <span class="text-danger">*</span></label>
-                      <div class="bd-input-wrap bd-select-wrap">
-                        <span class="bd-icon"><i class="fas fa-venus-mars"></i></span>
-                        <select class="bd-input bd-select" id="gender" name="gender"
-                          [(ngModel)]="biodata.gender" required>
-                          <option [ngValue]="null" disabled>Select gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                        </select>
-                        <span class="bd-chevron"><i class="fas fa-chevron-down"></i></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="bd-form-field">
-                      <label class="bd-label" for="region">Region</label>
-                      <div class="bd-input-wrap bd-select-wrap">
-                        <span class="bd-icon"><i class="fas fa-map"></i></span>
-                        <select class="bd-input bd-select" id="region" name="region"
-                          [(ngModel)]="biodata.region">
-                          <option [ngValue]="null">Select region</option>
-                          <option *ngFor="let option of regionOptions" [ngValue]="option.apiValue">
-                            {{option.display}}
-                          </option>
-                        </select>
-                        <span class="bd-chevron"><i class="fas fa-chevron-down"></i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ── Actions ──────────────────────────────────── -->
-              <div class="biodata-actions">
-                <button type="submit" class="bd-btn-save"
-                  [disabled]="isLoading || biodataForm.invalid">
-                  <span *ngIf="!isLoading">
-                    <i class="fas fa-save me-2"></i>{{ biodata.id ? 'Update Biodata' : 'Save Biodata' }}
-                  </span>
-                  <span *ngIf="isLoading" class="d-flex align-items-center gap-2">
-                    <i class="fas fa-spinner fa-spin"></i>{{ biodata.id ? 'Updating...' : 'Saving...' }}
-                  </span>
-                </button>
-
-                <button type="button" class="bd-btn-proceed"
-                  (click)="scrollToTarget()" [disabled]="!hasBiodata()">
-                  Continue to Grades Entry
-                  <i class="fas fa-arrow-right ms-2"></i>
-                </button>
-              </div>
-
-            </form>
           </div>
         </div>
 
-        <app-user-grades-entry
-          *ngIf="showH2Message"
-          [recordId]="recordId"
-          [subscriptionType]="currentCheck.subscriptionType"
-          [checkLimit]="currentCheck.checkLimit ?? 0"
-          [fullName]="fullName"
-          (refreshChecks)="getResultsByUser()"
-          (backToList)="goBackToList()">
-        </app-user-grades-entry>
+        <!-- Warning banner -->
+        <div class="biodata-warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Name fields must <strong>exactly match</strong> your WAEC registration name —
+            any mismatch will block your eligibility check.</span>
+        </div>
 
+        <!-- Alerts -->
+        <div class="biodata-alerts" *ngIf="submitSuccess || errorMsg.length">
+          <div *ngIf="submitSuccess" class="alert alert-success d-flex align-items-center gap-2 py-2 mb-2">
+            <i class="fas fa-check-circle flex-shrink-0"></i>
+            <span>Biodata {{ biodata.id ? 'updated' : 'submitted' }} successfully!</span>
+          </div>
+          <div *ngIf="errorMsg.length" class="alert alert-danger d-flex align-items-start gap-2 py-2 mb-0">
+            <i class="fas fa-exclamation-circle flex-shrink-0 mt-1"></i>
+            <ul class="mb-0 ps-0 list-unstyled">
+              <li *ngFor="let msg of errorMsg">{{ msg }}</li>
+            </ul>
+          </div>
+        </div>
 
+        <!-- Form body -->
+        <div class="biodata-body">
+          <form (ngSubmit)="submitBiodata()" #biodataForm="ngForm">
 
+            <!-- ── Identity ─────────────────────────────────── -->
+            <div class="bd-section">
+              <div class="bd-section-head">
+                <span class="bd-section-dot" style="background:#4361ee;"></span>
+                Identity
+              </div>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="firstName">First Name <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-user"></i></span>
+                      <input type="text" class="bd-input" id="firstName" placeholder="Enter first name"
+                        [(ngModel)]="biodata.firstName" name="firstName" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="middleName">Middle Name</label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-user"></i></span>
+                      <input type="text" class="bd-input" id="middleName" placeholder="Enter middle name"
+                        [(ngModel)]="biodata.middleName" name="middleName">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="lastName">Last Name <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-user"></i></span>
+                      <input type="text" class="bd-input" id="lastName" placeholder="Enter last name"
+                        [(ngModel)]="biodata.lastName" name="lastName" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <!-- ── Contact ──────────────────────────────────── -->
+            <div class="bd-section">
+              <div class="bd-section-head">
+                <span class="bd-section-dot" style="background:#0ea5e9;"></span>
+                Contact Details
+              </div>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="email">Email Address <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-envelope"></i></span>
+                      <input type="email" class="bd-input" id="email" placeholder="you@example.com"
+                        [(ngModel)]="biodata.email" name="email" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="phoneNumber">Phone Number <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-phone"></i></span>
+                      <input type="tel" class="bd-input" id="phoneNumber" placeholder="0XX XXX XXXX"
+                        [(ngModel)]="biodata.phoneNumber" name="phoneNumber" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="address">Address <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-map-marker-alt"></i></span>
+                      <input type="text" class="bd-input" id="address" placeholder="Street / Town"
+                        [(ngModel)]="biodata.address" name="address" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <!-- ── Demographics ─────────────────────────────── -->
+            <div class="bd-section mb-0">
+              <div class="bd-section-head">
+                <span class="bd-section-dot" style="background:#8b5cf6;"></span>
+                Demographics
+              </div>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="dob">Date of Birth <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap">
+                      <span class="bd-icon"><i class="fas fa-calendar-alt"></i></span>
+                      <input type="date" class="bd-input" id="dob" [(ngModel)]="biodata.dob" name="dob" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="gender">Gender <span class="text-danger">*</span></label>
+                    <div class="bd-input-wrap bd-select-wrap">
+                      <span class="bd-icon"><i class="fas fa-venus-mars"></i></span>
+                      <select class="bd-input bd-select" id="gender" name="gender" [(ngModel)]="biodata.gender"
+                        required>
+                        <option [ngValue]="null" disabled>Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                      <span class="bd-chevron"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="bd-form-field">
+                    <label class="bd-label" for="region">Region</label>
+                    <div class="bd-input-wrap bd-select-wrap">
+                      <span class="bd-icon"><i class="fas fa-map"></i></span>
+                      <select class="bd-input bd-select" id="region" name="region" [(ngModel)]="biodata.region">
+                        <option [ngValue]="null">Select region</option>
+                        <option *ngFor="let option of regionOptions" [ngValue]="option.apiValue">
+                          {{option.display}}
+                        </option>
+                      </select>
+                      <span class="bd-chevron"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <!-- ── Actions ──────────────────────────────────── -->
+            <div class="biodata-actions">
+              <button type="submit" class="bd-btn-save" [disabled]="isLoading || biodataForm.invalid">
+                <span *ngIf="!isLoading">
+                  <i class="fas fa-save me-2"></i>{{ biodata.id ? 'Update Biodata' : 'Save Biodata' }}
+                </span>
+                <span *ngIf="isLoading" class="d-flex align-items-center gap-2">
+                  <i class="fas fa-spinner fa-spin"></i>{{ biodata.id ? 'Updating...' : 'Saving...' }}
+                </span>
+              </button>
 
+              <button type="button" class="bd-btn-proceed" (click)="scrollToTarget()" [disabled]="!hasBiodata()">
+                Continue to Grades Entry
+                <i class="fas fa-arrow-right ms-2"></i>
+              </button>
+            </div>
 
-
-
-
-
-
+          </form>
+        </div>
       </div>
+
+      <app-user-grades-entry *ngIf="showH2Message" [recordId]="recordId"
+        [subscriptionType]="currentCheck.subscriptionType" [checkLimit]="currentCheck.checkLimit ?? 0"
+        [fullName]="fullName" (refreshChecks)="getResultsByUser()" (backToList)="goBackToList()">
+      </app-user-grades-entry>
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
   </div>
+</div>
 
 
 
@@ -1117,61 +1147,111 @@
 
 
 
-  <!-- //MODAL HTML TEMPLATE -->
+<!-- //MODAL HTML TEMPLATE -->
 
-  <div class="modal-backdrop" *ngIf="showPaymentModal">
-    <div class="payment-modal">
-      <div class="modal-content-container">
-        <!-- Header with progress indicator -->
-        <div class="modal-header">
-          <div class="progress-step active">Complete Payment</div>
-          <button class="close-button" (click)="closePaymentModal()" aria-label="Close">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </button>
-        </div>
+<div class="modal-backdrop" *ngIf="showPaymentModal">
+  <div class="payment-modal">
+    <div class="modal-content-container">
+      <!-- Header with progress indicator -->
+      <div class="modal-header">
+        <div class="progress-step active">Complete Payment</div>
+        <button class="close-button" (click)="closePaymentModal()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
 
-
-        <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
-          <div class="form-scroll-container">
-            <h3 class="section-title">Payment Amount</h3>
-            <div class="form-group amount-group">
-              <div class="currency-prefix">GHS</div>
-              <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
-                [readonly]="isAmountFixed" min="0.01" step="0.01" autofocus (blur)="validateAmount()" />
+      <div class="modal-body text-center"
+        style="padding: 0; display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()"
+          style="display: flex; flex-direction: column; height: 100%;">
+          <div class="form-scroll-container" style="flex: 1; overflow-y: auto; padding: 16px;">
+            <!-- Package Price Info -->
+            <div class="package-price-info mb-2 mt-2">
+              <h4 class="text-primary mb-1">{{ selectedPlan | titlecase }} Package</h4>
+              <h2 class="mb-0">
+                <span *ngIf="discountCodeValid" class="text-muted"
+                  style="text-decoration: line-through; font-size: 0.7em;">GHS {{ originalAmount | number:'1.2-2'
+                  }}</span>
+                <span [class.text-success]="discountCodeValid">GHS {{ paymentForm.get('amount')?.value | number:'1.2-2'
+                  }}</span>
+              </h2>
             </div>
-            <h3 class="section-title">Mobile Money Details</h3>
-            <div class="form-groups">
-              <!-- <label for="mobileNumber">Phone Number</label> -->
-              <div class="input-with-select">
-                <select formControlName="channel" class="network-select" required>
-                  <option value="" disabled selected>Select Network</option>
-                  <option value="13">MTN</option>
-                  <option value="6">Vodafone</option>
-                  <option value="7">AirtelTigo</option>
-                </select>
-                <input type="tel" id="mobileNumber" formControlName="payer" placeholder="XXXX XXX XXX"
-                  class="phone-input">
+
+            <!-- Discount Code Section (Only show if user has a discount code for this specific package) -->
+            <div
+              *ngIf="currentUser?.discountCode && (currentUser?.discountPackage === selectedPlan || currentUser?.discountPackage === 'ALL')"
+              class="discount-section mb-3 p-3 bg-light rounded"
+              style="text-align: left; border: 1px solid var(--border-color);">
+              <label for="discountInput" class="font-weight-bold mb-2"
+                style="display: block; font-size: 13px; color: var(--text-color);">Have a discount code?</label>
+              <div class="input-group">
+                <input type="text" id="discountInput" class="form-control" name="discountInput" [ngModelOptions]="{standalone: true}" placeholder="Enter code (e.g. DISC-...)"
+                  [(ngModel)]="discountCodeInput" [disabled]="discountCodeValid || isApplyingDiscount">
+                <button class="btn btn-primary px-4" type="button" *ngIf="!discountCodeValid"
+                  (click)="applyDiscountCode()" [disabled]="!discountCodeInput || !discountCodeInput.trim() || isApplyingDiscount">
+                  {{ isApplyingDiscount ? 'Applying...' : 'Apply' }}
+                </button>
+                <button class="btn btn-outline-danger px-3" type="button" *ngIf="discountCodeValid"
+                  (click)="removeDiscountCode()">
+                  Remove
+                </button>
               </div>
-              <!-- Add validation message -->
-              <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
-                class="error-message">
-                Please select a mobile network
+              <small class="text-danger d-block mt-1" *ngIf="discountError">{{ discountError }}</small>
+              <small class="text-success d-block mt-1" *ngIf="discountCodeValid"><i class="fas fa-check-circle"></i>
+                Discount applied successfully!</small>
+            </div>
+
+            <!-- Form fields -->
+            <div class="form-section active" style="text-align: left;">
+              <h3 class="section-title">Payment Amount</h3>
+              <div class="amount-group">
+                <div class="currency-prefix">GHS</div>
+                <input type="number" class="form-control" id="amount" placeholder="0.00" formControlName="amount"
+                  [readonly]="isAmountFixed" min="0.01" step="0.01" autofocus (blur)="validateAmount()"
+                  style="font-weight: 600;" />
               </div>
             </div>
-            <div class="info-box">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                  fill="#EFF6FF" stroke="#3B82F6" />
-                <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
-                <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
-              </svg>
-              <p>You'll receive a payment request on your phone</p>
+
+            <div class="form-section active" style="text-align: left; border-bottom: none; margin-bottom: 0;">
+              <h3 class="section-title">Mobile Money Details</h3>
+              <div class="form-groups">
+                <div class="input-with-select">
+                  <select formControlName="channel" class="network-select" required>
+                    <option value="" disabled selected>Select Network</option>
+                    <option value="13">MTN</option>
+                    <option value="6">Vodafone</option>
+                    <option value="7">AirtelTigo</option>
+                  </select>
+                  <input type="tel" id="mobileNumber" formControlName="payer" placeholder="XXXX XXX XXX"
+                    class="phone-input">
+                </div>
+                <!-- Validation message -->
+                <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
+                  class="error-message mt-2" style="color: #ef4444; font-size: 13px;">
+                  Please select a mobile network
+                </div>
+                <div *ngIf="paymentForm.get('payer')?.invalid && paymentForm.get('payer')?.touched"
+                  class="error-message mt-2" style="color: #ef4444; font-size: 13px;">
+                  Please enter a valid 10-digit mobile number
+                </div>
+              </div>
+              <div class="info-box">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                    fill="#EFF6FF" stroke="#3B82F6" />
+                  <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+                  <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <p style="margin: 0;">You'll receive a payment request on your phone</p>
+              </div>
             </div>
           </div>
-          <div class="modal-footer">
+
+          <div class="modal-footer"
+            style="padding: 12px 16px; background-color: var(--background-color); border-top: 1px solid var(--border-color); flex-shrink: 0;">
             <button type="submit" class="submit-button" [disabled]="!paymentForm.valid">
               <span *ngIf="!processingPayment">Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}}</span>
               <span *ngIf="processingPayment" class="processing">
@@ -1186,6 +1266,7 @@
       </div>
     </div>
   </div>
+</div>
 
 
 
@@ -1245,28 +1326,31 @@
 
 
 
-  <!-- OTP VERIFICATION MODAL -->
+<!-- OTP VERIFICATION MODAL -->
 
-  <div class="modal-backdrop" *ngIf="showOtpModal" @fadeInOut>
-    <div class="otp-modal">
-      <div class="modal-content-container">
-        <!-- Header with close button -->
-        <div class="modal-header">
-          <h2 class="modal-title">Verify Payment</h2>
-          <button class="close-button" (click)="closeOtpModal()" aria-label="Close">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </button>
-        </div>
+<div class="modal-backdrop" *ngIf="showOtpModal" @fadeInOut>
+  <div class="otp-modal">
+    <div class="modal-content-container">
+      <!-- Header with close button -->
+      <div class="modal-header">
+        <h2 class="modal-title">Verify Payment</h2>
+        <button class="close-button" (click)="closeOtpModal()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
 
-        <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()">
-          <div class="form-container">
+      <div class="modal-body text-center"
+        style="padding: 0; display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <form [formGroup]="otpForm" (ngSubmit)="verifyOTP()"
+          style="display: flex; flex-direction: column; height: 100%;">
+          <div class="form-container" style="flex: 1; overflow-y: auto; padding: 20px;">
             <!-- OTP Instructions -->
             <div class="otp-instructions">
               <p>
-                Enter the 6-digit verification code sent to  
-                   <strong>   {{ paymentForm.get('payer')?.value }}</strong>
+                Enter the 6-digit verification code sent to
+                <strong> {{ paymentForm.get('payer')?.value }}</strong>
               </p>
             </div>
             <!-- OTP Input Fields -->
@@ -1291,22 +1375,18 @@
             </div>
 
             <!-- Resend OTP Option -->
-
-
-
-
-
             <!-- <div class="otp-resend">
-              <p>Didn't receive the code?
-                <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
-                  Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
-                </button>
-              </p>
-            </div> -->
+                <p>Didn't receive the code?
+                  <button type="button" class="resend-link" (click)="resendOTP()" [disabled]="resendCooldown > 0">
+                    Resend {{resendCooldown > 0 ? '(' + resendCooldown + 's)' : ''}}
+                  </button>
+                </p>
+              </div> -->
           </div>
 
           <!-- Submit Button -->
-          <div class="modal-footer">
+          <div class="modal-footer"
+            style="padding: 12px 16px; background-color: var(--background-color); border-top: 1px solid var(--border-color); flex-shrink: 0;">
             <button type="submit" class="submit-button" [disabled]="otpForm.invalid || verifyingOTP">
               <span *ngIf="!verifyingOTP">Verify Payment</span>
               <span *ngIf="verifyingOTP" class="processing">
@@ -1321,6 +1401,7 @@
       </div>
     </div>
   </div>
+</div>
 
 
 
@@ -1349,88 +1430,77 @@
 
 
 
-  <!-- WAITING FOR WEBHOOK- to update payment Status -->
-  <div class="modal-backdrop" *ngIf="showWebHook">
+<!-- WAITING FOR WEBHOOK- to update payment Status -->
+<div class="modal-backdrop" *ngIf="showWebHook">
 
-    <div class="payment-status-modal" [class.show]="showWebHook">
-      <div (click)="closeWebhook()"></div>
+  <div class="payment-status-modal" [class.show]="showWebHook">
+    <div (click)="closeWebhook()">
+     
+      </div>
 
-      <div class="modal-card">
-        <!-- Processing State -->
-        <div class="modal-body" *ngIf="!paymentsucceDetails">
-          <div class="processing-header">
-            <div class="spinner-container">
-              <div class="spinnerpaystatus"></div>
-            </div>
-            <h3 class="modal-title">Complete Payment on Your Phone</h3>
+    <div class="modal-card">
+      <!-- Processing State -->
+      <div class="modal-body" *ngIf="!paymentsucceDetails">
+        <div class="processing-header">
+          <div class="spinner-container">
+            <div class="spinnerpaystatus"></div>
           </div>
-          <div class="payment-instructions">
-            <p class="instruction-text">Please approve the payment request on your mobile device to continue</p>
-            <div class="countdown-timer">
-              <svg width="24" height="24" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                  d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-                <path fill="currentColor" d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-              </svg>
-              <span>Waiting for confirmation...</span>
-            </div>
-          </div>
+          <h3 class="modal-title">Complete Payment on Your Phone</h3>
         </div>
-
-        <!-- Success State -->
-        <div class="modal-body success-state" *ngIf="paymentsucceDetails">
-          <div class="checkmark-container">
-            <svg class="checkmark-animated" width="80" height="80" viewBox="0 0 80 80">
-              <!-- Circle background (optional) -->
-              <circle cx="40" cy="40" r="38" fill="#f8fafc" />
-
-              <!-- Animated circle -->
-              <circle class="checkmark-circle" cx="40" cy="40" r="36" fill="none" stroke="#4CAF50" stroke-width="4"
-                stroke-dasharray="226" stroke-dashoffset="226" />
-
-              <!-- Animated check -->
-              <path class="checkmark-check" d="M25,40 l12,12 l23-23" fill="none" stroke="#4CAF50" stroke-width="4"
-                stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" />
+        <div class="payment-instructions">
+          <p class="instruction-text">Please approve the payment request on your mobile device to continue.</p>
+          <div class="countdown-timer">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+              <path fill="currentColor" d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
             </svg>
+            <span>Waiting for confirmation...</span>
           </div>
-          <!-- {{paymentsucceDetails| json}} -->
-          <h3 class="modal-title">Payment Successful!</h3>
-          <p class="success-message">Your payment has been processed successfully</p>
-          <div class="payment-details success-details">
-            <div class="detail-row">
-              <span class="detail-label">Date:</span>
-              <span class="detail-value">{{ paymentsucceDetails?.timestamp | date }}</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Amount:</span>
-              <span class="detail-value">{{ paymentsucceDetails.amount | currency:'GHS':'GH₵ ':'1.2-2' }}</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Transaction ID:</span>
-              <span class="detail-value">{{ paymentsucceDetails?.transactionId }}</span>
-            </div>
-          </div>
-          <button class="action-button" (click)="closeWebhook()">
-            Proceed
-            <i class="fas fa-arrow-right ms-2"></i>
-          </button>
-
-
         </div>
+      
+      </div>
+
+      <!-- Success State -->
+      <div class="modal-body success-state" *ngIf="paymentsucceDetails">
+        <div class="checkmark-container">
+          <svg class="checkmark-animated" width="80" height="80" viewBox="0 0 80 80">
+            <!-- Circle background (optional) -->
+            <circle cx="40" cy="40" r="38" fill="#f8fafc" />
+
+            <!-- Animated circle -->
+            <circle class="checkmark-circle" cx="40" cy="40" r="36" fill="none" stroke="#4CAF50" stroke-width="4"
+              stroke-dasharray="226" stroke-dashoffset="226" />
+
+            <!-- Animated check -->
+            <path class="checkmark-check" d="M25,40 l12,12 l23-23" fill="none" stroke="#4CAF50" stroke-width="4"
+              stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" />
+          </svg>
+        </div>
+        <!-- {{paymentsucceDetails| json}} -->
+        <h3 class="modal-title">Payment Successful!</h3>
+        <p class="success-message">Your payment has been processed successfully</p>
+        <div class="payment-details success-details">
+          <div class="detail-row">
+            <span class="detail-label">Date:</span>
+            <span class="detail-value">{{ paymentsucceDetails?.timestamp | date }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Amount:</span>
+            <span class="detail-value">{{ paymentsucceDetails.amount | currency:'GHS':'GH₵ ':'1.2-2' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Transaction ID:</span>
+            <span class="detail-value">{{ paymentsucceDetails?.transactionId }}</span>
+          </div>
+        </div>
+        <button class="action-button" (click)="closeWebhook()">
+          Proceed
+          <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+
+
       </div>
     </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>

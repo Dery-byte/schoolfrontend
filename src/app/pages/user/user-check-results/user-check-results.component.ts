@@ -112,7 +112,19 @@ export class UserCheckResultsComponent implements OnInit {
   amount: number = 0;
   showWebHook = false;
   packageConfigs: PackageConfiguration[] = [];
-  payee = { amount: '', channel: '', payer: '', otpcode: '', subscriptionType: '' };
+  payee = { amount: '', channel: '', payer: '', otpcode: '', subscriptionType: '', usedDiscountCode: false };
+  
+  // Discount Code State
+  public discountCodeInput = '';
+  public discountCodeValid = false;
+  public discountError = '';
+  public originalAmount = 0;
+  public isApplyingDiscount = false;
+  public currentUser: any = null;
+
+  public isApplyDisabled(): boolean {
+    return !this.discountCodeInput || !this.discountCodeInput.trim() || this.isApplyingDiscount;
+  }
 
   showH2Message = false;
   premium = true;
@@ -157,6 +169,18 @@ export class UserCheckResultsComponent implements OnInit {
     this.getResultsByUser();
     this.getAllRegions();
     this.loadPackageConfigs();
+    this.fetchCurrentUser();
+  }
+
+  fetchCurrentUser() {
+    this.manualService.getCurrentUser().subscribe({
+      next: (user: any) => {
+        this.currentUser = user;
+      },
+      error: (err) => {
+        console.error('Failed to load current user:', err);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -418,14 +442,77 @@ export class UserCheckResultsComponent implements OnInit {
       fixedAmount = 25;
     }
     
+    this.originalAmount = fixedAmount;
+    this.discountCodeValid = false;
+    this.discountError = '';
+    this.payee.usedDiscountCode = false;
+    
+    // Clear the discount code input to force user manual entry
+    this.discountCodeInput = '';
+    
     this.paymentForm.patchValue({ amount: fixedAmount.toFixed(2), subscriptionType: this.selectedPlan });
+  }
+
+  public applyDiscountCode() {
+    if (!this.discountCodeInput || !this.discountCodeInput.trim()) {
+      this.discountError = 'Please enter a valid discount code.';
+      this.discountCodeValid = false;
+      return;
+    }
+    this.isApplyingDiscount = true;
+    this.discountError = '';
+    this.discountCodeValid = false; // Always reset before applying
+    
+    this.manualService.validateDiscount(this.discountCodeInput, this.selectedPlan).subscribe({
+      next: (res: any) => {
+        this.isApplyingDiscount = false;
+        
+        // Ensure response is explicitly valid
+        if (res && res.valid === true) {
+          this.discountCodeValid = true;
+          
+          // Safely parse discount price to avoid undefined errors
+          let newAmount = 5.00; // Fallback discount price
+          if (res.discountPrice !== undefined && res.discountPrice !== null) {
+            newAmount = Number(res.discountPrice);
+          }
+          
+          if (!isNaN(newAmount)) {
+             this.paymentForm.patchValue({ amount: newAmount.toFixed(2) });
+          }
+          
+          this.payee.usedDiscountCode = true;
+          this.snackBar.open(res.message || 'Discount applied successfully!', 'Close', { duration: 3000 });
+        } else {
+          this.discountCodeValid = false;
+          this.discountError = res.message || 'Invalid discount code.';
+        }
+      },
+      error: (err) => {
+        this.isApplyingDiscount = false;
+        this.discountCodeValid = false;
+        this.discountError = err.error?.message || 'Failed to validate discount code. Please try again.';
+      }
+    });
+  }
+
+  removeDiscountCode() {
+    this.discountCodeValid = false;
+    this.discountCodeInput = '';
+    this.discountError = '';
+    this.payee.usedDiscountCode = false;
+    this.paymentForm.patchValue({ amount: this.originalAmount.toFixed(2) });
   }
 
   submitPayment(): void {
     if (this.paymentForm.valid) {
       this.processingPayment = true;
       const recordId = this.recordId;
-      const paymentPayload = { ...this.paymentForm.value, subscriptionType: this.selectedPlan };
+      const paymentPayload = { 
+        ...this.paymentForm.value, 
+        subscriptionType: this.selectedPlan,
+        usedDiscountCode: this.payee.usedDiscountCode
+      };
       this.manualService.initializePayment(paymentPayload, recordId).subscribe({
         next: (data: any) => {
           this.externalRef = data.externalref;
@@ -439,7 +526,6 @@ export class UserCheckResultsComponent implements OnInit {
           this.processingPayment = false;
         }
       });
-      this.openPaymentModal(this.selectedPlan);
     }
   }
 

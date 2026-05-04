@@ -38,6 +38,11 @@
                   <th>Email</th>
                   <th>Phone Number</th>
                   <th>Status</th>
+                  <th>Checks</th>
+                  <th>Discount Code</th>
+                  <th>Package</th>
+                  <th>Disc. Price</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -52,17 +57,110 @@
                       {{ user.enabled ? 'Active' : 'Inactive' }}
                     </span>
                   </td>
+                  <td>{{ user.eligibilityCheckCount || 0 }}</td>
+                  <td>
+                    <span *ngIf="user.discountCode" class="badge badge-info">{{ user.discountCode }}</span>
+                    <span *ngIf="!user.discountCode && user.discountGenerationMode === 'AUTOMATIC'" class="badge badge-warning">
+                      Auto (Threshold: {{ user.discountCheckThreshold }})
+                    </span>
+                    <span *ngIf="!user.discountCode && user.discountGenerationMode !== 'AUTOMATIC'" class="text-muted">—</span>
+                  </td>
+                  <td>
+                    <span *ngIf="user.discountPackage" class="badge badge-secondary">{{ user.discountPackage }}</span>
+                    <span *ngIf="!user.discountPackage" class="text-muted">—</span>
+                  </td>
+                  <td>
+                    <span *ngIf="user.discountPrice != null" class="text-success font-weight-bold">
+                      GHS {{ user.discountPrice | number:'1.2-2' }}
+                    </span>
+                    <span *ngIf="user.discountPrice == null" class="text-muted">—</span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm mr-2" 
+                            [ngClass]="user.enabled ? 'btn-warning' : 'btn-success'" 
+                            (click)="toggleUserStatus(user)">
+                      {{ user.enabled ? 'Deactivate' : 'Activate' }}
+                    </button>
+                    <button *ngIf="!user.discountCode && user.discountGenerationMode !== 'AUTOMATIC'" class="btn btn-sm btn-primary" (click)="openAssignModal(user)">Assign</button>
+                    <button *ngIf="user.discountCode || user.discountGenerationMode === 'AUTOMATIC'" class="btn btn-sm btn-danger" (click)="revokeDiscountCode(user)">Revoke</button>
+                  </td>
                 </tr>
                 <tr *ngIf="users.length === 0 && !loading">
-                  <td colspan="6" class="text-center">No users found.</td>
+                  <td colspan="11" class="text-center">No users found.</td>
                 </tr>
                 <tr *ngIf="loading">
-                  <td colspan="6" class="text-center">Loading users...</td>
+                  <td colspan="11" class="text-center">Loading users...</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Discount Modal -->
+<div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showAssignModal}" [ngStyle]="{'display': showAssignModal ? 'block' : 'none', 'background': 'rgba(0,0,0,0.5)'}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Assign Discount Code</h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeAssignModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Assigning a discount code to <strong>{{ selectedUser?.firstname }} {{ selectedUser?.lastname }}</strong>.</p>
+
+        <div class="form-group mt-3">
+          <label for="customDiscountMode">Discount Generation Mode</label>
+          <select id="customDiscountMode" class="form-control" [(ngModel)]="customDiscountMode">
+            <option value="MANUAL">Manual (Assign code immediately)</option>
+            <option value="AUTOMATIC">Automatic (Assign code after threshold)</option>
+          </select>
+          <small class="form-text text-muted">Choose whether to give the code now or wait until the user checks eligibility a certain number of times.</small>
+        </div>
+
+        <div class="form-group mt-3" *ngIf="customDiscountMode === 'AUTOMATIC'">
+          <label for="customThreshold">Automatic Code Threshold</label>
+          <input type="number" id="customThreshold" class="form-control" [(ngModel)]="customThreshold" min="1" />
+          <small class="form-text text-muted">User gets the discount code automatically after this many eligibility checks.</small>
+        </div>
+
+        <div class="form-group mt-3" *ngIf="customDiscountMode === 'MANUAL'">
+          <label for="customCode">Discount Code <span class="text-muted">(Optional)</span></label>
+          <input type="text" id="customCode" class="form-control" [(ngModel)]="customCode" placeholder="Leave blank to auto-generate" />
+          <small class="form-text text-muted">If left blank, a random code will be generated (e.g. DISC-A1B2C3).</small>
+        </div>
+
+        <div class="form-group mt-3">
+          <label for="customPackage">Applicable Package</label>
+          <select id="customPackage" class="form-control" [(ngModel)]="customPackage">
+            <option value="BASIC">Basic</option>
+            <option value="PREMIUM">Premium</option>
+            <option value="PREMIUM_PLUS">Premium Plus</option>
+          </select>
+          <small class="form-text text-muted">The subscription package this discount code applies to.</small>
+        </div>
+
+        <div class="form-group mt-3">
+          <label for="customPrice">Discounted Price (GHS)</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">GHS</span>
+            </div>
+            <input type="number" id="customPrice" class="form-control" [(ngModel)]="customPrice"
+              min="0" step="0.01" placeholder="e.g. 5.00" />
+          </div>
+          <small class="form-text text-muted">The fixed price the user will pay when they apply this code at checkout.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeAssignModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="confirmAssignDiscount()" [disabled]="isAssigning">
+          {{ isAssigning ? 'Assigning...' : 'Assign Discount' }}
+        </button>
       </div>
     </div>
   </div>

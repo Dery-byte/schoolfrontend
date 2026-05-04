@@ -21,4 +21,10 @@ export interface User {
   phoneNumber?: string;
   roles?: Array<Role>;
   username?: string;
+  eligibilityCheckCount?: number;
+  discountCode?: string;
+  discountPackage?: string;
+  discountPrice?: number;
+  discountGenerationMode?: string;
+  discountCheckThreshold?: number;
 }

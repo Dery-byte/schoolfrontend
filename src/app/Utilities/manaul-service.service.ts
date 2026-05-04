@@ -47,6 +47,23 @@ export class ManaulServiceService {
     )
   };
 
+  validateDiscount(discountCode: string, subscriptionType: string) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    const payload = { discountCode, subscriptionType };
+    return this.http.post(`${baseUrl}/auth/discount/validate`, payload, { headers });
+  }
+
+  getCurrentUser(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get(`${baseUrl}/auth/me`, { headers });
+  }
+
 
   startFirstStep() {
     const token = localStorage.getItem('token'); // Retrieve token
@@ -201,12 +218,19 @@ export class ManaulServiceService {
 
 
 
+  /** Admin toggle user status */
+  toggleUserStatus(userId: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.put(`${baseUrl}/auth/admin/users/${userId}/toggle-status`, {}, { headers });
+  }
 
-
-
-
-
-
+  /** Admin delete eligibility report */
+  deleteEligibilityReport(reportId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.delete(`${baseUrl}/auth/eligibilityRecords/${reportId}`, { headers });
+  }
 
   resetPassword(token: string, newPassword: string): Observable<any> {
     return this.http.post(`${baseUrl}/auth/update-password`, { token, newPassword });

@@ -64,4 +64,22 @@ export class AdminUserReportsComponent implements OnInit {
       }
     });
   }
+
+  deleteReport(userRecord: any, reportId: string): void {
+    if (!confirm('Are you sure you want to delete this eligibility report?')) return;
+
+    this.manualService.deleteEligibilityReport(reportId).subscribe({
+      next: () => {
+        this.snackBar.open('Report deleted successfully.', 'Dismiss', { duration: 3000 });
+        // Remove the report from the UI
+        if (userRecord && userRecord.reports) {
+          userRecord.reports = userRecord.reports.filter((r: any) => r.id !== reportId);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to delete report:', err);
+        this.snackBar.open('Failed to delete report.', 'Dismiss', { duration: 3000 });
+      }
+    });
+  }
 }

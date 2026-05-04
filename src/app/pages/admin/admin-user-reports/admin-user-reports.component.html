@@ -82,7 +82,7 @@
                           <td><small>{{ report.paymentReference || '—' }}</small></td>
                           <td class="text-center">
                             <button
-                              class="btn btn-sm btn-outline-primary"
+                              class="btn btn-sm btn-outline-primary mr-2"
                               (click)="downloadReport(report.id)"
                               [disabled]="downloadingId === report.id"
                               title="Download PDF Report">
@@ -92,6 +92,12 @@
                               <span *ngIf="downloadingId === report.id">
                                 <span class="spinner-border spinner-border-sm mr-1"></span> Downloading...
                               </span>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-danger"
+                              (click)="deleteReport(ur, report.id)"
+                              title="Delete Report">
+                              <i class="fas fa-trash"></i>
                             </button>
                           </td>
                         </tr>

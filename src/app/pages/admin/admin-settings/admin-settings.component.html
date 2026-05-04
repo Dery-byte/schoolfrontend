@@ -1,0 +1,54 @@
+<div class="page-inner">
+  <div class="page-header">
+    <h3 class="fw-bold mb-3">System Settings</h3>
+    <ul class="breadcrumbs mb-3">
+      <li class="nav-home">
+        <a href="#">
+          <i class="fas fa-home"></i>
+        </a>
+      </li>
+      <li class="separator">
+        <i class="fas fa-arrow-right"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Admin</a>
+      </li>
+      <li class="separator">
+        <i class="fas fa-arrow-right"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Settings</a>
+      </li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Eligibility Check Settings</div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="discountMode">Discount Generation Mode</label>
+            <select id="discountMode" class="form-control" [(ngModel)]="discountMode">
+              <option value="MANUAL">Manual (Admin must assign manually)</option>
+              <option value="AUTOMATIC">Automatic (System assigns after threshold)</option>
+            </select>
+          </div>
+          
+          <div class="form-group" *ngIf="discountMode === 'AUTOMATIC'">
+            <label for="thresholdInput">Automatic Discount Code Threshold</label>
+            <input type="number" id="thresholdInput" class="form-control" [(ngModel)]="threshold" min="1" />
+            <small class="form-text text-muted">
+              Users will receive an automatic discount code after performing this many eligibility checks.
+            </small>
+          </div>
+
+          <button class="btn btn-primary mt-3" (click)="saveThreshold()" [disabled]="saving">
+            {{ saving ? 'Saving...' : 'Save Settings' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

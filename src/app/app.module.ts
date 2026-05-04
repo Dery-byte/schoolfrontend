@@ -51,6 +51,7 @@ import { AdminUsersComponent } from './pages/admin/admin-users/admin-users.compo
 import { AdminUserReportsComponent } from './pages/admin/admin-user-reports/admin-user-reports.component';
 import { AdminBiodataComponent } from './pages/admin/admin-biodata/admin-biodata.component';
 import { ReportFilterPipe } from './pages/admin/admin-biodata/report-filter.pipe';
+import { AdminSettingsComponent } from './pages/admin/admin-settings/admin-settings.component';
 
 
 
@@ -92,7 +93,8 @@ import { ReportFilterPipe } from './pages/admin/admin-biodata/report-filter.pipe
     AdminUsersComponent,
     AdminUserReportsComponent,
     AdminBiodataComponent,
-    ReportFilterPipe
+    ReportFilterPipe,
+    AdminSettingsComponent
   ],
 
   exports:[TypingDirective],

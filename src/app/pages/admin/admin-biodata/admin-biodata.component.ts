@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import * as XLSX from 'xlsx';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 
 @Component({
   selector: 'app-admin-biodata',
@@ -93,5 +96,76 @@ export class AdminBiodataComponent implements OnInit {
         this.sendingEmail[bio.id] = false;
       }
     });
+  }
+
+  // --- Export Features ---
+
+  private getExportData(): any[] {
+    return this.biodataList.map(bio => ({
+      ID: bio.id,
+      'First Name': bio.firstName,
+      'Last Name': bio.lastName,
+      Email: bio.email,
+      'Phone Number': bio.phoneNumber,
+      Gender: bio.gender || 'N/A',
+      DOB: bio.dob || 'N/A',
+      Region: bio.region || 'N/A',
+      Address: bio.address || 'N/A',
+      'Has Report': bio.hasReport ? 'Yes' : 'No'
+    }));
+  }
+
+  exportToCSV(): void {
+    const data = this.getExportData();
+    if (data.length === 0) {
+      this.snackBar.open('No biodata to export.', 'Dismiss', { duration: 3000 });
+      return;
+    }
+    const ws = XLSX.utils.json_to_sheet(data);
+    const csv = XLSX.utils.sheet_to_csv(ws);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'Biodata_Report.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  exportToXLSX(): void {
+    const data = this.getExportData();
+    if (data.length === 0) {
+      this.snackBar.open('No biodata to export.', 'Dismiss', { duration: 3000 });
+      return;
+    }
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Biodata');
+    XLSX.writeFile(wb, 'Biodata_Report.xlsx');
+  }
+
+  exportToPDF(): void {
+    const data = this.getExportData();
+    if (data.length === 0) {
+      this.snackBar.open('No biodata to export.', 'Dismiss', { duration: 3000 });
+      return;
+    }
+    
+    const doc = new jsPDF('landscape');
+    const head = [['ID', 'First Name', 'Last Name', 'Email', 'Phone Number', 'Gender', 'DOB', 'Region', 'Address', 'Has Report']];
+    const body = data.map(obj => Object.values(obj));
+
+    doc.text('Biodata Report', 14, 15);
+    (doc as any).autoTable({
+      head: head,
+      body: body,
+      startY: 20,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 123, 191] }
+    });
+
+    doc.save('Biodata_Report.pdf');
   }
 }

@@ -25,6 +25,7 @@ import { BlogComponent } from './pages/guest/blog/blog.component';
 import { AdminUsersComponent } from './pages/admin/admin-users/admin-users.component';
 import { AdminUserReportsComponent } from './pages/admin/admin-user-reports/admin-user-reports.component';
 import { AdminBiodataComponent } from './pages/admin/admin-biodata/admin-biodata.component';
+import { AdminSettingsComponent } from './pages/admin/admin-settings/admin-settings.component';
 
 
 
@@ -54,7 +55,8 @@ const routes: Routes = [
       { path: 'packages', component: PackageManagementComponent },
       { path: 'users', component: AdminUsersComponent },
       { path: 'userReports', component: AdminUserReportsComponent },
-      { path: 'biodata', component: AdminBiodataComponent }
+      { path: 'biodata', component: AdminBiodataComponent },
+      { path: 'settings', component: AdminSettingsComponent }
 
       // {path:'allFarms', component:AllFarmsComponent}
       // {path:'allFarms', component:AllFarmsComponent}

@@ -564,8 +564,8 @@
 
 /* Form Sections */
 .form-section {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--border-color);
   opacity: 0.6;
   transition: var(--transition);
@@ -576,9 +576,9 @@
 }
 
 .section-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   color: var(--text-color);
 }
 
@@ -597,6 +597,16 @@
   transition: var(--transition);
   position: relative;
   background-color: #F9FAFB;
+}
+
+.package-price-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.package-price-info h2 {
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .payment-card:hover {
@@ -653,11 +663,12 @@
 }
 
 .currency-prefix {
-  padding: 0 16px;
+  padding: 0 14px;
   font-weight: 600;
+  font-size: 14px;
   color: var(--text-color);
   background-color: #F9FAFB;
-  height: 48px;
+  height: 44px;
   display: flex;
   align-items: center;
   border-right: 1px solid var(--border-color);
@@ -671,10 +682,10 @@
 .form-control {
   flex: 1;
   border: none;
-  padding: 12px 16px;
-  font-size: 16px;
+  padding: 10px 14px;
+  font-size: 15px;
   outline: none;
-  height: 48px;
+  height: 44px;
   background-color: var(--background-color);
 }
 
@@ -705,7 +716,7 @@ label {
 }
 
 .network-select {
-  padding: 12px;
+  padding: 10px;
   border: none;
   outline: none;
   background-color: #F9FAFB;
@@ -720,24 +731,26 @@ label {
   cursor: pointer;
 }
 
-/* .phone-input {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-  } */
+.phone-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background-color: var(--background-color);
+  width: 100%;
+}
 
 /* Info Box */
 .info-box {
   display: flex;
   align-items: center;
   background-color: #EFF6FF;
-  padding: 12px;
+  padding: 8px 12px;
   border-radius: 8px;
   color: var(--primary-color);
-  font-size: 14px;
-  margin-top: 16px;
+  font-size: 12px;
+  margin-top: 8px;
 }
 
 .info-box svg {
@@ -747,20 +760,20 @@ label {
 
 /* Modal Footer */
 .modal-footer {
-  padding: 20px;
+  padding: 16px 20px;
   border-top: 1px solid var(--border-color);
   background-color: var(--background-color);
 }
 
 .submit-button {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
   transition: var(--transition);
   display: flex;
@@ -773,8 +786,10 @@ label {
 }
 
 .submit-button:disabled {
-  opacity: 0.7;
+  background-color: #CBD5E1;
+  color: #FFFFFF;
   cursor: not-allowed;
+  opacity: 1;
 }
 
 /* Spinner */
@@ -887,8 +902,11 @@ label {
   width: 100%;
   max-width: 420px;
   margin: 20px auto;
+  max-height: 90vh;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-title {
@@ -912,9 +930,10 @@ label {
 
 .otp-instructions {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   color: #64748B;
-  font-size: 0.9375rem;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .otp-instructions strong {
@@ -924,25 +943,27 @@ label {
 
 .otp-input-group {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 24px;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .otp-digit {
-  width: 48px;
-  height: 56px;
+  width: 44px;
+  height: 54px;
   border: 1px solid #E2E8F0;
   border-radius: 8px;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1E293B;
+  background-color: #F8FAFC;
   transition: all 0.2s ease;
 }
 
 .otp-digit:focus {
   border-color: #3B82F6;
+  background-color: #FFFFFF;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   outline: none;
 }
