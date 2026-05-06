@@ -39,10 +39,10 @@ export class UserEligibilityComponent implements OnInit, OnDestroy {
 
   // Modern loading messages
   loadingMessages: string[] = [
-    'Loading user information...',
+    'Loading information...',
+    'Analyzing reports data...',
     'Organizing results...',
-    'Analyzing eligibility data...',
-    'Preparing your report...',
+    'Preparing your reports...',
     'Finalizing details...',
     'Almost there...'
   ];
