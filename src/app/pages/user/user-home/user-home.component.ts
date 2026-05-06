@@ -36,9 +36,9 @@ export class UserHomeComponent {
   ];
 
   stats = [
-    { label: 'Institutions', value: '2,400+' },
+    { label: 'Institutions', value: '20+' },
     { label: 'Success Rate', value: '94%' },
-    { label: 'Scholarships', value: '$18M+' },
+    { label: 'Scholarships', value: 'Coming Up' },
     { label: 'Avg. Time Saved', value: '120h' }
   ];
 
