@@ -13,9 +13,17 @@
 <div class="results-container">
   <!-- Loading State -->
   <div *ngIf="isLoading" class="full-page-loading">
-    <div class="spinner-container">
-      <div class="big-spinner"></div>
-      <p class="loading-text">Loading eligibility results...</p>
+    <div class="loading-content">
+      <div class="modern-spinner">
+        <div class="spinner-ring ring-1"></div>
+        <div class="spinner-ring ring-2"></div>
+        <div class="spinner-ring ring-3"></div>
+        <div class="spinner-core"></div>
+      </div>
+      <div class="loading-text-container">
+        <p class="loading-main-text">Processing</p>
+        <p class="loading-sub-text">{{ currentLoadingMessage }}</p>
+      </div>
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { EligibilityResult } from 'src/app/customModels/eligibility.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,7 +27,7 @@ interface RecommendationSections {
   templateUrl: './user-eligibility.component.html',
   styleUrls: ['./user-eligibility.component.css']
 })
-export class UserEligibilityComponent {
+export class UserEligibilityComponent implements OnInit, OnDestroy {
 
   @Input() records: EligibilityResult[] = [];
 
@@ -36,6 +36,19 @@ export class UserEligibilityComponent {
   showModal = false;
   isLoading = false;
   loadingError = false;
+
+  // Modern loading messages
+  loadingMessages: string[] = [
+    'Loading user information...',
+    'Organizing results...',
+    'Analyzing eligibility data...',
+    'Preparing your report...',
+    'Finalizing details...',
+    'Almost there...'
+  ];
+  currentLoadingMessage = this.loadingMessages[0];
+  private loadingInterval: any;
+
 
   activeCardId: number | null = null;
   showAll: Record<string, Record<SectionKey, boolean>> = {};
@@ -61,10 +74,35 @@ export class UserEligibilityComponent {
     this.recordByUser();
   }
 
+  ngOnDestroy(): void {
+    this.stopLoadingMessages();
+  }
+
+  // ── Loading Messages Logic ──────────────────────────────────────────────────
+
+  private startLoadingMessages(): void {
+    this.stopLoadingMessages();
+    let index = 0;
+    this.currentLoadingMessage = this.loadingMessages[0];
+    this.loadingInterval = setInterval(() => {
+      index = (index + 1) % this.loadingMessages.length;
+      this.currentLoadingMessage = this.loadingMessages[index];
+    }, 2500);
+  }
+
+  private stopLoadingMessages(): void {
+    if (this.loadingInterval) {
+      clearInterval(this.loadingInterval);
+      this.loadingInterval = null;
+    }
+  }
+
+
   // ── Data loading ────────────────────────────────────────────────────────────
 
   recordByUser(): void {
     this.isLoading = true;
+    this.startLoadingMessages();
     this.loadingError = false;
     this.manualService.eligibilityRecordsByUser().subscribe({
       next: (data: any) => {
@@ -72,10 +110,13 @@ export class UserEligibilityComponent {
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         this.isLoading = false;
+        this.stopLoadingMessages();
       },
       error: (err) => {
         this.loadingError = true;
         this.isLoading = false;
+        this.stopLoadingMessages();
+
         this.snackBar.open('Failed to load results', 'Dismiss', {
           duration: 5000,
           panelClass: ['error-snackbar']
@@ -134,10 +175,13 @@ export class UserEligibilityComponent {
    */
   downloadAsPdf(result: EligibilityResult): void {
     this.isLoading = true;
+    this.startLoadingMessages();
     this.manualService.downloadEligibilityReport(result.id).subscribe({
       next: (blob: Blob) => {
         this.isLoading = false;
+        this.stopLoadingMessages();
         const url = window.URL.createObjectURL(blob);
+
         const link = document.createElement('a');
         link.href = url;
         const safeName = result.examCheckRecord?.candidateName?.replace(/\s+/g, '_') || 'Candidate';
@@ -149,7 +193,9 @@ export class UserEligibilityComponent {
       },
       error: (err) => {
         this.isLoading = false;
+        this.stopLoadingMessages();
         this.snackBar.open('Failed to generate report. Please try again.', 'Dismiss', {
+
           duration: 5000,
           panelClass: ['error-snackbar']
         });
