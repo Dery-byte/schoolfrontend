@@ -1,27 +1,97 @@
-# SchoolFrontEnd
+# School Management & Eligibility System (Frontend)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.15.
+A modern, responsive web application built with Angular 16, designed for managing educational institutions, courses, and student eligibility. The platform provides a seamless experience for administrators to manage data and for students to verify their academic eligibility for various programs.
 
-## Development server
+## 🚀 Key Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### 👨‍💼 Administrator Portal
+- **Dashboard**: Real-time overview of system statistics and user activities.
+- **University & College Management**: Add, edit, and manage educational institutions.
+- **Program & Course Management**: Comprehensive tools for managing academic offerings.
+- **Bulk Operations**: Upload student or institutional data via CSV/Excel.
+- **User Management**: Control user access, roles, and view detailed user reports.
+- **Package Management**: Handle subscription or access packages for the system.
+- **System Settings**: Configure global application parameters and biodata.
 
-## Code scaffolding
+### 🎓 Student / User Portal
+- **Eligibility Engine**: Interactive form to enter grades and check eligibility for specific programs.
+- **Results Tracking**: View and export eligibility results.
+- **Personalized Dashboard**: Quick access to home and previous checks.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 🌐 Guest Features
+- **Guest Check**: Limited eligibility verification for non-registered users.
+- **Blog & Information**: Publicly accessible academic resources and updates.
 
-## Build
+### 🛠️ Technical Features
+- **Interactive Charts**: Visual data representation using Chart.js.
+- **Document Export**: Generate PDF and Excel reports for eligibility results.
+- **Secure Authentication**: JWT-based authentication flow with role-based access control (RBAC).
+- **Automated API Client**: OpenAPI integration for type-safe backend communication.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## 💻 Tech Stack
 
-## Running unit tests
+- **Framework**: [Angular 16](https://angular.io/)
+- **UI Components**: [Angular Material](https://material.angular.io/) & [NG Bootstrap](https://ng-bootstrap.github.io/)
+- **Styling**: Bootstrap 5 & Custom CSS
+- **Data Visualization**: [Chart.js](https://www.chartjs.org/) with [ng2-charts](https://valor-software.com/ng2-charts/)
+- **Animations**: [Lottie Animations](https://lottiefiles.com/)
+- **State Management**: RxJS
+- **Reports**: jsPDF & XLSX
+- **Authentication**: @auth0/angular-jwt
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🛠️ Getting Started
 
-## Running end-to-end tests
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v16.x or higher)
+- [Angular CLI](https://angular.io/cli) (v16.x)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Installation
+1. Clone the repository
+2. Navigate to the project directory:
+   ```bash
+   cd SchoolFrontEnd/schoolFrontEnd
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Further help
+### Development Server
+Run the development server:
+```bash
+npm start
+```
+The application will be available at `http://localhost:4200/`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Building for Production
+Create an optimized production build:
+```bash
+npm run build
+```
+Build artifacts will be stored in the `dist/` directory.
+
+### API Client Generation
+This project uses OpenAPI to generate the service layer. If the backend API changes, update the `src/openapi/openapi.json` file and run:
+```bash
+npm run api-gen
+```
+
+## 📂 Project Structure
+
+```text
+src/app/
+├── auth/           # Authentication guards and interceptors
+├── customModels/   # Shared interfaces and types
+├── pages/          # Feature-based components (Admin, User, Guest)
+│   ├── admin/      # Administrator-specific views
+│   ├── user/       # Student-specific views
+│   ├── guest/      # Public views
+│   └── layouts/    # Master layouts for different roles
+├── services/       # API services (generated & manual)
+├── shared/         # Reusable UI components
+└── Utilities/      # Helper functions and exporters
+```
+
+## 📄 License
+
+This project is proprietary and confidential.
