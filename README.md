@@ -1,27 +1,105 @@
-# SchoolFrontEnd
+# 🎓 ExamFront - Online Quiz & Course Management System
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.15.
+[![Angular](https://img.shields.io/badge/Angular-16.2.8-DD0031.svg?style=for-the-badge&logo=angular)](https://angular.io/)
+[![Material UI](https://img.shields.io/badge/Material--UI-15.2.1-0081CB.svg?style=for-the-badge&logo=angular-material)](https://material.angular.io/)
+[![CKEditor](https://img.shields.io/badge/CKEditor-5-0287D0.svg?style=for-the-badge&logo=ckeditor)](https://ckeditor.com/)
 
-## Development server
+**ExamFront** is a comprehensive, multi-role web application designed to streamline the process of online education, course registration, and automated examinations. It provides a robust platform for administrators, lecturers, and students to interact in a seamless digital learning environment.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## 🌟 Multi-Role Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 👨‍💼 Administrator Portal
+*   **System Oversight**: Comprehensive dashboard for monitoring user activity and system health.
+*   **Course Management**: Create and manage academic categories and courses.
+*   **User Management**: Oversee student and lecturer profiles, including role assignment and status toggling.
+*   **Global Quiz Control**: Manage all quizzes and questions across the platform.
 
-## Build
+### 🧑‍🏫 Lecturer Portal
+*   **Content Creation**: Manage personal courses and design specialized quizzes.
+*   **Question Bank**: Add and edit quiz questions using a rich text editor (CKEditor) for complex formatting (math, code, etc.).
+*   **Performance Tracking**: View student enrollment in courses and analyze quiz results.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 🎓 Student / User Portal
+*   **Course Registration**: Browse available courses and register for academic programs.
+*   **Interactive Exams**: Take timed quizzes with clear instructions and immediate feedback.
+*   **Progress Tracking**: View registered courses and historical quiz performance.
+*   **Quiz Printing**: Export quizzes or results to physical formats for record-keeping.
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🛠️ Technology Stack
 
-## Running end-to-end tests
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | [Angular 16](https://angular.io/) |
+| **UI Components** | [Angular Material](https://material.angular.io/), [PrimeNG](https://www.primefaces.org/primeng/) |
+| **Rich Text Editing** | [CKEditor 5](https://ckeditor.com/ckeditor-5/) |
+| **Data Visualization** | [CanvasJS](https://canvasjs.com/) |
+| **Loading States** | [ngx-ui-loader](https://github.com/tusharghoshbd/ngx-ui-loader) |
+| **Tables & Export** | [Angular DataTables](https://l-lin.github.io/angular-datatables/), mat-table-exporter |
+| **Styling** | Bootstrap Grid & Owl Carousel (ngx-owl-carousel-o) |
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## 📂 Project Structure
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```text
+src/app/
+├── components/     # Shared UI components (Navbar, Sidebar, Footer)
+├── pages/          # Role-based feature modules
+│   ├── admin/      # Administrative dashboards and management views
+│   ├── lecturer/   # Content creation and lecturer-specific tools
+│   ├── user/       # Student course registration and exam interface
+│   ├── layouts/    # Master templates for different user roles
+│   └── login/      # Authentication and account management
+├── services/       # API integration, guards (AdminGuard, NormalGuard), and state management
+└── custom-pipes/   # Formatting utilities for templates
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+*   **Node.js**: v16.x or higher
+*   **Angular CLI**: v16.2.x
+*   **npm**: v8.x or higher
+
+### Installation
+1.  **Clone the repository**:
+    ```bash
+    git clone [repository-url]
+    cd examfront_Angular
+    ```
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+### Development
+Run the local development server:
+```bash
+# Serves on port 80 by default (as configured in package.json)
+npm start
+```
+Navigate to `http://localhost:80/`. The application will automatically reload if you change any source files.
+
+### Production Build
+Generate an optimized production bundle:
+```bash
+npm run build
+```
+The output will be stored in the `dist/` directory.
+
+---
+
+## 📄 License
+
+This project is proprietary. Unauthorized use, modification, or distribution is prohibited.
+
+---
+<p align="center">
+  Empowering Digital Education through Seamless Examination Management
+</p>

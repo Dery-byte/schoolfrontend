@@ -299,16 +299,40 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
       .pipe(delay(3000))
       .subscribe({
         next: () => {
-          this.loading = false;
+          // OTP disabled: auto-login immediately after successful registration
+          const loginRequest: AuthenticationRequest = {
+            email: this.registerRequest.email,
+            password: this.registerRequest.password
+          };
           // Preserve guest session across registration flow
           const urlParams = new URLSearchParams(window.location.search);
           const pendingSessionId = urlParams.get('sessionId');
           if (pendingSessionId) {
             this.guestService.saveSessionId(pendingSessionId);
           }
-          // Set the flag before navigation
-          this.authService.setComingFromRegistration(true);
-          this.router.navigate(['/activate-account']);
+          this.authenticationService.authenticate({ body: loginRequest }).subscribe({
+            next: (res) => {
+              this.loading = false;
+              const token = res.token as string;
+              this.tokenService.token = token;
+              const username = res.lastName;
+              this.authService.setUser(username);
+              const decodedToken = decodeToken(token);
+              if (decodedToken && decodedToken.authorities) {
+                this.attachGuestSessionIfPresent();
+                this.navigateBasedOnRole(decodedToken.authorities);
+              } else {
+                this.router.navigate(['/user', 'home']);
+              }
+            },
+            error: (err) => {
+              this.loading = false;
+              // Registration succeeded but login failed — fall back to login page
+              this.activeForm = 'login';
+              this.errorMsgReg = ['Registration successful! Please sign in.'];
+              this.setMessageDisplayTime();
+            }
+          });
         },
         error: (err) => {
           this.loading = false;
