@@ -2,8 +2,10 @@ import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef } fro
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+import { GlobalDiscountService, GlobalDiscount } from 'src/app/services/global-discount.service';
 import { BlurService } from 'src/app/shared/blur/blur.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
@@ -121,6 +123,8 @@ export class UserCheckResultsComponent implements OnInit {
   public originalAmount = 0;
   public isApplyingDiscount = false;
   public currentUser: any = null;
+  public globalDiscount: GlobalDiscount | null = null;
+  private _discountSub = new Subscription();
 
   public isApplyDisabled(): boolean {
     return !this.discountCodeInput || !this.discountCodeInput.trim() || this.isApplyingDiscount;
@@ -145,7 +149,8 @@ export class UserCheckResultsComponent implements OnInit {
     private manualService: ManaulServiceService,
     private blurService: BlurService,
     private router: Router,
-    private packageService: PackageManagementService
+    private packageService: PackageManagementService,
+    public discountService: GlobalDiscountService
   ) {
 
     this.newCheckForm = this.fb.group({
@@ -170,6 +175,11 @@ export class UserCheckResultsComponent implements OnInit {
     this.getAllRegions();
     this.loadPackageConfigs();
     this.fetchCurrentUser();
+    this._discountSub.add(
+      this.discountService.discount$.subscribe(d => {
+        this.globalDiscount = d;
+      })
+    );
   }
 
   fetchCurrentUser() {
@@ -184,6 +194,7 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this._discountSub.unsubscribe();
     this.blurService.setBlur(false);
     document.body.style.overflow = '';
   }

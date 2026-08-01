@@ -1,0 +1,19 @@
+/* Admin Sidebar — supplemental styles */
+
+/* Logout item — distinct from nav items */
+.nav-logout a {
+  color: rgba(255, 93, 93, 0.85) !important;
+  border-left-color: transparent;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.75rem;
+}
+
+.nav-logout a:hover {
+  color: #ff5d5d !important;
+  background: rgba(255, 93, 93, 0.1) !important;
+}
+
+.nav-logout a i {
+  color: rgba(255, 93, 93, 0.85);
+}

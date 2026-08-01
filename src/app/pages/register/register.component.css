@@ -21,6 +21,270 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* ════════════════════════════════════════════════════════
+   GLOBAL DISCOUNT BANNER
+   ════════════════════════════════════════════════════════ */
+
+.discount-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 3rem 0.6rem 1rem;
+  overflow: hidden;
+  animation: bannerSlideDown 0.55s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* Animated gradient background */
+.discount-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    270deg,
+    #7c3aed, #4f46e5, #0ea5e9, #10b981,
+    #f59e0b, #ef4444, #ec4899, #7c3aed
+  );
+  background-size: 400% 400%;
+  animation: rainbowShift 5s ease infinite;
+  z-index: 0;
+}
+
+/* Inner dark overlay for text legibility */
+.discount-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  z-index: 1;
+}
+
+@keyframes rainbowShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+@keyframes bannerSlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* ── Shimmer ribbon ──────────────────────────────── */
+.banner-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: bannerShimmer 2.2s ease-in-out infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes bannerShimmer {
+  0%   { background-position: -100% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* ── Floating sparks ─────────────────────────────── */
+.banner-sparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.spark {
+  position: absolute;
+  bottom: -10px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.7rem;
+  animation: sparkRise 3s ease-in infinite;
+}
+
+.s1 { left: 8%;   animation-delay: 0s;    animation-duration: 3.2s; font-size: 0.65rem; }
+.s2 { left: 22%;  animation-delay: 0.5s;  animation-duration: 2.8s; }
+.s3 { left: 38%;  animation-delay: 0.2s;  animation-duration: 3.5s; font-size: 0.8rem; }
+.s4 { left: 55%;  animation-delay: 0.8s;  animation-duration: 2.6s; }
+.s5 { left: 70%;  animation-delay: 0.3s;  animation-duration: 3.1s; font-size: 0.75rem; }
+.s6 { left: 88%;  animation-delay: 0.6s;  animation-duration: 2.9s; }
+
+@keyframes sparkRise {
+  0%   { transform: translateY(0)   rotate(0deg)   scale(1);   opacity: 0; }
+  15%  { opacity: 1; }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(-70px) rotate(20deg) scale(0.5); opacity: 0; }
+}
+
+/* ── Banner content row ──────────────────────────── */
+.banner-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── Emoji burst ─────────────────────────────────── */
+.banner-emoji {
+  font-size: 1.3rem;
+  animation: emojiWiggle 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
+}
+
+@keyframes emojiWiggle {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50%       { transform: rotate( 8deg) scale(1.15); }
+}
+
+/* ── Percentage badge ────────────────────────────── */
+.pct-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 10px;
+  padding: 0.2rem 0.7rem;
+  animation: pctPulse 1.8s ease-in-out infinite;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes pctPulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(255,255,255,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(255,255,255,0);   }
+}
+
+.pct-number {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 12px rgba(255,255,255,0.8);
+}
+
+.pct-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  align-self: flex-end;
+  padding-bottom: 0.1rem;
+}
+
+/* ── Message text ────────────────────────────────── */
+.banner-msg {
+  color: rgba(255,255,255,0.95);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  max-width: 340px;
+  text-align: center;
+}
+
+/* ── Expiry chip ─────────────────────────────────── */
+.expiry-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.85);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* ── CTA nudge ───────────────────────────────────── */
+.banner-cta {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.78rem;
+  font-weight: 500;
+  animation: ctaBounce 1.4s ease-in-out infinite;
+}
+
+@keyframes ctaBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(3px); }
+}
+
+/* ── Close button ────────────────────────────────── */
+.banner-close {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.banner-close:hover {
+  background: rgba(255,255,255,0.32);
+  color: #fff;
+}
+
+/* ── Mobile tweaks ───────────────────────────────── */
+@media (max-width: 600px) {
+  .discount-banner {
+    min-height: 72px;
+    padding: 0.65rem 2.5rem 0.65rem 0.75rem;
+  }
+
+  .banner-msg {
+    font-size: 0.8rem;
+    max-width: 240px;
+  }
+
+  .banner-cta {
+    display: none;
+  }
+
+  .pct-number {
+    font-size: 1.1rem;
+  }
+}
+
+/* ── Reduced motion override ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .discount-banner::before,
+  .banner-shimmer,
+  .spark,
+  .banner-emoji,
+  .pct-badge,
+  .banner-cta {
+    animation: none !important;
+  }
+}
+
+
 /* ── Full-page shell ──────────────────────────────────── */
 .page-shell {
   position: fixed;
@@ -881,4 +1145,54 @@
 .btn-back:hover {
   border-color: rgba(255,255,255,0.34);
   color: #fff;
+}
+
+/* ── Accessibility: prefers-reduced-motion ─────── */
+@media (prefers-reduced-motion: reduce) {
+  .net-line.line-to-uni,
+  .net-line.line-to-engine {
+    animation: none !important;
+  }
+
+  .net-ball {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .eyebrow-pulse,
+  .pulse-dot,
+  .dot-online,
+  .dot-proc,
+  .status-dot,
+  .msg-dot {
+    animation: none !important;
+  }
+
+  .engine-card,
+  .uni-float,
+  .uni-glass {
+    transition: none !important;
+  }
+}
+
+/* ── Mobile: hide floating cards on very small screens ── */
+@media (max-width: 480px) {
+  .uni-float {
+    display: none;
+  }
+
+  .network-svg {
+    display: none;
+  }
+
+  .net-ball {
+    display: none;
+  }
+
+  .engine-card {
+    width: 92vw;
+    left: 4vw !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+  }
 }

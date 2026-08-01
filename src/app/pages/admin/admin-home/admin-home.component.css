@@ -1,109 +1,268 @@
+/* ─────────────────────────────────────────────────
+   Admin Dashboard — Enhanced Styles
+   ───────────────────────────────────────────────── */
+
+/* ── Stat Card Enhancements ─────────────────────── */
+.stat-card-enhanced {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 100px;
+}
+
+.stat-card-enhanced:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10) !important;
+}
+
+.stat-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 20px;
+  margin-top: 0.3rem;
+}
+
+.stat-trend i {
+  font-size: 0.65rem;
+}
+
+.trend-up {
+  color: #1a7a4a;
+  background-color: #d1fae5;
+}
+
+.trend-down {
+  color: #c0392b;
+  background-color: #fee2e2;
+}
+
+.trend-neutral {
+  color: #1e6091;
+  background-color: #dbeafe;
+}
+
+/* ── Daily Sales table scroll ───────────────────── */
+.daily-sales-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #dee2e6 transparent;
+  border-radius: 0.35rem;
+}
+
+.daily-sales-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.daily-sales-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.daily-sales-scroll::-webkit-scrollbar-thumb {
+  background-color: #dee2e6;
+  border-radius: 4px;
+}
+
+/* ── Daily Sales Card — harmonized (was near-black) ─ */
+.card-custom {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+/* ── Table styles ───────────────────────────────── */
 .custom-caption {
   caption-side: top;
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #082757; /* Bootstrap primary color */
+  font-size: 0.95rem;
+  color: #082757;
   text-align: left;
-  padding-bottom: 0.5rem;
-  padding-left: 0.25rem;
-  letter-spacing: 0.5px;
-  background-color: #f8f9fa;
-  border-radius: 0.25rem 0.25rem 0 0;
+  padding: 0.5rem 0.25rem;
+  letter-spacing: 0.3px;
 }
 
-
-
-.card-custom {
-  background-color: #2e2d2d;
-padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
- margin-bottom: 1.5rem;
-  transition: box-shadow 0.3s ease;
-}
-
-
-
-.card-category>button{
-    margin-bottom: 10px;
-    font-size: 15px;
-    
-}
-
-
-/* Style for table header */
 .custom-thead th {
-  background-color: #080808;
+  background-color: #1e3a5f;
   color: #fff;
- font-weight: 60;
+  font-weight: 600;
   text-align: left;
-  font-size: 13px;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
-/* Style for table data cells */
 .custom-td {
- padding: 10px 12px;
-  font-size: 13px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
   vertical-align: middle;
   color: #333;
-  background-color: #f9f9f9;
-  border-color: #dee2e6;
+  background-color: #fafafa;
+  border-color: #f0f0f0;
 }
 
-/* Optional: Alternate row shading */
 .custom-table tbody tr:nth-child(even) .custom-td {
-  background-color: #f1f1f1;
+  background-color: #f5f7fb;
 }
 
-.statsButton{
-  background-color: rgb(24, 23, 23);
+/* ── Region badge ───────────────────────────────── */
+.region-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4361ee, #3a56d4);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
+.badge-soft-primary {
+  background-color: rgba(67, 97, 238, 0.12);
+  color: #4361ee;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25em 0.6em;
+  border-radius: 20px;
+}
 
+/* ── Revenue chart dropdown ─────────────────────── */
+.statsButton {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
 
+/* ── Transaction table enhancements ────────────── */
+.tx-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
 
+.dot-success { background-color: #28a745; }
+.dot-warning { background-color: #ffc107; }
 
+/* ── Loading skeleton ───────────────────────────── */
+.tx-loading-state {
+  padding: 1rem 1.5rem;
+}
 
+.tx-skeleton {
+  height: 2.5rem;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
+}
 
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
 
+/* ── Empty state ────────────────────────────────── */
+.empty-state-sm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: #9ca3af;
+  text-align: center;
+}
 
+.empty-state-sm i {
+  font-size: 2rem;
+  margin-bottom: 0.6rem;
+  color: #d1d5db;
+}
 
+.empty-state-sm p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ── Pagination controls ────────────────────────── */
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  gap: 5px;
+  margin: 1.25rem 0;
+  gap: 0.35rem;
+  flex-wrap: wrap;
 }
 
 .pagination-controls button {
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  background: #f8f9fa;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  color: #4361ee;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background: #4361ee;
+  color: #fff;
+  border-color: #4361ee;
 }
 
 .pagination-controls button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .pagination-controls span {
-  padding: 5px 10px;
+  padding: 0.35rem 0.65rem;
   cursor: pointer;
   border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: background 0.15s;
 }
 
 .pagination-controls span.active {
-  border-color: #007bff;
-  color: #007bff;
-  font-weight: bold;
+  border-color: #4361ee;
+  color: #4361ee;
+  background: rgba(67, 97, 238, 0.08);
+  font-weight: 700;
 }
 
 .pagination-controls span:hover:not(.active) {
-  background-color: #f1f1f1;
+  background-color: #f3f4f6;
 }
 
 .page-info {
-  margin-left: 15px;
+  margin-left: 0.75rem;
+  font-size: 0.78rem;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+/* ── Geolocation section — responsive ───────────── */
+@media (max-width: 768px) {
+  .col-md-6.mapcontainer-col {
+    order: -1;
+  }
 }

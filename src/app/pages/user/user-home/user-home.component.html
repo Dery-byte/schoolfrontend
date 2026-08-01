@@ -19,7 +19,10 @@
         </lottie-player>
       </div>
       <div class="progress-details">
-        <p class="progress-label">Profile completion</p>
+        <div class="progress-label-row">
+          <p class="progress-label">Profile completion</p>
+          <span class="progress-pct">{{ profileCompletion }}%</span>
+        </div>
         <div class="progress-bar">
           <div class="progress-fill" [style.width]="profileCompletion + '%'"></div>
         </div>
@@ -31,7 +34,7 @@
 <!-- Main Dashboard Card -->
 <main class="dashboard-card">
   <!-- Card Header -->
-  <div class="card-header">
+  <div class="ely-card-header">
     <div class="header-content">
       <div class="header-text">
         <h2 class="card-title">Find Your Perfect University Match</h2>
@@ -47,7 +50,7 @@
   </div>
 
   <!-- Card Content -->
-  <div class="card-content">
+  <div class="ely-card-content">
     <!-- Process Steps -->
     <div class="process-steps">
       <div class="step-card" *ngFor="let step of steps; let i = index">
@@ -59,7 +62,7 @@
         </div>
         <h3 class="step-title">{{ step.title }}</h3>
         <p class="step-description">{{ step.description }}</p>
-        <a href="#" class="step-link">
+        <a [routerLink]="step.route" class="step-link">
           {{ step.linkText }}
           <i class="fas fa-chevron-right"></i>
         </a>

@@ -1,7 +1,7 @@
 <header class="topbar">
   <!-- Left: hamburger + page title -->
   <div class="topbar-left">
-    <button class="hamburger" (click)="onMenuClick()" aria-label="Toggle navigation">
+    <button class="hamburger" (click)="onMenuClick()" aria-label="Toggle navigation menu">
       <span></span>
       <span></span>
       <span></span>
@@ -12,54 +12,73 @@
   <!-- Right: user menu -->
   <div class="topbar-right">
     <div class="user-menu">
-      <button class="user-btn" (click)="toggleDropdown()">
-        <span class="avatar">{{ userInitial }}</span>
+      <button class="user-btn" (click)="toggleDropdown()" [attr.aria-expanded]="dropdownOpen" aria-haspopup="true">
+        <span class="avatar" aria-hidden="true">{{ userInitial }}</span>
         <span class="user-name">{{ userName }}</span>
         <svg class="chevron" [class.open]="dropdownOpen"
              width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </button>
 
       <!-- Dropdown panel -->
-      <div class="dropdown-panel" *ngIf="dropdownOpen">
-        <div class="dropdown-user-info">
-          <div class="dropdown-avatar">{{ userInitial }}</div>
+      <div class="dropdown-panel"
+           *ngIf="dropdownOpen"
+           role="menu"
+           aria-label="User menu">
+
+        <div class="dropdown-user-info" role="presentation">
+          <div class="dropdown-avatar" aria-hidden="true">{{ userInitial }}</div>
           <div>
             <p class="dropdown-name">{{ userName }}</p>
             <p class="dropdown-role">Student</p>
           </div>
         </div>
+
         <hr class="dropdown-sep">
-        <button class="dropdown-item" routerLink="/user/home" (click)="dropdownOpen = false">
+
+        <button class="dropdown-item" role="menuitem"
+                routerLink="/user/home" (click)="dropdownOpen = false"
+                aria-label="Go to Dashboard">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
             <polyline points="9 22 9 12 15 12 15 22"></polyline>
           </svg>
           Dashboard
         </button>
-        <button class="dropdown-item" routerLink="/user/checkResults" (click)="dropdownOpen = false">
+
+        <button class="dropdown-item" role="menuitem"
+                routerLink="/user/checkResults" (click)="dropdownOpen = false"
+                aria-label="Go to Check Results">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="9 11 12 14 22 4"></polyline>
             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
           </svg>
           Check Results
         </button>
-        <button class="dropdown-item" routerLink="/user/checkEligilibilty" (click)="dropdownOpen = false">
+
+        <button class="dropdown-item" role="menuitem"
+                routerLink="/user/checkEligilibilty" (click)="dropdownOpen = false"
+                aria-label="Go to Eligibility Reports">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
           </svg>
           Eligibility Reports
         </button>
+
         <hr class="dropdown-sep">
-        <button class="dropdown-item logout" (click)="logout()">
+
+        <button class="dropdown-item logout" role="menuitem"
+                (click)="logout()"
+                aria-label="Logout">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
             <polyline points="16 17 21 12 16 7"></polyline>
             <line x1="21" y1="12" x2="9" y2="12"></line>

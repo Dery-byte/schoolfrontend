@@ -1,56 +1,102 @@
-/* You can add global styles to this file, and also import other style files */
+/* ════════════════════════════════════════════════════
+   Elygrad — Global Styles
+   ════════════════════════════════════════════════════ */
+
+/* ── Reset & base ────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Code-input OTP fields ───────────────────────── */
 code-input input {
-    border: none;
-    border-bottom: 2px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease;
-    background: transparent;
-  }
-  
-  code-input input:focus {
-    border-bottom: 3px solid #192a56 !important;
-    border-top: 3px solid #192a56!important;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background: transparent;
+}
 
-  }
- 
-/* Global Scroll Fix - Ensures scrolling works on all pages and layouts */
-html, 
-body, 
-.wrapper, 
-.app-shell, 
-.app-main, 
-.main-panel, 
+code-input input:focus {
+  border-bottom: 3px solid #4361ee !important;
+  border-top: 3px solid #4361ee !important;
+}
+
+/* ── Scroll fix — ensures scrolling works everywhere */
+html,
+body,
+.wrapper,
+.app-shell,
+.app-main,
+.main-panel,
 .content-scroll {
-    height: auto !important;
-    overflow: auto !important;
-    overflow-y: auto !important;
-    min-height: 100%;
+  height: auto !important;
+  overflow: auto !important;
+  overflow-y: auto !important;
+  min-height: 100%;
 }
 
-body { 
-    margin: 0; 
-    font-family: Roboto, "Helvetica Neue", sans-serif; 
+/* ── Focus-visible: keyboard navigation ring ─────── */
+:focus-visible {
+  outline: 2px solid #4361ee;
+  outline-offset: 2px;
 }
 
+:focus:not(:focus-visible) {
+  outline: none;
+}
 
+/* ── Screen-reader only utility ──────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
+/* ── Global skeleton shimmer ─────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
 
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
 
+/* ── Smooth scrollbar ────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
 
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
 
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}

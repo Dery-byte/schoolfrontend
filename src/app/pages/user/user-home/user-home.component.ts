@@ -19,19 +19,22 @@ export class UserHomeComponent {
       animation: 'assets/animations/complete-profile.json',
       title: 'Complete Your Profile',
       description: 'Build your academic profile by entering your subjects, grades, and program preferences for accurate matching.',
-      linkText: 'Get started'
+      linkText: 'Get started',
+      route: '/user/checkResults'
     },
     {
       animation: 'assets/animations/ai-matching.json',
       title: 'AI-Powered Matching',
       description: 'Our algorithm analyzes your profile against thousands of institutions to find perfect academic matches.',
-      linkText: 'Learn more'
+      linkText: 'Check eligibility',
+      route: '/user/checkEligilibilty'
     },
     {
       animation: 'assets/animations/results.json',
       title: 'Personalized Results',
       description: 'Receive tailored recommendations with acceptance probabilities and scholarship opportunities.',
-      linkText: 'View example'
+      linkText: 'View reports',
+      route: '/user/checkEligilibilty'
     }
   ];
 

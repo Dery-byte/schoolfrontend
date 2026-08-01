@@ -5,7 +5,10 @@
        (click)="closeSidebar()">
   </div>
 
-  <app-user-sidebar [isOpen]="sidebarOpen"></app-user-sidebar>
+  <app-user-sidebar
+    [isOpen]="sidebarOpen"
+    (sidebarClose)="closeSidebar()">
+  </app-user-sidebar>
 
   <div class="app-main">
     <app-user-header (sidebarToggle)="toggleSidebar()"></app-user-header>

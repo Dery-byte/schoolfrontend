@@ -4,6 +4,69 @@
      ══════════════════════════════════════════════════════ -->
 <div class="page-shell">
 
+  <!-- ═══════════════════════════════════════════════════
+       GLOBAL DISCOUNT BANNER
+       Shown when admin has set an active global promotion.
+       Reads live from the backend via discountService.discount$ (async).
+       ═══════════════════════════════════════════════════ -->
+  <ng-container *ngIf="discountService.discount$ | async as discount">
+    <div class="discount-banner"
+         *ngIf="discountService.isActive(discount) && !discountDismissed"
+         role="banner"
+         aria-label="Limited time promotion">
+
+      <!-- Shimmer ribbon layer -->
+      <div class="banner-shimmer" aria-hidden="true"></div>
+
+      <!-- Floating sparkle particles -->
+      <div class="banner-sparks" aria-hidden="true">
+        <span class="spark s1">✦</span>
+        <span class="spark s2">✦</span>
+        <span class="spark s3">★</span>
+        <span class="spark s4">✦</span>
+        <span class="spark s5">★</span>
+        <span class="spark s6">✦</span>
+      </div>
+
+      <!-- Banner content -->
+      <div class="banner-content">
+        <!-- Emoji burst -->
+        <span class="banner-emoji" aria-hidden="true">🎉</span>
+
+        <!-- Percentage badge -->
+        <div class="pct-badge">
+          <span class="pct-number">{{ discount.percentage }}%</span>
+          <span class="pct-label">OFF</span>
+        </div>
+
+        <!-- Message -->
+        <p class="banner-msg">
+          {{ discount.message || 'Limited-time offer — don\'t miss out!' }}
+        </p>
+
+        <!-- Expiry countdown chip -->
+        <span class="expiry-chip" *ngIf="discount.expiryDate">
+          <i class="fas fa-clock" aria-hidden="true"></i>
+          Ends {{ discount.expiryDate | date:'MMM d, y' }}
+        </span>
+
+        <!-- CTA nudge -->
+        <span class="banner-cta" aria-hidden="true">👇 Sign up below</span>
+      </div>
+
+      <!-- Dismiss button -->
+      <button class="banner-close"
+              (click)="discountDismissed = true"
+              aria-label="Dismiss promotion banner">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </ng-container>
+
+
   <!-- Dot grid background -->
   <div class="page-grid"></div>
 
@@ -113,8 +176,8 @@
       <div class="auth-brand-row">
         <span class="modal-brand-icon">🎓</span>
         <div>
-          <div class="modal-brand-name">EduCheck</div>
-          <div class="modal-brand-sub">University Eligibility Portal</div>
+          <div class="modal-brand-name">Elygrad</div>
+          <div class="modal-brand-sub">University Eligibility Portal — Ghana</div>
         </div>
       </div>
       <button class="modal-x" (click)="closeAuthModal()">

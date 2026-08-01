@@ -1,205 +1,55 @@
- 
+<!-- ── Forgotten Password Modal ────────────────────────── -->
+<div class="modal-backdrop" *ngIf="showorgottenPasswordModal" (click)="closeFogottenModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
 
-
-
-
-
-<body>
-  <div class="main">
-    <input type="checkbox" id="chk" aria-hidden="true">
-
-    <div class="signup">
-      <form>
-        <label class="label" for="chk" aria-hidden="true" *ngIf="!errorMsgReg.length">Sign up</label>
-        <div id="alertreg" class="alert alert-danger" role="alert" *ngIf="errorMsgReg.length">
-          <p style="line-height: 0.6px;" *ngFor="let msgReg of errorMsgReg">{{msgReg}}</p>
-        </div>
-        <input [(ngModel)]="registerRequest.firstname" type="text" name="firstname" placeholder="First name"
-          required="">
-        <input [(ngModel)]="registerRequest.lastname" type="text" name="lastname" placeholder="Last Name" required="">
-        <input [(ngModel)]="registerRequest.email" type="email" name="email" placeholder="Email" required="">
-        <!-- <input type="number" name="broj" placeholder="BrojTelefona" required=""> -->
-
-        <input [(ngModel)]="registerRequest.password" type="password" name="pswd" placeholder="Password" required="">
-        <button (click)="register()">
-          <span *ngIf="loading" class="spinner" role="status" aria-hidden="true"></span>
-          <span *ngIf="!loading"> Sign up </span>
-        </button>
-      </form>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-    <div class="login">
-      <form name="loginForm" novalidate>
-        <label for="chk" aria-hidden="true">Sign In</label>
-        <input [(ngModel)]="authRequest.email" ng-blur="Login.blurInput(loginForm.email)"
-          ng-focus="Login.focusInput(loginForm.email)" ng-model="Login.user.email" class="form-control"
-          ng-class="{ 'is-dirty': Login.isDirty(loginForm.email) }" required type="email" name="email"
-          placeholder="Email" required="">
-        <input [(ngModel)]="authRequest.password" type="password" name="password"
-          ng-blur="Login.blurInput(loginForm.password)" ng-focus="Login.focusInput(loginForm.password)"
-          ng-model="Login.user.password" ng-maxlength="30" ng-minlength="6" class="form-control"
-          ng-class="{ 'is-dirty': Login.isDirty(loginForm.password) }" placeholder="Password" required="">
-
-        <button (click)="login()">Login</button>
-      </form>
-      <button class="btn btn-outline-secondary" (click)="openFogottenModal()">Fogotten Password?</button>
-
-      <div class="custom-alert" *ngIf="errorMsg.length">
-        <div class="alert-content">
-          <ul>
-            <p *ngFor="let msg of errorMsg">{{ msg }}</p>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-<div
-  class="form-layout"
-  ng-app="app.loginForm"
-  ng-controller="LoginCtrl as Login"
->
-  <h2>Sign In</h2>
-
-  <form name="loginForm" novalidate>
-    <div
-      class="input-field"
-      ng-class="{ active: Login.isLabelActive(loginForm.email) }"
-    >
-      <label> E-mail </label>
-      <input
-        [(ngModel)]="authRequest.email"
-        type="email"
-        name="email"
-        ng-blur="Login.blurInput(loginForm.email)"
-        ng-focus="Login.focusInput(loginForm.email)"
-        ng-model="Login.user.email"
-        class="form-control"
-        ng-class="{ 'is-dirty': Login.isDirty(loginForm.email) }"
-        required
-        autofocus
-      />
-    </div>
-    <div
-      class="input-field"
-      ng-class="{ active: Login.isLabelActive(loginForm.password) }"
-    >
-      <label> Password </label>
-      <input
-        [(ngModel)]="authRequest.password"
-        type="password"
-        name="password"
-        ng-blur="Login.blurInput(loginForm.password)"
-        ng-focus="Login.focusInput(loginForm.password)"
-        ng-model="Login.user.password"
-        ng-maxlength="30"
-        ng-minlength="6"
-        class="form-control"
-        ng-class="{ 'is-dirty': Login.isDirty(loginForm.password) }"
-        required
-      />
-    </div>
-    <button (click)="login()" class="btn btn-outline-secondary">Log In</button>
-    <div>
-      Don't have an account?&nbsp;
-      <button (click)="register()" type="button" class="btn btn-outline-dark">
-        Register
-      </button>
-    </div>
-  </form>
-  <div class="alert alert-danger" role="alert" *ngIf="errorMsg.length">
-    <p *ngFor="let msg of errorMsg">{{ msg }}</p>
-  </div>
-  
-</div>  -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- //MODAL HTML TEMPLATE -->
-
-
-
-
-
-
-
-
-<div class="modal-overlay" *ngIf="showorgottenPasswordModal">
-  <div class="reset-form-container">
-    <!-- Modal Header -->
-    <div class="reset-form-header">
-      <h2>Reset Password</h2>
-      <button class="modal-close" (click)="closeFogottenModal()" aria-label="Close">
-        &times;
+    <div class="modal-header">
+      <h3 class="modal-title">Reset Password</h3>
+      <button class="modal-close" (click)="closeFogottenModal()" aria-label="Close modal">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
       </button>
     </div>
 
-    <!-- Modal Body -->
-    <form class="reset-form" [formGroup]="passwordResetForm" (ngSubmit)="passwordResetRequest()">
-      <p class="form-intro">Enter your email to receive a password reset link</p>
-
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" formControlName="email" placeholder="Enter your registered email" required>
-        <div *ngIf="passwordResetForm.get('email')?.invalid && passwordResetForm.get('email')?.touched"
-          class="form-error">
-          Please enter a valid email address
-        </div>
-      </div>
-      <div *ngIf="showSuccessMessage" class="success-message">
-        Password reset link sent successfully! Please check your email.
-      </div>
-      <!-- Modal Footer -->
-      <div class="form-actions">
-        <button type="" class="cancel-btn" (click)="closeFogottenModal()">Cancel</button>
-        <button type="submit" class="submit-btn" [disabled]="!passwordResetForm.valid" [class.loading]="isSubmitting">
-          <span *ngIf="!isSubmitting">Send Reset Link</span>
-          <span *ngIf="isSubmitting">
-            <span class="spinnerresetpass"></span>
-            Sending...
+    <div *ngIf="!showSuccessMessage" class="modal-body">
+      <p class="modal-desc">Enter your email and we'll send you a password reset link.</p>
+      <form [formGroup]="passwordResetForm" (ngSubmit)="passwordResetRequest()">
+        <div class="form-field">
+          <label class="form-label" for="reset-email">Email address</label>
+          <input
+            id="reset-email"
+            class="form-input"
+            type="email"
+            formControlName="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+          <span class="field-err"
+                *ngIf="passwordResetForm.get('email')?.invalid && passwordResetForm.get('email')?.touched">
+            Valid email required.
           </span>
-        </button>
-      </div>
-    </form>
+          <span class="field-err" *ngIf="apiError">{{ apiError }}</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-outline" (click)="closeFogottenModal()">Cancel</button>
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="passwordResetForm.invalid || isSubmitting">
+            <span *ngIf="!isSubmitting">Send Reset Link</span>
+            <span *ngIf="isSubmitting" class="btn-spin-row">
+              <span class="spin"></span> Sending…
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
 
+    <div *ngIf="showSuccessMessage" class="modal-success">
+      <div class="success-icon">✅</div>
+      <p>Reset link sent! Check your inbox.</p>
+      <button class="btn-primary" (click)="closeFogottenModal()">Done</button>
+    </div>
 
   </div>
 </div>

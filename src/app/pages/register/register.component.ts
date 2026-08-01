@@ -12,6 +12,7 @@ import { delay } from 'rxjs';
 import { AuthenticationRequest } from '../../services/models/authentication-request';
 import { AuthenticationService } from 'src/app/services/services';
 import { GuestService } from 'src/app/Utilities/guest.service';
+import { GlobalDiscountService } from 'src/app/services/global-discount.service';
 
 
 
@@ -20,7 +21,7 @@ import { GuestService } from 'src/app/Utilities/guest.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements AfterViewInit, OnDestroy {
+export class RegisterComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   constructor(
@@ -32,13 +33,18 @@ export class RegisterComponent implements AfterViewInit, OnDestroy {
     private authService: AuthService,
     private guestService: GuestService,
     private titleService: Title,
-    private metaService: Meta
-  ) {
-  }
+    private metaService: Meta,
+    public discountService: GlobalDiscountService
+  ) {}
+
+  discountDismissed = false;
 
   ngOnInit(): void {
     this.titleService.setTitle('Elygrad - Instant University Eligibility Checker Ghana');
     this.metaService.updateTag({ name: 'description', content: 'Check your eligibility for KNUST, UG, UCC, and other top Ghana universities instantly. Affordable, fast, and accurate WAEC result analysis.' });
+    // Always fetch the latest discount from the database so the banner
+    // reflects the current state even if it was changed since the last visit.
+    this.discountService.fetchFromServer();
   }
 
 

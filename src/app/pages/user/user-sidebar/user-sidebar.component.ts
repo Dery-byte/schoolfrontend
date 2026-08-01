@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-sidebar',
@@ -8,12 +9,16 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class UserSidebarComponent implements OnInit {
 
-  @Input() isOpen = false;
+  @Input()  isOpen = false;
+  @Output() sidebarClose = new EventEmitter<void>();
 
   userName: string = '';
   userInitial: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe(fullName => {
@@ -21,5 +26,17 @@ export class UserSidebarComponent implements OnInit {
       this.userInitial = this.userName ? this.userName.charAt(0).toUpperCase() : '?';
     });
     this.authService.initializeUserFromToken();
+  }
+
+  closeSidebar(): void {
+    this.sidebarClose.emit();
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('fullName');
+    localStorage.removeItem('auth_token');
+    this.authService.logout();
+    this.router.navigate(['/']).then(() => window.location.reload());
   }
 }
