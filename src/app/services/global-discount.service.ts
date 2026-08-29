@@ -14,7 +14,12 @@ export interface GlobalDiscount {
   promoDiscountedPrice: number;
 }
 
-const API = 'http://localhost:8088/api/v1/auth/admin/settings/global-discount';
+// const API = 'http://localhost:8088/api/v1/auth/admin/settings/global-discount';
+
+
+//ONLINE BACKEND
+const API = 'https://schoolbackend-j5n9.onrender.com/api/v1/auth/admin/settings/global-discount';
+
 
 const EMPTY: GlobalDiscount = {
   enabled: false,
