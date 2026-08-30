@@ -289,8 +289,7 @@
 .page-shell {
   position: fixed;
   inset: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   /* Deep void base + ambient radial glows */
   background:
     radial-gradient(ellipse 90% 55% at 50% 50%,  rgba(79, 70,229,0.08) 0%, transparent 65%),
@@ -299,7 +298,6 @@
     radial-gradient(ellipse 40% 40% at 85% 14%,  rgba(22,163, 74,0.05) 0%, transparent 50%),
     radial-gradient(ellipse 40% 40% at 14% 86%,  rgba(217,119,  6,0.05) 0%, transparent 50%),
     #050508;
-  min-height: 100dvh;
 }
 
 /* Subtle grid overlay */
@@ -490,9 +488,6 @@
     0 32px 80px rgba(0,0,0,0.35),
     0 2px 4px rgba(0,0,0,0.2);
   transition: box-shadow 0.4s;
-  /* Guard against overflow on short viewports */
-  max-height: calc(100dvh - 120px);
-  overflow-y: auto;
 }
 
 /* Ambient glow behind card when engine is lit */
@@ -1092,26 +1087,31 @@
 }
 
 /* Mobile — hide orbiting nodes, compact card */
+/* Mobile — show 4 orbiting nodes, compact card */
 @media (max-width: 480px) {
-  /* Hide decorative elements to give card breathing room */
-  .uni-float   { display: none; }
-  .network-svg { display: none; }
-  .net-ball    { display: none; }
-
-  /* Engine card: centered, comfortably wide */
+  /* Scale down decorative elements to avoid overlapping too much */
+  .uni-glass { transform: scale(0.85); transform-origin: center; padding: 4px; border-radius: 8px; }
+  .uni-float.uni-lit .uni-glass { transform: scale(0.9); }
+  .uni-avatar { width: 28px; height: 28px; font-size: 0.45rem; border-radius: 6px; }
+  
+  /* Engine card: centered, comfortably wide, compact padding to fit */
   .engine-card {
-    width: 92%;
-    max-width: 360px;
-    padding: 22px 18px 18px;
-    border-radius: 18px;
+    width: 90%;
+    max-width: 320px;
+    padding: 16px 14px 14px;
+    border-radius: 16px;
   }
-  .engine-eyebrow { font-size: 0.58rem; margin-bottom: 12px; }
-  .engine-brand   { font-size: 1.75rem; }
-  .engine-tagline { font-size: 0.76rem; margin-bottom: 12px; }
-  .engine-divider { margin: 2px 0 14px; }
-  .engine-msg     { font-size: 0.7rem; white-space: normal; text-align: center; }
-  .cta-start      { height: 44px; font-size: 0.87rem; }
-  .cta-signin, .cta-guest { height: 40px; font-size: 0.82rem; }
+  .engine-eyebrow { font-size: 0.55rem; margin-bottom: 8px; }
+  .engine-brand   { font-size: 1.5rem; margin-bottom: 6px; }
+  .engine-tagline { font-size: 0.7rem; margin-bottom: 10px; line-height: 1.4; }
+  .engine-msg-zone { min-height: 28px; margin-bottom: 8px; }
+  .engine-divider { margin: 2px 0 10px; }
+  .engine-msg     { font-size: 0.65rem; white-space: normal; text-align: center; }
+  
+  .engine-ctas { margin-bottom: 12px; gap: 8px; }
+  .cta-start      { height: 40px; font-size: 0.8rem; }
+  .cta-signin, .cta-guest { height: 38px; font-size: 0.75rem; }
+  .cta-blog { font-size: 0.7rem; }
 
   /* Auth modal */
   .auth-modal { padding: 20px 16px 18px; border-radius: 16px; }

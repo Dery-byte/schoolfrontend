@@ -455,8 +455,15 @@ export class RegisterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get visibleNodes(): typeof this.uniNodes {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1200;
-    if (w < 480) return this.uniNodes.slice(0, 3);
-    if (w < 768) return this.uniNodes.slice(0, 4);
+    if (w < 768) {
+      // Return 2 at the top (UG, KNUST) and 2 at the bottom (GIMPA, ASHESI)
+      return [
+        this.uniNodes[0], // Top Left
+        this.uniNodes[1], // Top Right
+        this.uniNodes[2], // Bottom Left
+        this.uniNodes[5]  // Bottom Right
+      ];
+    }
     return this.uniNodes;
   }
 
