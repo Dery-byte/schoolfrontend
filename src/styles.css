@@ -31,9 +31,14 @@ code-input input:focus {
   border-top: 3px solid #4361ee !important;
 }
 
-/* ── Scroll fix — ensures scrolling works everywhere */
+/* ── Scroll fix — ensures scrolling works in dashboard/admin layouts */
 html,
-body,
+body {
+  height: 100%;
+  /* Do NOT force overflow:auto here — the page-shell (home screen) is position:fixed
+     and manages its own scrolling. Overflow is only needed in routed layout wrappers. */
+}
+
 .wrapper,
 .app-shell,
 .app-main,

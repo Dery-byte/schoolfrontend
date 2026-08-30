@@ -289,7 +289,8 @@
 .page-shell {
   position: fixed;
   inset: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   /* Deep void base + ambient radial glows */
   background:
     radial-gradient(ellipse 90% 55% at 50% 50%,  rgba(79, 70,229,0.08) 0%, transparent 65%),
@@ -298,6 +299,7 @@
     radial-gradient(ellipse 40% 40% at 85% 14%,  rgba(22,163, 74,0.05) 0%, transparent 50%),
     radial-gradient(ellipse 40% 40% at 14% 86%,  rgba(217,119,  6,0.05) 0%, transparent 50%),
     #050508;
+  min-height: 100dvh;
 }
 
 /* Subtle grid overlay */
@@ -488,6 +490,9 @@
     0 32px 80px rgba(0,0,0,0.35),
     0 2px 4px rgba(0,0,0,0.2);
   transition: box-shadow 0.4s;
+  /* Guard against overflow on short viewports */
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
 }
 
 /* Ambient glow behind card when engine is lit */
@@ -725,10 +730,24 @@
   -webkit-backdrop-filter: blur(10px);
   z-index: 100;
   display: flex;
-  align-items: center;
+  /* Default to flex-start so modal is always reachable even on short viewports */
+  align-items: flex-start;
   justify-content: center;
   padding: 20px;
   overflow-y: auto;
+}
+
+/* Re-center when there's enough vertical room */
+@supports (min-height: 100dvh) {
+  .auth-backdrop {
+    align-items: center;
+  }
+  @media (max-height: 700px), (max-width: 480px) {
+    .auth-backdrop {
+      align-items: flex-start;
+      padding: 16px;
+    }
+  }
 }
 
 .auth-modal {
@@ -742,6 +761,11 @@
               0 20px 60px rgba(0,0,0,0.7),
               0 4px 16px rgba(0,0,0,0.4);
   animation: modal-pop 0.22s ease;
+  /* Prevent modal from being taller than viewport */
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  /* Ensure it stays accessible via centering margin on small screens */
+  margin: auto;
 }
 @keyframes modal-pop {
   from { opacity: 0; transform: scale(0.96) translateY(10px); }
@@ -826,6 +850,11 @@
 .form-field { display: flex; flex-direction: column; gap: 5px; }
 .label-row  { display: flex; justify-content: space-between; align-items: center; }
 .form-label { font-size: 0.76rem; font-weight: 600; color: var(--fg-2); }
+
+/* Collapse two-column rows on phones */
+@media (max-width: 600px) {
+  .form-row-2 { grid-template-columns: 1fr; }
+}
 
 .form-input {
   height: 42px;
@@ -1062,15 +1091,18 @@
   .engine-tagline { font-size: 0.8rem; }
 }
 
-/* Mobile — 3 logos, compact card */
+/* Mobile — hide orbiting nodes, compact card */
 @media (max-width: 480px) {
-  .uni-avatar { width: 32px; height: 32px; font-size: 0.52rem; border-radius: 8px; }
-  .uni-glass  { padding: 6px; border-radius: 9px; }
-  .net-ball   { width: 9px; height: 9px; }
+  /* Hide decorative elements to give card breathing room */
+  .uni-float   { display: none; }
+  .network-svg { display: none; }
+  .net-ball    { display: none; }
+
+  /* Engine card: centered, comfortably wide */
   .engine-card {
-    width: 80%;
-    max-width: 300px;
-    padding: 22px 16px 18px;
+    width: 92%;
+    max-width: 360px;
+    padding: 22px 18px 18px;
     border-radius: 18px;
   }
   .engine-eyebrow { font-size: 0.58rem; margin-bottom: 12px; }
@@ -1080,14 +1112,16 @@
   .engine-msg     { font-size: 0.7rem; white-space: normal; text-align: center; }
   .cta-start      { height: 44px; font-size: 0.87rem; }
   .cta-signin, .cta-guest { height: 40px; font-size: 0.82rem; }
-  .auth-modal     { padding: 22px 16px 20px; border-radius: 16px; }
-  .form-row-2     { grid-template-columns: 1fr; }
+
+  /* Auth modal */
+  .auth-modal { padding: 20px 16px 18px; border-radius: 16px; }
 }
 
 @media (max-width: 380px) {
-  .engine-card { width: 84%; padding: 18px 14px 16px; }
+  .engine-card { width: 94%; padding: 18px 14px 16px; }
   .engine-brand { font-size: 1.55rem; }
   .cta-secondary-row { grid-template-columns: 1fr; }
+  .auth-modal { padding: 18px 14px 16px; }
 }
 
 /* ── Two-step register indicator ── */
@@ -1172,27 +1206,5 @@
   .uni-float,
   .uni-glass {
     transition: none !important;
-  }
-}
-
-/* ── Mobile: hide floating cards on very small screens ── */
-@media (max-width: 480px) {
-  .uni-float {
-    display: none;
-  }
-
-  .network-svg {
-    display: none;
-  }
-
-  .net-ball {
-    display: none;
-  }
-
-  .engine-card {
-    width: 92vw;
-    left: 4vw !important;
-    top: 50% !important;
-    transform: translateY(-50%);
   }
 }
