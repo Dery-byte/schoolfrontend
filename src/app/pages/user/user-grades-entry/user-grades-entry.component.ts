@@ -16,6 +16,7 @@ import {
   ExamBoard, WASSCEType, GradeOptions, SubjectDatabase,
   CATEGORIES, COMBINED_SUBJECTS, SUBJECT_DATABASE, GRADE_OPTIONS,
 } from './grades-entry.data';
+import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
 
 declare var bootstrap: any;
 
@@ -59,6 +60,9 @@ export class UserGradesEntryComponent implements OnInit {
 
   // ── Loading / UI state ─────────────────────────────────────────────────────
   isLoading = false;
+
+  /** Live package config fetched from the backend — drives maxCategorySelection */
+  packageConfig: PackageConfiguration | null = null;
 
   // ── Tab navigation ─────────────────────────────────────────────────────────
   activeTab: string = 'manual';
@@ -181,7 +185,8 @@ export class UserGradesEntryComponent implements OnInit {
     private manualService: ManaulServiceService,
     private blurService: BlurService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private packageService: PackageManagementService
   ) {}
 
   ngOnInit(): void {
@@ -189,6 +194,18 @@ export class UserGradesEntryComponent implements OnInit {
     this.initEntryForm();
     this.manualForm();
     this.getColleges();
+    this.loadPackageConfig();
+  }
+
+  private loadPackageConfig(): void {
+    if (this.subscriptionType) {
+      this.packageService.getAllConfigurations().subscribe({
+        next: (configs) => {
+          this.packageConfig = configs.find(c => c.subscriptionType === this.subscriptionType) || null;
+        },
+        error: (err) => console.error('Failed to load package config', err)
+      });
+    }
   }
 
   // ── Computed ───────────────────────────────────────────────────────────────
@@ -222,6 +239,10 @@ export class UserGradesEntryComponent implements OnInit {
   }
 
   get maxColleges(): number {
+    if (this.packageConfig?.maxCategorySelection) {
+      return this.packageConfig.maxCategorySelection;
+    }
+    // Fallback if config is not yet loaded or missing
     if (this.subscriptionType === 'BASIC') return 1;
     if (this.subscriptionType === 'PREMIUM') return 2;
     return 3;

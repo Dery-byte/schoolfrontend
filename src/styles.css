@@ -31,23 +31,31 @@ code-input input:focus {
   border-top: 3px solid #4361ee !important;
 }
 
-/* ── Scroll fix — ensures scrolling works in dashboard/admin layouts */
-html,
-body {
+/* ── Scroll fix — body is the single scroll container ──────────────────
+   Angular's scrollPositionRestoration only works on the window (body).
+   Layout wrappers must NOT set overflow:auto/hidden or they steal the
+   scroll away from window, which means router scroll-restoration breaks.
+   Instead we let body scroll and use min-height so wrappers still fill
+   the viewport.
+   ─────────────────────────────────────────────────────────────────── */
+html {
   height: 100%;
-  /* Do NOT force overflow:auto here — the page-shell (home screen) is position:fixed
-     and manages its own scrolling. Overflow is only needed in routed layout wrappers. */
 }
 
+body {
+  min-height: 100%;
+  overflow-y: auto;   /* body IS the scroll container */
+}
+
+/* Layout wrappers: grow naturally, do NOT create their own scroll context */
 .wrapper,
 .app-shell,
 .app-main,
 .main-panel,
 .content-scroll {
   height: auto !important;
-  overflow: auto !important;
-  overflow-y: auto !important;
-  min-height: 100%;
+  overflow: visible !important;
+  min-height: 0;
 }
 
 /* ── Focus-visible: keyboard navigation ring ─────── */

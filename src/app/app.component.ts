@@ -14,6 +14,8 @@ export class AppComponent {
   constructor(private router: Router) {
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: any) => {
       this.isHomePage = e.urlAfterRedirects === '/' || e.urlAfterRedirects === '';
+      // Scroll to top on every route change (body is the scroll container)
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     });
   }
 }
