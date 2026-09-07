@@ -191,5 +191,79 @@
       </div>
     </div>
 
+    <!-- ── NEW: Payment Gateway Toggle ── -->
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="card-title mb-0">
+            <i class="fas fa-credit-card me-2"></i> Payment Gateway
+          </div>
+          <span *ngIf="!loadingGateway"
+                class="badge"
+                [ngClass]="activeGateway === 'PAYSTACK' ? 'badge-success' : 'badge-secondary'">
+            {{ activeGateway === 'PAYSTACK' ? '✔ Paystack Active' : '✔ Moolre Active' }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <p class="text-muted small mb-3">
+            Choose which payment processor users will be directed to when making a payment.
+            This takes effect immediately — no redeployment required.
+          </p>
+
+          <div *ngIf="loadingGateway" class="text-center py-3">
+            <span class="spinner-border spinner-border-sm text-primary" role="status"></span>
+            Loading…
+          </div>
+
+          <ng-container *ngIf="!loadingGateway">
+            <!-- Moolre option -->
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" id="gwMoolre"
+                     name="gateway" value="MOOLRE"
+                     [(ngModel)]="activeGateway">
+              <label class="form-check-label fw-bold" for="gwMoolre">
+                <i class="fas fa-mobile-alt me-2 text-primary"></i> Moolre (Mobile Money)
+                <div class="text-muted small fw-normal mt-1">
+                  Ghana MoMo prompt → OTP → webhook confirmation.
+                  Supports MTN, Vodafone, AirtelTigo.
+                </div>
+              </label>
+            </div>
+
+            <!-- Paystack option -->
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="radio" id="gwPaystack"
+                     name="gateway" value="PAYSTACK"
+                     [(ngModel)]="activeGateway">
+              <label class="form-check-label fw-bold" for="gwPaystack">
+                <i class="fas fa-lock me-2 text-success"></i> Paystack
+                <div class="text-muted small fw-normal mt-1">
+                  Hosted checkout popup — supports cards, bank transfers &amp; Mobile Money.
+                  No OTP step; payment confirmed via webhook.
+                </div>
+              </label>
+            </div>
+
+            <button class="btn btn-primary"
+                    (click)="saveActiveGateway()"
+                    [disabled]="savingGateway">
+              <i class="fas fa-save me-1"></i>
+              {{ savingGateway ? 'Saving…' : 'Save Gateway' }}
+            </button>
+
+            <div class="mt-3 text-success small" *ngIf="gatewaySaved">
+              <i class="fas fa-check-circle me-1"></i>
+              Gateway switched to <strong>{{ activeGateway }}</strong> successfully.
+            </div>
+            <div class="mt-3 text-danger small" *ngIf="gatewayError">
+              <i class="fas fa-exclamation-circle me-1"></i>
+              {{ gatewayErrorMessage }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

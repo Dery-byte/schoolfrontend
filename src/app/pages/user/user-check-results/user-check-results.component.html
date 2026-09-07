@@ -1179,9 +1179,16 @@
 <div class="modal-backdrop" *ngIf="showPaymentModal">
   <div class="payment-modal">
     <div class="modal-content-container">
-      <!-- Header with progress indicator -->
+      <!-- Header -->
       <div class="modal-header">
-        <div class="progress-step active">Complete Payment</div>
+        <div class="progress-step active">
+          <ng-container *ngIf="activeGateway === 'PAYSTACK'">
+            <i class="fas fa-lock me-2 text-success"></i> Secure Checkout via Paystack
+          </ng-container>
+          <ng-container *ngIf="activeGateway !== 'PAYSTACK'">
+            Complete Payment
+          </ng-container>
+        </div>
         <button class="close-button" (click)="closePaymentModal()" aria-label="Close">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M12 4L4 12M4 4L12 12" stroke="#64748B" stroke-width="2" stroke-linecap="round" />
@@ -1189,10 +1196,11 @@
         </button>
       </div>
 
-      <!-- modal body: scrollable area + sticky footer -->
+      <!-- modal body -->
       <div class="modal-body-flex">
         <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="payment-form-inner">
           <div class="form-scroll-container">
+
             <!-- Package Price Info -->
             <div class="package-price-info mb-2 mt-2">
               <h4 class="text-primary mb-1">{{ selectedPlan | titlecase }} Package</h4>
@@ -1234,7 +1242,7 @@
                 Discount applied successfully!</small>
             </div>
 
-            <!-- Form fields -->
+            <!-- Amount field (always shown) -->
             <div class="form-section active" style="text-align: left;">
               <h3 class="section-title">Payment Amount</h3>
               <div class="amount-group">
@@ -1245,46 +1253,76 @@
               </div>
             </div>
 
-            <div class="form-section active" style="text-align: left; border-bottom: none; margin-bottom: 0;">
-              <h3 class="section-title">Mobile Money Details</h3>
-              <div class="form-groups">
-                <div class="input-with-select">
-                  <select formControlName="channel" class="network-select" required>
-                    <option value="" disabled selected>Select Network</option>
-                    <option value="13">MTN</option>
-                    <option value="6">Vodafone</option>
-                    <option value="7">AirtelTigo</option>
-                  </select>
-                  <input type="tel" id="mobileNumber" formControlName="payer" placeholder="XXXX XXX XXX"
-                    class="phone-input">
+            <!-- ── MOOLRE: Mobile Money fields ── -->
+            <ng-container *ngIf="activeGateway !== 'PAYSTACK'">
+              <div class="form-section active" style="text-align: left; border-bottom: none; margin-bottom: 0;">
+                <h3 class="section-title">Mobile Money Details</h3>
+                <div class="form-groups">
+                  <div class="input-with-select">
+                    <select formControlName="channel" class="network-select" required>
+                      <option value="" disabled selected>Select Network</option>
+                      <option value="13">MTN</option>
+                      <option value="6">Vodafone</option>
+                      <option value="7">AirtelTigo</option>
+                    </select>
+                    <input type="tel" id="mobileNumber" formControlName="payer" placeholder="XXXX XXX XXX"
+                      class="phone-input">
+                  </div>
+                  <!-- Validation messages -->
+                  <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
+                    class="error-message mt-2" style="color: #ef4444; font-size: 13px;">
+                    Please select a mobile network
+                  </div>
+                  <div *ngIf="paymentForm.get('payer')?.invalid && paymentForm.get('payer')?.touched"
+                    class="error-message mt-2" style="color: #ef4444; font-size: 13px;">
+                    Please enter a valid 10-digit mobile number
+                  </div>
                 </div>
-                <!-- Validation message -->
-                <div *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched"
-                  class="error-message mt-2" style="color: #ef4444; font-size: 13px;">
-                  Please select a mobile network
-                </div>
-                <div *ngIf="paymentForm.get('payer')?.invalid && paymentForm.get('payer')?.touched"
-                  class="error-message mt-2" style="color: #ef4444; font-size: 13px;">
-                  Please enter a valid 10-digit mobile number
+                <div class="info-box">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
+                      fill="#EFF6FF" stroke="#3B82F6" />
+                    <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+                    <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                  <p style="margin: 0;">You'll receive a payment request on your phone</p>
                 </div>
               </div>
-              <div class="info-box">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    fill="#EFF6FF" stroke="#3B82F6" />
-                  <path d="M8 5V8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
-                  <path d="M8 11H8.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <p style="margin: 0;">You'll receive a payment request on your phone</p>
-              </div>
-            </div>
-          </div>
+            </ng-container>
 
-          <!-- Footer INSIDE form so submit works, but visually pinned -->
+            <!-- ── PAYSTACK: Info block (no extra fields needed) ── -->
+            <ng-container *ngIf="activeGateway === 'PAYSTACK'">
+              <div class="form-section active" style="text-align: left; border-bottom: none; margin-bottom: 0;">
+                <div class="info-box" style="background:#f0fdf4; border-color:#22c55e;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="7" fill="#dcfce7" stroke="#22c55e"/>
+                    <path d="M5 8l2 2 4-4" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  <p style="margin: 0; font-size: 13px;">
+                    <strong>Secure Paystack Checkout</strong><br>
+                    A payment popup will open. You can pay with <strong>card, bank transfer, or Mobile Money</strong>.
+                    No phone number required here — just click the button below.
+                  </p>
+                </div>
+              </div>
+            </ng-container>
+
+          </div><!-- /form-scroll-container -->
+
+          <!-- Footer INSIDE form -->
           <div class="modal-footer">
-            <button type="submit" class="submit-button" [disabled]="!paymentForm.valid">
-              <span *ngIf="!processingPayment">Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}}</span>
+            <button type="submit" class="submit-button"
+              [disabled]="processingPayment || (activeGateway !== 'PAYSTACK' && !paymentForm.valid)">
+              <!-- Moolre button label -->
+              <span *ngIf="!processingPayment && activeGateway !== 'PAYSTACK'">
+                Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}}
+              </span>
+              <!-- Paystack button label -->
+              <span *ngIf="!processingPayment && activeGateway === 'PAYSTACK'">
+                <i class="fas fa-lock me-2"></i>Pay GHS {{paymentForm.get('amount')?.value | number:'1.2-2'}} via Paystack
+              </span>
+              <!-- Spinner -->
               <span *ngIf="processingPayment" class="processing">
                 <svg class="spinner" viewBox="0 0 50 50">
                   <circle cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
@@ -1461,25 +1499,34 @@
 
 
 
-<!-- WAITING FOR WEBHOOK- to update payment Status -->
+<!-- WAITING FOR WEBHOOK - to update payment Status -->
 <div class="modal-backdrop" *ngIf="showWebHook">
 
   <div class="payment-status-modal" [class.show]="showWebHook">
-    <div (click)="closeWebhook()">
-     
-      </div>
-
     <div class="modal-card">
-      <!-- Processing State -->
+
+      <!-- Processing / Verifying State -->
       <div class="modal-body" *ngIf="!paymentsucceDetails">
         <div class="processing-header">
           <div class="spinner-container">
             <div class="spinnerpaystatus"></div>
           </div>
-          <h3 class="modal-title">Complete Payment on Your Phone</h3>
+          <!-- Paystack: verifying after popup closed -->
+          <ng-container *ngIf="activeGateway === 'PAYSTACK'">
+            <h3 class="modal-title">Confirming your Paystack payment…</h3>
+          </ng-container>
+          <!-- Moolre: waiting for phone approval -->
+          <ng-container *ngIf="activeGateway !== 'PAYSTACK'">
+            <h3 class="modal-title">Complete Payment on Your Phone</h3>
+          </ng-container>
         </div>
         <div class="payment-instructions">
-          <p class="instruction-text">Please approve the payment request on your mobile device to continue.</p>
+          <p class="instruction-text" *ngIf="activeGateway !== 'PAYSTACK'">
+            Please approve the payment request on your mobile device to continue.
+          </p>
+          <p class="instruction-text" *ngIf="activeGateway === 'PAYSTACK'">
+            Please wait while we verify your payment with Paystack…
+          </p>
           <div class="countdown-timer">
             <svg width="24" height="24" viewBox="0 0 24 24">
               <path fill="currentColor"
@@ -1489,49 +1536,53 @@
             <span>Waiting for confirmation...</span>
           </div>
         </div>
-      
       </div>
 
       <!-- Success State -->
       <div class="modal-body success-state" *ngIf="paymentsucceDetails">
         <div class="checkmark-container">
           <svg class="checkmark-animated" width="80" height="80" viewBox="0 0 80 80">
-            <!-- Circle background (optional) -->
             <circle cx="40" cy="40" r="38" fill="#f8fafc" />
-
-            <!-- Animated circle -->
             <circle class="checkmark-circle" cx="40" cy="40" r="36" fill="none" stroke="#4CAF50" stroke-width="4"
               stroke-dasharray="226" stroke-dashoffset="226" />
-
-            <!-- Animated check -->
             <path class="checkmark-check" d="M25,40 l12,12 l23-23" fill="none" stroke="#4CAF50" stroke-width="4"
               stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" />
           </svg>
         </div>
-        <!-- {{paymentsucceDetails| json}} -->
         <h3 class="modal-title">Payment Successful!</h3>
         <p class="success-message">Your payment has been processed successfully</p>
         <div class="payment-details success-details">
           <div class="detail-row">
             <span class="detail-label">Date:</span>
-            <span class="detail-value">{{ paymentsucceDetails?.timestamp | date }}</span>
+            <!-- Paystack returns paid_at as ISO string; Moolre returns LocalDateTime; Angular date pipe handles both -->
+            <span class="detail-value">
+              {{ (paymentsucceDetails?.timestamp || paymentsucceDetails?.paid_at) | date:'medium' }}
+            </span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Amount:</span>
-            <span class="detail-value">{{ paymentsucceDetails.amount | currency:'GHS':'GH₵ ':'1.2-2' }}</span>
+            <span class="detail-value">{{ paymentsucceDetails?.amount | currency:'GHS':'GH₵ ':'1.2-2' }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Transaction ID:</span>
-            <span class="detail-value">{{ paymentsucceDetails?.transactionId }}</span>
+            <span class="detail-value">{{ paymentsucceDetails?.transactionId || paymentsucceDetails?.reference || '—' }}</span>
           </div>
         </div>
-        <button class="action-button" (click)="closeWebhook()">
-          Proceed
-          <i class="fas fa-arrow-right ms-2"></i>
+        <!-- Navigates back to the check records list; disabled for first 3 seconds -->
+        <button class="action-button" (click)="closeWebhook()"
+          [disabled]="!successCardCanClose"
+          [style.opacity]="successCardCanClose ? '1' : '0.6'"
+          [style.cursor]="successCardCanClose ? 'pointer' : 'wait'">
+          <span *ngIf="successCardCanClose">
+            View My Records
+            <i class="fas fa-arrow-right ms-2"></i>
+          </span>
+          <span *ngIf="!successCardCanClose">
+            <i class="fas fa-spinner fa-spin me-2"></i> Please wait…
+          </span>
         </button>
-
-
       </div>
+
     </div>
   </div>
 </div>

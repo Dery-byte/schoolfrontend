@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { GlobalDiscountService, GlobalDiscount } from 'src/app/services/global-discount.service';
+import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 
 @Component({
   selector: 'app-admin-settings',
@@ -10,13 +11,13 @@ import { GlobalDiscountService, GlobalDiscount } from 'src/app/services/global-d
 })
 export class AdminSettingsComponent implements OnInit, OnDestroy {
 
-  // ── Existing: threshold / discount mode ──────────────
+  // ── Existing: threshold / discount mode ──────────────────
   threshold: number = 3;
   discountMode: string = 'MANUAL';
   loading: boolean = false;
   saving: boolean = false;
 
-  // ── Global promotion banner ──────────────────────────
+  // ── Global promotion banner ──────────────────────────────
   globalDiscount: GlobalDiscount = {
     enabled: false,
     percentage: 0,
@@ -30,19 +31,28 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   savingDiscount  = false;
   discountSaved   = false;
   discountError   = false;
-  todayStr = new Date().toISOString().split('T')[0]; // min date for date-picker
+  todayStr = new Date().toISOString().split('T')[0];
+
+  // ── Payment gateway toggle ───────────────────────────────
+  activeGateway: string  = 'MOOLRE';   // "MOOLRE" | "PAYSTACK"
+  loadingGateway         = false;
+  savingGateway          = false;
+  gatewaySaved           = false;
+  gatewayError           = false;
+  gatewayErrorMessage    = '';
 
   private _sub = new Subscription();
 
   constructor(
     private http: HttpClient,
-    public discountService: GlobalDiscountService
+    public discountService: GlobalDiscountService,
+    private manualService: ManaulServiceService
   ) {}
 
   ngOnInit(): void {
     this.loadThreshold();
+    this.loadActiveGateway();
 
-    // Refresh from the database and keep the form in sync
     this.discountService.fetchFromServer();
     this._sub.add(
       this.discountService.discount$.subscribe(d => {
@@ -55,7 +65,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this._sub.unsubscribe();
   }
 
-  // ── Existing methods ─────────────────────────────────
+  // ── Existing methods ─────────────────────────────────────
 
   loadThreshold(): void {
     this.loading = true;
@@ -88,7 +98,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ── Global promotion banner methods ──────────────────
+  // ── Global promotion banner methods ──────────────────────
 
   saveGlobalDiscount(): void {
     this.savingDiscount = true;
@@ -118,6 +128,47 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Failed to clear global discount', err);
+      }
+    });
+  }
+
+  // ── Payment gateway methods ───────────────────────────────
+
+  loadActiveGateway(): void {
+    this.loadingGateway = true;
+    this.manualService.getActiveGateway().subscribe({
+      next: (res) => {
+        this.activeGateway  = res.gateway || 'MOOLRE';
+        this.loadingGateway = false;
+      },
+      error: (err) => {
+        console.error('Error loading active gateway', err);
+        this.loadingGateway = false;
+      }
+    });
+  }
+
+  saveActiveGateway(): void {
+    this.savingGateway      = true;
+    this.gatewaySaved       = false;
+    this.gatewayError       = false;
+    this.gatewayErrorMessage = '';
+
+    this.http.post<any>(
+      'http://localhost:8088/api/v1/auth/admin/settings/payment-gateway',
+      { gateway: this.activeGateway }
+    ).subscribe({
+      next: (res) => {
+        this.savingGateway = false;
+        this.gatewaySaved  = true;
+        setTimeout(() => this.gatewaySaved = false, 4000);
+      },
+      error: (err) => {
+        console.error('Failed to save gateway setting', err);
+        this.savingGateway      = false;
+        this.gatewayError       = true;
+        this.gatewayErrorMessage = err.error?.error || 'Failed to save gateway setting.';
+        setTimeout(() => this.gatewayError = false, 5000);
       }
     });
   }

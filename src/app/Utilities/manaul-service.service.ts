@@ -191,6 +191,41 @@ revokeDiscount(selectedUser: number): Observable<RevokeDiscountResponse> {
   }
 
 
+  /**
+   * Returns the currently active payment gateway ("MOOLRE" or "PAYSTACK").
+   * Used by the payment modal to decide which UI flow to render.
+   */
+  getActiveGateway(): Observable<{ gateway: string }> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<{ gateway: string }>(
+      `${baseUrl}/auth/admin/settings/payment-gateway`, { headers }
+    );
+  }
+
+  /**
+   * Returns the Paystack public key from the backend (read from application.yml).
+   * This avoids hard-coding the key in Angular source code.
+   */
+  getPaystackPublicKey(): Observable<{ publicKey: string }> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<{ publicKey: string }>(
+      `${baseUrl}/auth/admin/settings/paystack-public-key`, { headers }
+    );
+  }
+
+  /**
+   * Verifies a Paystack transaction server-side after the popup fires onSuccess.
+   * @param reference The Paystack transaction reference (our externalRef).
+   */
+  verifyPaystackTransaction(reference: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(`${baseUrl}/auth/payments/paystack/verify/${reference}`, { headers });
+  }
+
+
   getPaymentStatus(externalRef: String) {
     const headers = new HttpHeaders({
       //  'ngrok-skip-browser-warning': 'true',

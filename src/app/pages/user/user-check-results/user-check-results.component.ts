@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
@@ -7,6 +7,7 @@ import { BlurService } from 'src/app/shared/blur/blur.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
+import { PaystackPaymentService } from 'src/app/services/custom/paystack-payment.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 
@@ -115,7 +116,7 @@ export class UserCheckResultsComponent implements OnInit {
   showWebHook = false;
   packageConfigs: PackageConfiguration[] = [];
   payee = { amount: '', channel: '', payer: '', otpcode: '', subscriptionType: '', usedDiscountCode: false };
-  
+
   // Discount Code State
   public discountCodeInput = '';
   public discountCodeValid = false;
@@ -125,6 +126,15 @@ export class UserCheckResultsComponent implements OnInit {
   public currentUser: any = null;
   public globalDiscount: GlobalDiscount | null = null;
   private _discountSub = new Subscription();
+
+  // ── Payment gateway ──────────────────────────────────────
+  /** "MOOLRE" | "PAYSTACK" — loaded once on init */
+  activeGateway: string = 'MOOLRE';
+  paystackPublicKey: string = '';
+  verifyingPaystack = false;
+  paystackPaymentCancelled = false;
+  /** Prevents "View My Records" from closing the success card too quickly */
+  successCardCanClose = true;
 
   public isApplyDisabled(): boolean {
     return !this.discountCodeInput || !this.discountCodeInput.trim() || this.isApplyingDiscount;
@@ -150,7 +160,9 @@ export class UserCheckResultsComponent implements OnInit {
     private blurService: BlurService,
     private router: Router,
     private packageService: PackageManagementService,
-    public discountService: GlobalDiscountService
+    public discountService: GlobalDiscountService,
+    private paystackService: PaystackPaymentService,
+    private ngZone: NgZone
   ) {
 
     this.newCheckForm = this.fb.group({
@@ -175,12 +187,31 @@ export class UserCheckResultsComponent implements OnInit {
     this.getAllRegions();
     this.loadPackageConfigs();
     this.fetchCurrentUser();
+    this.loadGatewaySettings();
     this._discountSub.add(
       this.discountService.discount$.subscribe(d => {
         this.globalDiscount = d;
       })
     );
   }
+
+  /** Fetches the active gateway and Paystack public key in one go. */
+  private loadGatewaySettings(): void {
+    this.manualService.getActiveGateway().subscribe({
+      next: (res) => {
+        this.activeGateway = res.gateway || 'MOOLRE';
+        if (this.activeGateway === 'PAYSTACK') {
+          this.manualService.getPaystackPublicKey().subscribe({
+            next: (pk) => { this.paystackPublicKey = pk.publicKey || ''; },
+            error: (err) => { console.error('Failed to load Paystack public key', err); }
+          });
+        }
+      },
+      error: (err) => { console.error('Failed to load active gateway', err); }
+    });
+  }
+
+
 
   fetchCurrentUser() {
     this.manualService.getCurrentUser().subscribe({
@@ -516,29 +547,130 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   submitPayment(): void {
+    if (this.activeGateway === 'PAYSTACK') {
+      this.submitPaymentPaystack();
+    } else {
+      this.submitPaymentMoolre();
+    }
+  }
+
+  /** Original Moolre flow: calls /initiate → shows OTP modal */
+  private submitPaymentMoolre(): void {
     if (this.paymentForm.valid) {
       this.processingPayment = true;
       const recordId = this.recordId;
-      const paymentPayload = { 
-        ...this.paymentForm.value, 
+      const paymentPayload = {
+        ...this.paymentForm.value,
         subscriptionType: this.selectedPlan,
         usedDiscountCode: this.payee.usedDiscountCode
       };
       this.manualService.initializePayment(paymentPayload, recordId).subscribe({
         next: (data: any) => {
-          this.externalRef = data.externalref;
+          this.externalRef = data.externalRef || data.externalref;
           if (recordId) this.recordId = recordId;
           this.closePaymentModal();
           this.openOtpModal();
           this.processingPayment = false;
         },
         error: (err) => {
-          console.error('Payment failed:', err);
+          console.error('Moolre payment failed:', err);
           this.processingPayment = false;
+          this.snackBar.open('Payment initiation failed. Please try again.', 'Close', { duration: 4000 });
         }
       });
     }
   }
+
+  /** Paystack flow: calls /initiate → gets access_code → opens Paystack popup */
+  private submitPaymentPaystack(): void {
+    this.processingPayment = true;
+    this.paystackPaymentCancelled = false;
+
+    const recordId = this.recordId;
+    const paymentPayload = {
+      amount: parseFloat(this.paymentForm.get('amount')?.value || '0'),
+      subscriptionType: this.selectedPlan,
+      usedDiscountCode: this.payee.usedDiscountCode,
+      // payer/channel not used by Paystack but must match MoolrePaymentRequest types:
+      // channel is Integer — must be null, NOT a string like 'card'
+      payer: this.currentUser?.username || '',
+      channel: null
+    };
+
+    this.manualService.initializePayment(paymentPayload, recordId).subscribe({
+      next: (data: any) => {
+        this.externalRef = data.externalRef || data.externalref || '';
+        const accessCode = data.accessCode || '';
+        const email = this.currentUser?.username || '';
+        const amountPesewas = Math.round(parseFloat(this.paymentForm.get('amount')?.value || '0') * 100);
+
+        this.processingPayment = false;
+        this.closePaymentModal();
+
+        // Open the Paystack popup
+        this.paystackService.openPopup({
+          key: this.paystackPublicKey,
+          email: email,
+          amount: amountPesewas,
+          ref: this.externalRef,
+          currency: 'GHS',
+          onSuccess: (response) => {
+            // MUST run inside Angular zone — Paystack popup fires callbacks
+            // outside Angular's change detection cycle, so the modal would
+            // not appear until the user next clicks on the page.
+            this.ngZone.run(() => {
+              this.handlePaystackSuccess(response.reference);
+            });
+          },
+          onCancel: () => {
+            this.ngZone.run(() => {
+              this.paystackPaymentCancelled = true;
+              this.snackBar.open('Payment cancelled. You can try again anytime.', 'Close', { duration: 4000 });
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Paystack initiation failed:', err);
+        this.processingPayment = false;
+        this.snackBar.open('Payment initiation failed. Please try again.', 'Close', { duration: 4000 });
+      }
+    });
+  }
+
+  /** Called after Paystack popup fires onSuccess (already inside ngZone) */
+  private handlePaystackSuccess(reference: string): void {
+    // Lock scroll and open modal FIRST so spinner shows immediately
+    document.body.style.overflow = 'hidden';
+    this.blurService.setBlur(true);
+    this.verifyingPaystack = true;
+    this.showWebHook = true;
+
+    this.manualService.verifyPaystackTransaction(reference).subscribe({
+      next: (res: any) => {
+        this.verifyingPaystack = false;
+        if (res.verified) {
+          // Show the success card and refresh list in the background
+          this.paymentsucceDetails = res;
+          this.loadChecks();
+          this.getResultsByUser();
+          // Keep success card visible for at least 3 seconds before user can proceed
+          this.successCardCanClose = false;
+          setTimeout(() => { this.successCardCanClose = true; }, 3000);
+        } else {
+          // Pending — keep spinner + start polling fallback
+          this.startPaymentStatusCheck();
+        }
+      },
+      error: (err) => {
+        this.verifyingPaystack = false;
+        console.error('Paystack verify error:', err);
+        // Fall back to polling so modal eventually shows success card
+        this.startPaymentStatusCheck();
+      }
+    });
+  }
+
 
   startPaymentStatusCheck() {
     this.intervalId = setInterval(() => {
@@ -671,10 +803,20 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   closeWebhook() {
+    // Don't allow closing before the minimum display time expires
+    if (this.paymentsucceDetails && !this.successCardCanClose) {
+      return;
+    }
     this.showWebHook = false;
-    this.cancelCurrentCheck();
+    this.paymentsucceDetails = null;
+    this.verifyingPaystack = false;
+    this.successCardCanClose = true;
     document.body.style.overflow = '';
     this.blurService.setBlur(false);
+    // Refresh list then go back so user lands on the updated records list
+    this.loadChecks();
+    this.getResultsByUser();
+    this.cancelCurrentCheck();
   }
 
   proceedToPaymentConfirmation() {
