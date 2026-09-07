@@ -1,4 +1,4 @@
-/* ─── Global check-results page reset ──────────── */
+/* â”€â”€â”€ Global check-results page reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 :host {
   display: block;
 }
@@ -7,7 +7,7 @@
   padding: 0 !important;
 }
 
-/* ─── Cards ──────────────────────────────────────── */
+/* â”€â”€â”€ Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .card {
   border-radius: 12px !important;
   margin-bottom: 1.25rem;
@@ -22,12 +22,12 @@
   padding: 1.25rem !important;
 }
 
-/* ─── Step header banner ─────────────────────────── */
+/* â”€â”€â”€ Step header banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .card-header[style*="linear-gradient"] {
   border-radius: 0 !important;
 }
 
-/* ─── Primary button ─────────────────────────────── */
+/* â”€â”€â”€ Primary button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn-primary {
   background: linear-gradient(135deg, #4361ee, #7c3aed) !important;
   border: none !important;
@@ -48,7 +48,7 @@
   vertical-align: middle;
 }
 
-/* ─── Tables: horizontal scroll on mobile ─────────── */
+/* â”€â”€â”€ Tables: horizontal scroll on mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -81,14 +81,14 @@
 
 .table tbody tr:last-child td { border-bottom: none; }
 
-/* ─── Badge colours ──────────────────────────────── */
+/* â”€â”€â”€ Badge colours â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .bg-success-light  { background: #dcfce7 !important; }
 .bg-warning-light  { background: #fef3c7 !important; }
 .bg-danger-light   { background: #fee2e2 !important; }
 .bg-primary-light  { background: #dbeafe !important; }
 .bg-secondary-light{ background: #f1f5f9 !important; }
 
-/* ─── Loading / progress bar ─────────────────────── */
+/* â”€â”€â”€ Loading / progress bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .loading-state {
   text-align: center;
   padding: 2.5rem 1rem;
@@ -131,35 +131,35 @@
   100% { width: 0%; margin-left: 100%; }
 }
 
-/* ─── Alert info ─────────────────────────────────── */
+/* â”€â”€â”€ Alert info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .alert-info {
   border-radius: 10px !important;
   border-left: 4px solid #4361ee !important;
 }
 
-/* ─── Active check container ─────────────────────── */
+/* â”€â”€â”€ Active check container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .active-check-container {
   padding: 0;
 }
 
-/* ─── Eligibility results grid ───────────────────── */
+/* â”€â”€â”€ Eligibility results grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .eligibility-dashboard {
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
-/* ─── New check card ─────────────────────────────── */
+/* â”€â”€â”€ New check card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .new-check-card {
   border-radius: 12px !important;
 }
 
-/* ─── Check row hover ────────────────────────────── */
+/* â”€â”€â”€ Check row hover â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .check-row:hover td {
   background: #f8faff;
 }
 
-/* ─── Mobile overrides ───────────────────────────── */
+/* â”€â”€â”€ Mobile overrides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 768px) {
   .card-body { padding: 1rem !important; }
   .card-header { padding: 0.875rem 1rem !important; }
@@ -576,7 +576,7 @@
   background-color: #F3F4F6;
 }
 
-/* Form Container — scrollable middle zone */
+/* Form Container â€” scrollable middle zone */
 .form-scroll-container {
   padding: 12px 20px 16px;
   overflow-y: auto;
@@ -782,7 +782,7 @@ label {
   flex-shrink: 0;
 }
 
-/* Modal Footer — always pinned at the bottom */
+/* Modal Footer â€” always pinned at the bottom */
 .modal-footer {
   padding: 14px 20px;
   border-top: 1px solid var(--border-color);
@@ -1603,7 +1603,7 @@ label {
   box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
 }
 
-/* ─── Payment / Info callout ─────────────────────────── */
+/* â”€â”€â”€ Payment / Info callout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .payment-callout {
   display: flex;
   align-items: flex-start;
@@ -1630,9 +1630,9 @@ label {
   color: #1e40af;
 }
 
-/* ══════════════════════════════════════════════════════
-   BIODATA FORM — Premium redesign
-   ══════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BIODATA FORM â€” Premium redesign
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .biodata-wrapper {
   border-radius: 16px;
@@ -1753,7 +1753,7 @@ label {
   flex-shrink: 0;
 }
 
-/* ── Label-on-top field ───────────────────────────────── */
+/* â”€â”€ Label-on-top field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .bd-form-field {
   display: flex;
   flex-direction: column;
@@ -1916,7 +1916,7 @@ label {
   .bd-btn-proceed { width: 100%; justify-content: center; }
 }
 
-/* ─── Payment section layout ──────────────────────────── */
+/* â”€â”€â”€ Payment section layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .payment-section {
   padding: 0;
 }
@@ -1953,7 +1953,7 @@ label {
   padding: 1rem;
 }
 
-/* ─── Pricing cards ───────────────────────────────────── */
+/* â”€â”€â”€ Pricing cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .pricing-container {
   max-width: 1100px;
   margin: 0 auto;
@@ -2152,3 +2152,42 @@ label {
   font-size: 0.85em;
 }
 
+/* ─── Responsive adjustments ──────────────────────── */
+@media (max-width: 768px) {
+  .pricing-container {
+    padding: 0 10px;
+  }
+  .pricing-card .card-header {
+    padding: 1.25rem !important;
+  }
+  .pricing-card .card-body {
+    padding: 1.25rem !important;
+  }
+  .price-section .amount {
+    font-size: 2rem;
+  }
+  
+  .payment-modal {
+    width: 95%;
+    max-width: 460px;
+    margin: 10px auto;
+    max-height: 95vh;
+  }
+  .modal-header {
+    padding: 15px;
+  }
+  .form-scroll-container {
+    padding: 10px 15px 12px;
+  }
+}
+@media (max-width: 480px) {
+  .payment-modal {
+    width: 98%;
+  }
+  .plan-name {
+    font-size: 1.1rem;
+  }
+  .price-section .amount {
+    font-size: 1.75rem;
+  }
+}
