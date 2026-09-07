@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { GlobalDiscountService, GlobalDiscount } from 'src/app/services/global-discount.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
+import baseUrl from 'src/app/Utilities/helper';
 
 @Component({
   selector: 'app-admin-settings',
@@ -69,7 +70,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   loadThreshold(): void {
     this.loading = true;
-    this.http.get<any>('http://localhost:8088/api/v1/auth/admin/settings/threshold').subscribe({
+    this.http.get<any>(`${baseUrl}/auth/admin/settings/threshold`).subscribe({
       next: (res) => {
         this.threshold    = res.threshold;
         this.discountMode = res.discountMode || 'MANUAL';
@@ -85,7 +86,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   saveThreshold(): void {
     this.saving = true;
     const payload = { threshold: this.threshold, discountMode: this.discountMode };
-    this.http.post<any>('http://localhost:8088/api/v1/auth/admin/settings/threshold', payload).subscribe({
+    this.http.post<any>(`${baseUrl}/auth/admin/settings/threshold`, payload).subscribe({
       next: (res) => {
         alert(res.message);
         this.saving = false;
@@ -155,7 +156,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this.gatewayErrorMessage = '';
 
     this.http.post<any>(
-      'http://localhost:8088/api/v1/auth/admin/settings/payment-gateway',
+      `${baseUrl}/auth/admin/settings/payment-gateway`,
       { gateway: this.activeGateway }
     ).subscribe({
       next: (res) => {
