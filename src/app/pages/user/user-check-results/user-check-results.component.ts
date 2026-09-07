@@ -362,7 +362,7 @@ export class UserCheckResultsComponent implements OnInit {
   }
 
   private isValidBiodata(): boolean {
-    return !!this.biodata.id && !!this.biodata.firstName && !!this.biodata.lastName && !!this.biodata.email;
+    return !!this.biodata.id && !!this.biodata.firstName && !!this.biodata.lastName && !!this.biodata.region;
   }
 
   resetForm() {
