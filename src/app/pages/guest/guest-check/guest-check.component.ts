@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GuestService } from 'src/app/Utilities/guest.service';
 import { ManaulServiceService } from 'src/app/Utilities/manaul-service.service';
 import { WaecControllersService } from 'src/app/services/services';
 import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
+import { PaystackPaymentService } from 'src/app/services/custom/paystack-payment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   SUBJECT_DATABASE, GRADE_OPTIONS,
@@ -112,6 +113,11 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   // Eligibility check state
   isEligibilityChecked = false;
 
+  activeGateway: 'MOOLRE' | 'PAYSTACK' = 'MOOLRE';
+  paystackPublicKey = '';
+  verifyingPaystack = false;
+  paystackPaymentCancelled = false;
+
   get isLimitReached(): boolean {
     return this.waecresults !== null && this.waecresults2 !== null;
   }
@@ -125,11 +131,14 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
     private router: Router,
     private waec: WaecControllersService,
     private snackBar: MatSnackBar,
-    private packageService: PackageManagementService
+    private packageService: PackageManagementService,
+    private paystackService: PaystackPaymentService,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
     this.buildForms();
+    this.loadGatewaySettings();
     this.loadRegions();
     this.loadCategories();
     this.loadPackageConfigs();
@@ -147,6 +156,37 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
     }
   }
 
+  private loadGatewaySettings(): void {
+    this.guestService.getGuestGateway().subscribe({
+      next: (res) => {
+        this.activeGateway = (res.gateway as 'MOOLRE' | 'PAYSTACK') || 'MOOLRE';
+        this.updatePaymentFormValidators();
+        if (this.activeGateway === 'PAYSTACK') {
+          this.guestService.getGuestPaystackPublicKey().subscribe({
+            next: (pk) => { this.paystackPublicKey = pk.publicKey || ''; },
+            error: (err) => console.error('Failed to load Paystack public key', err)
+          });
+        }
+      },
+      error: (err) => console.error('Failed to load gateway settings', err)
+    });
+  }
+
+  private updatePaymentFormValidators(): void {
+    if (this.activeGateway === 'MOOLRE') {
+      this.paymentForm.get('payer')?.setValidators([Validators.required, Validators.pattern(/^(?:233|0)[2345][0-9]{8}$/)]);
+      this.paymentForm.get('channel')?.setValidators([Validators.required]);
+      this.paymentForm.get('email')?.clearValidators();
+    } else {
+      this.paymentForm.get('payer')?.clearValidators();
+      this.paymentForm.get('channel')?.clearValidators();
+      this.paymentForm.get('email')?.setValidators([Validators.required, Validators.email]);
+    }
+    this.paymentForm.get('payer')?.updateValueAndValidity();
+    this.paymentForm.get('channel')?.updateValueAndValidity();
+    this.paymentForm.get('email')?.updateValueAndValidity();
+  }
+
   ngOnDestroy(): void {
     this.stopPolling();
   }
@@ -158,8 +198,9 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
 
   private buildForms(): void {
     this.paymentForm = this.fb.group({
-      payer: ['', [Validators.required, Validators.pattern(/^(?:233|0)[2345][0-9]{8}$/)]],
-      channel: ['', Validators.required],
+      payer: [''],
+      channel: [''],
+      email: [''],
       candidateName: ['', Validators.required]
     });
 
@@ -286,6 +327,14 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
 
   submitPayment(): void {
     if (this.paymentForm.invalid) { this.paymentForm.markAllAsTouched(); return; }
+    if (this.activeGateway === 'PAYSTACK') {
+      this.submitPaymentPaystack();
+    } else {
+      this.submitPaymentMoolre();
+    }
+  }
+
+  private submitPaymentMoolre(): void {
     this.isLoading = true;
     this.errorMessage = '';
     const { payer, channel, candidateName } = this.paymentForm.value;
@@ -311,6 +360,80 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err?.error?.message || 'Payment initiation failed. Please try again.';
+      }
+    });
+  }
+
+  private submitPaymentPaystack(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.paystackPaymentCancelled = false;
+    const { email, candidateName } = this.paymentForm.value;
+
+    this.guestService.initiateGuestPayment({
+      payer: email, // Paystack needs an email
+      channel: '',
+      amount: this.planAmount,
+      subscriptionType: this.selectedPlan,
+      candidateName
+    }).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        if (res && res.sessionId) {
+          this.sessionId = res.sessionId;
+          this.externalRef = res.externalRef;
+          this.recordId = res.recordId;
+          this.guestService.saveSessionId(this.sessionId);
+          this.guestService.saveGuestMeta(this.externalRef, this.recordId);
+
+          const amountPesewas = Math.round(this.planAmount * 100);
+
+          this.paystackService.openPopup({
+            key: this.paystackPublicKey,
+            email: email,
+            amount: amountPesewas,
+            ref: this.externalRef,
+            currency: 'GHS',
+            onSuccess: (transaction) => {
+              this.ngZone.run(() => {
+                this.handleGuestPaystackSuccess(transaction.reference);
+              });
+            },
+            onCancel: () => {
+              this.ngZone.run(() => {
+                this.paystackPaymentCancelled = true;
+                this.errorMessage = 'Payment cancelled. You can try again anytime.';
+              });
+            }
+          });
+        } else {
+          this.errorMessage = res?.userMessage || 'Payment initiation failed. Please try again.';
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'Payment initiation failed. Please try again.';
+      }
+    });
+  }
+
+  private handleGuestPaystackSuccess(reference: string): void {
+    this.verifyingPaystack = true;
+    this.guestService.verifyGuestPaystackTransaction(reference).subscribe({
+      next: (res: any) => {
+        this.verifyingPaystack = false;
+        if (res && res.verified) {
+          this.setStep('biodata');
+        } else {
+          // Fallback to polling
+          this.setStep('pending');
+          this.startPolling();
+        }
+      },
+      error: (err) => {
+        this.verifyingPaystack = false;
+        this.setStep('pending');
+        this.startPolling();
       }
     });
   }

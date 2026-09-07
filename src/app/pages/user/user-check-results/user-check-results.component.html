@@ -992,11 +992,13 @@
               <div class="row g-3">
                 <div class="col-md-4">
                   <div class="bd-form-field">
-                    <label class="bd-label" for="email">Email Address <span class="text-danger">*</span></label>
+                    <label class="bd-label" for="email">Email Address 
+                      <!-- <span class="text-danger">*</span> -->
+                    </label>
                     <div class="bd-input-wrap">
                       <span class="bd-icon"><i class="fas fa-envelope"></i></span>
                       <input type="email" class="bd-input" id="email" placeholder="you@example.com"
-                        [(ngModel)]="biodata.email" name="email" required>
+                        [(ngModel)]="biodata.email" name="email">
                     </div>
                   </div>
                 </div>

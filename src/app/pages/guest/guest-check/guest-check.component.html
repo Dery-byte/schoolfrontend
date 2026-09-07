@@ -172,13 +172,21 @@
             <input class="gc-input" type="text" formControlName="candidateName" placeholder="Full name of candidate" />
             <span class="gc-field-err" *ngIf="paymentForm.get('candidateName')?.invalid && paymentForm.get('candidateName')?.touched">Name is required.</span>
           </div>
-          <div class="gc-field">
+
+          <div class="gc-field" *ngIf="activeGateway === 'MOOLRE'">
             <label class="gc-label">Mobile Money Number</label>
             <input class="gc-input" type="text" formControlName="payer" placeholder="e.g. 0241234567" />
             <span class="gc-field-err" *ngIf="paymentForm.get('payer')?.invalid && paymentForm.get('payer')?.touched">Enter a valid Ghana mobile number.</span>
           </div>
+
+          <div class="gc-field" *ngIf="activeGateway === 'PAYSTACK'">
+            <label class="gc-label">Email Address</label>
+            <input class="gc-input" type="email" formControlName="email" placeholder="e.g. you@example.com" />
+            <span class="gc-field-err" *ngIf="paymentForm.get('email')?.invalid && paymentForm.get('email')?.touched">Valid email is required.</span>
+          </div>
         </div>
-        <div class="gc-field">
+
+        <div class="gc-field" *ngIf="activeGateway === 'MOOLRE'">
           <label class="gc-label">Mobile Network</label>
           <select class="gc-select" formControlName="channel">
             <option value="" disabled selected>Select Network</option>
@@ -188,9 +196,11 @@
           </select>
           <span class="gc-field-err" *ngIf="paymentForm.get('channel')?.invalid && paymentForm.get('channel')?.touched">Please select a network.</span>
         </div>
-        <button type="submit" class="gc-btn-primary" [disabled]="isLoading">
-          <span *ngIf="!isLoading">Pay GHS {{ planAmount }} — Start Check →</span>
+
+        <button type="submit" class="gc-btn-primary" [disabled]="isLoading || verifyingPaystack">
+          <span *ngIf="!isLoading && !verifyingPaystack">Pay GHS {{ planAmount }} — Start Check →</span>
           <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Processing…</span>
+          <span *ngIf="verifyingPaystack" class="gc-spinner-row"><span class="gc-spin"></span> Verifying Payment…</span>
         </button>
       </form>
     </div>

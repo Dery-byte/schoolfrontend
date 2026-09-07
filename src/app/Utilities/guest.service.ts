@@ -85,4 +85,30 @@ export class GuestService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.post(`${baseUrl}/eligibility/attach-temp-report-to-user`, { sessionId }, { headers });
   }
+
+  // --- Gateway settings (no auth required — /guest/... is public) ---
+
+  /**
+   * Returns the active payment gateway configured by the admin.
+   * No authentication required.
+   */
+  getGuestGateway(): Observable<{ gateway: string }> {
+    return this.http.get<{ gateway: string }>(`${baseUrl}/guest/payment/gateway`);
+  }
+
+  /**
+   * Returns the Paystack public key for the guest popup.
+   * No authentication required.
+   */
+  getGuestPaystackPublicKey(): Observable<{ publicKey: string }> {
+    return this.http.get<{ publicKey: string }>(`${baseUrl}/guest/payment/paystack-key`);
+  }
+
+  /**
+   * Verifies a Paystack transaction after the popup fires onSuccess (guest flow).
+   * No authentication required.
+   */
+  verifyGuestPaystackTransaction(reference: string): Observable<any> {
+    return this.http.get(`${baseUrl}/guest/payment/verify/${reference}`);
+  }
 }
