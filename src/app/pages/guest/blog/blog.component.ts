@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 
 import { PackageManagementService, PackageConfiguration } from 'src/app/services/custom/package-management.service';
+import { CategoryControllerService } from 'src/app/services/services/category-controller.service';
+import { Category } from 'src/app/services/models/category';
 
 @Component({
   selector: 'app-blog',
@@ -13,10 +15,12 @@ export class BlogComponent implements OnInit {
   constructor(
     private titleService: Title, 
     private metaService: Meta,
-    private packageService: PackageManagementService
+    private packageService: PackageManagementService,
+    private categoryService: CategoryControllerService
   ) { }
 
   packageConfigs: PackageConfiguration[] = [];
+  categories: Category[] = [];
 
   ngOnInit(): void {
     this.titleService.setTitle('The Future of University Admissions in Ghana | Our Eligibility Checker');
@@ -29,6 +33,7 @@ export class BlogComponent implements OnInit {
     this.metaService.updateTag({ property: 'og:type', content: 'article' });
 
     this.loadPackageConfigs();
+    this.loadCategories();
   }
 
   private loadPackageConfigs(): void {
@@ -38,9 +43,17 @@ export class BlogComponent implements OnInit {
     });
   }
 
+  private loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (cats: Category[]) => { this.categories = cats; },
+      error: () => { console.error('Failed to load categories'); }
+    });
+  }
+
   get minPrice(): number {
     if (!this.packageConfigs.length) return 10;
     return Math.min(...this.packageConfigs.map(p => p.price));
   }
 
 }
+

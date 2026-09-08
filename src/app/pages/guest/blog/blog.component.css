@@ -151,6 +151,46 @@ strong { color: #818cf8; }
 .highlight-icon { font-size: 2.5rem; display: block; margin-bottom: 15px; }
 .highlight-card h3 { margin: 0 0 10px; color: #fff; }
 
+/* ── Category Table ── */
+.category-table-wrapper {
+  margin: 40px 0;
+  overflow-x: auto;
+}
+.category-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.category-table th, .category-table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.category-table th {
+  background: rgba(79, 70, 229, 0.2);
+  color: #fff;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+}
+.category-table tr:last-child td {
+  border-bottom: none;
+}
+.category-table tr:hover td {
+  background: rgba(255,255,255,0.05);
+}
+.category-name {
+  color: #818cf8;
+  font-weight: 600;
+  width: 30%;
+}
+.category-desc {
+  color: #cbd5e1;
+}
+
 .pricing-callout {
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
   padding: 40px;

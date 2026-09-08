@@ -58,6 +58,26 @@
         A manual admission consultant can cost hundreds of cedis. Buying five different university forms just to see 
         where you might fit is a waste of resources. We believe access to information should be affordable.
       </p>
+
+      <h2>Programme Categories Available</h2>
+      <p>Explore the broad range of academic disciplines we cover. From sciences to arts, our engine evaluates your eligibility across these distinct categories:</p>
+      
+      <div class="category-table-wrapper" *ngIf="categories.length > 0">
+        <table class="category-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cat of categories">
+              <td class="category-name">{{ cat.name }}</td>
+              <td class="category-desc">{{ cat.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="pricing-callout">
         <div class="pricing-label">Starting at</div>
         <div class="pricing-value">GHS {{ minPrice }}</div>
