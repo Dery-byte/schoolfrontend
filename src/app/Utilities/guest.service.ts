@@ -78,6 +78,10 @@ export class GuestService {
     return this.http.get(`${baseUrl}/guest/payment/session/${sessionId}`);
   }
 
+  getEligibilityBySessionId(sessionId: string): Observable<any> {
+    return this.http.get(`${baseUrl}/guest/eligibility/session/${sessionId}`);
+  }
+
   // --- Authenticated attach call (requires JWT token in localStorage) ---
 
   attachTempReportToUser(sessionId: string): Observable<any> {

@@ -13,7 +13,7 @@ import {
 } from 'src/app/pages/user/user-grades-entry/grades-entry.data';
 import Swal from 'sweetalert2';
 
-type GuestStep = 'payment' | 'otp' | 'pending' | 'biodata' | 'grades' | 'result';
+type GuestStep = 'payment' | 'otp' | 'pending' | 'session-copy' | 'biodata' | 'grades' | 'result';
 type SectionKey = 'core' | 'alternative' | 'recommendations';
 
 interface PayeeRequest {
@@ -301,11 +301,34 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
         this.guestService.saveSessionId(this.sessionId);
         this.guestService.saveGuestMeta(this.externalRef, this.recordId);
         if (data.paymentStatus === 'PAID') {
-          if (data.checkStatus === 'CHECKED') {
-            this.isEligibilityChecked = true;
+          if (!data.biodataCompleted) {
+            this.setStep('biodata');
+            this.showRecoveryInput = false;
+          } else {
+            if (data.checkStatus === 'CHECKED') {
+              this.isEligibilityChecked = true;
+              this.isLoading = true;
+              this.guestService.getEligibilityBySessionId(this.sessionId).subscribe({
+                next: (result: any) => {
+                  this.isLoading = false;
+                  this.eligibilityResult = result;
+                  const unis = this.getUniversities();
+                  unis.slice(0, 2).forEach((u: any) => this.expandedUniversities.add(u.universityName));
+                  this.setStep('result');
+                  this.showRecoveryInput = false;
+                },
+                error: (err: any) => {
+                  this.isLoading = false;
+                  this.errorMessage = 'Session found, but failed to load eligibility report.';
+                  this.setStep('grades');
+                  this.showRecoveryInput = false;
+                }
+              });
+            } else {
+              this.setStep('grades');
+              this.showRecoveryInput = false;
+            }
           }
-          this.setStep(data.checkStatus === 'CHECKED' ? 'result' : 'grades');
-          this.showRecoveryInput = false;
         } else {
           this.errorMessage = 'Session found but payment is not yet confirmed. Please complete payment first.';
         }
@@ -320,6 +343,13 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   copySessionId(): void {
     navigator.clipboard.writeText(this.sessionId).then(() => {
       Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Session ID copied!', showConfirmButton: false, timer: 2000 });
+    });
+  }
+
+  copySessionIdAndContinue(): void {
+    navigator.clipboard.writeText(this.sessionId).then(() => {
+      Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Session ID copied!', showConfirmButton: false, timer: 2000 });
+      this.setStep('biodata');
     });
   }
 
@@ -423,7 +453,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         this.verifyingPaystack = false;
         if (res && res.verified) {
-          this.setStep('biodata');
+          this.setStep('session-copy');
         } else {
           // Fallback to polling
           this.setStep('pending');
@@ -540,7 +570,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
         next: (status: any) => {
           if (status && status.txStatus === 1) {
             this.stopPolling();
-            this.setStep('biodata');
+            this.setStep('session-copy');
           } else if (status && status.txStatus === -1) {
             this.stopPolling();
             this.errorMessage = 'Payment failed. Please restart the process.';
@@ -1060,7 +1090,7 @@ export class GuestCheckComponent implements OnInit, OnDestroy {
   openSaveModal(): void { this.showSaveModal(); }
 
   isDone(step: GuestStep): boolean {
-    const order: GuestStep[] = ['payment', 'otp', 'pending', 'biodata', 'grades', 'result'];
+    const order: GuestStep[] = ['payment', 'otp', 'pending', 'session-copy', 'biodata', 'grades', 'result'];
     return order.indexOf(this.currentStep) > order.indexOf(step);
   }
 }

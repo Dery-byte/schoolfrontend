@@ -271,6 +271,30 @@
 
 
     <!-- ═══════════════════════════════════════ -->
+    <!-- STEP 3.5 — SESSION COPY                -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="gc-panel gc-panel-center" *ngIf="currentStep==='session-copy'">
+      <div class="gc-panel-head">
+        <h2 class="gc-panel-title">Payment Successful! 🎉</h2>
+        <p class="gc-panel-sub">Your session ID has been generated. Please copy and save it securely so you can resume this session later.</p>
+      </div>
+
+      <div class="gc-session-box" *ngIf="sessionId" style="margin: 30px 0;">
+        <div class="gc-session-label">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="gc-session-icon"><path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/></svg>
+          Your Session ID
+        </div>
+        <div class="gc-session-row">
+          <code class="gc-session-code" style="font-size: 1.5rem; padding: 15px;">{{ sessionId }}</code>
+        </div>
+      </div>
+
+      <button class="gc-btn-primary" (click)="copySessionIdAndContinue()">
+        <i class="fas fa-copy"></i> Copy Session ID & Continue →
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
     <!-- STEP 4 — BIODATA                       -->
     <!-- ═══════════════════════════════════════ -->
     <div class="gc-panel" *ngIf="currentStep==='biodata'">
