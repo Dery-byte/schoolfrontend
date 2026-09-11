@@ -95,6 +95,32 @@ select:not([value=""])+label {
   background: #ffffff;
 }
 
+/* Fix Bootstrap form-floating conflicts with custom label */
+.form-floating > label {
+  width: fit-content !important;
+  height: fit-content !important;
+  padding: 0 4px !important;
+  transform: none !important;
+  top: 16px !important;
+  left: 16px !important;
+}
+
+.form-floating > input:focus ~ label,
+.form-floating > input:not(:placeholder-shown) ~ label,
+.form-floating > select:focus ~ label,
+.form-floating > select:not([value=""]) ~ label {
+  top: -8px !important;
+  left: 12px !important;
+  font-size: 0.75rem !important;
+  background: #ffffff !important;
+}
+
+.form-floating > .form-control:focus ~ label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+.form-floating > .form-select ~ label::after {
+  display: none !important;
+}
+
 .form-field.with-action {
   display: flex;
   gap: 10px;
