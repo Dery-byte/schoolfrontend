@@ -605,8 +605,9 @@
                 </div>
                 <div class="text-center mt-3">
                   <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm"
-                    (click)="addEntry()">
-                    <i class="fas fa-plus me-2"></i> Add Subject
+                    (click)="addEntry()" [disabled]="entries.length >= 8">
+                    <i class="fas" [ngClass]="entries.length >= 8 ? 'fa-lock me-2' : 'fa-plus me-2'"></i> 
+                    {{ entries.length >= 8 ? 'Max 8 Subjects' : 'Add Subject' }}
                   </button>
                 </div>
               </div>
@@ -690,10 +691,11 @@
 
                   <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2"
                     (click)="checkEligibilityManualEntryPrivate()"
-                    [disabled]="isCheckingEligibility || selectedCount === 0">
-                    <span *ngIf="!isCheckingEligibility">
-                      <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-                    </span>
+                    [disabled]="isCheckingEligibility || selectedCount === 0 || entries.length < 6">
+                    <ng-container *ngIf="!isCheckingEligibility">
+                      <span *ngIf="entries.length >= 6"><i class="fas fa-chart-bar me-2"></i>Check Eligibility</span>
+                      <span *ngIf="entries.length < 6"><i class="fas fa-lock me-2"></i>Add {{ 6 - entries.length }} or more subject{{ 6 - entries.length > 1 ? 's' : '' }} to proceed</span>
+                    </ng-container>
                     <span *ngIf="isCheckingEligibility">
                       <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                       Checking...
@@ -1561,8 +1563,9 @@
 
           <div class="text-center mt-3">
             <button type="button" class="btn btn-primary px-5 rounded-pill shadow-sm"
-              (click)="addEntry()">
-              <i class="fas fa-plus me-2"></i> Add Subject
+              (click)="addEntry()" [disabled]="entries.length >= 8">
+              <i class="fas" [ngClass]="entries.length >= 8 ? 'fa-lock me-2' : 'fa-plus me-2'"></i> 
+              {{ entries.length >= 8 ? 'Max 8 Subjects' : 'Add Subject' }}
             </button>
           </div>
         </div>
@@ -1646,10 +1649,11 @@
 
             <button class="btn btn-primary rounded-pill shadow-sm w-100 py-2"
               (click)="checkEligibilityManualEntry()"
-              [disabled]="isCheckingEligibility || selectedCount === 0">
-              <span *ngIf="!isCheckingEligibility">
-                <i class="fas fa-chart-bar me-2"></i>Check Eligibility
-              </span>
+              [disabled]="isCheckingEligibility || selectedCount === 0 || entries.length < 6">
+              <ng-container *ngIf="!isCheckingEligibility">
+                <span *ngIf="entries.length >= 6"><i class="fas fa-chart-bar me-2"></i>Check Eligibility</span>
+                <span *ngIf="entries.length < 6"><i class="fas fa-lock me-2"></i>Add {{ 6 - entries.length }} more subject{{ 6 - entries.length > 1 ? 's' : '' }} to proceed</span>
+              </ng-container>
               <span *ngIf="isCheckingEligibility">
                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 Checking, Please Wait...

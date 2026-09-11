@@ -658,8 +658,9 @@
                   </div>
                 </div>
                 <div class="gc-add-row">
-                  <button type="button" class="gc-btn-add" (click)="addEntry()">
-                    <i class="fas fa-plus"></i> Add Subject
+                  <button type="button" class="gc-btn-add" (click)="addEntry()" [disabled]="entries.length >= 8">
+                    <i class="fas" [ngClass]="entries.length >= 8 ? 'fa-lock' : 'fa-plus'"></i> 
+                    {{ entries.length >= 8 ? 'Max 8 Subjects' : 'Add Subject' }}
                   </button>
                 </div>
               </div>
@@ -716,8 +717,11 @@
                   <button *ngIf="isEligibilityChecked" class="gc-btn-checked" disabled>
                     <i class="fas fa-check-circle"></i> Eligibility Checked
                   </button>
-                  <button *ngIf="!isEligibilityChecked" class="gc-btn-primary" (click)="submitGrades()" [disabled]="isLoading || selectedCategoryIds.length===0">
-                    <span *ngIf="!isLoading"><i class="fas fa-chart-bar"></i> Check Eligibility</span>
+                  <button *ngIf="!isEligibilityChecked" class="gc-btn-primary" (click)="submitGrades()" [disabled]="isLoading || selectedCategoryIds.length===0 || entries.length < 6">
+                    <ng-container *ngIf="!isLoading">
+                      <span *ngIf="entries.length >= 6"><i class="fas fa-chart-bar"></i> Check Eligibility</span>
+                      <span *ngIf="entries.length < 6"><i class="fas fa-lock"></i> Add {{ 6 - entries.length }} more subject{{ 6 - entries.length > 1 ? 's' : '' }} to proceed</span>
+                    </ng-container>
                     <span *ngIf="isLoading" class="gc-spinner-row"><span class="gc-spin"></span> Checking…</span>
                   </button>
                 </div>
