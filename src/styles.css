@@ -31,31 +31,30 @@ code-input input:focus {
   border-top: 3px solid #4361ee !important;
 }
 
-/* ── Scroll fix — body is the single scroll container ──────────────────
-   Angular's scrollPositionRestoration only works on the window (body).
-   Layout wrappers must NOT set overflow:auto/hidden or they steal the
-   scroll away from window, which means router scroll-restoration breaks.
-   Instead we let body scroll and use min-height so wrappers still fill
-   the viewport.
-   ─────────────────────────────────────────────────────────────────── */
-html {
-  height: 100%;
-}
-
-body {
+/* ── Scroll fix ────────────────── */
+html, body {
   min-height: 100%;
-  overflow-y: auto;   /* body IS the scroll container */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: auto;   /* Allow vertical scroll */
+  width: 100%;
 }
 
-/* Layout wrappers: grow naturally, do NOT create their own scroll context */
-.wrapper,
-.app-shell,
-.app-main,
-.main-panel,
-.content-scroll {
-  height: auto !important;
+/* Ensure wrappers don't clip vertically */
+.wrapper, .main-panel, .app-shell, .app-main, .guest-shell {
+  min-height: 100vh;
+  overflow-x: hidden !important;
+}
+
+/* Override KaiAdmin's overflow:hidden on container that blocks scroll */
+.main-panel > .container,
+.main-panel > .container-full {
   overflow: visible !important;
-  min-height: 0;
+  min-height: calc(100vh - 123px);
+}
+
+/* ── Catch-all: never let block-level elements overflow horizontally ───*/
+body * {
+  box-sizing: border-box;
 }
 
 /* ── Focus-visible: keyboard navigation ring ─────── */
@@ -94,22 +93,13 @@ body {
   border-radius: 6px;
 }
 
-/* ── Smooth scrollbar ────────────────────────────── */
+/* ── Global scrollbar: completely hidden ─────────────────
+   Content areas still scroll via wheel / swipe — the bar
+   itself is invisible for a clean, native-app feel.       */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE / Edge legacy */
 }
-
 *::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 4px;
+  display: none;                /* Chrome / Safari / Opera */
 }
